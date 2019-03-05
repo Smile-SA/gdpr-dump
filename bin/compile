@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+use Smile\Anonymizer\Compiler;
+
+$root = dirname(__DIR__);
+
+// Initialize autoload
+require $root . '/vendor/autoload.php';
+
+$compiler = new Compiler();
+$compiler->compile($root . '/anonymizer.phar');
