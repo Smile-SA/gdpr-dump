@@ -1,0 +1,27 @@
+{
+    "name": "smile/anonymizer",
+    "description": "Proof of concept of a data anonymization utility",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Technical Office",
+            "email": "dirtech@smile.fr"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.0.0",
+        "symfony/console": "^4.2",
+        "ifsnop/mysqldump-php": "^2.6",
+        "fzaninotto/faker": "^1.8",
+        "symfony/finder": "^4.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Smile\\Anonymizer\\": "src/"
+        }
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}
