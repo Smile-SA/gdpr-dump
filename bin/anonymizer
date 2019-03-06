@@ -1,15 +1,10 @@
 #!/usr/bin/env php
 <?php
-use Smile\Anonymizer\Command\AnonymizeCommand;
-use Symfony\Component\Console\Application;
+use Smile\Anonymizer\Application;
 
 // Initialize autoload
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 // Run the console application
-$application = new Application('anonymizer', '1.0.0');
-$command = new AnonymizeCommand();
-
-$application->add($command);
-$application->setDefaultCommand('anonymize', true);
+$application = new Application();
 $application->run();

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smile\Anonymizer;
 
 use Symfony\Component\Finder\Finder;
@@ -10,7 +12,7 @@ class Compiler
      *
      * @param string $fileName
      */
-    public function compile(string $fileName): void
+    public function compile(string $fileName)
     {
         if (file_exists($fileName)) {
             unlink($fileName);
@@ -41,7 +43,7 @@ class Compiler
      * @param array $patterns
      * @param array $exclude
      */
-    private function addFiles(\Phar $phar, string $directory, array $patterns, array $exclude = []): void
+    private function addFiles(\Phar $phar, string $directory, array $patterns, array $exclude = [])
     {
         $finder = new Finder();
         $finder->files()
@@ -74,10 +76,10 @@ class Compiler
      * @param \Phar $phar
      * @param \SplFileInfo $file
      */
-    private function addFile(\Phar $phar, \SplFileInfo $file): void
+    private function addFile(\Phar $phar, \SplFileInfo $file)
     {
         $path = $this->getRelativeFilePath($file);
-        $content = php_strip_whitespace($file);
+        $content = php_strip_whitespace($path);
 
         $phar->addFromString($path, $content);
     }
@@ -87,7 +89,7 @@ class Compiler
      *
      * @param \Phar $phar
      */
-    private function addAnonymizerBin(\Phar $phar): void
+    private function addAnonymizerBin(\Phar $phar)
     {
         $content = php_strip_whitespace(__DIR__ . '/../bin/anonymizer');
         $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $content);
