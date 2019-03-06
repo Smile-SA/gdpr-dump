@@ -124,7 +124,7 @@ class Compiler
 <?php
 Phar::mapPhar('anonymizer.phar');
 require 'phar://anonymizer.phar/bin/anonymizer';
-__HALgT_COMPILER();
+__HALT_COMPILER();
 EOF;
     }
 }
