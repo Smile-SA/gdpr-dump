@@ -106,3 +106,33 @@ tables:
 This would allow to anonymize the following value:
 
 `{"customer":{"firstname":"John","lastname":"Doe"}}`
+
+## How To Test Installation
+
+Phar creation:
+
+```php
+bin/compile
+```
+
+Or with composer:
+
+```php
+composer create-project --repository-url=packages.json smile/anonymizer
+```
+
+With the following `packages.json` file:
+
+```json
+{
+    "package": {
+        "name": "smile/anonymizer",
+        "version": "1.0.0",
+        "source": {
+          "url": "/path/to/anonymizer/.git",
+          "type": "git",
+          "reference": "master"
+        }
+    }
+}
+```
