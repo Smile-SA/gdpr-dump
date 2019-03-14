@@ -8,12 +8,14 @@ use Symfony\Component\Console\Application as BaseApplication;
 
 class Application extends BaseApplication
 {
+    const VERSION = '0.1.0';
+
     /**
      * Constructor.
      */
     public function __construct()
     {
-        parent::__construct('anonymizer', '1.0.0');
+        parent::__construct('anonymizer', self::VERSION);
 
         $this->setDefaultCommand('anonymize', true);
     }
