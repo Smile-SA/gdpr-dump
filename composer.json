@@ -1,5 +1,5 @@
 {
-    "name": "smile/anonymizer",
+    "name": "smile/database-anonymizer",
     "description": "Proof of concept of a data anonymization utility",
     "type": "library",
     "authors": [

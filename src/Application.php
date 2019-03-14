@@ -17,7 +17,7 @@ class Application extends BaseApplication
     {
         parent::__construct('anonymizer', self::VERSION);
 
-        $this->setDefaultCommand('anonymize', true);
+        $this->setDefaultCommand('dump', true);
     }
 
     /**
@@ -26,7 +26,7 @@ class Application extends BaseApplication
     protected function getDefaultCommands(): array
     {
         $commands = parent::getDefaultCommands();
-        $commands[] = new Command\AnonymizeCommand();
+        $commands[] = new Command\DumpCommand();
 
         return $commands;
     }

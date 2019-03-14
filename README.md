@@ -12,30 +12,53 @@ Libraries:
 ## Basic Usage
 
 ```
-bin/anonymizer [--host=...] [--user=...] [--password=...] db_name
+bin/dump [--host=...] [--user=...] [--password=...] <db_name> [<dump_file>]
 ```
 
 If no password is specified, it will be prompted.
 
 This command creates an anonymized dump.
 
-Currently, it only anonymizes the `email` field of the `customer_entity` table (if it exists).
+Currently, it only anonymizes a table named `customer_entity` (if it exists).
 
-## TODO
+## Installation
 
-Installation:
+Phar creation:
 
-- Provide a PHAR.
+```php
+bin/compile
+```
 
-Code:
+Or with composer:
 
-- Anonymize all personal data
-- Use an abstraction layer.
-- Compatibility with multiple platforms (Magento 1, Magento 2, Drupal...).
-- Use a config file for each platform (e.g. magento2.yml).
+```php
+composer create-project --repository-url=packages.json smile/database-anonymizer
+```
+
+With the following `packages.json` file:
+
+```json
+{
+    "package": {
+        "name": "smile/database-anonymizer",
+        "version": "0.1.0",
+        "source": {
+          "url": "/path/to/database-anonymizer/.git",
+          "type": "git",
+          "reference": "master"
+        }
+    }
+}
+```
+
+## Going Further
+
+TODO:
+
+- Add dump options / database driver in the console command (currently the driver is hardcoded to mysql)
+- Use a config file for each platform (e.g. magento1, magento2, drupal8...).
 - Make it possible to use a custom config file (e.g. myproject.yml that extends magento2.yml).
-- Use a schema validator for config files (e.g. yml to json, then validate with json schema)
-- Logs?
+- Use a schema validator for config files (e.g. yml to json, then validate with json schema).
 - Tests
 
 An abstraction layer should be implemented for the following entities:
@@ -53,86 +76,60 @@ Documentation:
 
 Config example:
 
-```yml
-# magento.yml
-
+```yaml
 tables:
+  tmp_*:
+    ignore: true
+
+  cache:
+    truncate: true
+  cache_tag:
+    truncate: true
+  session:
+    truncate: true
+
   customer_entity:
+    limit: 1000
     fields:
-      firstname:
-        action: firstname
-      lastname:
-        action: lastname
-      email:
-        action: email
+      - field: email
+        value: unique_email
+      - field: firstname
+        value: random_firstname
+      - field: middlename
+        value: set_null
+      - field: lastname
+        value: random_lastname
 
-  visitor_log:
-    action: truncate
+  admin_user:
+    fields:
+      - field: email
+        value: unique_email
+      - field: firstname
+        value: random_firstname
+      - field: lastname
+        value: random_lastname
+      - field: username
+        value: unique_username
+        condition: username <> 'admin'
 ```
-
-Using this config file, the tool would:
-
-- Anonymize the `firstname`, `lastname` and `email` columns of the `customer_entity` table.
-- Truncate the `visitor_log` table.
 
 The tool must allow config extension:
 
 ```yml
 # myproject.yml
 
-extends: magento
+# File name without extension of a built-in template, or absolute path to a custom template
+extends: magento2
 
-tables:
-  customer_entity:
-    action: truncate
+# ...
 ```
 
 It should also handle serialized/json data.
 For example:
 
 ```yml
-tables:
-  example_table:
-    fields:
-      example_field:
-        action: json_update
-        fields:
-          - path: customer.firstname
-            action: firstname
-          - path: customer.lastname
-            action: lastname
-```
-
-This would allow to anonymize the following value:
-
-`{"customer":{"firstname":"John","lastname":"Doe"}}`
-
-## How To Test Installation
-
-Phar creation:
-
-```php
-bin/compile
-```
-
-Or with composer:
-
-```php
-composer create-project --repository-url=packages.json smile/anonymizer
-```
-
-With the following `packages.json` file:
-
-```json
-{
-    "package": {
-        "name": "smile/anonymizer",
-        "version": "1.0.0",
-        "source": {
-          "url": "/path/to/anonymizer/.git",
-          "type": "git",
-          "reference": "master"
-        }
-    }
-}
+- field: additonial_data
+  json_data:
+    - path: customer.email
+      value: random_email
 ```

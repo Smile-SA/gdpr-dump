@@ -91,9 +91,9 @@ class Compiler
      */
     private function addAnonymizerBin(\Phar $phar)
     {
-        $content = php_strip_whitespace(__DIR__ . '/../bin/anonymizer');
+        $content = php_strip_whitespace(__DIR__ . '/../bin/dump');
         $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $content);
-        $phar->addFromString('bin/anonymizer', $content);
+        $phar->addFromString('bin/dump', $content);
     }
 
     /**
@@ -123,7 +123,7 @@ class Compiler
 #!/usr/bin/env php
 <?php
 Phar::mapPhar('anonymizer.phar');
-require 'phar://anonymizer.phar/bin/anonymizer';
+require 'phar://anonymizer.phar/bin/dump';
 __HALT_COMPILER();
 EOF;
     }
