@@ -22,14 +22,17 @@ class Compiler
         $phar->setSignatureAlgorithm(\Phar::SHA1);
         $phar->startBuffering();
 
-        // Add anonymizer library
-        $this->addFiles($phar, __DIR__, ['*.php'], ['Tests', 'tests', 'test']);
+        // Add source files
+        $this->addFiles($phar, APP_ROOT . '/src', ['*.php']);
 
-        // Add vendor libraries
-        $this->addFiles($phar, __DIR__ . '/../vendor', ['*.php'], ['Tests', 'test']);
+        // Add vendor files
+        $this->addFiles($phar, APP_ROOT . '/vendor', ['*.php'], $this->getExcludedVendorDirs());
+
+        // Add config files
+        $this->addFiles($phar, APP_ROOT . '/config');
 
         // Add bin file
-        $this->addAnonymizerBin($phar);
+        $this->addConsoleBin($phar);
 
         $phar->setStub($this->getStub());
         $phar->stopBuffering();
@@ -40,34 +43,27 @@ class Compiler
      *
      * @param \Phar $phar
      * @param string $directory
-     * @param array $patterns
-     * @param array $exclude
+     * @param string[] $patterns
+     * @param string[] $exclude
      */
-    private function addFiles(\Phar $phar, string $directory, array $patterns, array $exclude = [])
+    private function addFiles(\Phar $phar, string $directory, array $patterns = [], array $exclude = [])
     {
         $finder = new Finder();
         $finder->files()
             ->ignoreVCS(true)
-            ->name($patterns)
             ->exclude($exclude)
             ->in($directory)
-            ->sort(\Closure::fromCallable([$this, 'sortFiles']));
+            ->sort(function (\SplFileInfo $a, \SplFileInfo $b) {
+                return strcmp(strtr($a->getRealPath(), '\\', '/'), strtr($b->getRealPath(), '\\', '/'));
+            });
+
+        foreach ($patterns as $pattern) {
+            $finder->name($pattern);
+        }
 
         foreach ($finder as $file) {
             $this->addFile($phar, $file);
         }
-    }
-
-    /**
-     * Sort files by path.
-     *
-     * @param \SplFileInfo $a
-     * @param \SplFileInfo $b
-     * @return int
-     */
-    private function sortFiles(\SplFileInfo $a, \SplFileInfo $b): int
-    {
-        return strcmp(strtr($a->getRealPath(), '\\', '/'), strtr($b->getRealPath(), '\\', '/'));
     }
 
     /**
@@ -78,8 +74,11 @@ class Compiler
      */
     private function addFile(\Phar $phar, \SplFileInfo $file)
     {
+        // Path must be relative
         $path = $this->getRelativeFilePath($file);
-        $content = php_strip_whitespace($path);
+
+        // Strip whitespace before adding the file
+        $content = php_strip_whitespace(APP_ROOT . '/' . $path);
 
         $phar->addFromString($path, $content);
     }
@@ -89,11 +88,11 @@ class Compiler
      *
      * @param \Phar $phar
      */
-    private function addAnonymizerBin(\Phar $phar)
+    private function addConsoleBin(\Phar $phar)
     {
-        $content = php_strip_whitespace(__DIR__ . '/../bin/dump');
+        $content = php_strip_whitespace(APP_ROOT . '/bin/console');
         $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $content);
-        $phar->addFromString('bin/dump', $content);
+        $phar->addFromString('bin/console', $content);
     }
 
     /**
@@ -105,11 +104,21 @@ class Compiler
     private function getRelativeFilePath(\SplFileInfo $file): string
     {
         $realPath = $file->getRealPath();
-        $pathPrefix = dirname(__DIR__) . DIRECTORY_SEPARATOR;
+        $pathPrefix = APP_ROOT . DIRECTORY_SEPARATOR;
         $pos = strpos($realPath, $pathPrefix);
         $relativePath = ($pos !== false) ? substr_replace($realPath, '', $pos, strlen($pathPrefix)) : $realPath;
 
         return strtr($relativePath, '\\', '/');
+    }
+
+    /**
+     * Get the vendor directories to exclude.
+     *
+     * @return string[]
+     */
+    private function getExcludedVendorDirs()
+    {
+        return ['Tests', 'tests', 'test', 'unit-tests', 'fixtures', 'examples', 'build'];
     }
 
     /**
@@ -122,8 +131,9 @@ class Compiler
         return <<<EOF
 #!/usr/bin/env php
 <?php
+Phar::interceptFileFuncs();
 Phar::mapPhar('anonymizer.phar');
-require 'phar://anonymizer.phar/bin/dump';
+require 'phar://anonymizer.phar/bin/console';
 __HALT_COMPILER();
 EOF;
     }

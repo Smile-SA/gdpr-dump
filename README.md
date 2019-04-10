@@ -2,34 +2,38 @@
 
 ## Description
 
-This is a proof of concept of a data anonymization tool.
+This tool provides a command that dumps the contents of a database to the specified output (e.g. dump file).
 
-Libraries:
+You can use a config file to specify how the database should be dumped.
 
-- [MySQLDump - PHP](https://github.com/ifsnop/mysqldump-php)
-- [Faker](https://github.com/fzaninotto/faker)
+In the config file, you can:
+ 
+- specify data converters that allow you to transform the data before it is dumped to the file.
+  It can be used to create an anonymized dump file.
+- specify the tables to ignore (not included in the dump).
+- specify the tables to truncate (included in the dump, but without any data).
+- specify the database connection info (host, user, password...)
+- specify dump options (compression, output type...)
 
-## Basic Usage
+## Prerequisites
 
-```
-bin/dump [--host=...] [--user=...] [--password=...] <db_name> [<dump_file>]
-```
+Requirements:
 
-If no password is specified, it will be prompted.
+- PHP >= 7.0
+- MySQL, or one of its variants (MariaDB, Percona)
 
-This command creates an anonymized dump.
-
-Currently, it only anonymizes a table named `customer_entity` (if it exists).
+If you only need to dump the data (insert queries), this tool can be used with most DBMS (but only MySQL was tested).
+The MySQL requirement applies only if you need to dump the structure of the database.
 
 ## Installation
 
-Phar creation:
+You can create a PHAR file with the following command:
 
 ```php
 bin/compile
 ```
 
-Or with composer:
+Alternatively, you can install the project with composer:
 
 ```php
 composer create-project --repository-url=packages.json smile/database-anonymizer
@@ -51,85 +55,125 @@ With the following `packages.json` file:
 }
 ```
 
-## Going Further
+The package is not in packagist yet, we need to find a name first.
+
+## Basic Usage
+
+Dump creation command:
+
+```
+bin/console dump [--host=...] [--user=...] [--password] [--database] [<config_file>]
+```
+
+There are default config files to anonymize Magento / Drupal databases.
+You don't need to specify the full path for these config files, you can specify only the file name.
+
+Example:
+
+```yml
+bin/console dump path/to/my/config.yaml 
+bin/console dump --database=mydb --user=myuser --password magento2
+```
+
+## Configuration
+
+The [documentation](docs/configuration.md) explains how to set up a configuration file.
+
+Also, there are multiple examples of config files in the config/templates directory.
+
+## FAQ
+
+**What if I don't meet the requirements?**
+
+SQL: if you use any other DBMS than MySQL, there are two options:
+
+- You can dump the structure of your database with your usual dump utility, and use our tool to dump only the INSERT queries.
+  This will work only if your DBMS allows to temporary disable foreign keys. 
+- You can set up a cron job on your production environment that clones your database, anonymizes it (by running SQL queries), and creates the dump file.
+
+PHP: if you use a PHP version < 7.0, you have bigger worries than not being able to anonymize your data!
+You need to upgrade to a [supported version of PHP](http://php.net/supported-versions.php) as soon as possible.
+Each release branch of PHP is supported for 3 years (2 years of full support, then 1 year of security support).
+
+**Why don't you use Doctrine to generate the dump?**
+
+The goal of Doctrine is to support a wide array of DBMS.
+It does not support features that are specific to some databases.
+
+For example, in MySQL, it is possible to create an index on BLOB columns.
+There is a restriction though, you need to specify the length of the index.
+
+This feature is used in Magento 2.
+Since Doctrine does not support this feature, it cannot be used to create a working dump file of a Magento 2 database.
+The following error would trigger during the import of the generated dump file:
+
+```
+ERROR 1170 (42000) at line 254: BLOB/TEXT column 'code' used in key specification without a key length
+```
+
+Also, the schema manager of Doctrine can only manage tables.
+It does not handle triggers, procedures, views...
+
+As a consequence, we don't use Doctrine to generate the dump file.
+The dump file is generated with [MySQLDump-PHP](https://github.com/ifsnop/mysqldump-php) instead, which is only compatible with MySQL and SQLite.
+
+**How is the config loaded?**
+
+The config services are defined in the [services.yaml](config/services.yaml) file.
+
+The config is loaded with the `load` method of the [ConfigLoader](src/Config/ConfigLoader.php) service.
+It has the following dependencies:
+
+- [Config](src/Config/Config.php): contains the parsed config
+- [ConfigParser](src/Config/ConfigParser.php): reads YAML files and returns the data
+- [PathResolver](src/Config/Resolver/PathResolver.php): resolves the path of the config files (`~` character, realpath...)
+
+At the end of the process, the [Config](src/Config/Config.php) object is filled with the config data.
+
+The config data is then [validated against a JSON schema](src/Config/Validator/JsonSchemaValidator.php).
+
+The dumper uses this configuration data to initialize its own configuration object: [DumperConfig](src/Dumper/Sql/DumperConfig.php).
+This allows to use getters/setters for each config value.
+
+## Roadmap
+
+Done / mostly done:
+
+- Console command application
+- Dependency injection
+- Config files
+- Overriding config files
+- Schema validation with [JSON schema](https://github.com/justinrainbow/json-schema/)
+- Phar file creation (with `bin/compile`)
+- SQL Dumper, with [mysqldump-php](https://github.com/ifsnop/mysqldump-php)
+- Value generators, with [Faker](https://github.com/fzaninotto/Faker/), or custom
+
+WIP:
+
+- Config templates (Magento, Drupal)
+- Documentation (in proper english)
 
 TODO:
 
-- Add dump options / database driver in the console command (currently the driver is hardcoded to mysql)
-- Use a config file for each platform (e.g. magento1, magento2, drupal8...).
-- Make it possible to use a custom config file (e.g. myproject.yml that extends magento2.yml).
-- Use a schema validator for config files (e.g. yml to json, then validate with json schema).
+- Filter table data (e.g. dump only 1000 rows)
+- Config per framework version (e.g. Magento 2.3)
+- Find a package name
 - Tests
 
-An abstraction layer should be implemented for the following entities:
+## Contributing
 
-- Config
-- Dumper
-- Formatter
+You can contribute to this module by submitting issues or pull requests.
 
-Documentation:
+For more details, please take a look at the [contribution guidelines](CONTRIBUTING.md).
 
-- Implement CHANGELOG.LOG
-- Implement CONTRIBUTING.MD
-- Implement LICENSE.MD
-- Complete documentation (in proper english!)
+## License
 
-Config example:
+[TODO - determine the license](LICENSE.md)
 
-```yaml
-tables:
-  tmp_*:
-    ignore: true
+## Changelog
 
-  cache:
-    truncate: true
-  cache_tag:
-    truncate: true
-  session:
-    truncate: true
+All notable changes are recorded in this [changelog](CHANGELOG.md).
 
-  customer_entity:
-    limit: 1000
-    fields:
-      - field: email
-        value: unique_email
-      - field: firstname
-        value: random_firstname
-      - field: middlename
-        value: set_null
-      - field: lastname
-        value: random_lastname
+## Contact
 
-  admin_user:
-    fields:
-      - field: email
-        value: unique_email
-      - field: firstname
-        value: random_firstname
-      - field: lastname
-        value: random_lastname
-      - field: username
-        value: unique_username
-        condition: username <> 'admin'
-```
-
-The tool must allow config extension:
-
-```yml
-# myproject.yml
-
-# File name without extension of a built-in template, or absolute path to a custom template
-extends: magento2
-
-# ...
-```
-
-It should also handle serialized/json data.
-For example:
-
-```yml
-- field: additonial_data
-  json_data:
-    - path: customer.email
-      value: random_email
-```
+Guillaume Vrac <dirtech@smile.fr>

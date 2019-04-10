@@ -1,0 +1,251 @@
+{
+    "title": "Template",
+    "type": "object",
+    "properties": {
+        "extends": {
+            "type": ["string", "array"]
+        },
+        "database": { "$ref": "#/definitions/database" },
+        "dump": { "$ref": "#/definitions/dump" },
+        "tables": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": { "$ref": "#/definitions/table" }
+        },
+        "table_whitelist": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "minLength": 1
+            }
+        }
+    },
+    "additionalProperties": false,
+    "definitions": {
+        "database": {
+            "type": "object",
+            "minProperties": 1,
+            "properties": {
+                "driver": {
+                    "type": "string",
+                    "enum": ["pdo_mysql", "pdo_sqlite"]
+                },
+                "host": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "port": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "user": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "password": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "pdoSettings": {
+                    "type": "object",
+                    "minProperties": 1,
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            },
+            "additionalProperties": {
+                "type": "string"
+            }
+        },
+        "dump": {
+            "type": "object",
+            "minProperties": 1,
+            "properties": {
+                "file": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "settings": {
+                    "type": "object",
+                    "minProperties": 1,
+                    "properties": {
+                        "compress": {
+                            "type": "string",
+                            "enum": ["none", "gzip", "bzip2"]
+                        },
+                        "reset-auto-increment": {
+                            "type": "boolean"
+                        },
+                        "add-drop-database": {
+                            "type": "boolean"
+                        },
+                        "add-drop-table": {
+                            "type": "boolean"
+                        },
+                        "add-drop-trigger": {
+                            "type": "boolean"
+                        },
+                        "add-locks": {
+                            "type": "boolean"
+                        },
+                        "complete-insert": {
+                            "type": "boolean"
+                        },
+                        "default-character-set": {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "disable-keys": {
+                            "type": "boolean"
+                        },
+                        "extended-insert": {
+                            "type": "boolean"
+                        },
+                        "events": {
+                            "type": "boolean"
+                        },
+                        "hex-blob": {
+                            "type": "boolean"
+                        },
+                        "insert-ignore": {
+                            "type": "boolean"
+                        },
+                        "net_buffer_length": {
+                            "type": "integer"
+                        },
+                        "no-autocommit": {
+                            "type": "string"
+                        },
+                        "no-create-info": {
+                            "type": "boolean"
+                        },
+                        "lock-tables": {
+                            "type": "boolean"
+                        },
+                        "routines": {
+                            "type": "boolean"
+                        },
+                        "single-transaction": {
+                            "type": "boolean"
+                        },
+                        "skip-triggers": {
+                            "type": "boolean"
+                        },
+                        "skip-tz-utc": {
+                            "type": "boolean"
+                        },
+                        "skip-comments": {
+                            "type": "boolean"
+                        },
+                        "skip-dump-date": {
+                            "type": "boolean"
+                        },
+                        "skip-definer": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "table": {
+            "type": "object",
+            "properties": {
+                "ignore": {
+                    "type": "boolean"
+                },
+                "truncate": {
+                    "type": "boolean"
+                },
+                "converters": {
+                    "type": "object",
+                    "minProperties": 1,
+                    "additionalProperties": { "$ref": "#/definitions/converter" }
+                },
+                "filters": {
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "minProperties": 2,
+                        "maxProperties": 3
+                    }
+                },
+                "orderBy": {
+                    "type": "string"
+                },
+                "limit": {
+                    "type": ["integer", "string"]
+                }
+            },
+            "additionalProperties": false
+        },
+        "converter": {
+            "type": ["object", "string", "null"],
+            "properties": {
+                "field": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "converter": {
+                    "type": ["string", "null"],
+                    "minLength": 1
+                },
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "converters": {
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/converter" }
+                        },
+                        "converter": {
+                            "type": { "$ref": "#/definitions/converter" }
+                        }
+                    }
+                },
+                "condition": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "unique": {
+                    "type": "boolean"
+                },
+                "optional": {
+                    "type": "boolean"
+                },
+                "json_data": {
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/data" },
+                    "minProperties": 1
+                },
+                "serialized_data": {
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/data" },
+                    "minProperties": 1
+                }
+            },
+            "additionalProperties": false
+        },
+        "data": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "converter": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "parameters": {
+                    "type": "object"
+                }
+            },
+            "additionalProperties": false,
+            "required": ["path", "action"]
+        }
+    }
+}

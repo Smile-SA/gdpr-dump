@@ -1,0 +1,33 @@
+---
+tables:
+    customer_log:
+        truncate: true
+
+    customer_visitor:
+        truncate: true
+
+    cache:
+        truncate: true
+
+    cache_tag:
+        truncate: true
+
+    admin_user_session:
+        truncate: true
+
+    persistent_session:
+        truncate: true
+
+    customer_entity:
+        converters:
+            email:
+                converter: 'anonymizeEmail'
+                unique: true
+                parameters: {method: 'replace'}
+            firstname: 'anonymizeText'
+            lastname: 'anonymizeText'
+            password_hash: 'anonymizeText'
+            failures_num:
+                converter: 'setValue'
+                parameters: {value: 0}
+            lock_expires: 'setNull'

@@ -1,9 +1,8 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer;
+namespace Smile\Anonymizer\Console;
 
-use Smile\Anonymizer\Command;
 use Symfony\Component\Console\Application as BaseApplication;
 
 class Application extends BaseApplication
@@ -16,18 +15,25 @@ class Application extends BaseApplication
     public function __construct()
     {
         parent::__construct('anonymizer', self::VERSION);
-
-        $this->setDefaultCommand('dump', true);
     }
 
     /**
-     * @inheritdoc
+     * Get the config path.
+     *
+     * @return string
      */
-    protected function getDefaultCommands(): array
+    public function getConfigPath()
     {
-        $commands = parent::getDefaultCommands();
-        $commands[] = new Command\DumpCommand();
+        return APP_ROOT . '/config';
+    }
 
-        return $commands;
+    /**
+     * Get the vendor path.
+     *
+     * @return string
+     */
+    public function getVendorPath()
+    {
+        return APP_ROOT . '/vendor';
     }
 }

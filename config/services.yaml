@@ -1,0 +1,65 @@
+---
+parameters:
+    config.schema_file: '%app_root%/config/schema.json'
+    faker.locale: 'en_US'
+
+services:
+    # --- Commands ---
+    command.dump:
+        class: 'Smile\Anonymizer\Console\Command\DumpCommand'
+        arguments:
+            - '@dumper.sql'
+            - '@config.storage'
+            - '@config.loader'
+            - '@config.validator'
+        tags:
+            - {name: 'console.command'}
+
+    command.validate_config:
+        class: 'Smile\Anonymizer\Console\Command\ValidateConfigCommand'
+        arguments:
+            - '@config.storage'
+            - '@config.loader'
+            - '@config.validator'
+        tags:
+            - {name: 'console.command'}
+
+    # --- Configuration ---
+    config.storage:
+        class: 'Smile\Anonymizer\Config\Config'
+
+    config.loader:
+        class: 'Smile\Anonymizer\Config\ConfigLoader'
+        arguments:
+            - '@config.storage'
+            - '@config.parser'
+            - '@config.resolver.path'
+
+    config.parser:
+        class: 'Smile\Anonymizer\Config\Parser\YamlParser'
+
+    config.validator:
+        class: 'Smile\Anonymizer\Config\Validator\JsonSchemaValidator'
+        arguments:
+            - '%config.schema_file%'
+
+    config.resolver.path:
+        class: 'Smile\Anonymizer\Config\Resolver\PathResolver'
+
+    # --- Dumper ---
+    dumper.sql:
+        class: 'Smile\Anonymizer\Dumper\SqlDumper'
+        arguments:
+            - '@converter.factory'
+
+    # --- Converter ---
+    converter.factory:
+        class: 'Smile\Anonymizer\Converter\ConverterFactory'
+        arguments:
+            - '@faker.service'
+
+    # --- Faker ---
+    faker.service:
+        class: 'Smile\Anonymizer\Faker\FakerService'
+        arguments:
+            - {locale: '%faker.locale%'}
