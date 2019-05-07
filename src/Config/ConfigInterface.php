@@ -32,14 +32,6 @@ interface ConfigInterface
     public function set($key, $value): ConfigInterface;
 
     /**
-     * Unset a config item.
-     *
-     * @param string $key
-     * @return ConfigInterface
-     */
-    public function unset($key): ConfigInterface;
-
-    /**
      * Get the configuration data.
      *
      * @return array

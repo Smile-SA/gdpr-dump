@@ -48,13 +48,6 @@ class Config implements ConfigInterface
         return $this;
     }
 
-    public function unset($key): ConfigInterface
-    {
-        unset($this->items[$key]);
-
-        return $this;
-    }
-
     /**
      * @inheritdoc
      */
