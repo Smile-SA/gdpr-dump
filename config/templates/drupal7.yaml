@@ -1,4 +1,6 @@
 ---
+requiresVersion: true
+
 tables:
     cache:
         truncate: true

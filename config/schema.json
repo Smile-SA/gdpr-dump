@@ -1,9 +1,18 @@
 {
-    "title": "Template",
     "type": "object",
     "properties": {
         "extends": {
             "type": ["string", "array"]
+        },
+        "requiresVersion": {
+            "type": "boolean"
+        },
+        "version": {
+            "type": "string"
+        },
+        "if_version": {
+            "type": "object",
+            "additionalProperties": { "$ref": "#/definitions/if_version" }
         },
         "database": { "$ref": "#/definitions/database" },
         "dump": { "$ref": "#/definitions/dump" },
@@ -22,6 +31,26 @@
     },
     "additionalProperties": false,
     "definitions": {
+        "if_version": {
+            "type": "object",
+            "properties": {
+                "database": { "$ref": "#/definitions/database" },
+                "dump": { "$ref": "#/definitions/dump" },
+                "tables": {
+                    "type": "object",
+                    "minProperties": 1,
+                    "additionalProperties": { "$ref": "#/definitions/table" }
+                },
+                "table_whitelist": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
         "database": {
             "type": "object",
             "minProperties": 1,
@@ -65,7 +94,7 @@
             "type": "object",
             "minProperties": 1,
             "properties": {
-                "file": {
+                "output": {
                     "type": "string",
                     "minLength": 1
                 },

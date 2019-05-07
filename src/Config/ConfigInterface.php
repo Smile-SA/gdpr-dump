@@ -32,12 +32,12 @@ interface ConfigInterface
     public function set($key, $value): ConfigInterface;
 
     /**
-     * Merge the config data with another set of items.
+     * Unset a config item.
      *
-     * @param array $data
-     * @return $this
+     * @param string $key
+     * @return ConfigInterface
      */
-    public function merge(array $data): ConfigInterface;
+    public function unset($key): ConfigInterface;
 
     /**
      * Get the configuration data.
@@ -45,4 +45,12 @@ interface ConfigInterface
      * @return array
      */
     public function toArray(): array;
+
+    /**
+     * Merge the config data with another set of items.
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function merge(array $data): ConfigInterface;
 }

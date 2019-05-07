@@ -5,8 +5,7 @@ namespace Smile\Anonymizer\Config;
 
 use Smile\Anonymizer\Config\Parser\ParserInterface;
 use Smile\Anonymizer\Config\Resolver\PathResolverInterface;
-use Smile\Anonymizer\Config\Validator\ValidationException;
-use Smile\Anonymizer\Config\Validator\ValidatorInterface;
+use Smile\Anonymizer\Config\Version\VersionCondition;
 
 class ConfigLoader implements ConfigLoaderInterface
 {
@@ -43,22 +42,82 @@ class ConfigLoader implements ConfigLoaderInterface
     /**
      * @inheritdoc
      */
-    public function load(string $fileName): ConfigLoaderInterface
+    public function loadFile(string $fileName): ConfigLoaderInterface
     {
+        // Resolve the path
         $fileName = $this->pathResolver->resolve($fileName);
 
-        // Load the data
+        // Parse the data
         $data = $this->parser->parse($fileName);
 
+        // Merge the data into the config
+        $this->loadData($data);
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function loadData(array $data): ConfigLoaderInterface
+    {
         // Recursively load parent config files
         if (isset($data['extends'])) {
             foreach ((array) $data['extends'] as $parentFile) {
-                $this->load($parentFile);
+                $this->loadFile($parentFile);
             }
+
+            unset($data['extends']);
         }
 
-        // Merge the loaded data with the current config
         $this->config->merge($data);
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function loadVersionData(): ConfigLoaderInterface
+    {
+        $requiresVersion = (bool) $this->config->get('requiresVersion');
+        $version = (string) $this->config->get('version');
+        $versionsData = (array) $this->config->get('if_version');
+
+        if ($version === '') {
+            // Check if version is mandatory
+            if ($requiresVersion) {
+                throw new \RuntimeException('The application version must be specified in the configuration, or with the "--additional-config" parameter.');
+            }
+
+            return $this;
+        }
+
+        if (empty($versionsData)) {
+            return $this;
+        }
+
+        // Merge version-specific data into the configuration
+        foreach ($versionsData as $requirement => $versionData) {
+            // Get the requirements as an array (e.g. '>2.0, <2.3' becomes an array of 2 elements)
+            $conditions = array_map('trim', explode(',', $requirement));
+            $matchVersion = true;
+
+            // Check if all requirements match
+            foreach ($conditions as $condition) {
+                $condition = new VersionCondition($condition);
+
+                if (!$condition->match($version)) {
+                    $matchVersion = false;
+                    break;
+                }
+            }
+
+            // If all requirements match, merge the version-specific data into the configuration
+            if ($matchVersion) {
+                $this->config->merge($versionData);
+            }
+        }
 
         return $this;
     }

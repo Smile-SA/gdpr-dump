@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Console\Command;
 
-use Smile\Anonymizer\Config\ConfigInterface;
-use Smile\Anonymizer\Config\ConfigLoader;
+use Smile\Anonymizer\Config\Parser\ParserInterface;
+use Smile\Anonymizer\Config\Resolver\PathResolverInterface;
 use Smile\Anonymizer\Config\Validator\ValidatorInterface;
 use Smile\Anonymizer\Config\Validator\ValidationResultInterface;
 use Symfony\Component\Console\Command\Command;
@@ -15,33 +15,34 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ValidateConfigCommand extends Command
 {
     /**
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
-     * @var ConfigLoader
-     */
-    private $configLoader;
-
-    /**
      * @var ValidatorInterface
      */
     private $validator;
 
     /**
-     * @param ConfigInterface $config
-     * @param ConfigLoader $configLoader
+     * @var ParserInterface
+     */
+    private $parser;
+
+    /**
+     * @var PathResolverInterface
+     */
+    private $pathResolver;
+
+
+    /**
      * @param ValidatorInterface $validator
+     * @param ParserInterface $parser
+     * @param PathResolverInterface $pathResolver
      */
     public function __construct(
-        ConfigInterface $config,
-        ConfigLoader $configLoader,
-        ValidatorInterface $validator
+        ValidatorInterface $validator,
+        ParserInterface $parser,
+        PathResolverInterface $pathResolver
     ) {
-        $this->config = $config;
-        $this->configLoader = $configLoader;
         $this->validator = $validator;
+        $this->parser = $parser;
+        $this->pathResolver = $pathResolver;
         parent::__construct();
     }
 
@@ -63,11 +64,13 @@ class ValidateConfigCommand extends Command
         $fileName = $input->getArgument('config_file');
 
         try {
+            // Resolve the path
+            $fileName = $this->pathResolver->resolve($fileName);
+
             // Load the data
-            $this->configLoader->load($fileName);
+            $data = $this->parser->parse($fileName);
 
             // Validate the data against the schema
-            $data = $this->config->toArray();
             $result = $this->validator->validate($data);
 
             // Output the results

@@ -18,12 +18,12 @@ class ArrayHelper
         $cur = $array;
 
         foreach (explode('.', $path) as $key) {
-            if (isset($cur[$key])) {
-                $cur = $cur[$key];
-            } else {
+            if (!isset($cur[$key])) {
                 $cur = $default;
                 break;
             }
+
+            $cur = $cur[$key];
         }
 
         return $cur;
@@ -40,7 +40,7 @@ class ArrayHelper
     {
         $keys = explode('.', $path);
         $lastKey = array_pop($keys);
-        $cur = & $array;
+        $cur = &$array;
 
         foreach ($keys as $key) {
             if (!isset($cur[$key])) {

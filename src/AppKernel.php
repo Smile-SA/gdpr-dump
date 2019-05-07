@@ -17,6 +17,9 @@ class AppKernel
      */
     public function run()
     {
+        // Convert notices/warnings into exceptions
+        $this->initErrorHandler();
+
         // Initialize the application
         $application = new Application();
 
@@ -48,5 +51,20 @@ class AppKernel
         $loader->load('services.yaml');
 
         return $container;
+    }
+
+    /**
+     * Set the error handler.
+     */
+    private function initErrorHandler()
+    {
+        set_error_handler(function(int $severity, string $message, string $file, int $line, array $context): bool {
+            // Error was suppressed with the "@" operator
+            if (0 === error_reporting()) {
+                return false;
+            }
+
+            throw new \ErrorException($message, 0, $severity, $file, $line);
+        });
     }
 }

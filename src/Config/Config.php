@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Config;
 
+use Smile\Anonymizer\Helper\ArrayHelper;
+
 class Config implements ConfigInterface
 {
     /**
@@ -46,12 +48,9 @@ class Config implements ConfigInterface
         return $this;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function merge(array $data): ConfigInterface
+    public function unset($key): ConfigInterface
     {
-        $this->items = $this->mergeArray($this->items, $data);
+        unset($this->items[$key]);
 
         return $this;
     }
@@ -62,6 +61,16 @@ class Config implements ConfigInterface
     public function toArray(): array
     {
         return $this->items;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function merge(array $data): ConfigInterface
+    {
+        $this->items = $this->mergeArray($this->items, $data);
+
+        return $this;
     }
 
     /**
@@ -89,7 +98,7 @@ class Config implements ConfigInterface
 
     /**
      * Merge two arrays.
-     * We don't use array_merge_recursive because it doesn't override string keys
+     * Difference with array_merge_recursive: combines array keys instead of overriding them
      *
      * @param array $data
      * @param array $override
@@ -99,10 +108,7 @@ class Config implements ConfigInterface
     {
         foreach ($override as $key => $value) {
             if (array_key_exists($key, $data)) {
-                if (is_numeric($key)) {
-                    // Key is numeric, append value
-                    $data[] = $value;
-                } elseif (is_array($value) && is_array($data[$key])) {
+                if (is_array($value) && is_array($data[$key])) {
                     // Key is associative, merge and overwrite value
                     $data[$key] = $this->mergeArray($data[$key], $value);
                 } else {

@@ -1,4 +1,6 @@
 ---
+requiresVersion: true
+
 tables:
     cache_bootstrap:
         truncate: true

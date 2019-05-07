@@ -35,7 +35,7 @@ class SqlDumper implements DumperInterface
 
         // Create the dump
         $dumper = $this->getDumperInstance($config);
-        $dumper->start($config->getDumpFile());
+        $dumper->start($config->getDumpOutput());
 
         return $dumper;
     }

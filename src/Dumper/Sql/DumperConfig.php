@@ -17,7 +17,7 @@ class DumperConfig
     /**
      * @var string
      */
-    private $dumpFile;
+    private $dumpOutput;
 
     /**
      * @var array
@@ -58,13 +58,13 @@ class DumperConfig
     }
 
     /**
-     * Get the dump file.
+     * Get the dump output.
      *
      * @return string
      */
-    public function getDumpFile(): string
+    public function getDumpOutput(): string
     {
-        return $this->dumpFile;
+        return $this->dumpOutput;
     }
 
     /**
@@ -134,7 +134,7 @@ class DumperConfig
         }
 
         // Dump config
-        $this->dumpFile = $config->get('dump.file', 'php://stdout');
+        $this->dumpOutput = $config->get('dump.output', 'php://stdout');
         $this->dumpSettings = $config->get('dump.settings', []);
         $this->dumpSettings['exclude-tables'] = $this->getTablesToIgnore();
         $this->dumpSettings['no-data'] = $this->getTablesToTruncate();

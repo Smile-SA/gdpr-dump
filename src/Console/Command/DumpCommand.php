@@ -68,6 +68,7 @@ class DumpCommand extends Command
             ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Database user')
             ->addOption('password', null, InputOption::VALUE_NONE, 'Whether to prompt a password')
             ->addOption('database', null, InputOption::VALUE_REQUIRED, 'Database name')
+            ->addOption('additional-config', null, InputOption::VALUE_REQUIRED, 'JSON-encoded config to load in addition to the configuration file')
             ->addArgument('config_file', InputArgument::OPTIONAL, 'Dump configuration file');
     }
 
@@ -76,20 +77,16 @@ class DumpCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $prompt = $input->getOption('password');
-        $configFile = $input->getArgument('config_file');
+        $database = (string) $input->getOption('database');
+        $configFile = (string) $input->getArgument('config_file');
 
         try {
-            // Get the password
-            $password = $prompt ? $this->promptPassword($input, $output) : '';
-
-            // Load the config
-            if ($configFile) {
-                $this->configLoader->load($configFile);
+            if ($configFile === '' && $database === '') {
+                throw new \Exception('You must provide a config file or a database name.');
             }
 
-            // Override the config with the console options/arguments
-            $this->overrideConfig($input, $password);
+            // Load the config
+            $this->loadConfig($input, $output);
 
             // Validate the config data
             $result = $this->validator->validate($this->config->toArray());
@@ -112,6 +109,49 @@ class DumpCommand extends Command
         return 0;
     }
 
+    private function loadConfig(InputInterface $input, OutputInterface $output)
+    {
+        $prompt = (string) $input->getOption('password');
+        $configFile = (string) $input->getArgument('config_file');
+
+        // Get the password
+        $password = $prompt !== '' ? $this->promptPassword($input, $output) : '';
+
+        // Load the config file
+        if ($configFile) {
+            $this->configLoader->loadFile($configFile);
+        }
+
+        // Load the JSON-encoded config passed in the "additional-config" option
+        $this->loadAdditionalConfig($input);
+
+        // Load version-specific data
+        $this->configLoader->loadVersionData();
+
+        // Override the config with the console options/arguments
+        $this->overrideConfig($input, $password);
+    }
+
+    /**
+     * Load the additional configuration (JSON-encoded data passed in the "additional-config" option).
+     *
+     * @param InputInterface $input
+     */
+    private function loadAdditionalConfig(InputInterface $input)
+    {
+        $additionalConfig = $input->getOption('additional-config');
+
+        if ($additionalConfig) {
+            $decodedData = json_decode($additionalConfig, true);
+
+            if ($decodedData === null) {
+                throw new \RuntimeException(sprintf('Invalid JSON "%s".', $additionalConfig));
+            }
+
+            $this->configLoader->loadData($decodedData);
+        }
+    }
+
     /**
      * Override the config with the console arguments/options.
      *
@@ -120,25 +160,29 @@ class DumpCommand extends Command
      */
     private function overrideConfig(InputInterface $input, string $password)
     {
-        $values = [
+        // Database config
+        $databaseInput = [
             'host' => $input->getOption('host'),
             'user' => $input->getOption('user'),
             'name' => $input->getOption('database'),
         ];
 
-        $databaseData = $this->config->get('database', []);
+        $databaseConfig = $this->config->get('database', []);
 
-        foreach ($values as $key => $value) {
+        foreach ($databaseInput as $key => $value) {
             if ($value !== null) {
-                $databaseData[$key] = $value;
+                $databaseConfig[$key] = $value;
             }
         }
 
-        if ($password !== '') {
-            $databaseData['password'] = $password;
+        // Override password only if it was prompted
+        if ($input->getOption('password')) {
+            $databaseConfig['password'] = $password;
         }
 
-        $this->config->set('database', $databaseData);
+        if (!empty($databaseConfig)) {
+            $this->config->set('database', $databaseConfig);
+        }
     }
 
     /**

@@ -14,13 +14,16 @@ extends: path/to/config/file.yaml
 
 There are default config templates available in the config/templates directory of the application:
 
+- drupal7.yaml
 - drupal8.yaml
 - magento1.yaml
 - magento2.yaml
+- magento2_b2b.yaml
+- magento2_commerce.yaml
 
 These templates can be used to anonymize a drupal/magento database.
 
-If you override a default template, the path to the file can be omitted:
+If you override a default template, the path to the file and the extension may be omitted:
 
 ```yaml
 extends: magento2
@@ -34,11 +37,26 @@ extends:
   - path/to/config/file.yaml
 ```
 
-The files will be loaded sequentially:
+In the above example, the files will be loaded in this order:
 
 1. config/templates/magento2.yml
 2. path/to/config/file.yml
 3. your config file
+
+## Application Version
+
+Some templates (e.g. `magento2`) require to specify the version of the application.
+
+The version is required if the template file contains the `if_version` parameter (version-specific configuration).
+
+To define the application version:
+
+```yaml
+extends: 'magento2'
+version: '2.2.8'
+```
+
+Note: if you extends a default config template (magento2, drupal8, ...), it is a good practice to always specify the version of your application.
 
 ## Database Settings
 
@@ -46,22 +64,22 @@ The database information can be specified in the `dababase` object:
 
 ```yaml
 database:
-    driver: mysql
-    host: my_host
-    port: 3306
-    user: my_user
-    password: my_password
-    name: my_db_name
+    driver: 'mysql'
+    host: 'my_host'
+    port: '3306'
+    user: 'my_user'
+    password: 'my_password'
+    name: 'my_db_name'
     pdo_settings:
-        MY_PDO_SETTING: some_value
+        MY_PDO_SETTING: 'some_value'
 ```
 
 Default values:
 
-- driver: `mysql`
-- host: `localhost`
-- user: `root`
-- port: `3306`
+- driver: `'mysql'`
+- host: `'localhost'`
+- user: `'root'`
+- port: `'3306'`
 
 Available drivers:
 
@@ -71,7 +89,7 @@ Available drivers:
 
 ```yaml
 dump:
-    output: my_dump_file.sql
+    output: 'my_dump_file.sql'
     settings:
         compress: true
         # TODO list of all settings in a table
@@ -79,7 +97,7 @@ dump:
 
 Default values:
 
-- output: `php://stdout`
+- output: `'php://stdout'`
 
 ## Tables to Ignore
 
@@ -157,8 +175,8 @@ All other tables will be ignored, even if they are mentioned in the config file(
 
 ```yaml
 table_whitelist:
-    - customers
-    - transactions
+    - 'customers'
+    - 'transactions'
 ```
 
 ## Data Converters
@@ -225,3 +243,23 @@ Variables must be encapsed by double brackets.
 
 The available variables are the columns of the table.
 For example, if the table has a `id` column, the `{{id}}` variable will be available.
+
+## Version-specific configuration
+
+The `if_version` property allows to define configuration that will be read only if the version of your application matches a requirement.
+
+Syntax:
+
+```yaml
+if_version:
+    '<2.2.0':
+        # version-specific config here (e.g. tables)
+```
+
+The application version can be defined with the `version` parameter, as explained earlier in this documentation.
+
+The `version` parameter becomes mandatory if the `requiresVersion` parameter is defined and set to `true`.
+The [magento2 template](config/templates/magento2.yaml) is a good example of this feature.
+
+There is little point to use this feature in your custom configuration file(s).
+It is mainly used to provide default config templates that are compatible with all versions of a framework.

@@ -6,6 +6,11 @@ namespace Smile\Anonymizer\Config\Resolver;
 class PathResolver implements PathResolverInterface
 {
     /**
+     * @var array
+     */
+    private $templates;
+
+    /**
      * @inheritdoc
      */
     public function resolve(string $path): string
@@ -13,9 +18,8 @@ class PathResolver implements PathResolverInterface
         $toAbsolutePath = true;
 
         // Check if it is a config template
-        $templates = $this->getTemplates();
-        if (array_key_exists($path, $templates)) {
-            $path = $templates[$path];
+        if ($this->isTemplate($path)) {
+            $path = $this->getTemplate($path);
             $toAbsolutePath = false;
         }
 
@@ -38,12 +42,41 @@ class PathResolver implements PathResolverInterface
     }
 
     /**
+     * Check if the specified file is a config template.
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function isTemplate(string $name): bool
+    {
+        $templates = $this->getTemplates();
+
+        return array_key_exists($name, $templates);
+
+    }
+
+    /**
+     * Get the path to a template.
+     *
+     * @param string $name
+     * @return string
+     */
+    private function getTemplate(string $name): string
+    {
+        return $this->getTemplates()[$name];
+    }
+
+    /**
      * Get the config templates.
      *
      * @return string[]
      */
     private function getTemplates(): array
     {
+        if ($this->templates !== null) {
+            return $this->templates;
+        }
+
         $templates = [];
         $templatesDirectory = $this->getTemplatesDirectory();
 
@@ -56,10 +89,10 @@ class PathResolver implements PathResolverInterface
             }
 
             $template = pathinfo($fileName, PATHINFO_FILENAME);
-            $templates[$template] = $templatesDirectory . '/' . $fileName;
+            $this->templates[$template] = $templatesDirectory . '/' . $fileName;
         }
 
-        return $templates;
+        return $this->templates;
     }
 
     /**

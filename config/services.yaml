@@ -18,9 +18,9 @@ services:
     command.validate_config:
         class: 'Smile\Anonymizer\Console\Command\ValidateConfigCommand'
         arguments:
-            - '@config.storage'
-            - '@config.loader'
             - '@config.validator'
+            - '@config.parser'
+            - '@config.resolver.path'
         tags:
             - {name: 'console.command'}
 
