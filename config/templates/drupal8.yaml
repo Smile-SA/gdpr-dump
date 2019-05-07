@@ -1,0 +1,53 @@
+---
+tables:
+    cache_bootstrap:
+        truncate: true
+
+    cache_config:
+        truncate: true
+
+    cache_container:
+        truncate: true
+
+    cache_data:
+        truncate: true
+
+    cache_default:
+        truncate: true
+
+    cache_discovery:
+        truncate: true
+
+    cache_dynamic_page_cache:
+        truncate: true
+
+    cache_entity:
+        truncate: true
+
+    cache_menu:
+        truncate: true
+
+    cache_render:
+        truncate: true
+
+    cache_toolbar:
+        truncate: true
+
+    sessions:
+        truncate: true
+
+    users_field_data:
+        converters:
+            mail:
+                converter: 'anonymizeEmail'
+                unique: true
+                parameters: {method: 'replace'}
+            init:
+                converter: 'anonymizeEmail'
+                unique: true
+                parameters: {method: 'replace'}
+            name:
+                converter: 'anonymizeText'
+                unique: true
+                parameters: {method: 'replace'}
+            pass: 'anonymizeText'

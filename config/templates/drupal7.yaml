@@ -1,0 +1,50 @@
+---
+tables:
+    cache:
+        truncate: true
+
+    cache_block:
+        truncate: true
+
+    cache_bootstrap:
+        truncate: true
+
+    cache_field:
+        truncate: true
+
+    cache_filter:
+        truncate: true
+
+    cache_form:
+        truncate: true
+
+    cache_image:
+        truncate: true
+
+    cache_menu:
+        truncate: true
+
+    cache_page:
+        truncate: true
+
+    cache_path:
+        truncate: true
+
+    sessions:
+        truncate: true
+
+    users:
+        converters:
+            mail:
+                converter: 'anonymizeEmail'
+                unique: true
+                parameters: {method: 'replace'}
+            init:
+                converter: 'anonymizeEmail'
+                unique: true
+                parameters: {method: 'replace'}
+            name:
+                converter: 'anonymizeText'
+                unique: true
+                parameters: {method: 'replace'}
+            pass: 'anonymizeText'
