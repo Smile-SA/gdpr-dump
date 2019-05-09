@@ -152,6 +152,8 @@ class DumperConfig
      */
     private function prepareTableConfig(string $tableName, array $tableData)
     {
+        $tableName = $this->getTableName($tableName, $tableData);
+
         if (isset($tableData['ignore']) && $tableData['ignore']) {
             $this->tablesToIgnore[] = $tableName;
         }
@@ -161,5 +163,37 @@ class DumperConfig
         }
 
         $this->tablesConfig[$tableName] = new TableConfig($tableName, $tableData);
+    }
+
+    /**
+     * Get the table name that will be used by the dumper object.
+     * The table name is converted to a regular expression if the wildcard character "*" is used.
+     *
+     * @param string $tableName
+     * @param array $tableData
+     * @return string
+     */
+    private function getTableName(string $tableName, array $tableData): string
+    {
+        // Check if the table name contains a wildcard
+        if (strpos($tableName, '*') === false) {
+            return $tableName;
+        }
+
+        // Wildcard character can only be used with the "truncate" or "ignore" parameters
+        $diff = array_diff_key($tableData, array_flip(['truncate', 'ignore']));
+
+        if (!empty($diff)) {
+            $key = key($diff);
+            throw new \UnexpectedValueException(
+                sprintf('Table "%s": the "%s" parameter is not allowed with wildcards.', $tableName, $key)
+            );
+        }
+
+        // Convert the table name to a regular expression
+        $tableName = str_replace('*', '.*', $tableName);
+        $tableName = '/^' . $tableName . '$/';
+
+        return $tableName;
     }
 }

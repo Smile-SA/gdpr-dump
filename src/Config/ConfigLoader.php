@@ -87,7 +87,7 @@ class ConfigLoader implements ConfigLoaderInterface
         if ($version === '') {
             // Check if version is mandatory
             if ($requiresVersion) {
-                throw new \RuntimeException('The application version must be specified in the configuration, or with the "--additional-config" parameter.');
+                throw new \RuntimeException('The application version must be specified in the configuration, or with the "--additional-config" option.');
             }
 
             return $this;

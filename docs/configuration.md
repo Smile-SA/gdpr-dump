@@ -109,6 +109,8 @@ tables:
         ignore: true
 ```
 
+The wildcard character `*` can be used in table names (e.g. `cache_*`).
+
 ## Tables to Truncate
 
 You can specify tables to include without any data (no insert query):
@@ -118,6 +120,8 @@ tables:
     my_table:
         truncate: true
 ```
+
+The wildcard character `*` can be used in table names (e.g. `cache_*`).
 
 ## Filtering Values
 

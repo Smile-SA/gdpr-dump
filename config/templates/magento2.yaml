@@ -39,7 +39,7 @@ tables:
                     formatter: 'something'
                     arguments: [1, 100]
 
-# todo: serializeData instead of jsonData in some tables
+# todo: serializedData instead of jsonData in some tables
 #if_version:
 #    '<2.2.0':
 #        # Version-specific config here

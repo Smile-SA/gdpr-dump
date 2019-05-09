@@ -174,6 +174,8 @@ Done / mostly done:
 - Phar file creation (with `bin/compile`)
 - SQL Dumper, with [mysqldump-php](https://github.com/ifsnop/mysqldump-php)
 - Value generators, with [Faker](https://github.com/fzaninotto/Faker/), or custom
+- Wildcard character "*" in table names (only compatible with `ignore` and `truncate` characters)
+- Config per framework version (e.g. Magento 2.3)
 
 WIP:
 
@@ -183,7 +185,6 @@ WIP:
 TODO:
 
 - Filter table data (e.g. dump only 1000 rows)
-- Config per framework version (e.g. Magento 2.3)
 - Find a package name
 - Tests
 
