@@ -5,31 +5,7 @@ tables:
     cache:
         truncate: true
 
-    cache_block:
-        truncate: true
-
-    cache_bootstrap:
-        truncate: true
-
-    cache_field:
-        truncate: true
-
-    cache_filter:
-        truncate: true
-
-    cache_form:
-        truncate: true
-
-    cache_image:
-        truncate: true
-
-    cache_menu:
-        truncate: true
-
-    cache_page:
-        truncate: true
-
-    cache_path:
+    cache_*:
         truncate: true
 
     sessions:

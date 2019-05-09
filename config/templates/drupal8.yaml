@@ -2,37 +2,7 @@
 requiresVersion: true
 
 tables:
-    cache_bootstrap:
-        truncate: true
-
-    cache_config:
-        truncate: true
-
-    cache_container:
-        truncate: true
-
-    cache_data:
-        truncate: true
-
-    cache_default:
-        truncate: true
-
-    cache_discovery:
-        truncate: true
-
-    cache_dynamic_page_cache:
-        truncate: true
-
-    cache_entity:
-        truncate: true
-
-    cache_menu:
-        truncate: true
-
-    cache_render:
-        truncate: true
-
-    cache_toolbar:
+    cache_*:
         truncate: true
 
     sessions:
