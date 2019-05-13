@@ -4,6 +4,19 @@
 
 Configuration files must use the YAML format.
 
+## Templates
+
+There are default config templates available in the config/templates directory of the application:
+
+- drupal7
+- drupal8
+- magento1
+- magento2
+- magento2_b2b
+- magento2_commerce
+
+These templates can be used to anonymize a drupal/magento database.
+
 ## Override Another Config File
 
 Your config file can automatically inherit the contents of another config file, by specifying the following parameter:
@@ -12,16 +25,6 @@ Your config file can automatically inherit the contents of another config file, 
 extends: path/to/config/file.yaml
 ```
 
-There are default config templates available in the config/templates directory of the application:
-
-- drupal7.yaml
-- drupal8.yaml
-- magento1.yaml
-- magento2.yaml
-- magento2_b2b.yaml
-- magento2_commerce.yaml
-
-These templates can be used to anonymize a drupal/magento database.
 
 If you override a default template, the path to the file and the extension may be omitted:
 
@@ -215,7 +218,7 @@ List of available properties:
 
 | Property | Required | Default | Description |
 | --- | --- | --- | --- |
-| **converter** | Y | | Converter name. A list of all converters [is available here](converters.md). |
+| **converter** | Y | | Converter name. A list of all converters [is available here](03-converters.md). |
 | **condition** | N | `''` | A PHP expression that must evaluate to `true` or `false`. The value is converted if the expression returns `true`. |
 | **parameters** | N | `{}` | e.g. `min` and `max` for `numberBetween`. Most converters don't accept any parameter. |
 | **unique** | N | `false` | Whether to generate only unique values. May result in a fatal error with converters that can't generate enough unique values. |
@@ -263,7 +266,7 @@ if_version:
 The application version can be defined with the `version` parameter, as explained earlier in this documentation.
 
 The `version` parameter becomes mandatory if the `requiresVersion` parameter is defined and set to `true`.
-The [magento2 template](config/templates/magento2.yaml) is a good example of this feature.
+The [magento2 template](config/templates/magento2.yaml) uses that feature.
 
 There is little point to use this feature in your custom configuration file(s).
 It is mainly used to provide default config templates that are compatible with all versions of a framework.
