@@ -2,6 +2,11 @@
 requiresVersion: true
 
 tables:
+    # TODO index, tmp, replica
+
+    cron_schedule:
+        truncate: true
+
     customer_log:
         truncate: true
 
@@ -20,7 +25,24 @@ tables:
     persistent_session:
         truncate: true
 
+    store_website:
+        limit: 1
+        filters:
+            - ['website_id', 'neq', 0]
+
+    catalog_product_entity:
+        limit: 2
+        orderBy: 'sku asc, entity_id desc'
+        filters:
+            - ['entity_id', 'isNotNull']
+            - ['sku', 'isNotNull']
+            - ['type_id', 'in', ['simple', 'configurable']]
+
     customer_entity:
+        limit: 10
+        filters:
+            - ['updated_at', 'gt', 'expr: DATE_SUB(now(), INTERVAL 1000 DAY)']
+
         converters:
             email:
                 converter: 'anonymizeEmail'

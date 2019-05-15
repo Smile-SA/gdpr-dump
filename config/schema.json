@@ -199,8 +199,8 @@
                     "type": "array",
                     "items": {
                         "type": "array",
-                        "minProperties": 2,
-                        "maxProperties": 3
+                        "minItems": 2,
+                        "maxItems": 3
                     }
                 },
                 "orderBy": {
@@ -244,37 +244,9 @@
                 },
                 "optional": {
                     "type": "boolean"
-                },
-                "json_data": {
-                    "type": "array",
-                    "items": { "$ref": "#/definitions/data" },
-                    "minProperties": 1
-                },
-                "serialized_data": {
-                    "type": "array",
-                    "items": { "$ref": "#/definitions/data" },
-                    "minProperties": 1
                 }
             },
             "additionalProperties": false
-        },
-        "data": {
-            "type": "object",
-            "properties": {
-                "path": {
-                    "type": "string",
-                    "minLength": 1
-                },
-                "converter": {
-                    "type": "string",
-                    "minLength": 1
-                },
-                "parameters": {
-                    "type": "object"
-                }
-            },
-            "additionalProperties": false,
-            "required": ["path", "action"]
         }
     }
 }

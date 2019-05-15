@@ -9,6 +9,9 @@ interface DumperInterface
 {
     /**
      * Create a dump file of a database.
+     *
+     * @param ConfigInterface $config
+     * @return $this
      */
-    public function dump(ConfigInterface $config);
+    public function dump(ConfigInterface $config): DumperInterface;
 }

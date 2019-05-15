@@ -34,6 +34,16 @@ class TableConfig
     private $converters = [];
 
     /**
+     * @var bool
+     */
+    private $dumpSchema = true;
+
+    /**
+     * @var bool
+     */
+    private $dumpData = true;
+
+    /**
      * @param string $tableName
      * @param array $tableConfig
      */
@@ -84,6 +94,24 @@ class TableConfig
     }
 
     /**
+     * Check if the table schema must be included in the dump.
+     *
+     * @return bool
+     */
+    public function isSchemaDumped(): bool
+    {
+        return $this->dumpSchema;
+    }
+
+    /**
+     * Check if the table data must be included in the dump.
+     */
+    public function isDataDumped(): bool
+    {
+        return $this->dumpData;
+    }
+
+    /**
      * Get the converter definitions of a table.
      *
      * @return array
@@ -94,22 +122,64 @@ class TableConfig
     }
 
     /**
+     * Check if there is data to filter.
+     *
+     * @return bool
+     */
+    public function hasFilter(): bool
+    {
+        return !empty($this->filters);
+    }
+
+    /**
+     * Check if the table data must be sorted.
+     *
+     * @return bool
+     */
+    public function hasSortOrder(): bool
+    {
+        return !empty($this->sortOrders);
+    }
+
+    /**
+     * Check if a limit is defined.
+     *
+     * @return bool
+     */
+    public function hasLimit(): bool
+    {
+        return $this->limit !== null;
+    }
+
+    /**
      * Prepare the table config.
      *
      * @param array $tableData
      */
     private function prepareConfig(array $tableData)
     {
+        if (isset($tableData['ignore']) && $tableData['ignore']) {
+            $this->dumpSchema = false;
+            return;
+        }
+
+        if (isset($tableData['truncate']) && $tableData['truncate']) {
+            $this->dumpData = false;
+            return;
+        }
+
         $this->prepareFilters($tableData);
         $this->prepareLimit($tableData);
         $this->prepareSortOrder($tableData);
         $this->prepareConverters($tableData);
+        $this->validateConfig();
     }
 
     /**
      * Prepare the table filters.
      *
      * @param array $tableData
+     * @throws \UnexpectedValueException
      */
     private function prepareFilters(array $tableData)
     {
@@ -127,7 +197,7 @@ class TableConfig
      */
     private function prepareLimit(array $tableData)
     {
-        if (isset($tableData['limit']) && $tableData['limit']) {
+        if (isset($tableData['limit']) && $tableData['limit'] !== null && $tableData['limit'] !== '') {
             $this->limit = (int) $tableData['limit'];
         }
     }
@@ -140,8 +210,8 @@ class TableConfig
     private function prepareSortOrder(array $tableData)
     {
         if (isset($tableData['orderBy']) && $tableData['orderBy']) {
-            $orders = explode(' ', (string) $tableData['orderBy']);
-            array_map('trim', $orders);
+            $orders = explode(',', (string) $tableData['orderBy']);
+            $orders = array_map('trim', $orders);
 
             foreach ($orders as $order) {
                 $parts = explode(' ', $order);
@@ -178,6 +248,28 @@ class TableConfig
 
             // Don't validate the converter data, it will be validated by the factory during the object creation
             $this->converters[$column] = $converterData;
+        }
+    }
+
+    /**
+     * Validate the table config.
+     *
+     * @throws \UnexpectedValueException
+     */
+    private function validateConfig()
+    {
+        $hasQuery = !empty($this->sortOrders) || !empty($this->converters) || $this->limit !== null;
+
+        if (!$this->dumpSchema && ($hasQuery || !$this->dumpData)) {
+            throw new \UnexpectedValueException(
+                sprintf('Table "%s": the "ignore" property cannot be combined with other properties.', $this->name)
+            );
+        }
+
+        if (!$this->dumpData && ($hasQuery || !$this->dumpSchema)) {
+            throw new \UnexpectedValueException(
+                sprintf('Table "%s": the "truncate" property cannot be combined with other properties.', $this->name)
+            );
         }
     }
 }

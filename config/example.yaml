@@ -1,0 +1,13 @@
+---
+extends: 'magento2'
+version: '2.3.0'
+
+database:
+    user: 'magento2'
+    password: '7fd8r6cmy5wrhu2m'
+    name: 'magento2'
+
+dump:
+    output: 'php://stdout'
+    settings:
+        compress: 'bzip2'

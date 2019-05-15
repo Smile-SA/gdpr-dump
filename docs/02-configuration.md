@@ -95,12 +95,16 @@ dump:
     output: 'my_dump_file.sql'
     settings:
         compress: true
-        # TODO list of all settings in a table
 ```
 
-Default values:
+The default value of `output` is `'php://stdout'`
 
-- output: `'php://stdout'`
+The dump settings are listed in the [documentation](https://github.com/ifsnop/mysqldump-php/blob/v2.7/README.md#user-content-dump-settings) of the MySQLDump-PHP library.
+
+The default values are the same, except for two options:
+
+- add-drop-table: `true` instead of `false`
+- lock-tables: `false` instead of `true`
 
 ## Tables to Ignore
 
@@ -116,7 +120,7 @@ The wildcard character `*` can be used in table names (e.g. `cache_*`).
 
 ## Tables to Truncate
 
-You can specify tables to include without any data (no insert query):
+You can specify tables to include without any data (no insert query).
 
 ```yaml
 tables:
@@ -128,9 +132,7 @@ The wildcard character `*` can be used in table names (e.g. `cache_*`).
 
 ## Filtering Values
 
-**This feature is not yet implemented.**
-
-It will be possible to limit the data dumped for each table:
+It is possible to limit the data dumped for each table.
 
 ```yaml
 tables:
@@ -138,11 +140,22 @@ tables:
         limit: 10000
 ```
 
+The data is automatically filtered for all tables that depend on the target table (foreign keys).
+
 Available properties:
 
-- `limit`: to limit the number of values to dump
-- `direction`: `asc` or `desc`
+- `limit`: to limit the number of rows to dump
+- `orderBy`: same as SQL (e.g. `name asc, id desc`)
 - `filters`: filters applied to the table data
+
+How to define a sort order:
+
+```yaml
+tables:
+    my_table:
+        orderBy: 'sku, entity_id desc'
+        
+```
 
 How to define a filter:
 
@@ -164,26 +177,20 @@ Available filters:
 - `le` (less than or equal to)
 - `like`
 - `notLike`
-- `isNull`
-- `isNotNull`
-- `in`
-- `notIn`
+- `isNull` (no value)
+- `isNotNull` (no value)
+- `in` (value must be an array)
+- `notIn` (value must be an array)
 
-The data is automatically filtered for all tables that depend on the target table (foreign keys).
 
-## Table Whitelist
-
-**This feature is not yet implemented.**
-
-You will be able to specify a table whitelist.
-If a whitelist is defined, only the tables included in the whitelist will be dumped.
-
-All other tables will be ignored, even if they are mentioned in the config file(s).
+To use an expression, you can prefix the value by `expr:`:
 
 ```yaml
-table_whitelist:
-    - 'customers'
-    - 'transactions'
+tables:
+    my_table:
+        filters:
+            - ['updated_at', 'gt', 'expr: DATE_SUB(now(), INTERVAL 30 DAY)']
+
 ```
 
 ## Data Converters

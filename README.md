@@ -132,6 +132,7 @@ Done / mostly done:
 - Value generators, with [Faker](https://github.com/fzaninotto/Faker/), or custom
 - Wildcard character "*" in table names (only compatible with `ignore` and `truncate` characters)
 - Config per framework version (e.g. Magento 2.3)
+- Filter table data (e.g. dump only 1000 rows)
 
 WIP:
 
@@ -140,7 +141,6 @@ WIP:
 
 TODO:
 
-- Filter table data (e.g. dump only 1000 rows)
 - Find a package name
 - Tests
 

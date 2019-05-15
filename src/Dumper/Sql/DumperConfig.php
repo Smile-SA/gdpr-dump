@@ -25,25 +25,21 @@ class DumperConfig
     private $dumpSettings = [];
 
     /**
-     * @var string[]
-     */
-    private $tablesToIgnore = [];
-
-    /**
-     * @var string[]
-     */
-    private $tablesToTruncate = [];
-
-    /**
-     * @var array
+     * @var TableConfig[]
      */
     private $tablesConfig = [];
 
     /**
+     * @var TableFinder
+     */
+    private $tableFinder;
+
+    /**
      * @param ConfigInterface $config
      */
-    public function __construct(ConfigInterface $config)
+    public function __construct(ConfigInterface $config, TableFinder $tableFinder)
     {
+        $this->tableFinder = $tableFinder;
         $this->prepareConfig($config);
     }
 
@@ -78,26 +74,6 @@ class DumperConfig
     }
 
     /**
-     * Get the tables to ignore (not included in the dump file).
-     *
-     * @return string[]
-     */
-    public function getTablesToIgnore(): array
-    {
-        return $this->tablesToIgnore;
-    }
-
-    /**
-     * Get the tables to truncate (only the structure is included in the dump file, not the data).
-     *
-     * @return string[]
-     */
-    public function getTablesToTruncate(): array
-    {
-        return $this->tablesToTruncate;
-    }
-
-    /**
      * Get the tables configuration (filters, orders, limits).
      *
      * @return TableConfig[]
@@ -112,9 +88,58 @@ class DumperConfig
      *
      * @return TableConfig
      */
-    public function getTableConfig(string $tableName): TableConfig
+    public function getTableConfig(string $tableName)
     {
-        return $this->tablesConfig[$tableName];
+        return $this->tablesConfig[$tableName] ?? null;
+    }
+
+    /**
+     * Get the names of the tables to filter.
+     *
+     * @return string[]
+     */
+    public function getTablesToFilter(): array
+    {
+        $tables = [];
+
+        foreach ($this->tablesConfig as $tableConfig) {
+            if ($tableConfig->hasFilter() || $tableConfig->hasLimit() || !$tableConfig->isDataDumped()) {
+                $tables[] = $tableConfig->getName();
+            }
+        }
+
+        return $tables;
+    }
+
+    /**
+     * Get the names of the tables to sort.
+     *
+     * @return string[]
+     */
+    public function getTablesToSort(): array
+    {
+        $tables = [];
+
+        foreach ($this->tablesConfig as $tableConfig) {
+            if ($tableConfig->hasSortOrder()) {
+                $tables[] = $tableConfig->getName();
+            }
+        }
+
+        return $tables;
+    }
+
+    /**
+     * Set the table finder.
+     *
+     * @param TableFinder $tableFinder
+     * @return $this
+     */
+    public function setTableFinder(TableFinder $tableFinder): DumperConfig
+    {
+        $this->tableFinder = $tableFinder;
+
+        return $this;
     }
 
     /**
@@ -129,9 +154,7 @@ class DumperConfig
 
         // Tables config
         $tablesData = $config->get('tables', []);
-        foreach ($tablesData as $tableName => $tableData) {
-            $this->prepareTableConfig($tableName, $tableData);
-        }
+        $this->prepareTablesConfig($tablesData);
 
         // Dump config
         $this->dumpOutput = $config->get('dump.output', 'php://stdout');
@@ -139,61 +162,80 @@ class DumperConfig
         $this->dumpSettings['exclude-tables'] = $this->getTablesToIgnore();
         $this->dumpSettings['no-data'] = $this->getTablesToTruncate();
 
+        // Change the defaults for some options (to be closed to mysqldump logic)
         $this->dumpSettings += [
             'add-drop-table' => true,
+            'lock-tables' => false,
         ];
     }
 
     /**
-     * Prepare the table config.
+     * Prepare the tables config.
      *
-     * @param string $tableName
-     * @param array $tableData
+     * @param array $tablesData
      */
-    private function prepareTableConfig(string $tableName, array $tableData)
+    private function prepareTablesConfig(array $tablesData)
     {
-        $tableName = $this->getTableName($tableName, $tableData);
+        foreach ($tablesData as $tableName => $tableData) {
+            // Find all tables matching the pattern
+            $matches = $this->tableFinder->findByName($tableName);
 
-        if (isset($tableData['ignore']) && $tableData['ignore']) {
-            $this->tablesToIgnore[] = $tableName;
+            // Table found is the same as the table name -> nothing to do
+            if (count($matches) === 1 && $matches[0] === $tableName) {
+                continue;
+            }
+
+            // If tables were found -> update the tables data
+            foreach ($matches as $match) {
+                if (!array_key_exists($match, $tablesData)) {
+                    $tablesData[$match] = [];
+                }
+
+                $tablesData[$match] += $tableData;
+            }
+
+            // Remove the entry from the tables data
+            unset($tablesData[$tableName]);
         }
 
-        if (isset($tableData['truncate']) && $tableData['truncate']) {
-            $this->tablesToTruncate[] = $tableName;
+        foreach ($tablesData as $tableName => $tableData) {
+            $this->tablesConfig[$tableName] = new TableConfig($tableName, $tableData);
         }
-
-        $this->tablesConfig[$tableName] = new TableConfig($tableName, $tableData);
     }
 
     /**
-     * Get the table name that will be used by the dumper object.
-     * The table name is converted to a regular expression if the wildcard character "*" is used.
+     * Get the tables to ignore (not included in the dump file).
      *
-     * @param string $tableName
-     * @param array $tableData
-     * @return string
+     * @return string[]
      */
-    private function getTableName(string $tableName, array $tableData): string
+    private function getTablesToIgnore(): array
     {
-        // Check if the table name contains a wildcard
-        if (strpos($tableName, '*') === false) {
-            return $tableName;
+        $tables = [];
+
+        foreach ($this->tablesConfig as $tableConfig) {
+            if (!$tableConfig->isSchemaDumped()) {
+                $tables[] = $tableConfig->getName();
+            }
         }
 
-        // Wildcard character can only be used with the "truncate" or "ignore" parameters
-        $diff = array_diff_key($tableData, array_flip(['truncate', 'ignore']));
+        return $tables;
+    }
 
-        if (!empty($diff)) {
-            $key = key($diff);
-            throw new \UnexpectedValueException(
-                sprintf('Table "%s": the "%s" parameter is not allowed with wildcards.', $tableName, $key)
-            );
+    /**
+     * Get the tables to truncate (only the structure is included in the dump file, not the data).
+     *
+     * @return string[]
+     */
+    private function getTablesToTruncate(): array
+    {
+        $tables = [];
+
+        foreach ($this->tablesConfig as $tableConfig) {
+            if (!$tableConfig->isDataDumped()) {
+                $tables[] = $tableConfig->getName();
+            }
         }
 
-        // Convert the table name to a regular expression
-        $tableName = str_replace('*', '.*', $tableName);
-        $tableName = '/^' . $tableName . '$/';
-
-        return $tableName;
+        return $tables;
     }
 }

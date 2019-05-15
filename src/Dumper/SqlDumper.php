@@ -7,8 +7,12 @@ use Ifsnop\Mysqldump\Mysqldump;
 use Smile\Anonymizer\Config\ConfigInterface;
 use Smile\Anonymizer\Converter\ConverterFactory;
 use Smile\Anonymizer\Dumper\Sql\ColumnTransformer;
+use Smile\Anonymizer\Dumper\Sql\Config\DatabaseConfig;
+use Smile\Anonymizer\Dumper\Sql\Doctrine\ConnectionFactory;
 use Smile\Anonymizer\Dumper\Sql\Driver\DriverFactory;
 use Smile\Anonymizer\Dumper\Sql\DumperConfig;
+use Smile\Anonymizer\Dumper\Sql\TableDependency\FilterBuilder;
+use Smile\Anonymizer\Dumper\Sql\TableFinder;
 
 class SqlDumper implements DumperInterface
 {
@@ -28,16 +32,32 @@ class SqlDumper implements DumperInterface
     /**
      * @@inheritdoc
      */
-    public function dump(ConfigInterface $config)
+    public function dump(ConfigInterface $config): DumperInterface
     {
-        // Use a config wrapper with getters/setters
-        $config = new DumperConfig($config);
+        // Get the database config
+        $databaseConfig = new DatabaseConfig($config);
 
-        // Create the dump
+        // Create a doctrine connection
+        $connection = ConnectionFactory::create($databaseConfig);
+
+        // Use a config wrapper with getters/setters
+        $tableFinder = new TableFinder($connection);
+        $config = new DumperConfig($config, $tableFinder);
+
+        // Create the dumper instance
         $dumper = $this->getDumperInstance($config);
+
+        // Set the table filters
+        $filterBuilder = new FilterBuilder($config, $connection);
+        $tableWheres = $filterBuilder->getTableFilters();
+        $dumper->setTableWheres($tableWheres);
+
+        // Close the doctrine connection
+        $connection->close();
+
         $dumper->start($config->getDumpOutput());
 
-        return $dumper;
+        return $this;
     }
 
     /**
@@ -50,7 +70,7 @@ class SqlDumper implements DumperInterface
     private function getDumperInstance(DumperConfig $config): Mysqldump
     {
         $database = $config->getDatabase();
-        $driver = DriverFactory::create($config->getDatabase()->getDriver());
+        $driver = DriverFactory::create($database->getDriver());
 
         $dumper = new Mysqldump(
             $driver->getDsn($database),

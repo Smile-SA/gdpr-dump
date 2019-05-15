@@ -31,6 +31,8 @@ class SortOrder
      */
     public function __construct(string $column, string $direction = self::DIRECTION_ASC)
     {
+        $direction = strtoupper($direction);
+
         if ($direction !== self::DIRECTION_ASC && $direction !== self::DIRECTION_DESC) {
             throw new \UnexpectedValueException(sprintf('Invalid sort direction "%s".', $direction));
         }
