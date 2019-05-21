@@ -5,19 +5,19 @@ namespace Smile\Anonymizer\Converter\Anonymize;
 
 use Smile\Anonymizer\Converter\ConverterInterface;
 
-class AnonymizeNumber implements ConverterInterface
+class ObfuscateNumber implements ConverterInterface
 {
     /**
      * @var \Closure
      */
-    private $callback;
+    private $replaceCallback;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->callback = function () {
+        $this->replaceCallback = function () {
             return mt_rand(0, 9);
         };
     }
@@ -27,10 +27,6 @@ class AnonymizeNumber implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        if (!is_string($value) || !is_numeric($value)) {
-            return $value;
-        }
-
-        return preg_replace_callback('/\w/', $this->callback, $value);
+        return preg_replace_callback('/[0-9]/', $this->replaceCallback, $value);
     }
 }

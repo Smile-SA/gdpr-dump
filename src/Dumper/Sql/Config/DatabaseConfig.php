@@ -25,11 +25,11 @@ class DatabaseConfig
     private $pdoSettings = [];
 
     /**
-     * @param ConfigInterface $config
+     * @param array $params
      */
-    public function __construct(ConfigInterface $config)
+    public function __construct(array $params)
     {
-        $this->prepareConfig($config);
+        $this->prepareConfig($params);
     }
 
     /**
@@ -115,24 +115,22 @@ class DatabaseConfig
     /**
      * Prepare the config.
      *
-     * @param ConfigInterface $config
+     * @param array $params
      * @throws \UnexpectedValueException
      */
-    private function prepareConfig(ConfigInterface $config)
+    private function prepareConfig(array $params)
     {
-        $databaseData = $config->get('database', []);
-
-        if (!isset($databaseData['name'])) {
+        if (!isset($params['name'])) {
             throw new \UnexpectedValueException(sprintf('Missing database name.'));
         }
 
         // PDO settings
-        if (array_key_exists('pdoSettings', $databaseData)) {
-            $this->pdoSettings = $databaseData['pdoSettings'];
-            unset($databaseData['pdoSettings']);
+        if (array_key_exists('pdoSettings', $params)) {
+            $this->pdoSettings = $params['pdoSettings'];
+            unset($params['pdoSettings']);
         }
 
-        foreach ($databaseData as $param => $value) {
+        foreach ($params as $param => $value) {
             if (!array_key_exists($param, $this->params)) {
                 throw new \UnexpectedValueException(sprintf('Invalid database parameter "%s".', $param));
             }

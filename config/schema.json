@@ -57,7 +57,7 @@
             "properties": {
                 "driver": {
                     "type": "string",
-                    "enum": ["pdo_mysql", "pdo_sqlite"]
+                    "enum": ["pdo_mysql"]
                 },
                 "host": {
                     "type": "string",

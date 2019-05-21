@@ -35,7 +35,7 @@ class SqlDumper implements DumperInterface
     public function dump(ConfigInterface $config): DumperInterface
     {
         // Get the database config
-        $databaseConfig = new DatabaseConfig($config);
+        $databaseConfig = new DatabaseConfig($config->get('database', []));
 
         // Create a doctrine connection
         $connection = ConnectionFactory::create($databaseConfig);

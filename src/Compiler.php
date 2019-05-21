@@ -5,6 +5,9 @@ namespace Smile\Anonymizer;
 
 use Symfony\Component\Finder\Finder;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Compiler
 {
     /**

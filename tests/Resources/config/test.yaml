@@ -1,0 +1,21 @@
+---
+extends: 'magento2'
+
+database:
+    name: 'tests'
+
+dump:
+    output: 'dump.sql'
+
+tables:
+    customer_entity:
+        converters:
+            email:
+                converter: 'faker'
+                parameters:
+                    formatter: 'safeEmail'
+
+if_version:
+    '<2.3.0':
+        dump:
+            output: 'dump_old.sql'

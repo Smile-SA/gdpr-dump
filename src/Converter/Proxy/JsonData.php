@@ -16,7 +16,7 @@ class JsonData implements ConverterInterface
     /**
      * @param array $parameters
      */
-    public function __construct(array $parameters = [])
+    public function __construct(array $parameters)
     {
         if (empty($parameters['converters'])) {
             throw new \InvalidArgumentException('The json data converter requires a "converters" parameter.');

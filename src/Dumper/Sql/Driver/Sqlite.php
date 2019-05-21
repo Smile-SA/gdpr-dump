@@ -14,10 +14,6 @@ class Sqlite implements DriverInterface
     {
         $name = $config->getName();
 
-        if ($name === 'memory') {
-            $name = ':memory:';
-        }
-
         return 'sqlite:' . $name;
     }
 }

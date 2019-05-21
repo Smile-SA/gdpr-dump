@@ -150,7 +150,7 @@ class DumperConfig
     private function prepareConfig(ConfigInterface $config)
     {
         // Database config
-        $this->databaseConfig = new DatabaseConfig($config);
+        $this->databaseConfig = new DatabaseConfig($config->get('database', []));
 
         // Tables config
         $tablesData = $config->get('tables', []);

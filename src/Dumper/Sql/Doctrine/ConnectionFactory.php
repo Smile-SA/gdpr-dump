@@ -18,12 +18,14 @@ class ConnectionFactory
      */
     public static function create(DatabaseConfig $config)
     {
-        return DriverManager::getConnection([
+        $params = [
             'dbname' => $config->getName(),
             'user' => $config->getUser(),
             'password' => $config->getPassword(),
             'host' => $config->getHost(),
             'driver' => $config->getDriver(),
-        ]);
+        ];
+
+        return DriverManager::getConnection($params);
     }
 }

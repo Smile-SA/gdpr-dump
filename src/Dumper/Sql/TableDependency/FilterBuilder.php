@@ -66,14 +66,8 @@ class FilterBuilder
 
             // Convert the query to SQL, starting from the "WHERE" clause
             $sql = $this->getQueryString($queryBuilder);
-
-            if ($tableName === 'customer_entity_varchar') {
-                echo $queryBuilder->getSQL() . "\n\n"; // TODO remove
-            }
             $tablesWheres[$tableName] = $sql;
         }
-
-        exit;
 
         return $tablesWheres;
     }
@@ -83,10 +77,15 @@ class FilterBuilder
      *
      * @param string $tableName
      * @param QueryBuilder $queryBuilder
+     * @param array $dependencies
      * @param int $subQueryCount
      */
-    private function addDependentFilter(string $tableName, QueryBuilder $queryBuilder, &$dependencies, &$subQueryCount = 0)
-    {
+    private function addDependentFilter(
+        string $tableName,
+        QueryBuilder $queryBuilder,
+        &$dependencies,
+        &$subQueryCount = 0
+    ) {
         if (!array_key_exists($tableName, $dependencies)) {
             throw new \UnexpectedValueException(sprintf('The table dependency "%s" was not found.', $tableName));
         }
@@ -158,7 +157,8 @@ class FilterBuilder
         // Sort orders
         foreach ($tableConfig->getSortOrders() as $sortOrder) {
             $queryBuilder->addOrderBy(
-                $this->connection->quoteIdentifier($sortOrder->getColumn()), $sortOrder->getDirection()
+                $this->connection->quoteIdentifier($sortOrder->getColumn()),
+                $sortOrder->getDirection()
             );
         }
 

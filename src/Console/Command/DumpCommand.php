@@ -15,6 +15,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
+/**
+ * @codeCoverageIgnore
+ */
 class DumpCommand extends Command
 {
     /**
@@ -61,6 +64,7 @@ class DumpCommand extends Command
      */
     public function configure()
     {
+        // phpcs:disable Generic.Files.LineLength.TooLong
         $this->setName('dump')
             ->setDescription('Create an anonymized dump')
             ->addOption('driver', null, InputOption::VALUE_OPTIONAL, 'Database driver')
@@ -70,6 +74,7 @@ class DumpCommand extends Command
             ->addOption('database', null, InputOption::VALUE_REQUIRED, 'Database name')
             ->addOption('additional-config', null, InputOption::VALUE_REQUIRED, 'JSON-encoded config to load in addition to the configuration file')
             ->addArgument('config_file', InputArgument::OPTIONAL, 'Dump configuration file');
+        // phpcs:enable
     }
 
     /**

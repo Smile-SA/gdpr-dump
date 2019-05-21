@@ -8,6 +8,9 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
+/**
+ * @codeCoverageIgnore
+ */
 class AppKernel
 {
     /**
@@ -58,7 +61,7 @@ class AppKernel
      */
     private function initErrorHandler()
     {
-        set_error_handler(function(int $severity, string $message, string $file, int $line, array $context): bool {
+        set_error_handler(function (int $severity, string $message, string $file, int $line): bool {
             // Error was suppressed with the "@" operator
             if (0 === error_reporting()) {
                 return false;

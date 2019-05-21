@@ -62,6 +62,10 @@ class Filter
             throw new \UnexpectedValueException(sprintf('Invalid filter operator "%s".', $operator));
         }
 
+        if (in_array($operator, [self::OPERATOR_IN, self::OPERATOR_NOT_IN]) && !is_array($value)) {
+            throw new \UnexpectedValueException('The "in" operator requires an array value');
+        }
+
         $this->column = $column;
         $this->operator = $operator;
         $this->value = $value;

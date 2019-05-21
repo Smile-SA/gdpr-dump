@@ -15,21 +15,13 @@ class Chain implements ConverterInterface
     /**
      * @param array $parameters
      */
-    public function __construct(array $parameters = [])
+    public function __construct(array $parameters)
     {
         if (empty($parameters['converters'])) {
             throw new \InvalidArgumentException('The chain converter requires a "converters" parameter.');
         }
 
         $this->converters = $parameters['converters'];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function getRequiredParameters(): array
-    {
-        return ['converters'];
     }
 
     /**

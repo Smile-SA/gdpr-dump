@@ -160,12 +160,10 @@ class TableConfig
     {
         if (isset($tableData['ignore']) && $tableData['ignore']) {
             $this->dumpSchema = false;
-            return;
         }
 
         if (isset($tableData['truncate']) && $tableData['truncate']) {
             $this->dumpData = false;
-            return;
         }
 
         $this->prepareFilters($tableData);
@@ -242,7 +240,7 @@ class TableConfig
             }
 
             // Allows to "cancel" a converter definition
-            if ($converterData['converter'] === null || $converterData['converter'] === '') {
+            if (!isset($converterData['converter']) || $converterData['converter'] === '') {
                 continue;
             }
 

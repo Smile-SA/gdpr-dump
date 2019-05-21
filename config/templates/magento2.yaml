@@ -25,41 +25,25 @@ tables:
     persistent_session:
         truncate: true
 
-    store_website:
-        limit: 1
-        filters:
-            - ['website_id', 'neq', 0]
+    #catalog_product_entity:
+    #    limit: 2
+    #    orderBy: 'sku asc, entity_id desc'
+    #    filters:
+    #        - ['entity_id', 'isNotNull']
+    #        - ['sku', 'isNotNull']
+    #        - ['type_id', 'in', ['simple', 'configurable']]
 
-    catalog_product_entity:
-        limit: 2
-        orderBy: 'sku asc, entity_id desc'
-        filters:
-            - ['entity_id', 'isNotNull']
-            - ['sku', 'isNotNull']
-            - ['type_id', 'in', ['simple', 'configurable']]
+    #sales_order:
+    #    truncate: true
 
     customer_entity:
-        limit: 10
-        filters:
-            - ['updated_at', 'gt', 'expr: DATE_SUB(now(), INTERVAL 1000 DAY)']
-
         converters:
-            email:
-                converter: 'anonymizeEmail'
-                unique: true
-                parameters: {method: 'replace'}
+            email: { converter: 'anonymizeEmail', unique: true }
             firstname: 'anonymizeText'
             lastname: 'anonymizeText'
             password_hash: 'anonymizeText'
-            failures_num:
-                converter: 'setValue'
-                parameters: {value: 0}
+            failures_num: { converter: 'setValue', parameters: { value: 0 } }
             lock_expires: 'setNull'
-            test:
-                converter: 'faker'
-                parameters:
-                    formatter: 'something'
-                    arguments: [1, 100]
 
 # todo: serializedData instead of jsonData in some tables
 #if_version:

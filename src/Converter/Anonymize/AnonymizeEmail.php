@@ -15,15 +15,20 @@ class AnonymizeEmail extends AnonymizeText
     ];
 
     /**
+     * @var int
+     */
+    private $domainsCount;
+
+    /**
      * @param array $parameters
      */
     public function __construct(array $parameters = [])
     {
-        parent::__construct($parameters);
-
         if (!empty($parameters['domains'])) {
             $this->domains = $parameters['domains'];
         }
+
+        $this->domainsCount = count($this->domains);
     }
 
     /**
@@ -31,20 +36,15 @@ class AnonymizeEmail extends AnonymizeText
      */
     public function convert($value, array $context = [])
     {
-        if (!is_string($value)) {
-            return $value;
-        }
-
         $parts = explode('@', $value);
 
-        // Replace alphanumeric characters by random characters
         if (isset($parts[0])) {
             $parts[0] = parent::convert($parts[0]);
         }
 
         // Replace the email domain
         if (isset($parts[1])) {
-            $index = mt_rand(0, 2);
+            $index = mt_rand(0, $this->domainsCount - 1);
             $parts[1] = $this->domains[$index];
         }
 

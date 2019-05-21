@@ -25,6 +25,11 @@ class ConfigLoader implements ConfigLoaderInterface
     private $pathResolver;
 
     /**
+     * @var string[]
+     */
+    private $parentTemplates = [];
+
+    /**
      * @param ConfigInterface $config
      * @param ParserInterface $parser
      * @param PathResolverInterface $pathResolver
@@ -64,7 +69,11 @@ class ConfigLoader implements ConfigLoaderInterface
         // Recursively load parent config files
         if (isset($data['extends'])) {
             foreach ((array) $data['extends'] as $parentFile) {
-                $this->loadFile($parentFile);
+                // Load the parent template if it was not already loaded
+                if (!in_array($parentFile, $this->parentTemplates, true)) {
+                    $this->loadFile($parentFile);
+                    $this->parentTemplates[] = $parentFile;
+                }
             }
 
             unset($data['extends']);
@@ -87,7 +96,9 @@ class ConfigLoader implements ConfigLoaderInterface
         if ($version === '') {
             // Check if version is mandatory
             if ($requiresVersion) {
+                // phpcs:disable Generic.Files.LineLength.TooLong
                 throw new \RuntimeException('The application version must be specified in the configuration, or with the "--additional-config" option.');
+                // phpcs:enable
             }
 
             return $this;

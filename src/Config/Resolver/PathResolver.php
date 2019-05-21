@@ -33,7 +33,7 @@ class PathResolver implements PathResolverInterface
         if ($toAbsolutePath) {
             $realpath = realpath($path);
             if ($realpath === false) {
-                throw new \Exception(sprintf('The file "%s" was not found.', $path));
+                throw new \RuntimeException(sprintf('The file "%s" was not found.', $path));
             }
             $path = $realpath;
         }
@@ -47,12 +47,11 @@ class PathResolver implements PathResolverInterface
      * @param string $name
      * @return bool
      */
-    public function isTemplate(string $name): bool
+    private function isTemplate(string $name): bool
     {
         $templates = $this->getTemplates();
 
         return array_key_exists($name, $templates);
-
     }
 
     /**

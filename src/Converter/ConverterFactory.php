@@ -155,7 +155,7 @@ class ConverterFactory
             $this->initClassNames();
 
             // Check if the converter is a class declared in this namespace
-            if (array_key_exists($name,  $this->classNames)) {
+            if (array_key_exists($name, $this->classNames)) {
                 $className = $this->classNames[$name];
             }
         }
@@ -184,7 +184,7 @@ class ConverterFactory
      */
     private function initClassNames()
     {
-        if ( $this->classNames !== null) {
+        if ($this->classNames !== null) {
             return  $this->classNames;
         }
 
@@ -215,7 +215,7 @@ class ConverterFactory
 
             if (is_dir($path)) {
                 // Recursively find files in this directory
-                $result = array_merge($result,  $this->findClassNames($path, $fileName));
+                $result = array_merge($result, $this->findClassNames($path, $fileName));
             } else {
                 // Remove the extension
                 $fileName = pathinfo($fileName, PATHINFO_FILENAME);

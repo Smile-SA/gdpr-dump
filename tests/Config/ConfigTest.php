@@ -1,42 +1,71 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Config\ConfigTest;
+namespace Smile\Anonymizer\Tests\Config;
 
 use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Config\Config;
 
 class ConfigTest extends TestCase
 {
+    /**
+     * @var array
+     */
     private $data = [
-        'key' => 'value',
-        'nested' => [
-            'key' => 'nested value',
+        'string' => 'value',
+        'array' => [1, 2],
+        'object' => [
+            'key' => 'value',
         ],
     ];
 
-    public function testValueFound()
+    /**
+     * Test the constructor.
+     */
+    public function testConstructor()
     {
         $config = new Config($this->data);
-
-        // Assert that a config item exists
-        $this->assertSame(true, $config->has('key'));
-        $this->assertSame(true, $config->has('nested.key'));
-
-        // Assert that config items can be fetched by path
-        $this->assertSame('value', $config->get('key'));
-        $this->assertSame('nested value', $config->get('nested.key'));
-
-        // Assert that the config can be dumped
         $this->assertSame($this->data, $config->toArray());
     }
 
+    /**
+     * Test the "set", "get" and "has" methods.
+     */
+    public function testSetValue()
+    {
+        $config = new Config();
+        $config->set('key', 'value');
+
+        $this->assertTrue($config->has('key'));
+        $this->assertSame('value', $config->get('key'));
+        $this->assertSame(['key' => 'value'], $config->toArray());
+    }
+
+    /**
+     * Test the "merge" method.
+     */
+    public function testMerge()
+    {
+        $config = new Config();
+        $config->merge($this->data);
+        $config->merge(['array' => [2, 3]]);
+        $config->merge(['object' => ['key' => 'new value']]);
+
+        // Assert that string keys are properly merged
+        $this->assertSame('new value', $config->get('object.key'));
+
+        // Assert that numeric keys are replaced
+        $this->assertSame([2, 3], $config->get('array'));
+    }
+
+    /**
+     * Test the behavior of the "get" method when the specified key is not defined.
+     */
     public function testValueNotFound()
     {
         $config = new Config($this->data);
 
-        $this->assertSame(null, $config->get('not.exists'));
-        $this->assertSame(true, $config->get('not.exists', true));
-        $this->assertSame(false, $config->has('not.exists'));
+        $this->assertNull($config->get('not.exists'));
+        $this->assertSame('defaultValue', $config->get('not.exists', 'defaultValue'));
     }
 }

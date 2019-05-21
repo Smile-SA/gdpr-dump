@@ -26,14 +26,10 @@ class Unique implements ConverterInterface
      * @param array $parameters
      * @throws \InvalidArgumentException
      */
-    public function __construct(array $parameters = [])
+    public function __construct(array $parameters)
     {
         if (!isset($parameters['converter'])) {
             throw new \InvalidArgumentException('The unique converter requires a "converter" parameter.');
-        }
-
-        if ($parameters['converter'] instanceof Optional) {
-            throw new \InvalidArgumentException('The optional converter cannot be chained after the unique converter.');
         }
 
         $this->converter = $parameters['converter'];
@@ -66,17 +62,5 @@ class Unique implements ConverterInterface
         $this->generated[serialize($result)] = null;
 
         return $result;
-    }
-
-    /**
-     * Reset the cache that stores the generated values.
-     *
-     * @return $this
-     */
-    public function reset()
-    {
-        $this->generated = [];
-
-        return $this;
     }
 }

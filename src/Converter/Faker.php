@@ -31,7 +31,7 @@ class Faker implements ConverterInterface
      * @param array $parameters
      * @throws \InvalidArgumentException
      */
-    public function __construct(array $parameters = [])
+    public function __construct(array $parameters)
     {
         if (empty($parameters['faker'])) {
             throw new \InvalidArgumentException('The Faker converter requires the "faker" parameter.');
@@ -54,14 +54,6 @@ class Faker implements ConverterInterface
                 $this->placeholders[] = $name;
             }
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRequiredParameters(): array
-    {
-        return ['faker', 'formatter'];
     }
 
     /**

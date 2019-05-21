@@ -27,9 +27,9 @@ class Conditional implements ConverterInterface
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public function __construct(array $parameters = [])
+    public function __construct(array $parameters)
     {
-        if (!isset($parameters['condition'])) {
+        if (!isset($parameters['condition']) || $parameters['condition'] === '') {
             throw new \InvalidArgumentException('The conditional converter requires a "condition" parameter.');
         }
 
@@ -77,10 +77,6 @@ class Conditional implements ConverterInterface
      */
     private function sanitize(string $filter): string
     {
-        if ($filter === '') {
-            return $filter;
-        }
-
         // Remove line breaks
         $filter = preg_replace('/[\r\n]+/', ' ', $filter);
 

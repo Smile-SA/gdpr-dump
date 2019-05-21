@@ -16,7 +16,7 @@ class SerializedData implements ConverterInterface
     /**
      * @param array $parameters
      */
-    public function __construct(array $parameters = [])
+    public function __construct(array $parameters)
     {
         if (empty($parameters['converters'])) {
             throw new \InvalidArgumentException('The serialized data converter requires a "converters" parameter.');
@@ -30,7 +30,7 @@ class SerializedData implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        $decoded = unserialize($value, true);
+        $decoded = unserialize($value);
 
         if (!is_array($decoded)) {
             return $value;

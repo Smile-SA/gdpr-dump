@@ -11,7 +11,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^7.0",
-        "doctrine/dbal": "^2.9",
+        "doctrine/dbal": "^2.5",
         "fzaninotto/faker": "^1.8",
         "ifsnop/mysqldump-php": "^2.7",
         "justinrainbow/json-schema": "^5.2",
