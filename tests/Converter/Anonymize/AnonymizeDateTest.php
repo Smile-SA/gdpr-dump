@@ -34,6 +34,18 @@ class AnonymizeDateTest extends TestCase
     }
 
     /**
+     * Test if an exception is thrown when an invalid date is provided.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testInvalidDateFormat()
+    {
+        $converter = new AnonymizeDate();
+
+        $converter->convert('invalidFormat');
+    }
+
+    /**
      * Assert that a date is anonymized.
      *
      * @param string $expected

@@ -31,4 +31,16 @@ class AnonymizeDateTimeTest extends AnonymizeDateTest
         $anonymizedDate = $converter->convert($date);
         $this->assertDateIsAnonymized($date, $anonymizedDate, $format);
     }
+
+    /**
+     * Test if an exception is thrown when an invalid date is provided.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testInvalidDateFormat()
+    {
+        $converter = new AnonymizeDateTime();
+
+        $converter->convert('invalidFormat');
+    }
 }
