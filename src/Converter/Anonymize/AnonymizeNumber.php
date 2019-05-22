@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Converter\Anonymize;
 
-use Smile\Anonymizer\Converter\ConverterInterface;
-
-class AnonymizeText implements ConverterInterface
+class AnonymizeNumber extends AnonymizeText
 {
     /**
      * @inheritdoc
@@ -15,7 +13,7 @@ class AnonymizeText implements ConverterInterface
         $isFirstCharacter = true;
 
         foreach (str_split($value) as $index => $char) {
-            if ($char === ' ' || $char === '_' || $char === '.') {
+            if (!is_numeric($char)) {
                 $isFirstCharacter = true;
                 continue;
             }
