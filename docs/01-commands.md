@@ -54,7 +54,7 @@ If you don't use one of the default templates provided by this tool, you don't n
 
 ## Configuration File Validation
 
-The following commands checks if a configuration file is valid:
+The following command checks if a configuration file is valid:
 
 ```
 bin/console config:validate <config_file>

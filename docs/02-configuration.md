@@ -59,8 +59,6 @@ extends: 'magento2'
 version: '2.2.8'
 ```
 
-Note: if you extends a default config template (magento2, drupal8, ...), it is a good practice to always specify the version of your application.
-
 ## Database Settings
 
 The database information can be specified in the `dababase` object:
@@ -88,6 +86,8 @@ Available drivers:
 
 - `mysql`
 
+If command-line options are specified (e.g. `--user`), they will have priority over the parameter in the configuration file.
+
 ## Dump Settings
 
 ```yaml
@@ -106,6 +106,20 @@ The default values are the same, except for two options:
 - add-drop-table: `true` instead of `false`
 - lock-tables: `false` instead of `true`
 
+## Tables Configuration
+
+The configuration of each table must be specified in the `tables` parameter.
+
+```yaml
+tables:
+    table1:
+        # ...
+    table2:
+        # ...
+```
+
+The wildcard character `*` can be used in table names (e.g. `cache_*`).
+
 ## Tables to Ignore
 
 You can specify tables to not include in the dump:
@@ -115,8 +129,6 @@ tables:
     my_table:
         ignore: true
 ```
-
-The wildcard character `*` can be used in table names (e.g. `cache_*`).
 
 ## Tables to Truncate
 
@@ -128,7 +140,7 @@ tables:
         truncate: true
 ```
 
-The wildcard character `*` can be used in table names (e.g. `cache_*`).
+If there are tables with foreign keys to this table, they will also be automatically filtered.
 
 ## Filtering Values
 
@@ -182,7 +194,6 @@ Available filters:
 - `in` (value must be an array)
 - `notIn` (value must be an array)
 
-
 To use an expression, you can prefix the value by `expr:`:
 
 ```yaml
@@ -190,8 +201,10 @@ tables:
     my_table:
         filters:
             - ['updated_at', 'gt', 'expr: DATE_SUB(now(), INTERVAL 30 DAY)']
-
+            - ['website_id', 'eq', 'expr: (SELECT website_id FROM store_website WHERE name = "base")']
 ```
+
+Note: as of now, it is impossible to define expressions with the `in` and `notIn` operators, because the value must be an array of scalar values.
 
 ## Data Converters
 
@@ -203,7 +216,7 @@ Short syntax:
 tables:
     my_table:
         converters:
-            my_column: 'anonymizeEmail'
+            my_column: 'obfuscateEmail'
 ```
 
 The key is the column name, the value is the converter name.
@@ -215,7 +228,7 @@ tables:
     my_table:
         converters:
             my_column:
-                converter: 'anonymizeEmail'
+                converter: 'obfuscateEmail'
                 unique: true
 ```
 
@@ -237,8 +250,8 @@ tables:
     my_table:
         converters:
             my_column:
-                converter: 'numberBetween'
-                parameters: {min: 0, max: 100}
+                converter: 'obfuscateEmail'
+                parameters: {domains: ['example.org']}
 ```
 
 How to define a condition:
