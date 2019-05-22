@@ -13,16 +13,11 @@ tables:
 
     users:
         converters:
-            mail:
-                converter: 'anonymizeEmail'
-                unique: true
-                parameters: {method: 'replace'}
+            mail: 'obfuscateEmail'
             init:
-                converter: 'anonymizeEmail'
+                converter: 'obfuscateEmail'
                 unique: true
-                parameters: {method: 'replace'}
             name:
-                converter: 'anonymizeText'
+                converter: 'obfuscateText'
                 unique: true
-                parameters: {method: 'replace'}
             pass: 'anonymizeText'

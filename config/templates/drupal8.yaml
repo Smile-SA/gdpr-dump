@@ -11,15 +11,11 @@ tables:
     users_field_data:
         converters:
             mail:
-                converter: 'anonymizeEmail'
-                unique: true
-                parameters: {method: 'replace'}
+                converter: 'obfuscateEmail'
             init:
-                converter: 'anonymizeEmail'
+                converter: 'obfuscateEmail'
                 unique: true
-                parameters: {method: 'replace'}
             name:
-                converter: 'anonymizeText'
+                converter: 'obfuscateText'
                 unique: true
-                parameters: {method: 'replace'}
             pass: 'anonymizeText'
