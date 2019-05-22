@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Dumper\Sql;
+namespace Smile\Anonymizer\Tests\Dumper;
 
 use Smile\Anonymizer\Config\Config;
 use Smile\Anonymizer\Converter\ConverterFactory;

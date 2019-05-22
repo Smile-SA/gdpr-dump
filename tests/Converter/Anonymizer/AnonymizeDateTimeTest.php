@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter\Anonymize;
+namespace Smile\Anonymizer\Tests\Converter\Anonymizer;
 
 use Smile\Anonymizer\Converter\Anonymizer\AnonymizeDateTime;
 

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter\Setter;
+namespace Smile\Anonymizer\Tests\Converter\Helper;
 
 use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Converter\Helper\ArrayHelper;

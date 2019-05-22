@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Dumper\Sql\Config\Table\Filter;
+namespace Smile\Anonymizer\Tests\Dumper\Sql\Config\Table;
 
 use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Dumper\Sql\Config\Table\Filter\Filter;
