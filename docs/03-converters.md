@@ -48,65 +48,6 @@ tables:
 
 How it works: if the specified converter does not exist, it automatically tries to fallback to a Faker converter, with the converter name used as the Faker formatter name.
 
-## [obfuscateText](src/Converter/Anonymizer/ObfuscateText.php)
-
-Converts all alphanumeric characters to random alphanumeric characters.
-
-For example, one of the possible convertions for "john_doe" is "vO7s2pJx".
-
-Parameters:
-
-| Name | Required | Default | Description |
-| --- | --- | --- | --- |
-| **replacements** | N | [Check here](src/Converter/Anonymizer/ObfuscateText.php) | A string that contains the replacements characters. |
-
-Example:
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column: 'obfuscateText'
-```
-
-## [obfuscateNumber](src/Converter/Anonymizer/ObfuscateNumber.php)
-
-Converts all numeric characters to random numbers.
-
-For example, one of the possible conversions for "number_123456" is "number_086714"
-
-Example:
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column: 'obfuscateNumber'
-```
-
-## [obfuscateEmail](src/Converter/Anonymizer/ObfuscateEmail.php)
-
-Same as `obfuscateText`, but it doesn't obfuscate the email domain.
-The email domain is replaced by a safe domain.
-
-For example, one of the possible conversions for "user1@gmail.com" is "Jv4oq@example.org".
-
-Parameters:
-
-| Name | Required | Default | Description |
-| --- | --- | --- | --- |
-| **replacements** | N | [Check here](src/Converter/Anonymizer/ObfuscateText.php) | A string that contains the replacements characters. |
-| **domains** | N | `['example.com', 'example.net', 'example.org']` | A list of email domains. |
-
-Example:
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column: 'obfuscateEmail'
-```
-
 ## [anonymizeText](src/Converter/Anonymizer/AnonymizeText.php)
 
 Anonymizes string values by replacing all characters by the `*` character.
@@ -203,6 +144,65 @@ tables:
     my_table:
         converters:
             my_column: 'anonymizeDateTime'
+```
+
+## [obfuscateText](src/Converter/Anonymizer/ObfuscateText.php)
+
+Converts all alphanumeric characters to random alphanumeric characters.
+
+For example, one of the possible convertions for "john_doe" is "vO7s2pJx".
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **replacements** | N | [Check here](src/Converter/Anonymizer/ObfuscateText.php) | A string that contains the replacements characters. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column: 'obfuscateText'
+```
+
+## [obfuscateNumber](src/Converter/Anonymizer/ObfuscateNumber.php)
+
+Converts all numeric characters to random numbers.
+
+For example, one of the possible conversions for "number_123456" is "number_086714"
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column: 'obfuscateNumber'
+```
+
+## [obfuscateEmail](src/Converter/Anonymizer/ObfuscateEmail.php)
+
+Same as `obfuscateText`, but it doesn't obfuscate the email domain.
+The email domain is replaced by a safe domain.
+
+For example, one of the possible conversions for "user1@gmail.com" is "Jv4oq@example.org".
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **replacements** | N | [Check here](src/Converter/Anonymizer/ObfuscateText.php) | A string that contains the replacements characters. |
+| **domains** | N | `['example.com', 'example.net', 'example.org']` | A list of email domains. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column: 'obfuscateEmail'
 ```
 
 ## [setNull](src/Converter/Setter/SetNull.php)
