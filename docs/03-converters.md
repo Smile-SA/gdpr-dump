@@ -48,7 +48,7 @@ tables:
 
 How it works: if the specified converter does not exist, it automatically tries to fallback to a Faker converter, with the converter name used as the Faker formatter name.
 
-## [obfuscateText](src/Converter/Anonymize/ObfuscateText.php)
+## [obfuscateText](src/Converter/Anonymizer/ObfuscateText.php)
 
 Converts all alphanumeric characters to random alphanumeric characters.
 
@@ -58,7 +58,7 @@ Parameters:
 
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
-| **replacements** | N | [Check here](src/Converter/Anonymize/ObfuscateText.php) | A string that contains the replacements characters. |
+| **replacements** | N | [Check here](src/Converter/Anonymizer/ObfuscateText.php) | A string that contains the replacements characters. |
 
 Example:
 
@@ -69,7 +69,7 @@ tables:
             my_column: 'obfuscateText'
 ```
 
-## [obfuscateNumber](src/Converter/Anonymize/ObfuscateNumber.php)
+## [obfuscateNumber](src/Converter/Anonymizer/ObfuscateNumber.php)
 
 Converts all numeric characters to random numbers.
 
@@ -84,7 +84,7 @@ tables:
             my_column: 'obfuscateNumber'
 ```
 
-## [obfuscateEmail](src/Converter/Anonymize/ObfuscateEmail.php)
+## [obfuscateEmail](src/Converter/Anonymizer/ObfuscateEmail.php)
 
 Same as `obfuscateText`, but it doesn't obfuscate the email domain.
 The email domain is replaced by a safe domain.
@@ -95,7 +95,7 @@ Parameters:
 
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
-| **replacements** | N | [Check here](src/Converter/Anonymize/ObfuscateText.php) | A string that contains the replacements characters. |
+| **replacements** | N | [Check here](src/Converter/Anonymizer/ObfuscateText.php) | A string that contains the replacements characters. |
 | **domains** | N | `['example.com', 'example.net', 'example.org']` | A list of email domains. |
 
 Example:
@@ -107,7 +107,7 @@ tables:
             my_column: 'obfuscateEmail'
 ```
 
-## [anonymizeText](src/Converter/Anonymize/AnonymizeText.php)
+## [anonymizeText](src/Converter/Anonymizer/AnonymizeText.php)
 
 Anonymizes string values by replacing all characters by the `*` character.
 The first letter of each word is preserved.
@@ -124,7 +124,7 @@ tables:
             my_column: 'anonymizeText'
 ```
 
-## [anonymizeNumber](src/Converter/Anonymize/AnonymizeNumber.php)
+## [anonymizeNumber](src/Converter/Anonymizer/AnonymizeNumber.php)
 
 Anonymizes numeric values by replacing all numbers by the `*` character.
 The first digit of each number is preserved.
@@ -140,7 +140,7 @@ tables:
             my_column: 'anonymizeNumber'
 ```
 
-## [anonymizeEmail](src/Converter/Anonymize/AnonymizeEmail.php)
+## [anonymizeEmail](src/Converter/Anonymizer/AnonymizeEmail.php)
 
 Same as `anonymizeText`, but it doesn't obfuscate the email domain.
 The email domain is replaced by a safe domain.
@@ -160,6 +160,49 @@ tables:
     my_table:
         converters:
             my_column: 'anonymizeEmail'
+```
+
+## [anonymizeDate](src/Converter/Anonymizer/AnonymizeDate.php)
+
+Anonymizes date values.
+It can be used to anonymize a date of birth.
+
+The day and month are randomized, the year is not changed.
+
+For example, one of the possible conversions for "1990-01-01" is "1990-11-25".
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **format** | N | `'Y-m-d'` | The date format. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column: 'anonymizeDate'
+```
+
+## [anonymizeDateTime](src/Converter/Anonymizer/AnonymizeDateTime.php)
+
+This is exactly the same as the `anonymizeDate` converter, but the default value of the format parameter is `Y-m-d H:i:s` instead of `Y-m-d`.
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **format** | N | `'Y-m-d H:i:s'` | The date format. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column: 'anonymizeDateTime'
 ```
 
 ## [setNull](src/Converter/Setter/SetNull.php)

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Smile\Anonymizer\Tests\Converter\Proxy;
 
 use PHPUnit\Framework\TestCase;
-use Smile\Anonymizer\Converter\Anonymize\ObfuscateText;
+use Smile\Anonymizer\Converter\Anonymizer\ObfuscateText;
 
 class ObfuscateTextTest extends TestCase
 {

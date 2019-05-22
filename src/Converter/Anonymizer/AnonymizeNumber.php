@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Converter\Anonymize;
+namespace Smile\Anonymizer\Converter\Anonymizer;
 
 class AnonymizeNumber extends AnonymizeText
 {

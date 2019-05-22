@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Converter\Anonymize;
+namespace Smile\Anonymizer\Converter\Anonymizer;
 
-class AnonymizeEmail extends AnonymizeText
+class ObfuscateEmail extends ObfuscateText
 {
     /**
      * @var array
@@ -24,6 +24,8 @@ class AnonymizeEmail extends AnonymizeText
      */
     public function __construct(array $parameters = [])
     {
+        parent::__construct($parameters);
+
         if (!empty($parameters['domains'])) {
             $this->domains = $parameters['domains'];
         }
