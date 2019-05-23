@@ -202,7 +202,7 @@ Example:
 tables:
     my_table:
         converters:
-            my_column: 'obfuscateEmail'
+            my_column: 'randomizeEmail'
 ```
 
 ## [randomizeDate](src/Converter/Randomizer/RandomizeDate.php)

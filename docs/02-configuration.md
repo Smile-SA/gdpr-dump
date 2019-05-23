@@ -215,7 +215,7 @@ Short syntax:
 tables:
     my_table:
         converters:
-            my_column: 'obfuscateEmail'
+            my_column: 'randomizeEmail'
 ```
 
 The key is the column name, the value is the converter name.
@@ -227,7 +227,7 @@ tables:
     my_table:
         converters:
             my_column:
-                converter: 'obfuscateEmail'
+                converter: 'randomizeEmail'
                 unique: true
 ```
 
@@ -249,7 +249,7 @@ tables:
     my_table:
         converters:
             my_column:
-                converter: 'obfuscateEmail'
+                converter: 'randomizeEmail'
                 parameters: {domains: ['example.org']}
 ```
 
@@ -260,7 +260,7 @@ tables:
     my_table:
         converters:
             my_column:
-                converter: 'anonymizeEmail'
+                converter: 'randomizeEmail'
                 condition: '{{another_column}} !== null'
 ```
 
