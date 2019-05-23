@@ -11,11 +11,11 @@ tables:
     users_field_data:
         converters:
             mail:
-                converter: 'obfuscateEmail'
+                converter: 'randomizeEmail'
             init:
-                converter: 'obfuscateEmail'
+                converter: 'randomizeEmail'
                 unique: true
             name:
-                converter: 'obfuscateText'
+                converter: 'randomizeText'
                 unique: true
             pass: 'anonymizeText'
