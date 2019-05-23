@@ -1,4 +1,206 @@
 ---
 requiresVersion: true
 
-# TODO
+tables:
+    cache:
+        truncate: true
+
+    cache_tag:
+        truncate: true
+
+    session:
+        truncate: true
+
+    persistent_session:
+        truncate: true
+
+    admin_user_session:
+        truncate: true
+
+    customer_log:
+        truncate: true
+
+    customer_visitor:
+        truncate: true
+
+    newsletter_queue:
+        truncate: true
+
+    # Not anonymized: prefix, suffix, gender
+    customer_entity:
+        converters:
+            email: 'randomizeEmail'
+            firstname: 'anonymizeText'
+            middlename: 'anonymizeText'
+            lastname: 'anonymizeText'
+            dob: 'anonymizeDate'
+            password_hash: 'randomizeText'
+            failures_num: {converter: 'setValue', parameters: {value: 0}}
+            first_failure: 'setNull'
+            lock_expires: 'setNull'
+
+    # Not anonymized: country_id, prefix, region, region_id, suffix
+    customer_address_entity:
+        converters:
+            firstname: 'anonymizeText'
+            lastname: 'anonymizeText'
+            middlename: 'anonymizeText'
+            street: 'anonymizeText'
+            postcode: 'randomizeNumber'
+            city: 'anonymizeText'
+            telephone: 'randomizeNumber'
+            fax: 'randomizeNumber'
+            company: 'anonymizeText'
+
+    # Not anonymized: gender, billing_country_id, billing_region
+    customer_grid_flat:
+        converters:
+            name: 'anonymizeText'
+            email: 'randomizeEmail'
+            dob: 'anonymizeDate'
+            shipping_full: 'anonymizeText'
+            billing_full: 'anonymizeText'
+            billing_firstname: 'anonymizeText'
+            billing_lastname: 'anonymizeText'
+            billing_company: 'anonymizeText'
+            billing_street: 'anonymizeText'
+            billing_postcode: 'randomizeNumber'
+            billing_city: 'anonymizeText'
+            billing_telephone: 'randomizeNumber'
+            billing_fax: 'randomizeNumber'
+
+    newsletter_subscriber:
+        converters:
+            subscriber_email: 'randomizeEmail'
+            subscriber_confirm_code: 'randomizeText'
+
+    # Not anonymized: template_subject, template_text
+    newsletter_template:
+        converters:
+            template_sender_name: 'anonymizeText'
+            template_sender_email: 'randomizeEmail'
+
+    # Not anonymized: title, detail
+    review_detail:
+        converters:
+            nickname: 'anonymizeText'
+
+    # Not anonymized: customer_prefix, customer_suffix ,customer_gender
+    quote:
+        converters:
+            customer_email: 'randomizeEmail'
+            customer_firstname: 'anonymizeText'
+            customer_middlename: 'anonymizeText'
+            customer_lastname: 'anonymizeText'
+            customer_dob: 'anonymizeDateTime'
+            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
+            remote_ip: {converter: 'faker', parameters: {formatter: 'ipv4'}}
+            password_hash: 'randomizeText'
+            coupon_code: 'randomizeText'
+
+    # Not anonymized: prefix, suffix, region, region_id, country_id
+    quote_address:
+        converters:
+            email: 'randomizeEmail'
+            firstname: 'anonymizeText'
+            middlename: 'anonymizeText'
+            lastname: 'anonymizeText'
+            company: 'anonymizeText'
+            street: 'anonymizeText'
+            postcode: 'randomizeNumber'
+            city: 'anonymizeText'
+            telephone: 'randomizeNumber'
+            fax: 'randomizeNumber'
+
+    # Not anonymized: customer_prefix, customer_suffix, customer_gender
+    sales_order:
+        converters:
+            customer_email: 'randomizeEmail'
+            customer_firstname: 'anonymizeText'
+            customer_middlename: 'anonymizeText'
+            customer_lastname: 'anonymizeText'
+            customer_dob: 'anonymizeDateTime'
+            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
+            remote_ip: {converter: 'faker', parameters: {formatter: 'ipv4'}}
+            coupon_code: 'randomizeText'
+
+    # Not anonymized: prefix, suffix, region, region_id, country_id
+    sales_order_address:
+        converters:
+            email: 'randomizeEmail'
+            firstname: 'anonymizeText'
+            middlename: 'anonymizeText'
+            lastname: 'anonymizeText'
+            company: 'anonymizeText'
+            street: 'anonymizeText'
+            postcode: 'randomizeNumber'
+            city: 'anonymizeText'
+            telephone: 'randomizeNumber'
+            fax: 'randomizeNumber'
+
+    sales_order_grid:
+        converters:
+            customer_email: 'randomizeEmail'
+            customer_name: 'anonymizeText'
+            billing_name: 'anonymizeText'
+            shipping_name: 'anonymizeText'
+            billing_address: 'anonymizeText'
+            shipping_address: 'anonymizeText'
+
+    # Not anonymized: cc_exp_month, cc_exp_year, cc_ss_start_year
+    sales_order_payment:
+        converters:
+            last_trans_id: 'anonymizeNumber'
+            cc_trans_id: 'anonymizeNumber'
+            cc_owner: 'anonymizeText'
+            cc_approval: 'anonymizeText'
+            cc_number_enc: 'anonymizeText'
+            cc_last_4: 'anonymizeNumber'
+            cc_debug_request_body: 'anonymizeText'
+            cc_debug_response_body: 'anonymizeText'
+            cc_debug_response_serialized: 'anonymizeText'
+            echeck_account_name: 'anonymizeText'
+            echeck_bank_name: 'anonymizeText'
+            additional_data: 'anonymizeText' # TODO?
+            additional_information: 'anonymizeText' # TODO
+
+    sales_shipment:
+        converters:
+            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
+
+    sales_shipment_grid:
+        converters:
+            customer_email: 'anonymizeText'
+            customer_name: 'anonymizeText'
+            billing_name: 'anonymizeText'
+            shipping_name: 'anonymizeText'
+            billing_address: 'anonymizeText'
+            shipping_address: 'anonymizeText'
+
+    sales_shipment_track:
+        converters:
+            track_number: 'anonymizeText'
+
+    sales_invoice:
+        converters:
+            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
+
+    sales_invoice_grid:
+        converters:
+            customer_email: 'randomizeEmail'
+            customer_name: 'anonymizeText'
+            billing_name: 'anonymizeText'
+            billing_address: 'anonymizeText'
+            shipping_address: 'anonymizeText'
+
+    sales_creditmemo:
+        converters:
+            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
+
+    sales_creditmemo_grid:
+        converters:
+            customer_email: 'randomizeEmail'
+            customer_name: 'anonymizeText'
+            billing_name: 'anonymizeText'
+            billing_address: 'anonymizeText'
+            shipping_address: 'anonymizeText'

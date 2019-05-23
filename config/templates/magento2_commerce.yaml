@@ -1,4 +1,59 @@
 ---
 extends: magento2
 
-# TODO
+tables:
+    email_abandoned_cart:
+        converters:
+            # TODO
+
+    email_automation:
+        converters:
+            # TODO
+
+    email_campaign:
+        converters:
+            # TODO
+
+    email_contact:
+        converters:
+            # TODO
+
+    email_importer:
+        converters:
+            # TODO
+
+    email_order:
+        converters:
+            # TODO
+
+    magento_giftregistry_entity:
+        converters:
+            # TODO
+
+    magento_giftregistry_person:
+        converters:
+            # TODO
+
+    magento_invitation:
+        converters:
+            # TODO
+
+    magento_rma:
+        converters:
+            # TODO
+
+    magento_sales_creditmemo_grid_archive:
+        converters:
+            # TODO
+
+    magento_sales_invoice_grid_archive:
+        converters:
+            # TODO
+
+    magento_sales_order_grid_archive:
+        converters:
+            # TODO
+
+    magento_sales_shipment_grid_archive:
+        converters:
+            # TODO
