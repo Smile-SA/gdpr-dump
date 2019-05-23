@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter\Anonymizer;
+namespace Smile\Anonymizer\Tests\Converter\Randomizer;
 
 use PHPUnit\Framework\TestCase;
-use Smile\Anonymizer\Converter\Anonymizer\ObfuscateEmail;
+use Smile\Anonymizer\Converter\Randomizer\RandomizeEmail;
 
-class ObfuscateEmailTest extends TestCase
+class RandomizeEmailTest extends TestCase
 {
     /**
      * Test the converter.
      */
     public function testConverter()
     {
-        $converter = new ObfuscateEmail(['domains' => ['example.org']]);
+        $converter = new RandomizeEmail(['domains' => ['example.org']]);
 
         $value = $converter->convert('user1@gmail.com');
         $this->assertNotContains('user1', $value);
@@ -26,7 +26,7 @@ class ObfuscateEmailTest extends TestCase
      */
     public function testCustomReplacements()
     {
-        $converter = new ObfuscateEmail(['replacements' => 'a', 'domains' => ['example.org']]);
+        $converter = new RandomizeEmail(['replacements' => 'a', 'domains' => ['example.org']]);
 
         $value = $converter->convert('user1@example.org');
         $this->assertSame('aaaaa@example.org', $value);

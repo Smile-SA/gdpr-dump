@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Converter\Anonymizer;
 
-class AnonymizeDate
+use Smile\Anonymizer\Converter\ConverterInterface;
+
+class AnonymizeDate implements ConverterInterface
 {
     /**
      * @var string
@@ -42,14 +44,14 @@ class AnonymizeDate
      *
      * @param \DateTime $date
      */
-    private function anonymizeDate(\DateTime $date)
+    protected function anonymizeDate(\DateTime $date)
     {
-        // Get the day, month and year
+        // Get the year, month and day
         $year = (int) $date->format('Y');
         $month = (int) $date->format('n');
         $day = (int) $date->format('j');
 
-        // Randomize the day and month
+        // Randomize the month and day
         do {
             $randomDay = mt_rand(1, 31);
             $randomMonth = mt_rand(1, 12);

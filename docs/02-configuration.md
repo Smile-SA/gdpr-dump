@@ -25,7 +25,6 @@ Your config file can automatically inherit the contents of another config file, 
 extends: path/to/config/file.yaml
 ```
 
-
 If you override a default template, the path to the file and the extension may be omitted:
 
 ```yaml

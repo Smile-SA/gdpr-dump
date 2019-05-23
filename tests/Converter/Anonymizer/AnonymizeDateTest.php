@@ -17,20 +17,20 @@ class AnonymizeDateTest extends TestCase
 
         $date = '1990-12-31';
         $anonymizedDate = $converter->convert($date);
-        $this->assertDateIsAnonymized($date, $anonymizedDate, 'Y-m-d');
+        $this->assertDateIsAnonymized($anonymizedDate, $date, 'Y-m-d');
     }
 
     /**
      * Test the converter with a custom date format.
      */
-    public function testCustomFormat()
+    public function testFormatParameter()
     {
         $format = 'd/m/Y';
         $converter = new AnonymizeDate(['format' => $format]);
 
         $date = '31/12/1990';
         $anonymizedDate = $converter->convert($date);
-        $this->assertDateIsAnonymized($date, $anonymizedDate, $format);
+        $this->assertDateIsAnonymized($anonymizedDate, $date, $format);
     }
 
     /**
@@ -41,29 +41,28 @@ class AnonymizeDateTest extends TestCase
     public function testInvalidDateFormat()
     {
         $converter = new AnonymizeDate();
-
         $converter->convert('invalidFormat');
     }
 
     /**
      * Assert that a date is anonymized.
      *
-     * @param string $expected
+     * @param string $anonymized
      * @param string $actual
      * @param string $format
      */
-    protected function assertDateIsAnonymized($expected, $actual, $format)
+    protected function assertDateIsAnonymized($anonymized, $actual, $format)
     {
-        $expectedDate = \DateTime::createFromFormat($format, $expected);
+        $anonymizedDate = \DateTime::createFromFormat($format, $anonymized);
         $actualDate = \DateTime::createFromFormat($format, $actual);
 
         // The year must not have changed
-        $this->assertSame($expectedDate->format('Y'), $actualDate->format('Y'));
+        $this->assertSame($anonymizedDate->format('Y'), $actualDate->format('Y'));
 
         // The day and month must have been randomized
-        $this->assertTrue($expectedDate->format('n') !== $actualDate->format('n') || $expectedDate->format('j') !== $actualDate->format('j'));
+        $this->assertTrue($anonymizedDate->format('n') !== $actualDate->format('n') || $anonymizedDate->format('j') !== $actualDate->format('j'));
 
         // The time must not have changed
-        $this->assertSame($expectedDate->format('H:i:s'), $actualDate->format('H:i:s'));
+        $this->assertSame($anonymizedDate->format('H:i:s'), $actualDate->format('H:i:s'));
     }
 }

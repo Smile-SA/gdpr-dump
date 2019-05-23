@@ -16,20 +16,20 @@ class AnonymizeDateTimeTest extends AnonymizeDateTest
 
         $date = '1990-12-31 12:05:41';
         $anonymizedDate = $converter->convert($date);
-        $this->assertDateIsAnonymized($date, $anonymizedDate, 'Y-m-d H:i:s');
+        $this->assertDateIsAnonymized($anonymizedDate, $date, 'Y-m-d H:i:s');
     }
 
     /**
-     * Test using a custom format.
+     * Test using a custom date format.
      */
-    public function testCustomFormat()
+    public function testFormatParameter()
     {
         $format = 'd/m/Y H:i:s';
         $converter = new AnonymizeDateTime(['format' => $format]);
 
         $date = '31/12/1990 12:05:41';
         $anonymizedDate = $converter->convert($date);
-        $this->assertDateIsAnonymized($date, $anonymizedDate, $format);
+        $this->assertDateIsAnonymized($anonymizedDate, $date, $format);
     }
 
     /**
@@ -40,7 +40,6 @@ class AnonymizeDateTimeTest extends AnonymizeDateTest
     public function testInvalidDateFormat()
     {
         $converter = new AnonymizeDateTime();
-
         $converter->convert('invalidFormat');
     }
 }

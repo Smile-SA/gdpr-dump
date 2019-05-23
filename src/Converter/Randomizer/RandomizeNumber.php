@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Converter\Anonymizer;
+namespace Smile\Anonymizer\Converter\Randomizer;
 
 use Smile\Anonymizer\Converter\ConverterInterface;
 
-class ObfuscateNumber implements ConverterInterface
+class RandomizeNumber implements ConverterInterface
 {
     /**
      * @var \Closure

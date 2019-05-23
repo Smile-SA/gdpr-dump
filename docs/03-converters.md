@@ -146,7 +146,7 @@ tables:
             my_column: 'anonymizeDateTime'
 ```
 
-## [obfuscateText](src/Converter/Anonymizer/ObfuscateText.php)
+## [randomizeText](src/Converter/Randomizer/RandomizeText.php)
 
 Converts all alphanumeric characters to random alphanumeric characters.
 
@@ -156,7 +156,7 @@ Parameters:
 
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
-| **replacements** | N | [Check here](src/Converter/Anonymizer/ObfuscateText.php) | A string that contains the replacements characters. |
+| **replacements** | N | [Check here](src/Converter/Randomizer/RandomizeText.php) | A string that contains the replacements characters. |
 
 Example:
 
@@ -164,10 +164,10 @@ Example:
 tables:
     my_table:
         converters:
-            my_column: 'obfuscateText'
+            my_column: 'randomizeText'
 ```
 
-## [obfuscateNumber](src/Converter/Anonymizer/ObfuscateNumber.php)
+## [randomizeNumber](src/Converter/Randomizer/RandomizeNumber.php)
 
 Converts all numeric characters to random numbers.
 
@@ -179,12 +179,12 @@ Example:
 tables:
     my_table:
         converters:
-            my_column: 'obfuscateNumber'
+            my_column: 'randomizeNumber'
 ```
 
-## [obfuscateEmail](src/Converter/Anonymizer/ObfuscateEmail.php)
+## [randomizeEmail](src/Converter/Randomizer/RandomizeEmail.php)
 
-Same as `obfuscateText`, but it doesn't obfuscate the email domain.
+Same as `randomizeText`, but it doesn't randomize the email domain.
 The email domain is replaced by a safe domain.
 
 For example, one of the possible conversions for "user1@gmail.com" is "Jv4oq@example.org".
@@ -193,7 +193,7 @@ Parameters:
 
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
-| **replacements** | N | [Check here](src/Converter/Anonymizer/ObfuscateText.php) | A string that contains the replacements characters. |
+| **replacements** | N | [Check here](src/Converter/Randomizer/RandomizeText.php) | A string that contains the replacements characters. |
 | **domains** | N | `['example.com', 'example.net', 'example.org']` | A list of email domains. |
 
 Example:
@@ -204,6 +204,53 @@ tables:
         converters:
             my_column: 'obfuscateEmail'
 ```
+
+## [randomizeDate](src/Converter/Randomizer/RandomizeDate.php)
+
+Generates a random date.
+
+For example, one of the possible conversions for "1990-01-01" is "2002-01-20".
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **format** | N | `'Y-m-d'` | The date format. |
+| **minYear** | N | `1900` | The min year. If set to `null`, the min year is the current year. |
+| **maxYear** | N | `null` | The max year. If set to `null`, the max year is the current year. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column: 'randomizeDate'
+```
+
+## [randomizeDateTime](src/Converter/Randomizer/RandomizeDateTime.php)
+
+Generates a random date time.
+
+For example, one of the possible conversions for "1990-01-01 00:00:00" is "2002-01-20 23:05:49".
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **format** | N | `'Y-m-d H:i:s'` | The date format. |
+| **minYear** | N | `1900` | The min year. If set to `null`, the min year is the current year. |
+| **maxYear** | N | `null` | The max year. If set to `null`, the max year is the current year. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column: 'randomizeDateTime'
+```
+
 
 ## [setNull](src/Converter/Setter/SetNull.php)
 

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Converter\Anonymizer;
+namespace Smile\Anonymizer\Converter\Randomizer;
 
-class ObfuscateEmail extends ObfuscateText
+class RandomizeEmail extends RandomizeText
 {
     /**
      * @var array

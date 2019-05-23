@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter\Anonymizer;
+namespace Smile\Anonymizer\Tests\Converter\Randomizer;
 
 use PHPUnit\Framework\TestCase;
-use Smile\Anonymizer\Converter\Anonymizer\ObfuscateNumber;
+use Smile\Anonymizer\Converter\Randomizer\RandomizeNumber;
 
-class ObfuscateNumberTest extends TestCase
+class RandomizeNumberTest extends TestCase
 {
     /**
      * Test the converter.
      */
     public function testConverter()
     {
-        $converter = new ObfuscateNumber();
+        $converter = new RandomizeNumber();
 
         $value = $converter->convert('+33601010101');
         $this->assertStringStartsWith('+', $value);

@@ -51,7 +51,6 @@ version: '2.2.8'
 
 If you don't use one of the default templates provided by this tool, you don't need to specify any version.
 
-
 ## Configuration File Validation
 
 The following command checks if a configuration file is valid:
