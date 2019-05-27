@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Converter;
 
+use Smile\Anonymizer\Converter\Proxy\Cache;
 use Smile\Anonymizer\Converter\Proxy\Conditional;
 use Smile\Anonymizer\Converter\Proxy\Unique;
 use Smile\Anonymizer\Faker\FakerService;
@@ -54,6 +55,10 @@ class ConverterFactory
             $converter = new Unique(['converter' => $converter]);
         }
 
+        if ($definition['cache_key']) {
+            $converter = new Cache(['converter' => $converter, 'cache_key' => $definition['cache_key']]);
+        }
+
         // Convert data only if it matches the specified condition
         if ($definition['condition']) {
             $converter = new Conditional([
@@ -95,6 +100,7 @@ class ConverterFactory
         $definition += [
             'parameters' => [],
             'condition' => '',
+            'cache_key' => null,
             'unique' => false,
             'optional' => false,
             'chain' => null,
