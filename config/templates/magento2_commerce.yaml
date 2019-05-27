@@ -2,58 +2,61 @@
 extends: magento2
 
 tables:
-    email_abandoned_cart:
-        converters:
-            # TODO
-
-    email_automation:
-        converters:
-            # TODO
-
-    email_campaign:
-        converters:
-            # TODO
-
-    email_contact:
-        converters:
-            # TODO
-
-    email_importer:
-        converters:
-            # TODO
-
-    email_order:
-        converters:
-            # TODO
-
     magento_giftregistry_entity:
         converters:
-            # TODO
+            title: 'anonymizeText'
+            message: 'anonymizeText'
+            shipping_address: 'anonymizeText'
 
     magento_giftregistry_person:
         converters:
-            # TODO
+            email: 'randomizeEmail'
+            firstname: 'anonymizeText'
+            lastname: 'anonymizeText'
 
     magento_invitation:
         converters:
-            # TODO
+            email: 'randomizeEmail'
+            message: 'anonymizeText'
 
     magento_rma:
         converters:
-            # TODO
+            customer_custom_email: 'randomizeEmail'
 
     magento_sales_creditmemo_grid_archive:
         converters:
-            # TODO
+            customer_email: 'randomizeEmail'
+            customer_name: 'anonymizeText'
+            billing_name: 'anonymizeText'
+            billing_address: 'anonymizeText'
+            shipping_address: 'anonymizeText'
+            shipping_information: 'anonymizeText'
 
     magento_sales_invoice_grid_archive:
         converters:
-            # TODO
+            customer_email: 'randomizeEmail'
+            customer_name: 'anonymizeText'
+            billing_name: 'anonymizeText'
+            billing_address: 'anonymizeText'
+            shipping_address: 'anonymizeText'
+            shipping_information: 'anonymizeText'
 
     magento_sales_order_grid_archive:
         converters:
-            # TODO
+            customer_email: 'randomizeEmail'
+            customer_name: 'anonymizeText'
+            billing_name: 'anonymizeText'
+            shipping_name: 'anonymizeText'
+            billing_address: 'anonymizeText'
+            shipping_address: 'anonymizeText'
+            shipping_information: 'anonymizeText'
 
     magento_sales_shipment_grid_archive:
         converters:
-            # TODO
+            customer_email: 'randomizeEmail'
+            customer_name: 'anonymizeText'
+            billing_name: 'anonymizeText'
+            shipping_name: 'anonymizeText'
+            billing_address: 'anonymizeText'
+            shipping_address: 'anonymizeText'
+            shipping_information: 'anonymizeText'

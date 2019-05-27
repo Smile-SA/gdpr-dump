@@ -227,7 +227,7 @@
                     "type": "object",
                     "properties": {
                         "converters": {
-                            "type": "array",
+                            "type": ["array", "object"],
                             "items": { "$ref": "#/definitions/converter" }
                         },
                         "converter": {
@@ -242,8 +242,8 @@
                 "unique": {
                     "type": "boolean"
                 },
-                "optional": {
-                    "type": "boolean"
+                "cache_key": {
+                    "type": "string"
                 }
             },
             "additionalProperties": false

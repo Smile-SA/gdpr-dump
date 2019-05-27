@@ -28,7 +28,7 @@ class RandomizeText implements ConverterInterface
     public function __construct(array $parameters = [])
     {
         if (isset($parameters['replacements'])) {
-            $this->replacements = $parameters['replacements'];
+            $this->replacements = (string) $parameters['replacements'];
         }
 
         $this->replacementsCount = strlen($this->replacements);

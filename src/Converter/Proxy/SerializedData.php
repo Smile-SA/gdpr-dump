@@ -22,7 +22,7 @@ class SerializedData implements ConverterInterface
             throw new \InvalidArgumentException('The serialized data converter requires a "converters" parameter.');
         }
 
-        $this->converters = $parameters['converters'];
+        $this->converters = (array) $parameters['converters'];
     }
 
     /**
@@ -30,7 +30,7 @@ class SerializedData implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        $decoded = unserialize($value);
+        $decoded = @unserialize($value);
 
         if (!is_array($decoded)) {
             return $value;

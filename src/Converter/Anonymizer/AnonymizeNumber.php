@@ -12,7 +12,7 @@ class AnonymizeNumber extends AnonymizeText
     {
         $isFirstCharacter = true;
 
-        foreach (str_split($value) as $index => $char) {
+        foreach (str_split((string) $value) as $index => $char) {
             if (!is_numeric($char)) {
                 $isFirstCharacter = true;
                 continue;

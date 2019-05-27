@@ -14,7 +14,7 @@ class AnonymizeText implements ConverterInterface
     {
         $isFirstCharacter = true;
 
-        foreach (str_split($value) as $index => $char) {
+        foreach (str_split((string) $value) as $index => $char) {
             if ($char === ' ' || $char === '_' || $char === '.') {
                 $isFirstCharacter = true;
                 continue;

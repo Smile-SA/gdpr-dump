@@ -2,19 +2,13 @@
 requiresVersion: true
 
 tables:
+    admin_user_session:
+        truncate: true
+
     cache:
         truncate: true
 
     cache_tag:
-        truncate: true
-
-    session:
-        truncate: true
-
-    persistent_session:
-        truncate: true
-
-    admin_user_session:
         truncate: true
 
     customer_log:
@@ -26,10 +20,27 @@ tables:
     newsletter_queue:
         truncate: true
 
+    persistent_session:
+        truncate: true
+
+    session:
+        truncate: true
+
+    admin_user:
+        converters:
+            email: {converter: 'randomizeEmail', unique: true}
+            username: {converter: 'randomizeText', unique: true}
+            firstname: 'anonymizeText'
+            lastname: 'anonymizeText'
+            password: 'randomizeText'
+            failures_num: {converter: 'setValue', parameters: {value: 0}}
+            first_failure: 'setNull'
+            lock_expires: 'setNull'
+
     # Not anonymized: prefix, suffix, gender
     customer_entity:
         converters:
-            email: 'randomizeEmail'
+            email: {converter: 'randomizeEmail', unique: true}
             firstname: 'anonymizeText'
             middlename: 'anonymizeText'
             lastname: 'anonymizeText'
@@ -69,6 +80,27 @@ tables:
             billing_telephone: 'randomizeNumber'
             billing_fax: 'randomizeNumber'
 
+    # TODO: only on EE in earlier versions?
+    email_abandoned_cart:
+        converters:
+            email: 'randomizeEmail'
+
+    email_automation:
+        converters:
+            email: 'randomizeEmail'
+
+    email_campaign:
+        converters:
+            email: 'randomizeEmail'
+
+    email_contact:
+        converters:
+            email: 'randomizeEmail'
+
+    email_order:
+        converters:
+            email_imported: 'randomizeEmail'
+
     newsletter_subscriber:
         converters:
             subscriber_email: 'randomizeEmail'
@@ -79,11 +111,6 @@ tables:
         converters:
             template_sender_name: 'anonymizeText'
             template_sender_email: 'randomizeEmail'
-
-    # Not anonymized: title, detail
-    review_detail:
-        converters:
-            nickname: 'anonymizeText'
 
     # Not anonymized: customer_prefix, customer_suffix ,customer_gender
     quote:
@@ -111,6 +138,46 @@ tables:
             city: 'anonymizeText'
             telephone: 'randomizeNumber'
             fax: 'randomizeNumber'
+
+    # Not anonymized: cc_exp_month, cc_exp_year, cc_ss_start_month, cc_ss_start_year
+    quote_payment:
+        converters:
+            cc_owner: 'anonymizeText'
+            cc_number_enc: 'anonymizeText'
+            cc_last_4: 'anonymizeNumber'
+            additional_information:
+                converter: 'jsonData'
+                parameters:
+                    converters: {CC_CN: 'anonymizeText'}
+
+    # Not anonymized: title, detail
+    review_detail:
+        converters:
+            nickname: 'anonymizeText'
+
+    sales_creditmemo:
+        converters:
+            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
+
+    sales_creditmemo_grid:
+        converters:
+            customer_email: 'randomizeEmail'
+            customer_name: 'anonymizeText'
+            billing_name: 'anonymizeText'
+            billing_address: 'anonymizeText'
+            shipping_address: 'anonymizeText'
+
+    sales_invoice:
+        converters:
+            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
+
+    sales_invoice_grid:
+        converters:
+            customer_email: 'randomizeEmail'
+            customer_name: 'anonymizeText'
+            billing_name: 'anonymizeText'
+            billing_address: 'anonymizeText'
+            shipping_address: 'anonymizeText'
 
     # Not anonymized: customer_prefix, customer_suffix, customer_gender
     sales_order:
@@ -147,7 +214,7 @@ tables:
             billing_address: 'anonymizeText'
             shipping_address: 'anonymizeText'
 
-    # Not anonymized: cc_exp_month, cc_exp_year, cc_ss_start_year
+    # Not anonymized: cc_exp_month, cc_exp_year, cc_ss_start_month, cc_ss_start_year
     sales_order_payment:
         converters:
             last_trans_id: 'anonymizeNumber'
@@ -161,8 +228,10 @@ tables:
             cc_debug_response_serialized: 'anonymizeText'
             echeck_account_name: 'anonymizeText'
             echeck_bank_name: 'anonymizeText'
-            additional_data: 'anonymizeText' # TODO?
-            additional_information: 'anonymizeText' # TODO
+            additional_information:
+                converter: 'jsonData'
+                parameters:
+                    converters: {CC_CN: 'anonymizeText'}
 
     sales_shipment:
         converters:
@@ -181,26 +250,15 @@ tables:
         converters:
             track_number: 'anonymizeText'
 
-    sales_invoice:
-        converters:
-            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
+if_version:
+    '<2.2.0':
+        tables:
+            quote_payment:
+                converters:
+                    additional_information:
+                        converter: 'serializedData'
 
-    sales_invoice_grid:
-        converters:
-            customer_email: 'randomizeEmail'
-            customer_name: 'anonymizeText'
-            billing_name: 'anonymizeText'
-            billing_address: 'anonymizeText'
-            shipping_address: 'anonymizeText'
-
-    sales_creditmemo:
-        converters:
-            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
-
-    sales_creditmemo_grid:
-        converters:
-            customer_email: 'randomizeEmail'
-            customer_name: 'anonymizeText'
-            billing_name: 'anonymizeText'
-            billing_address: 'anonymizeText'
-            shipping_address: 'anonymizeText'
+            sales_order_payment:
+                converters:
+                    additional_information:
+                        converter: 'serializedData'

@@ -58,9 +58,10 @@ The package is not in packagist yet, we need to find a name first.
 
 Table of contents:
 
-1. [Basic usage](docs/01-commands.md)
-1. [Configuration](docs/02-configuration.md)
-2. [Converters](docs/03-converters.md)
+1. [Basic Usage](docs/01-commands.md)
+2. [Configuration](docs/02-configuration.md)
+3. [Template Recommendations](docs/03-template-recommendations.md)
+4. [Converters](docs/04-converters.md)
 
 Also, there are multiple examples of config files in the config/templates directory.
 
@@ -68,14 +69,13 @@ Also, there are multiple examples of config files in the config/templates direct
 
 **What if I don't meet the requirements?**
 
-SQL: if you use any other DBMS than MySQL, there are two options:
+SQL: this tool is only compatible with MySQL.
 
-- You can dump the structure of your database with your usual dump utility, and use our tool to dump only the INSERT queries.
-  This will work only if your DBMS allows to temporary disable foreign keys. 
-- You can set up a cron job on your production environment that clones your database, anonymizes it (by running SQL queries), and creates the dump file.
+If you use another DBMS  (e.g. PostgreSQL), you'll need to use another tool, or setup a script that clones a database, then anonymize and dumps the cloned database.
 
-PHP: if you use a PHP version < 7.0, you have bigger worries than not being able to anonymize your data!
-You need to upgrade to a [supported version of PHP](http://php.net/supported-versions.php) as soon as possible.
+PHP: this tool is only compatible with PHP >= 7.0.
+
+If you use a PHP version < 7.0, you need to upgrade to a [supported version of PHP](http://php.net/supported-versions.php) as soon as possible.
 Each release branch of PHP is supported for 3 years (2 years of full support, then 1 year of security support).
 
 **Why don't you use Doctrine to generate the dump?**
@@ -99,10 +99,9 @@ It does not handle triggers, procedures, views...
 
 As a consequence, we don't use Doctrine to generate the dump file.
 The dump file is generated with [MySQLDump-PHP](https://github.com/ifsnop/mysqldump-php) instead, which is only compatible with MySQL and SQLite.
+Doctrine is used by the tool, but only to detect the dependencies between tables (forein keys).
 
 **How is the config loaded?**
-
-The config services are defined in the [services.yaml](config/services.yaml) file.
 
 The config is loaded with the `load` method of the [ConfigLoader](src/Config/ConfigLoader.php) service.
 It has the following dependencies:
@@ -118,32 +117,6 @@ The config data is then [validated against a JSON schema](src/Config/Validator/J
 The dumper uses this configuration data to initialize its own configuration object: [DumperConfig](src/Dumper/Sql/DumperConfig.php).
 This allows to use getters/setters for each config value.
 
-## Roadmap
-
-Done / mostly done:
-
-- Console command application
-- Dependency injection
-- Config files
-- Overriding config files
-- Schema validation with [JSON schema](https://github.com/justinrainbow/json-schema/)
-- Phar file creation (with `bin/compile`)
-- SQL Dumper, with [mysqldump-php](https://github.com/ifsnop/mysqldump-php)
-- Value generators, with [Faker](https://github.com/fzaninotto/Faker/), or custom
-- Wildcard character "*" in table names (only compatible with `ignore` and `truncate` characters)
-- Config per framework version (e.g. Magento 2.3)
-- Filter table data (e.g. dump only 1000 rows)
-
-WIP:
-
-- Config templates (Magento, Drupal)
-- Documentation (in proper english)
-
-TODO:
-
-- Find a package name
-- Tests
-
 ## Contributing
 
 You can contribute to this module by submitting issues or pull requests.
@@ -152,7 +125,7 @@ For more details, please take a look at the [contribution guidelines](CONTRIBUTI
 
 ## License
 
-[TODO - determine the license](LICENSE.md)
+This project is licensed under the [GPLv3 License](LICENSE.md).
 
 ## Changelog
 

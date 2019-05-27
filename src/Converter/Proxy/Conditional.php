@@ -39,7 +39,7 @@ class Conditional implements ConverterInterface
             );
         }
 
-        $this->condition = $this->sanitize($parameters['condition']);
+        $this->condition = $this->sanitize((string) $parameters['condition']);
 
         if (isset($parameters['if_true_converter'])) {
             $this->ifTrueConverter = $parameters['if_true_converter'];

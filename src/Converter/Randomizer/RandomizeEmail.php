@@ -27,7 +27,7 @@ class RandomizeEmail extends RandomizeText
         parent::__construct($parameters);
 
         if (!empty($parameters['domains'])) {
-            $this->domains = $parameters['domains'];
+            $this->domains = (array) $parameters['domains'];
         }
 
         $this->domainsCount = count($this->domains);

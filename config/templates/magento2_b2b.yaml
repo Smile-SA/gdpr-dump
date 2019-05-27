@@ -1,4 +1,37 @@
 ---
 extends: magento2_commerce
 
-# TODO
+tables:
+    company:
+        # Not anonymized: region, region_id, country_id
+        converters:
+            company_email: 'randomizeEmail'
+            company_name: 'anonymizeText'
+            legal_name: 'anonymizeText'
+            comment: 'anonymizeText'
+            street: 'anonymizeText'
+            city: 'anonymizeText'
+            postcode: 'randomizeNumber'
+            telephone: 'randomizeNumber'
+            reject_reason: 'anonymizeText'
+
+    company_advanced_customer_entity:
+        converters:
+            telephone: 'randomizeNumber'
+
+    company_credit_history:
+        converters:
+            comment: 'anonymizeText'
+
+    company_order_entity:
+        converters:
+            company_name: 'anonymizeText'
+
+    negotiable_quote_comment:
+        converters:
+            comment: 'anonymizeText'
+
+    negotiable_quote_grid:
+        converters:
+            company_name: 'anonymizeText'
+            sales_rep: 'anonymizeText'

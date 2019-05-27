@@ -1,25 +1,22 @@
 # Configuration
 
-## Format
+## Table of Contents
 
-Configuration files must use the YAML format.
+- [Overriding Configuration](#user-content-overriding-configuration)
+- [Application Version](#user-content-application-version)
+- [Database Settings](#user-content-database-settings)
+- [Dump Settings](#user-content-dump-settings)
+- [Tables Configuration](#user-content-tables-configuration)
+    - [Tables to Ignore](#user-content-tables-to-ignore)
+    - [Tables to Truncate](#user-content-tables-to-truncate)
+    - [Filtering Values](#user-content-filtering-values)
+    - [Data Converters](#user-content-data-converters)
+    - [Sharing Converter Results](#user-content-sharing-converter-results)
+- [Version-specific Configuration](#user-content-version-specific-configuration)
 
-## Templates
+## Overriding Configuration
 
-There are default config templates available in the config/templates directory of the application:
-
-- drupal7
-- drupal8
-- magento1
-- magento2
-- magento2_b2b
-- magento2_commerce
-
-These templates can be used to anonymize a drupal/magento database.
-
-## Override Another Config File
-
-Your config file can automatically inherit the contents of another config file, by specifying the following parameter:
+You can create a custom config file that inherits the properties of another config file, by specifying the following parameter:
 
 ```yaml
 extends: path/to/config/file.yaml
@@ -119,7 +116,7 @@ tables:
 
 The wildcard character `*` can be used in table names (e.g. `cache_*`).
 
-## Tables to Ignore
+### Tables to Ignore
 
 You can specify tables to not include in the dump:
 
@@ -129,7 +126,7 @@ tables:
         ignore: true
 ```
 
-## Tables to Truncate
+### Tables to Truncate
 
 You can specify tables to include without any data (no insert query).
 
@@ -141,7 +138,7 @@ tables:
 
 If there are tables with foreign keys to this table, they will also be automatically filtered.
 
-## Filtering Values
+### Filtering Values
 
 It is possible to limit the data dumped for each table.
 
@@ -205,7 +202,7 @@ tables:
 
 Note: as of now, it is impossible to define expressions with the `in` and `notIn` operators, because the value must be an array of scalar values.
 
-## Data Converters
+### Data Converters
 
 It is possible to define data converters for any column.
 
@@ -237,10 +234,11 @@ List of available properties:
 
 | Property | Required | Default | Description |
 | --- | --- | --- | --- |
-| **converter** | Y | | Converter name. A list of all converters [is available here](03-converters.md). |
+| **converter** | Y | | Converter name. A list of all converters [is available here](04-converters.md). |
 | **condition** | N | `''` | A PHP expression that must evaluate to `true` or `false`. The value is converted if the expression returns `true`. |
 | **parameters** | N | `{}` | e.g. `min` and `max` for `numberBetween`. Most converters don't accept any parameter. |
 | **unique** | N | `false` | Whether to generate only unique values. May result in a fatal error with converters that can't generate enough unique values. |
+| **cache_key** | N | `null` | The generated value will be used by all converters that use this cache key. |
 
 How to use parameters:
 
@@ -270,7 +268,39 @@ Variables must be encapsed by double brackets.
 The available variables are the columns of the table.
 For example, if the table has a `id` column, the `{{id}}` variable will be available.
 
-## Version-specific configuration
+### Sharing Converter Results
+
+The `cache_key` parameter can be used to share values between converters.
+
+For example, to generate the same anonymized email in two tables:
+
+```yaml
+tables:
+    customer_entity:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+                cache_key: 'customer_email'
+                unique: true
+```
+
+```yaml
+tables:
+    newsletter_subscriber:
+        converters:
+            subscriber_email:
+                converter: 'randomizeEmail'
+                cache_key: 'customer_email'
+                unique: true
+```
+
+Notes:
+
+- If you use the `unique` parameter, it must be specified in all converters that share the same cache key.
+  If the parameter is missing somewhere, it can result in a infinite loop situation.
+- This feature is not used in the default templates (`magento2`, ...), because it may require a lot of memory, depending on the size of the tables.
+
+### Version-specific Configuration
 
 The `if_version` property allows to define configuration that will be read only if the version of your application matches a requirement.
 

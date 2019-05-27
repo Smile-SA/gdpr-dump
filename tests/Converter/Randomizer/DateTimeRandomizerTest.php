@@ -37,7 +37,7 @@ class DateTimeRandomizerTest extends DateRandomizerTest
      */
     public function testYearParameters()
     {
-        $converter = new RandomizeDateTime(['minYear' => 1970, 'maxYear' => 2020]);
+        $converter = new RandomizeDateTime(['min_year' => 1970, 'max_year' => 2020]);
 
         $date = '1990-12-31 12:05:41';
         $randomizedDate = $converter->convert($date);
@@ -51,7 +51,7 @@ class DateTimeRandomizerTest extends DateRandomizerTest
      */
     public function testYearConflict()
     {
-        $converter = new RandomizeDateTime(['minYear' => 2020, 'maxYear' => 2019]);
+        $converter = new RandomizeDateTime(['min_year' => 2020, 'max_year' => 2019]);
         $converter->convert('1990-12-31');
     }
 }

@@ -18,7 +18,7 @@ class AnonymizeDate implements ConverterInterface
     public function __construct(array $parameters = [])
     {
         if (isset($parameters['format'])) {
-            $this->format = $parameters['format'];
+            $this->format = (string) $parameters['format'];
         }
     }
 

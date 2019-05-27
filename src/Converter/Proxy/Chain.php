@@ -8,7 +8,7 @@ use Smile\Anonymizer\Converter\ConverterInterface;
 class Chain implements ConverterInterface
 {
     /**
-     * @var array
+     * @var ConverterInterface[]
      */
     private $converters;
 
@@ -21,7 +21,7 @@ class Chain implements ConverterInterface
             throw new \InvalidArgumentException('The chain converter requires a "converters" parameter.');
         }
 
-        $this->converters = $parameters['converters'];
+        $this->converters = (array) $parameters['converters'];
     }
 
     /**

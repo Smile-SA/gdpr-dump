@@ -35,16 +35,16 @@ class RandomizeDate implements ConverterInterface
         $this->date = new \DateTime();
 
         if (isset($parameters['format'])) {
-            $this->format = $parameters['format'];
+            $this->format = (string) $parameters['format'];
         }
 
         // Min year is the current year if the parameter is set to null, 1900 if the parameter is not defined
-        if (array_key_exists('minYear', $parameters)) {
-            $this->minYear = (int) ($parameters['minYear'] !== null ? $parameters['minYear'] : $this->date->format('Y'));
+        if (array_key_exists('min_year', $parameters)) {
+            $this->minYear = (int) ($parameters['min_year'] !== null ? $parameters['min_year'] : $this->date->format('Y'));
         }
 
         // Max year is the current year if the parameter is not defined or set to null
-        $this->maxYear = (int) ($parameters['maxYear'] ?? $this->date->format('Y'));
+        $this->maxYear = (int) ($parameters['max_year'] ?? $this->date->format('Y'));
 
         if ($this->minYear > $this->maxYear) {
             throw new \UnexpectedValueException('The minYear parameter must be lower than the maxYear parameter.');

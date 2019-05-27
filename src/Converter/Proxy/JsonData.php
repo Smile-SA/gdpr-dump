@@ -22,7 +22,7 @@ class JsonData implements ConverterInterface
             throw new \InvalidArgumentException('The json data converter requires a "converters" parameter.');
         }
 
-        $this->converters = $parameters['converters'];
+        $this->converters = (array) $parameters['converters'];
     }
 
     /**

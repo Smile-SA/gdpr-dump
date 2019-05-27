@@ -1,5 +1,23 @@
 # Available Converters
 
+## Table of Contents
+
+- [faker](#user-content-faker)
+- [anonymizeText](#user-content-anonymizetext)
+- [anonymizeNumber](#user-content-anonymizenumber)
+- [anonymizeEmail](#user-content-anonymizeemail)
+- [anonymizeDate](#user-content-anonymizedate)
+- [anonymizeDateTime](#user-content-anonymizedatetime)
+- [randomizeText](#user-content-randomizetext)
+- [randomizeNumber](#user-content-randomizenumber)
+- [randomizeEmail](#user-content-randomizeemail)
+- [randomizeDate](#user-content-randomizedate)
+- [randomizeDateTime](#user-content-randomizedatetime)
+- [setNull](#user-content-setnull)
+- [setValue](#user-content-setvalue)
+- [jsonData](#user-content-jsondata)
+- [serializedData](#user-content-serializeddata)
+
 ## [faker](src/Converter/Faker.php)
 
 Allows to use any formatter defined in the [Faker](https://github.com/fzaninotto/Faker) library.
@@ -216,8 +234,8 @@ Parameters:
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
 | **format** | N | `'Y-m-d'` | The date format. |
-| **minYear** | N | `1900` | The min year. If set to `null`, the min year is the current year. |
-| **maxYear** | N | `null` | The max year. If set to `null`, the max year is the current year. |
+| **min_year** | N | `1900` | The min year. If set to `null`, the min year is the current year. |
+| **max_year** | N | `null` | The max year. If set to `null`, the max year is the current year. |
 
 Example:
 
@@ -239,8 +257,8 @@ Parameters:
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
 | **format** | N | `'Y-m-d H:i:s'` | The date format. |
-| **minYear** | N | `1900` | The min year. If set to `null`, the min year is the current year. |
-| **maxYear** | N | `null` | The max year. If set to `null`, the max year is the current year. |
+| **min_year** | N | `1900` | The min year. If set to `null`, the min year is the current year. |
+| **max_year** | N | `null` | The max year. If set to `null`, the max year is the current year. |
 
 Example:
 
@@ -250,7 +268,6 @@ tables:
         converters:
             my_column: 'randomizeDateTime'
 ```
-
 
 ## [setNull](src/Converter/Setter/SetNull.php)
 
