@@ -6,7 +6,19 @@ tables:
         converters:
             title: 'anonymizeText'
             message: 'anonymizeText'
-            shipping_address: 'anonymizeText'
+            shipping_address:
+                converter: 'jsonData'
+                parameters:
+                    converters:
+                        firstname: 'anonymizeText'
+                        middlename: 'anonymizeText'
+                        lastname: 'anonymizeText'
+                        company: 'anonymizeText'
+                        street: 'anonymizeText'
+                        postcode: 'randomizeNumber'
+                        city: 'anonymizeText'
+                        telephone: 'randomizeNumber'
+                        fax: 'randomizeNumber'
 
     magento_giftregistry_person:
         converters:

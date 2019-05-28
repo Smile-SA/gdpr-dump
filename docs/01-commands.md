@@ -21,6 +21,7 @@ Instead of a config file, you can also use one of the default templates availabl
 - drupal7
 - drupal8
 - magento1
+- magento1_commerce
 - magento2
 - magento2_b2b
 - magento2_commerce

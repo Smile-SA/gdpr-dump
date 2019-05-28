@@ -166,6 +166,7 @@ class DumperConfig
         $this->dumpSettings += [
             'add-drop-table' => true,
             'lock-tables' => false,
+            'hex-blob' => false,
         ];
     }
 

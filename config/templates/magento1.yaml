@@ -1,4 +1,159 @@
 ---
 requiresVersion: true
 
-# TODO
+tables:
+    api_session:
+        truncate: true
+
+    core_cache:
+        truncate: true
+
+    core_cache_tag:
+        truncate: true
+
+    core_session:
+        truncate: true
+
+    dataflow_session:
+        truncate: true
+
+    persistent_session:
+        truncate: true
+
+    admin_user:
+        converters:
+            email: {converter: 'randomizeEmail', unique: true}
+            username: {converter: 'randomizeText', unique: true}
+            firstname: 'anonymizeText'
+            lastname: 'anonymizeText'
+            password: 'randomizeText'
+
+    customer_entity:
+        converters:
+            email: {converter: 'randomizeEmail', unique: true}
+
+    # Customer date of birth
+    customer_entity_datetime:
+        converters:
+            value:
+                converter: 'anonymizeDateTime'
+                condition: '{{attribute_id}} == 11'
+
+    # Customer firstname, middlename, lastname
+    customer_entity_varchar:
+        converters:
+            value:
+                converter: 'anonymizeText'
+                condition: '{{attribute_id}} == 5 || {{attribute_id}} == 6 || {{attribute_id}} == 7'
+
+    newsletter_subscriber:
+        converters:
+            subscriber_email: 'randomizeEmail'
+            subscriber_confirm_code: 'randomizeText'
+
+    # Not anonymized: title, detail
+    review_detail:
+        converters:
+            nickname: 'anonymizeText'
+
+    sales_flat_creditmemo_comment:
+        converters:
+            comment: {converter: 'faker', parameters: {formatter: 'text'}}
+
+    sales_flat_creditmemo_grid:
+        converters:
+            billing_name: 'anonymizeText'
+
+    sales_flat_invoice_comment:
+        converters:
+            comment: {converter: 'faker', parameters: {formatter: 'text'}}
+
+    sales_flat_invoice_grid:
+        converters:
+            billing_name: 'anonymizeText'
+
+    # Not anonymized: customer_prefix, customer_suffix, customer_gender
+    sales_flat_order:
+        converters:
+            customer_email: 'randomizeEmail'
+            customer_firstname: 'anonymizeText'
+            customer_middlename: 'anonymizeText'
+            customer_lastname: 'anonymizeText'
+            customer_dob: 'anonymizeDateTime'
+            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
+            remote_ip: {converter: 'faker', parameters: {formatter: 'ipv4'}}
+            coupon_code: 'randomizeText'
+
+    # Not anonymized: prefix, suffix, region, region_id, country_id
+    sales_flat_order_address:
+        converters:
+            email: 'randomizeEmail'
+            firstname: 'anonymizeText'
+            middlename: 'anonymizeText'
+            lastname: 'anonymizeText'
+            company: 'anonymizeText'
+            street: 'anonymizeText'
+            postcode: 'randomizeNumber'
+            city: 'anonymizeText'
+            telephone: 'randomizeNumber'
+            fax: 'randomizeNumber'
+
+    sales_flat_order_grid:
+        converters:
+            billing_name: 'anonymizeText'
+            shipping_name: 'anonymizeText'
+
+    # Not anonymized: cc_exp_month, cc_exp_year, cc_ss_start_month, cc_ss_start_year
+    sales_flat_order_payment:
+        converters:
+            last_trans_id: 'anonymizeNumber'
+            cc_trans_id: 'anonymizeNumber'
+            cc_owner: 'anonymizeText'
+            cc_approval: 'anonymizeText'
+            cc_number_enc: 'anonymizeText'
+            cc_last4: 'anonymizeNumber'
+            cc_debug_request_body: 'anonymizeText'
+            cc_debug_response_body: 'anonymizeText'
+            cc_debug_response_serialized: 'anonymizeText'
+            echeck_account_name: 'anonymizeText'
+            echeck_bank_name: 'anonymizeText'
+            additional_information:
+                converter: 'serializedData'
+                parameters:
+                    converters: {CC_CN: 'anonymizeText'}
+
+    # Not anonymized: customer_prefix, customer_suffix ,customer_gender
+    sales_flat_quote:
+        converters:
+            customer_email: 'randomizeEmail'
+            customer_firstname: 'anonymizeText'
+            customer_middlename: 'anonymizeText'
+            customer_lastname: 'anonymizeText'
+            customer_dob: 'anonymizeDateTime'
+            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
+            remote_ip: {converter: 'faker', parameters: {formatter: 'ipv4'}}
+            password_hash: 'randomizeText'
+            coupon_code: 'randomizeText'
+
+    # Not anonymized: cc_exp_month, cc_exp_year, cc_ss_start_month, cc_ss_start_year
+    sales_flat_quote_payment:
+        converters:
+            cc_owner: 'anonymizeText'
+            cc_number_enc: 'anonymizeText'
+            cc_last4: 'anonymizeNumber'
+            additional_information:
+                converter: 'serializedData'
+                parameters:
+                    converters: {CC_CN: 'anonymizeText'}
+
+    sales_flat_shipment_comment:
+        converters:
+            comment: {converter: 'faker', parameters: {formatter: 'text'}}
+
+    sales_flat_shipment_grid:
+        converters:
+            shipping_name: 'anonymizeText'
+
+    sales_flat_shipment_track:
+        converters:
+            track_number: 'anonymizeText'

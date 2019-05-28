@@ -54,8 +54,8 @@ tables:
     customer_address_entity:
         converters:
             firstname: 'anonymizeText'
-            lastname: 'anonymizeText'
             middlename: 'anonymizeText'
+            lastname: 'anonymizeText'
             street: 'anonymizeText'
             postcode: 'randomizeNumber'
             city: 'anonymizeText'
@@ -105,12 +105,6 @@ tables:
         converters:
             subscriber_email: 'randomizeEmail'
             subscriber_confirm_code: 'randomizeText'
-
-    # Not anonymized: template_subject, template_text
-    newsletter_template:
-        converters:
-            template_sender_name: 'anonymizeText'
-            template_sender_email: 'randomizeEmail'
 
     # Not anonymized: customer_prefix, customer_suffix ,customer_gender
     quote:
@@ -239,7 +233,7 @@ tables:
             additional_information:
                 converter: 'jsonData'
                 parameters:
-                    converters: {CC_CN: 'anonymizeText'}
+                    converters: {CC_CN: 'anonymizeText', method_title: 'anonymizeText'}
 
     sales_shipment:
         converters:

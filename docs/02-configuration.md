@@ -101,6 +101,7 @@ The default values are the same, except for two options:
 
 - add-drop-table: `true` instead of `false`
 - lock-tables: `false` instead of `true`
+- hex-blob: `false` instead of `true`
 
 ## Tables Configuration
 
