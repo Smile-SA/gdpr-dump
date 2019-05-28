@@ -10,52 +10,75 @@ tables:
                 converter: 'serializedData'
                 parameters:
                     converters:
-                        firstname: 'anonymizeText'
-                        middlename: 'anonymizeText'
-                        lastname: 'anonymizeText'
-                        company: 'anonymizeText'
-                        street: 'anonymizeText'
-                        postcode: 'randomizeNumber'
-                        city: 'anonymizeText'
-                        telephone: 'randomizeNumber'
-                        fax: 'randomizeNumber'
+                        firstname:
+                            converter: 'anonymizeText'
+                        middlename:
+                            converter: 'anonymizeText'
+                        lastname:
+                            converter: 'anonymizeText'
+                        company:
+                            converter: 'anonymizeText'
+                        street:
+                            converter: 'anonymizeText'
+                        postcode:
+                            converter: 'randomizeNumber'
+                        city:
+                            converter: 'anonymizeText'
+                        telephone:
+                            converter: 'randomizeNumber'
+                        fax:
+                            converter: 'randomizeNumber'
 
     enterprise_giftregistry_person:
         converters:
-            email: 'randomizeEmail'
-            firstname: 'anonymizeText'
-            middlename: 'anonymizeText'
-            lastname: 'anonymizeText'
+            email:
+                converter: 'randomizeEmail'
+            firstname:
+                converter: 'anonymizeText'
+            middlename:
+                converter: 'anonymizeText'
+            lastname:
+                converter: 'anonymizeText'
 
     enterprise_rma:
         converters:
-            customer_custom_email: 'randomizeEmail'
+            customer_custom_email:
+                converter: 'randomizeEmail'
 
     enterprise_rma_grid:
         converters:
-            customer_name: 'anonymizeText'
+            customer_name:
+                converter: 'anonymizeText'
 
     enterprise_rma_shipping_label:
         converters:
-            track_number: 'anonymizeText'
+            track_number:
+                converter: 'anonymizeText'
 
     enterprise_rma_status_history:
         converters:
-            comment: {converter: 'faker', parameters: {formatter: 'text'}}
+            comment:
+                converter: 'faker'
+                parameters: {formatter: 'text'}
 
     enterprise_sales_creditmemo_grid_archive:
         converters:
-            billing_name: 'anonymizeText'
+            billing_name:
+                converter: 'anonymizeText'
 
     enterprise_sales_invoice_grid_archive:
         converters:
-            billing_name: 'anonymizeText'
+            billing_name:
+                converter: 'anonymizeText'
 
     enterprise_sales_order_grid_archive:
         converters:
-            billing_name: 'anonymizeText'
-            shipping_name: 'anonymizeText'
+            billing_name:
+                converter: 'anonymizeText'
+            shipping_name:
+                converter: 'anonymizeText'
 
     enterprise_sales_shipment_grid_archive:
         converters:
-            shipping_name: 'anonymizeText'
+            shipping_name:
+                converter: 'anonymizeText'

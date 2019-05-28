@@ -13,11 +13,13 @@ tables:
 
     users:
         converters:
-            mail: 'randomizeEmail'
+            mail:
+                converter: 'randomizeEmail'
             init:
                 converter: 'randomizeEmail'
                 unique: true
             name:
                 converter: 'randomizeText'
                 unique: true
-            pass: 'anonymizeText'
+            pass:
+                converter: 'anonymizeText'

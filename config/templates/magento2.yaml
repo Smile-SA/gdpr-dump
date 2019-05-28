@@ -28,117 +28,192 @@ tables:
 
     admin_user:
         converters:
-            email: {converter: 'randomizeEmail', unique: true}
-            username: {converter: 'randomizeText', unique: true}
-            firstname: 'anonymizeText'
-            lastname: 'anonymizeText'
-            password: 'randomizeText'
-            failures_num: {converter: 'setValue', parameters: {value: 0}}
-            first_failure: 'setNull'
-            lock_expires: 'setNull'
+            email:
+                converter: 'randomizeEmail'
+                unique: true
+            username:
+                converter: 'randomizeText'
+                unique: true
+            firstname:
+                converter: 'anonymizeText'
+            lastname:
+                converter: 'anonymizeText'
+            password:
+                converter: 'randomizeText'
+            failures_num:
+                converter: 'setValue'
+                parameters: {value: 0}
+            first_failure:
+                converter: 'setNull'
+            lock_expires:
+                converter: 'setNull'
 
     # Not anonymized: prefix, suffix, gender
     customer_entity:
         converters:
-            email: {converter: 'randomizeEmail', unique: true}
-            firstname: 'anonymizeText'
-            middlename: 'anonymizeText'
-            lastname: 'anonymizeText'
-            dob: 'anonymizeDate'
-            password_hash: 'randomizeText'
-            failures_num: {converter: 'setValue', parameters: {value: 0}}
-            first_failure: 'setNull'
-            lock_expires: 'setNull'
+            email:
+                converter: 'randomizeEmail'
+                unique: true
+            firstname:
+                converter: 'anonymizeText'
+            middlename:
+                converter: 'anonymizeText'
+            lastname:
+                converter: 'anonymizeText'
+            dob:
+                converter: 'anonymizeDate'
+            password_hash:
+                converter: 'randomizeText'
+            failures_num:
+                converter: 'setValue'
+                parameters: {value: 0}
+            first_failure:
+                converter: 'setNull'
+            lock_expires:
+                converter: 'setNull'
 
     # Not anonymized: country_id, prefix, region, region_id, suffix
     customer_address_entity:
         converters:
-            firstname: 'anonymizeText'
-            middlename: 'anonymizeText'
-            lastname: 'anonymizeText'
-            street: 'anonymizeText'
-            postcode: 'randomizeNumber'
-            city: 'anonymizeText'
-            telephone: 'randomizeNumber'
-            fax: 'randomizeNumber'
-            company: 'anonymizeText'
+            firstname:
+                converter: 'anonymizeText'
+            middlename:
+                converter: 'anonymizeText'
+            lastname:
+                converter: 'anonymizeText'
+            street:
+                converter: 'anonymizeText'
+            postcode:
+                converter: 'randomizeNumber'
+            city:
+                converter: 'anonymizeText'
+            telephone:
+                converter: 'randomizeNumber'
+            fax:
+                converter: 'randomizeNumber'
+            company:
+                converter: 'anonymizeText'
 
     # Not anonymized: gender, billing_country_id, billing_region
     customer_grid_flat:
         converters:
-            name: 'anonymizeText'
-            email: 'randomizeEmail'
-            dob: 'anonymizeDate'
-            shipping_full: 'anonymizeText'
-            billing_full: 'anonymizeText'
-            billing_firstname: 'anonymizeText'
-            billing_lastname: 'anonymizeText'
-            billing_company: 'anonymizeText'
-            billing_street: 'anonymizeText'
-            billing_postcode: 'randomizeNumber'
-            billing_city: 'anonymizeText'
-            billing_telephone: 'randomizeNumber'
-            billing_fax: 'randomizeNumber'
+            name:
+                converter: 'anonymizeText'
+            email:
+                converter: 'randomizeEmail'
+            dob:
+                converter: 'anonymizeDate'
+            shipping_full:
+                converter: 'anonymizeText'
+            billing_full:
+                converter: 'anonymizeText'
+            billing_firstname:
+                converter: 'anonymizeText'
+            billing_lastname:
+                converter: 'anonymizeText'
+            billing_company:
+                converter: 'anonymizeText'
+            billing_street:
+                converter: 'anonymizeText'
+            billing_postcode:
+                converter: 'randomizeNumber'
+            billing_city:
+                converter: 'anonymizeText'
+            billing_telephone:
+                converter: 'randomizeNumber'
+            billing_fax:
+                converter: 'randomizeNumber'
 
     # TODO: only on EE in earlier versions?
     email_abandoned_cart:
         converters:
-            email: 'randomizeEmail'
+            email:
+                converter: 'randomizeEmail'
 
     email_automation:
         converters:
-            email: 'randomizeEmail'
+            email:
+                converter: 'randomizeEmail'
 
     email_campaign:
         converters:
-            email: 'randomizeEmail'
+            email:
+                converter: 'randomizeEmail'
 
     email_contact:
         converters:
-            email: 'randomizeEmail'
+            email:
+                converter: 'randomizeEmail'
 
     email_order:
         converters:
-            email_imported: 'randomizeEmail'
+            email_imported:
+                converter: 'randomizeEmail'
 
     newsletter_subscriber:
         converters:
-            subscriber_email: 'randomizeEmail'
-            subscriber_confirm_code: 'randomizeText'
+            subscriber_email:
+                converter: 'randomizeEmail'
+            subscriber_confirm_code:
+                converter: 'randomizeText'
 
     # Not anonymized: customer_prefix, customer_suffix ,customer_gender
     quote:
         converters:
-            customer_email: 'randomizeEmail'
-            customer_firstname: 'anonymizeText'
-            customer_middlename: 'anonymizeText'
-            customer_lastname: 'anonymizeText'
-            customer_dob: 'anonymizeDateTime'
-            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
-            remote_ip: {converter: 'faker', parameters: {formatter: 'ipv4'}}
-            password_hash: 'randomizeText'
-            coupon_code: 'randomizeText'
+            customer_email:
+                converter: 'randomizeEmail'
+            customer_firstname:
+                converter: 'anonymizeText'
+            customer_middlename:
+                converter: 'anonymizeText'
+            customer_lastname:
+                converter: 'anonymizeText'
+            customer_dob:
+                converter: 'anonymizeDateTime'
+            customer_note:
+                converter: 'faker'
+                parameters: {formatter: 'text'}
+            remote_ip:
+                converter: 'faker'
+                parameters: {formatter: 'ipv4'}
+            password_hash:
+                converter: 'randomizeText'
+            coupon_code:
+                converter: 'randomizeText'
 
     # Not anonymized: prefix, suffix, region, region_id, country_id
     quote_address:
         converters:
-            email: 'randomizeEmail'
-            firstname: 'anonymizeText'
-            middlename: 'anonymizeText'
-            lastname: 'anonymizeText'
-            company: 'anonymizeText'
-            street: 'anonymizeText'
-            postcode: 'randomizeNumber'
-            city: 'anonymizeText'
-            telephone: 'randomizeNumber'
-            fax: 'randomizeNumber'
+            email:
+                converter: 'randomizeEmail'
+            firstname:
+                converter: 'anonymizeText'
+            middlename:
+                converter: 'anonymizeText'
+            lastname:
+                converter: 'anonymizeText'
+            company:
+                converter: 'anonymizeText'
+            street:
+                converter: 'anonymizeText'
+            postcode:
+                converter: 'randomizeNumber'
+            city:
+                converter: 'anonymizeText'
+            telephone:
+                converter: 'randomizeNumber'
+            fax:
+                converter: 'randomizeNumber'
 
     # Not anonymized: cc_exp_month, cc_exp_year, cc_ss_start_month, cc_ss_start_year
     quote_payment:
         converters:
-            cc_owner: 'anonymizeText'
-            cc_number_enc: 'anonymizeText'
-            cc_last_4: 'anonymizeNumber'
+            cc_owner:
+                converter: 'anonymizeText'
+            cc_number_enc:
+                converter: 'anonymizeText'
+            cc_last_4:
+                converter: 'anonymizeNumber'
             additional_information:
                 converter: 'jsonData'
                 parameters:
@@ -147,89 +222,145 @@ tables:
     # Not anonymized: title, detail
     review_detail:
         converters:
-            nickname: 'anonymizeText'
+            nickname:
+                converter: 'anonymizeText'
 
     sales_creditmemo:
         converters:
-            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
+            customer_note:
+                converter: 'faker'
+                parameters: {formatter: 'text'}
 
     sales_creditmemo_comment:
         converters:
-            comment: {converter: 'faker', parameters: {formatter: 'text'}}
+            comment:
+                converter: 'faker'
+                parameters: {formatter: 'text'}
 
     sales_creditmemo_grid:
         converters:
-            customer_email: 'randomizeEmail'
-            customer_name: 'anonymizeText'
-            billing_name: 'anonymizeText'
-            billing_address: 'anonymizeText'
-            shipping_address: 'anonymizeText'
+            customer_email:
+                converter: 'randomizeEmail'
+            customer_name:
+                converter: 'anonymizeText'
+            billing_name:
+                converter: 'anonymizeText'
+            billing_address:
+                converter: 'anonymizeText'
+            shipping_address:
+                converter: 'anonymizeText'
 
     sales_invoice:
         converters:
-            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
+            customer_note:
+                converter: 'faker'
+                parameters: {formatter: 'text'}
 
     sales_invoice_comment:
         converters:
-            comment: {converter: 'faker', parameters: {formatter: 'text'}}
+            comment:
+                converter: 'faker'
+                parameters: {formatter: 'text'}
 
     sales_invoice_grid:
         converters:
-            customer_email: 'randomizeEmail'
-            customer_name: 'anonymizeText'
-            billing_name: 'anonymizeText'
-            billing_address: 'anonymizeText'
-            shipping_address: 'anonymizeText'
+            customer_email:
+                converter: 'randomizeEmail'
+            customer_name:
+                converter: 'anonymizeText'
+            billing_name:
+                converter: 'anonymizeText'
+            billing_address:
+                converter: 'anonymizeText'
+            shipping_address:
+                converter: 'anonymizeText'
 
     # Not anonymized: customer_prefix, customer_suffix, customer_gender
     sales_order:
         converters:
-            customer_email: 'randomizeEmail'
-            customer_firstname: 'anonymizeText'
-            customer_middlename: 'anonymizeText'
-            customer_lastname: 'anonymizeText'
-            customer_dob: 'anonymizeDateTime'
-            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
-            remote_ip: {converter: 'faker', parameters: {formatter: 'ipv4'}}
-            coupon_code: 'randomizeText'
+            customer_email:
+                converter: 'randomizeEmail'
+            customer_firstname:
+                converter: 'anonymizeText'
+            customer_middlename:
+                converter: 'anonymizeText'
+            customer_lastname:
+                converter: 'anonymizeText'
+            customer_dob:
+                converter: 'anonymizeDateTime'
+            customer_note:
+                converter: 'faker'
+                parameters: {formatter: 'text'}
+            remote_ip:
+                converter: 'faker'
+                parameters: {formatter: 'ipv4'}
+            coupon_code:
+                converter: 'randomizeText'
 
     # Not anonymized: prefix, suffix, region, region_id, country_id
     sales_order_address:
         converters:
-            email: 'randomizeEmail'
-            firstname: 'anonymizeText'
-            middlename: 'anonymizeText'
-            lastname: 'anonymizeText'
-            company: 'anonymizeText'
-            street: 'anonymizeText'
-            postcode: 'randomizeNumber'
-            city: 'anonymizeText'
-            telephone: 'randomizeNumber'
-            fax: 'randomizeNumber'
+            email:
+                converter: 'randomizeEmail'
+            firstname:
+                converter: 'anonymizeText'
+            middlename:
+                converter: 'anonymizeText'
+            lastname:
+                converter: 'anonymizeText'
+            company:
+                converter: 'anonymizeText'
+            street:
+                converter: 'anonymizeText'
+            postcode:
+                converter: 'randomizeNumber'
+            city:
+                converter: 'anonymizeText'
+            telephone:
+                converter: 'randomizeNumber'
+            fax:
+                converter: 'randomizeNumber'
 
     sales_order_grid:
         converters:
-            customer_email: 'randomizeEmail'
-            customer_name: 'anonymizeText'
-            billing_name: 'anonymizeText'
-            shipping_name: 'anonymizeText'
-            billing_address: 'anonymizeText'
-            shipping_address: 'anonymizeText'
+            customer_email:
+                converter: 'randomizeEmail'
+            customer_name:
+                converter: 'anonymizeText'
+            billing_name:
+                converter: 'anonymizeText'
+            shipping_name:
+                converter: 'anonymizeText'
+            billing_address:
+                converter: 'anonymizeText'
+            shipping_address:
+                converter: 'anonymizeText'
 
     # Not anonymized: cc_exp_month, cc_exp_year, cc_ss_start_month, cc_ss_start_year
     sales_order_payment:
         converters:
-            last_trans_id: 'anonymizeNumber'
-            cc_trans_id: 'anonymizeNumber'
-            cc_owner: 'anonymizeText'
-            cc_approval: 'anonymizeText'
-            cc_number_enc: 'anonymizeText'
-            cc_last_4: 'anonymizeNumber'
-            cc_debug_request_body: 'anonymizeText'
-            cc_debug_response_body: 'anonymizeText'
-            cc_debug_response_serialized: 'anonymizeText'
-            echeck_account_name: 'anonymizeText'
-            echeck_bank_name: 'anonymizeText'
+            last_trans_id:
+                converter: 'anonymizeNumber'
+            cc_trans_id:
+                converter: 'anonymizeNumber'
+            cc_owner:
+                converter: 'anonymizeText'
+            cc_approval:
+                converter: 'anonymizeText'
+            cc_number_enc:
+                converter: 'anonymizeText'
+            cc_last_4:
+                converter: 'anonymizeNumber'
+            cc_debug_request_body:
+                converter: 'anonymizeText'
+            cc_debug_response_body:
+                converter: 'anonymizeText'
+            cc_debug_response_serialized:
+                converter: 'anonymizeText'
+            echeck_account_name:
+                converter: 'anonymizeText'
+            echeck_bank_name:
+                converter: 'anonymizeText'
             additional_information:
                 converter: 'jsonData'
                 parameters:
@@ -237,24 +368,35 @@ tables:
 
     sales_shipment:
         converters:
-            customer_note: {converter: 'faker', parameters: {formatter: 'text'}}
+            customer_note:
+                converter: 'faker'
+                parameters: {formatter: 'text'}
 
     sales_shipment_comment:
         converters:
-            comment: {converter: 'faker', parameters: {formatter: 'text'}}
+            comment:
+                converter: 'faker'
+                parameters: {formatter: 'text'}
 
     sales_shipment_grid:
         converters:
-            customer_email: 'anonymizeText'
-            customer_name: 'anonymizeText'
-            billing_name: 'anonymizeText'
-            shipping_name: 'anonymizeText'
-            billing_address: 'anonymizeText'
-            shipping_address: 'anonymizeText'
+            customer_email:
+                converter: 'anonymizeText'
+            customer_name:
+                converter: 'anonymizeText'
+            billing_name:
+                converter: 'anonymizeText'
+            shipping_name:
+                converter: 'anonymizeText'
+            billing_address:
+                converter: 'anonymizeText'
+            shipping_address:
+                converter: 'anonymizeText'
 
     sales_shipment_track:
         converters:
-            track_number: 'anonymizeText'
+            track_number:
+                converter: 'anonymizeText'
 
 if_version:
     '<2.2.0':

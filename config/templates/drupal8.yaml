@@ -18,4 +18,5 @@ tables:
             name:
                 converter: 'randomizeText'
                 unique: true
-            pass: 'anonymizeText'
+            pass:
+                converter: 'anonymizeText'

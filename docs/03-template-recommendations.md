@@ -1,5 +1,11 @@
 # Template Recommendations
 
+## Performance
+
+Since this tool is a pure PHP implementation of a MySQL dumper, it is way slower than mysqldump.
+
+If the database to dump has very large tables, it is strongly recommended to use the [table filter](docs/02-configuration#user-content-filtering-values) mechanism.
+
 ## Custom Tables
 
 If your project has custom tables with sensible data, your config file must declare converters that anonymizes this data.
@@ -17,11 +23,31 @@ Example of sensible data:
 - payment data
 - comment that could contain customer-related information
 
-## Performance
 
-Since this tool is a pure PHP implementation of a dumper, it is way slower than mysqldump.
+## Data Consistency
 
-If the database to dump has tables with 
+If you use the default templates (e.g. `magento2`), the anonymized data is not consistent.
+For example, the anonymized customer email won't have the same value between the customer table and the quote table.
+
+You can add data consistency by specifying a [cache key](docs/02-configuration#user-content-data-converters).
+For example, in Magento 2:
+
+```yaml
+tables:
+    customer_entity:
+        converters:
+            email: {cache_key: 'customer_email', unique: true}
+
+    customer_flat_grid:
+        converters:
+            email: {cache_key: 'customer_email', unique: true}
+
+    # ... repeat this for each table that stores a customer email
+```
+
+With the above configuration, each table will use the same anonymized email for each customer.
+
+Warning: this can use **a lot** of memory depending on the number of values to memorize (approximately 1G for 10 million values).
 
 ## Magento
 

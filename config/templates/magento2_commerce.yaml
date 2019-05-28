@@ -4,79 +4,125 @@ extends: magento2
 tables:
     magento_giftregistry_entity:
         converters:
-            title: 'anonymizeText'
-            message: 'anonymizeText'
+            title:
+                converter: 'anonymizeText'
+            message:
+                converter: 'anonymizeText'
             shipping_address:
                 converter: 'jsonData'
                 parameters:
                     converters:
-                        firstname: 'anonymizeText'
-                        middlename: 'anonymizeText'
-                        lastname: 'anonymizeText'
-                        company: 'anonymizeText'
-                        street: 'anonymizeText'
-                        postcode: 'randomizeNumber'
-                        city: 'anonymizeText'
-                        telephone: 'randomizeNumber'
-                        fax: 'randomizeNumber'
+                        firstname:
+                            converter: 'anonymizeText'
+                        middlename:
+                            converter: 'anonymizeText'
+                        lastname:
+                            converter: 'anonymizeText'
+                        company:
+                            converter: 'anonymizeText'
+                        street:
+                            converter: 'anonymizeText'
+                        postcode:
+                            converter: 'randomizeNumber'
+                        city:
+                            converter: 'anonymizeText'
+                        telephone:
+                            converter: 'randomizeNumber'
+                        fax:
+                            converter: 'randomizeNumber'
 
     magento_giftregistry_person:
         converters:
-            email: 'randomizeEmail'
-            firstname: 'anonymizeText'
-            lastname: 'anonymizeText'
+            email:
+                converter: 'randomizeEmail'
+            firstname:
+                converter: 'anonymizeText'
+            lastname:
+                converter: 'anonymizeText'
 
     magento_invitation:
         converters:
-            email: 'randomizeEmail'
-            message: 'anonymizeText'
+            email:
+                converter: 'randomizeEmail'
+            message:
+                converter: 'anonymizeText'
 
     magento_rma:
         converters:
-            customer_custom_email: 'randomizeEmail'
+            customer_custom_email:
+                converter: 'randomizeEmail'
 
     magento_rma_shipping_label:
         converters:
-            track_number: 'anonymizeText'
+            track_number:
+                converter: 'anonymizeText'
 
     magento_rma_status_history:
         converters:
-            comment: {converter: 'faker', parameters: {formatter: 'text'}}
+            comment:
+                converter: 'faker'
+                parameters: {formatter: 'text'}
 
     magento_sales_creditmemo_grid_archive:
         converters:
-            customer_email: 'randomizeEmail'
-            customer_name: 'anonymizeText'
-            billing_name: 'anonymizeText'
-            billing_address: 'anonymizeText'
-            shipping_address: 'anonymizeText'
-            shipping_information: 'anonymizeText'
+            customer_email:
+                converter: 'randomizeEmail'
+            customer_name:
+                converter: 'anonymizeText'
+            billing_name:
+                converter: 'anonymizeText'
+            billing_address:
+                converter: 'anonymizeText'
+            shipping_address:
+                converter: 'anonymizeText'
+            shipping_information:
+                converter: 'anonymizeText'
 
     magento_sales_invoice_grid_archive:
         converters:
-            customer_email: 'randomizeEmail'
-            customer_name: 'anonymizeText'
-            billing_name: 'anonymizeText'
-            billing_address: 'anonymizeText'
-            shipping_address: 'anonymizeText'
-            shipping_information: 'anonymizeText'
+            customer_email:
+                converter: 'randomizeEmail'
+            customer_name:
+                converter: 'anonymizeText'
+            billing_name:
+                converter: 'anonymizeText'
+            billing_address:
+                converter: 'anonymizeText'
+            shipping_address:
+                converter: 'anonymizeText'
+            shipping_information:
+                converter: 'anonymizeText'
 
     magento_sales_order_grid_archive:
         converters:
-            customer_email: 'randomizeEmail'
-            customer_name: 'anonymizeText'
-            billing_name: 'anonymizeText'
-            shipping_name: 'anonymizeText'
-            billing_address: 'anonymizeText'
-            shipping_address: 'anonymizeText'
-            shipping_information: 'anonymizeText'
+            customer_email:
+                converter: 'randomizeEmail'
+            customer_name:
+                converter: 'anonymizeText'
+            billing_name:
+                converter: 'anonymizeText'
+            shipping_name:
+                converter: 'anonymizeText'
+            billing_address:
+                converter: 'anonymizeText'
+            shipping_address:
+                converter: 'anonymizeText'
+            shipping_information:
+                converter: 'anonymizeText'
 
     magento_sales_shipment_grid_archive:
         converters:
-            customer_email: 'randomizeEmail'
-            customer_name: 'anonymizeText'
-            billing_name: 'anonymizeText'
-            shipping_name: 'anonymizeText'
-            billing_address: 'anonymizeText'
-            shipping_address: 'anonymizeText'
-            shipping_information: 'anonymizeText'
+            customer_email:
+                converter: 'randomizeEmail'
+            customer_name:
+                converter: 'anonymizeText'
+            billing_name:
+                converter: 'anonymizeText'
+            shipping_name:
+                converter: 'anonymizeText'
+            billing_address:
+                converter: 'anonymizeText'
+            shipping_address:
+                converter: 'anonymizeText'
+            shipping_information:
+                converter: 'anonymizeText'
