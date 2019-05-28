@@ -23,6 +23,14 @@ tables:
         converters:
             customer_custom_email: 'randomizeEmail'
 
+    magento_rma_shipping_label:
+        converters:
+            track_number: 'anonymizeText'
+
+    magento_rma_status_history:
+        converters:
+            comment: {converter: 'faker', parameters: {formatter: 'text'}}
+
     magento_sales_creditmemo_grid_archive:
         converters:
             customer_email: 'randomizeEmail'
