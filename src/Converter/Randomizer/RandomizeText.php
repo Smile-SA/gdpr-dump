@@ -44,6 +44,6 @@ class RandomizeText implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        return preg_replace_callback('/\w/', $this->replaceCallback, $value);
+        return preg_replace_callback('/\w/u', $this->replaceCallback, $value);
     }
 }
