@@ -6,11 +6,15 @@ namespace Smile\Anonymizer\Dumper\Sql\Driver;
 class DriverFactory
 {
     /**
+     * MySQL driver name.
+     */
+    const DRIVER_MYSQL = 'pdo_mysql';
+
+    /**
      * @var string[]
      */
     public static $drivers = [
-        'pdo_mysql' => Mysql::class,
-        'pdo_sqlite' => Sqlite::class,
+        self::DRIVER_MYSQL => Mysql::class,
     ];
 
     /**

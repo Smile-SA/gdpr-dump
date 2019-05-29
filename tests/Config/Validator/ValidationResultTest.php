@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Config\Validator;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Config\Validator\ValidationResult;
+use Smile\Anonymizer\Tests\TestCase;
 
 class ValidationResultTest extends TestCase
 {

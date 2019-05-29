@@ -6,7 +6,7 @@ namespace Smile\Anonymizer\Dumper\Sql\TableDependency;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 
-class DependencyTree
+class DependencyResolver
 {
     /**
      * @var Connection
@@ -31,16 +31,15 @@ class DependencyTree
      *
      * e.g.
      * - with $tableName as "table1"
-     * - with foreign keys as: table2 with FK to table 1, table 3 with FK to table 2, table 5 with FK to table 4
+     * - with foreign keys as: table2 with FK to table 1, table 3 with FK to table 2
      *
      * Result will be:
+     * ```
      * [
-     *    'table1' => []
      *    'table2' => [FK of table 2 to table 1]
      *    'table3' => [FK of table 3 to table 2]
      * ]
-     *
-     * Table 4/5 are not included in the result because they are not related in any way to table 1.
+     * ```
      *
      * @param string $tableName
      * @return array
@@ -79,10 +78,6 @@ class DependencyTree
      */
     private function resolveDependencies(string $tableName, array $resolved = []): array
     {
-        if (!isset($resolved[$tableName])) {
-            $resolved[$tableName] = [];
-        }
-
         // No foreign key to this table
         if (!isset($this->foreignKeys[$tableName])) {
             return $resolved;
@@ -107,7 +102,7 @@ class DependencyTree
     }
 
     /**
-     * Build the tables dependencies (parent -> children)
+     * Build the tables dependencies (parent -> children).
      */
     public function buildDependencyTree()
     {

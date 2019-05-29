@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Converter\Setter;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Converter\Setter\SetNull;
+use Smile\Anonymizer\Tests\TestCase;
 
 class SetNullTest extends TestCase
 {

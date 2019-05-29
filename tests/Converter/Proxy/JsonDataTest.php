@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Converter\Proxy;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Converter\Proxy\JsonData;
 use Smile\Anonymizer\Tests\Converter\Dummy;
+use Smile\Anonymizer\Tests\TestCase;
 
 class JsonDataTest extends TestCase
 {

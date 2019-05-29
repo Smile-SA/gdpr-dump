@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Dumper\Sql\Config\Table;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Dumper\Sql\Config\Table\Filter\Filter;
 use Smile\Anonymizer\Dumper\Sql\Config\Table\TableConfig;
+use Smile\Anonymizer\Tests\TestCase;
 
 class TableConfigTest extends TestCase
 {
@@ -134,9 +134,6 @@ class TableConfigTest extends TestCase
      */
     public function testIgnoreDataConflict()
     {
-        $config = new TableConfig('table1', ['truncate' => true, 'limit' => 100]);
-
-        var_dump($config->isDataDumped());
-        var_dump($config->getLimit());
+        new TableConfig('table1', ['truncate' => true, 'limit' => 100]);
     }
 }

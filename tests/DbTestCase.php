@@ -4,10 +4,6 @@ declare(strict_types=1);
 namespace Smile\Anonymizer\Tests;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver;
-use Doctrine\DBAL\DriverManager;
-use PHPUnit\Framework\TestCase;
-use Smile\Anonymizer\Config\Config;
 use Smile\Anonymizer\Dumper\Sql\Config\DatabaseConfig;
 use Smile\Anonymizer\Dumper\Sql\Doctrine\ConnectionFactory;
 
@@ -35,6 +31,11 @@ abstract class DbTestCase extends TestCase
         $config = new DatabaseConfig(static::getConnectionParams());
 
         static::$connection = ConnectionFactory::create($config);
+
+        // Create the tables
+        $queries = file_get_contents(APP_ROOT . '/tests/Resources/db/test_db.sql');
+        $statement = static::$connection->prepare($queries);
+        $statement->execute();
     }
 
     /**

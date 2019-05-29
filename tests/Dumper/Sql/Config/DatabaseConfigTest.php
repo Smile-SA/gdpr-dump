@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Dumper\Sql\Config;
 
-use PHPUnit\Framework\TestCase;
-use Smile\Anonymizer\Config\Config;
 use Smile\Anonymizer\Dumper\Sql\Config\DatabaseConfig;
+use Smile\Anonymizer\Tests\TestCase;
 
 class DatabaseConfigTest extends TestCase
 {

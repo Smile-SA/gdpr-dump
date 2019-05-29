@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Converter\Randomizer;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Converter\Randomizer\RandomizeNumber;
+use Smile\Anonymizer\Tests\TestCase;
 
 class RandomizeNumberTest extends TestCase
 {

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Config\Validator;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Config\Validator\JsonSchemaValidator;
+use Smile\Anonymizer\Tests\TestCase;
 
 class JsonSchemaValidatorTest extends TestCase
 {
@@ -18,7 +18,7 @@ class JsonSchemaValidatorTest extends TestCase
      */
     public function setUp()
     {
-        $this->schemaFile = APP_ROOT . '/tests/Resources/config/schema.json';
+        $this->schemaFile = $this->getResource('config/schema.json');
     }
 
     /**

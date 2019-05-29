@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Converter\Proxy;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Converter\Proxy\Cache;
 use Smile\Anonymizer\Converter\Randomizer\RandomizeText;
+use Smile\Anonymizer\Tests\TestCase;
 
 class CacheTest extends TestCase
 {

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Console;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Console\Application;
+use Smile\Anonymizer\Tests\TestCase;
 
 class ApplicationTest extends TestCase
 {

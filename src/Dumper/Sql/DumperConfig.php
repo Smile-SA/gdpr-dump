@@ -130,19 +130,6 @@ class DumperConfig
     }
 
     /**
-     * Set the table finder.
-     *
-     * @param TableFinder $tableFinder
-     * @return $this
-     */
-    public function setTableFinder(TableFinder $tableFinder): DumperConfig
-    {
-        $this->tableFinder = $tableFinder;
-
-        return $this;
-    }
-
-    /**
      * Prepare the config.
      *
      * @param ConfigInterface $config

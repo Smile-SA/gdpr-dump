@@ -5,7 +5,6 @@ namespace Smile\Anonymizer\Faker;
 
 use Faker\Generator;
 use Faker\Factory;
-use Smile\Anonymizer\Faker\Provider\Internet;
 
 class FakerService
 {
@@ -38,7 +37,6 @@ class FakerService
     {
         if ($this->generator === null) {
             $this->generator = Factory::create($this->options['locale']);
-            $this->generator->addProvider(new Internet($this->generator));
         }
 
         return $this->generator;

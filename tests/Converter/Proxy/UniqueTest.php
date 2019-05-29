@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Converter\Proxy;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Converter\Proxy\Unique;
 use Smile\Anonymizer\Converter\Setter\SetNull;
 use Smile\Anonymizer\Tests\Converter\Dummy;
+use Smile\Anonymizer\Tests\TestCase;
 
 class UniqueTest extends TestCase
 {

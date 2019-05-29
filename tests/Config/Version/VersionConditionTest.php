@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Config\Version;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Config\Version\VersionCondition;
+use Smile\Anonymizer\Tests\TestCase;
 
 class VersionConditionTest extends TestCase
 {

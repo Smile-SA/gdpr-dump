@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Converter\Anonymizer;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Converter\Anonymizer\AnonymizeEmail;
+use Smile\Anonymizer\Tests\TestCase;
 
 class AnonymizeEmailTest extends TestCase
 {

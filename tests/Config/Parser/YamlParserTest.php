@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Config\Parser;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Config\Parser\YamlParser;
+use Smile\Anonymizer\Tests\TestCase;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlParserTest extends TestCase

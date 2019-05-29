@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Converter;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Converter\ConverterFactory;
 use Smile\Anonymizer\Converter\Faker;
 use Smile\Anonymizer\Converter\Proxy\Conditional;
 use Smile\Anonymizer\Converter\Proxy\Unique;
 use Smile\Anonymizer\Faker\FakerService;
+use Smile\Anonymizer\Tests\TestCase;
 
 class ConverterFactoryTest extends TestCase
 {

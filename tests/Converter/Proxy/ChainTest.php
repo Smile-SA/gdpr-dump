@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Converter\Proxy;
 
-use PHPUnit\Framework\TestCase;
-use Smile\Anonymizer\Converter\ConverterInterface;
 use Smile\Anonymizer\Converter\Proxy\Chain;
 use Smile\Anonymizer\Tests\Converter\Dummy;
+use Smile\Anonymizer\Tests\TestCase;
 
 class ChainTest extends TestCase
 {

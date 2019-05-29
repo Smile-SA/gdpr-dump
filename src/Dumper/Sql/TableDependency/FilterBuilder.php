@@ -38,22 +38,23 @@ class FilterBuilder
      */
     public function getTableFilters(): array
     {
+        $tablesWheres = [];
         $tablesToFilter = $this->config->getTablesToFilter();
         $tablesToSort = $this->config->getTablesToSort();
 
         if (empty($tablesToFilter) && empty($tablesToSort)) {
-            return [];
+            return $tablesWheres;
         }
 
-        $dependencyTree = new DependencyTree($this->connection);
-
         // Get the foreign keys of each table that depends on the filters that were declared in the configuration
-        $dependencies = $dependencyTree->getTablesDependencies($tablesToFilter);
+        $dependencyResolver = new DependencyResolver($this->connection);
+        $dependencies = $dependencyResolver->getTablesDependencies($tablesToFilter);
 
-        // Use these foreign keys to build the WHERE condition of each table
-        $tablesWheres = [];
-
-        $tablesToQuery = array_unique(array_merge(array_keys($dependencies), $tablesToSort));
+        // Tables to query are:
+        // - tables with filters declared in the config
+        // - tables with sort orders declared in the config
+        // - tables that depend on the tables to filter
+        $tablesToQuery = array_unique(array_merge(array_keys($dependencies), $tablesToFilter, $tablesToSort));
 
         foreach ($tablesToQuery as $tableName) {
             // Create the query that will contain a combination of filter / sort order / limit
@@ -68,6 +69,9 @@ class FilterBuilder
             $sql = $this->getQueryString($queryBuilder);
             $tablesWheres[$tableName] = $sql;
         }
+
+        // Sort by table name (easier to debug)
+        ksort($tablesWheres);
 
         return $tablesWheres;
     }
@@ -86,17 +90,13 @@ class FilterBuilder
         &$dependencies,
         &$subQueryCount = 0
     ) {
-        if (!array_key_exists($tableName, $dependencies)) {
-            throw new \UnexpectedValueException(sprintf('The table dependency "%s" was not found.', $tableName));
-        }
-
         /** @var ForeignKeyConstraint $dependency */
         foreach ($dependencies[$tableName] as $dependency) {
             $qb = $this->createQueryBuilder($dependency->getForeignTableName());
             $qb->select($this->getColumnsSql($dependency->getForeignColumns()));
 
             // Recursively add condition on parent tables
-            if ($qb->getMaxResults() !== 0) {
+            if ($qb->getMaxResults() !== 0 && array_key_exists($dependency->getForeignTableName(), $dependencies)) {
                 $this->addDependentFilter($dependency->getForeignTableName(), $qb, $dependencies, $subQueryCount);
             }
 

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Converter\Anonymizer;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Converter\Anonymizer\AnonymizeDate;
+use Smile\Anonymizer\Tests\TestCase;
 
 class AnonymizeDateTest extends TestCase
 {

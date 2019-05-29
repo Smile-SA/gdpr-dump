@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Config;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Config\Config;
+use Smile\Anonymizer\Tests\TestCase;
 
 class ConfigTest extends TestCase
 {

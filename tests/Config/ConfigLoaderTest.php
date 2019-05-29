@@ -3,14 +3,27 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Tests\Config;
 
-use PHPUnit\Framework\TestCase;
 use Smile\Anonymizer\Config\Config;
 use Smile\Anonymizer\Config\ConfigLoader;
 use Smile\Anonymizer\Config\Parser\YamlParser;
 use Smile\Anonymizer\Config\Resolver\PathResolver;
+use Smile\Anonymizer\Tests\TestCase;
 
 class ConfigLoaderTest extends TestCase
 {
+    /**
+     * @var string
+     */
+    private $configFile;
+
+    /**
+     * @inheritdoc
+     */
+    public function setUp()
+    {
+        $this->configFile = $this->getResource('config/test_config.yaml');
+    }
+
     /**
      * Test the "loadData" method.
      */
@@ -37,9 +50,9 @@ class ConfigLoaderTest extends TestCase
         $config = new Config();
         $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
 
-        $configLoader->loadFile(APP_ROOT . '/tests/Resources/config/test.yaml');
-        $this->assertSame('faker', $config->get('tables.customer_entity.converters.email.converter'));
-        $this->assertSame('dump.sql', $config->get('dump.output'));
+        $configLoader->loadFile($this->configFile);
+        $this->assertSame('randomizeEmail', $config->get('tables.customers.converters.email'));
+        $this->assertSame('php://stdout', $config->get('dump.output'));
     }
 
     public function testLoadVersionData()
@@ -48,9 +61,9 @@ class ConfigLoaderTest extends TestCase
         $config->set('version', '2.0.0');
         $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
 
-        $configLoader->loadFile(APP_ROOT . '/tests/Resources/config/test.yaml');
+        $configLoader->loadFile($this->configFile);
         $configLoader->loadVersionData();
-        $this->assertSame('dump_old.sql', $config->get('dump.output'));
+        $this->assertSame('anonymizeEmail', $config->get('tables.customers.converters.email'));
     }
 
     /**
@@ -62,7 +75,7 @@ class ConfigLoaderTest extends TestCase
     {
         $config = new Config();
         $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
-        $configLoader->loadFile(APP_ROOT . '/tests/Resources/config/test.yaml');
+        $configLoader->loadFile($this->configFile);
         $configLoader->loadVersionData();
     }
 }
