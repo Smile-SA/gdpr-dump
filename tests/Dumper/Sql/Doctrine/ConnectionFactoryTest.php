@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Smile\Anonymizer\Tests\Dumper\Sql\Doctrine;
 
 use Doctrine\DBAL\Connection;
-use Smile\Anonymizer\Tests\DbTestCase;
+use Smile\Anonymizer\Tests\DatabaseTestCase;
 
-class ConnectionFactoryTest extends DbTestCase
+class ConnectionFactoryTest extends DatabaseTestCase
 {
     /**
      * Test the connection factory.

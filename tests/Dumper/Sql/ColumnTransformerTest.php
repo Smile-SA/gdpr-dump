@@ -5,9 +5,9 @@ namespace Smile\Anonymizer\Tests\Dumper\Sql;
 
 use Smile\Anonymizer\Dumper\Sql\ColumnTransformer;
 use Smile\Anonymizer\Tests\Converter\Dummy;
-use Smile\Anonymizer\Tests\DbTestCase;
+use Smile\Anonymizer\Tests\DatabaseTestCase;
 
-class ColumnTransformerTest extends DbTestCase
+class ColumnTransformerTest extends DatabaseTestCase
 {
     /**
      * Check if a value is transformed properly.

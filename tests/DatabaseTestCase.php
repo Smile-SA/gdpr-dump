@@ -7,7 +7,7 @@ use Doctrine\DBAL\Connection;
 use Smile\Anonymizer\Dumper\Sql\Config\DatabaseConfig;
 use Smile\Anonymizer\Dumper\Sql\Doctrine\ConnectionFactory;
 
-abstract class DbTestCase extends TestCase
+abstract class DatabaseTestCase extends TestCase
 {
     /**
      * @var Connection

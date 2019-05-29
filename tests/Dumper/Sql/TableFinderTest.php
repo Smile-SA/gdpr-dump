@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Smile\Anonymizer\Tests\Dumper\Sql;
 
 use Smile\Anonymizer\Dumper\Sql\TableFinder;
-use Smile\Anonymizer\Tests\DbTestCase;
+use Smile\Anonymizer\Tests\DatabaseTestCase;
 
-class TableFinderTest extends DbTestCase
+class TableFinderTest extends DatabaseTestCase
 {
     /**
      * Test if a table is found by name.

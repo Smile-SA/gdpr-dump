@@ -7,10 +7,10 @@ use Smile\Anonymizer\Config\Config;
 use Smile\Anonymizer\Converter\ConverterFactory;
 use Smile\Anonymizer\Dumper\SqlDumper;
 use Smile\Anonymizer\Tests\Converter\Dummy;
-use Smile\Anonymizer\Tests\DbTestCase;
+use Smile\Anonymizer\Tests\DatabaseTestCase;
 use Symfony\Component\Yaml\Yaml;
 
-class SqlDumperTest extends DbTestCase
+class SqlDumperTest extends DatabaseTestCase
 {
     /**
      * Test if a dump file is created.

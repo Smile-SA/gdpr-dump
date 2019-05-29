@@ -5,9 +5,9 @@ namespace Smile\Anonymizer\Tests\Dumper\TableDependency;
 
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Smile\Anonymizer\Dumper\Sql\TableDependency\DependencyResolver;
-use Smile\Anonymizer\Tests\DbTestCase;
+use Smile\Anonymizer\Tests\DatabaseTestCase;
 
-class DependencyResolverTest extends DbTestCase
+class DependencyResolverTest extends DatabaseTestCase
 {
     /**
      * Test the "getTableDependencies" method.
