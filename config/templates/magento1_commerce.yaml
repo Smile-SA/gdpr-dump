@@ -2,6 +2,18 @@
 extends: magento1
 
 tables:
+    '*_cl':
+        truncate: true
+
+    enterprise_admin_passwords:
+        truncate: true
+
+    enterprise_logging_event:
+        truncate: true
+
+    enterprise_logging_event_changes:
+        truncate: true
+
     enterprise_giftregistry_entity:
         converters:
             title: 'anonymizeText'

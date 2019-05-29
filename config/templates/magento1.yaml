@@ -2,6 +2,12 @@
 requiresVersion: true
 
 tables:
+    '*_tmp':
+        truncate: true
+
+    '*_idx':
+        truncate: true
+
     api_session:
         truncate: true
 
@@ -14,10 +20,37 @@ tables:
     core_session:
         truncate: true
 
+    dataflow_batch:
+        truncate: true
+
+    dataflow_batch_export:
+        truncate: true
+
+    dataflow_batch_import:
+        truncate: true
+
+    dataflow_import_data:
+        import: true
+
+    dataflow_profile_history:
+        truncate: true
+
     dataflow_session:
         truncate: true
 
+    index_event:
+        truncate: true
+
+    log_*:
+        truncate: true
+
     persistent_session:
+        truncate: true
+
+    report_event:
+        truncate: true
+
+    sendfriend_log:
         truncate: true
 
     admin_user:
@@ -90,7 +123,7 @@ tables:
             billing_name:
                 converter: 'anonymizeText'
 
-    # Not anonymized: customer_prefix, customer_suffix, customer_gender
+    # Not anonymized: customer_prefix, customer_suffix, customer_gender, coupon_code
     sales_flat_order:
         converters:
             customer_email:
@@ -109,8 +142,6 @@ tables:
             remote_ip:
                 converter: 'faker'
                 parameters: {formatter: 'ipv4'}
-            coupon_code:
-                converter: 'randomizeText'
 
     # Not anonymized: prefix, suffix, region, region_id, country_id
     sales_flat_order_address:
@@ -173,7 +204,7 @@ tables:
                 parameters:
                     converters: {CC_CN: 'anonymizeText'}
 
-    # Not anonymized: customer_prefix, customer_suffix ,customer_gender
+    # Not anonymized: customer_prefix, customer_suffix ,customer_gender, coupon_code
     sales_flat_quote:
         converters:
             customer_email:
@@ -193,9 +224,34 @@ tables:
                 converter: 'faker'
                 parameters: {formatter: 'ipv4'}
             password_hash:
-                converter: 'randomizeText'
-            coupon_code:
-                converter: 'randomizeText'
+                converter: 'setNull'
+
+    # Not anonymized: prefix, suffix, region, region_id, country_id
+    sales_flat_quote_address:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+            firstname:
+                converter: 'anonymizeText'
+            middlename:
+                converter: 'anonymizeText'
+            lastname:
+                converter: 'anonymizeText'
+            company:
+                converter: 'anonymizeText'
+            street:
+                converter: 'anonymizeText'
+            postcode:
+                converter: 'randomizeNumber'
+            city:
+                converter: 'anonymizeText'
+            telephone:
+                converter: 'randomizeNumber'
+            fax:
+                converter: 'randomizeNumber'
+            customer_notes:
+                converter: 'faker'
+                parameters: {formatter: 'text'}
 
     # Not anonymized: cc_exp_month, cc_exp_year, cc_ss_start_month, cc_ss_start_year
     sales_flat_quote_payment:

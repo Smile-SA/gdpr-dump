@@ -2,7 +2,16 @@
 requiresVersion: true
 
 tables:
+    '*_tmp':
+        truncate: true
+
+    '*_idx':
+        truncate: true
+
     admin_user_session:
+        truncate: true
+
+    admin_passwords:
         truncate: true
 
     cache:
@@ -20,7 +29,16 @@ tables:
     newsletter_queue:
         truncate: true
 
+    password_reset_request_event:
+        truncate: true
+
     persistent_session:
+        truncate: true
+
+    report_event:
+        truncate: true
+
+    sendfriend_log:
         truncate: true
 
     session:
@@ -157,7 +175,7 @@ tables:
             subscriber_confirm_code:
                 converter: 'randomizeText'
 
-    # Not anonymized: customer_prefix, customer_suffix ,customer_gender
+    # Not anonymized: customer_prefix, customer_suffix ,customer_gender, coupon_code
     quote:
         converters:
             customer_email:
@@ -177,9 +195,7 @@ tables:
                 converter: 'faker'
                 parameters: {formatter: 'ipv4'}
             password_hash:
-                converter: 'randomizeText'
-            coupon_code:
-                converter: 'randomizeText'
+                converter: 'setNull'
 
     # Not anonymized: prefix, suffix, region, region_id, country_id
     quote_address:
@@ -204,6 +220,9 @@ tables:
                 converter: 'randomizeNumber'
             fax:
                 converter: 'randomizeNumber'
+            customer_notes:
+                converter: 'faker'
+                parameters: {formatter: 'text'}
 
     # Not anonymized: cc_exp_month, cc_exp_year, cc_ss_start_month, cc_ss_start_year
     quote_payment:
@@ -275,7 +294,7 @@ tables:
             shipping_address:
                 converter: 'anonymizeText'
 
-    # Not anonymized: customer_prefix, customer_suffix, customer_gender
+    # Not anonymized: customer_prefix, customer_suffix, customer_gender, coupon_code
     sales_order:
         converters:
             customer_email:
@@ -294,8 +313,6 @@ tables:
             remote_ip:
                 converter: 'faker'
                 parameters: {formatter: 'ipv4'}
-            coupon_code:
-                converter: 'randomizeText'
 
     # Not anonymized: prefix, suffix, region, region_id, country_id
     sales_order_address:

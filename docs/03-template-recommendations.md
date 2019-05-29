@@ -51,6 +51,32 @@ Warning: this can use **a lot** of memory depending on the number of values to m
 
 ## Magento
 
+**Performance**
+
+To speed up the dump creation, you can truncate the following tables in your custom config file:
+
+- `*_cl`
+- `*_idx`
+- `*_tmp`
+- Quotes (`sales_flat_quote` in Magento 1, `quote` in Magento 2)
+
+Example:
+
+```yaml
+    '*_tmp':
+        truncate: true
+
+    '*_idx':
+        truncate: true
+
+    '*_cl':
+        truncate: true
+        
+    quote:
+        filters:
+            - ['email', 'notLike', '%@smile.fr']
+```
+
 **Admin Accounts**
 
 The `magento1` and `magento2` templates anonymize all admin accounts.

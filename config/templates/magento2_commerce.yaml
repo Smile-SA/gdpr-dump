@@ -2,6 +2,15 @@
 extends: magento2
 
 tables:
+    '*_cl':
+        truncate: true
+
+    magento_logging_event:
+        truncate: true
+
+    magento_logging_event_changes:
+        truncate: true
+
     magento_giftregistry_entity:
         converters:
             title:
