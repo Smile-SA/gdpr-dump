@@ -76,7 +76,6 @@ class PathResolver implements PathResolverInterface
             return $this->templates;
         }
 
-        $templates = [];
         $templatesDirectory = $this->getTemplatesDirectory();
 
         // Can't use glob, doesn't work with phar

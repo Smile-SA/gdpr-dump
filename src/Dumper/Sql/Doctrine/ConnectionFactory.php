@@ -16,16 +16,19 @@ class ConnectionFactory
      * @return Connection
      * @throws \Doctrine\DBAL\DBALException
      */
-    public static function create(DatabaseConfig $config)
+    public static function create(DatabaseConfig $config): Connection
     {
         $params = [
-            'dbname' => $config->getName(),
+            'dbname' => $config->getDatabaseName(),
             'user' => $config->getUser(),
             'password' => $config->getPassword(),
             'host' => $config->getHost(),
             'driver' => $config->getDriver(),
         ];
 
-        return DriverManager::getConnection($params);
+        /** @var Connection $connection */
+        $connection = DriverManager::getConnection($params);
+
+        return $connection;
     }
 }

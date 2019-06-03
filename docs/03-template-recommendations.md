@@ -4,7 +4,7 @@
 
 Since this tool is a pure PHP implementation of a MySQL dumper, it is way slower than mysqldump.
 
-If the database to dump has very large tables, it is strongly recommended to use the [table filter](docs/02-configuration#user-content-filtering-values) mechanism.
+If the database to dump has very large tables, it is strongly recommended to use the [table filter](docs/02-configuration.md#user-content-filtering-values) mechanism.
 
 ## Custom Tables
 
@@ -29,18 +29,22 @@ Example of sensible data:
 If you use the default templates (e.g. `magento2`), the anonymized data is not consistent.
 For example, the anonymized customer email won't have the same value between the customer table and the quote table.
 
-You can add data consistency by specifying a [cache key](docs/02-configuration#user-content-data-converters).
+You can add data consistency by specifying a [cache key](docs/02-configuration.md#user-content-sharing-converter-results).
 For example, in Magento 2:
 
 ```yaml
 tables:
     customer_entity:
         converters:
-            email: {cache_key: 'customer_email', unique: true}
+            email:
+                cache_key: 'customer_email'
+                unique: true
 
     customer_flat_grid:
         converters:
-            email: {cache_key: 'customer_email', unique: true}
+            email:
+                cache_key: 'customer_email'
+                unique: true
 
     # ... repeat this for each table that stores a customer email
 ```
@@ -53,28 +57,23 @@ Warning: this can use **a lot** of memory depending on the number of values to m
 
 **Performance**
 
-To speed up the dump creation, you can truncate the following tables in your custom config file:
+To speed up the dump creation, temporary tables are automatically truncated:
 
-- `*_cl`
-- `*_idx`
-- `*_tmp`
-- Quotes (`sales_flat_quote` in Magento 1, `quote` in Magento 2)
+- cache tables
+- session tables
+- log tables
+- index tables: `*_idx`, `*_cl`
+- temporary tables: `*_tmp`
 
-Example:
+Quote tables are not truncated by default.
+If these tables contain a lot of values, adding filters to these tables will speed up the dump creation.
+
+For example (Magento 2):
 
 ```yaml
-    '*_tmp':
-        truncate: true
-
-    '*_idx':
-        truncate: true
-
-    '*_cl':
-        truncate: true
-        
+tables:
     quote:
-        filters:
-            - ['email', 'notLike', '%@smile.fr']
+        truncate: true
 ```
 
 **Admin Accounts**

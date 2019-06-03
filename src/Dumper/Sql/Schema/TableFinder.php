@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Dumper\Sql;
+namespace Smile\Anonymizer\Dumper\Sql\Schema;
 
 use Doctrine\DBAL\Connection;
 

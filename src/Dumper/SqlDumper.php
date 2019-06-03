@@ -7,12 +7,11 @@ use Ifsnop\Mysqldump\Mysqldump;
 use Smile\Anonymizer\Config\ConfigInterface;
 use Smile\Anonymizer\Converter\ConverterFactory;
 use Smile\Anonymizer\Dumper\Sql\ColumnTransformer;
+use Smile\Anonymizer\Dumper\Sql\Config\ConfigProcessor;
 use Smile\Anonymizer\Dumper\Sql\Config\DatabaseConfig;
+use Smile\Anonymizer\Dumper\Sql\Config\DumperConfig;
 use Smile\Anonymizer\Dumper\Sql\Doctrine\ConnectionFactory;
-use Smile\Anonymizer\Dumper\Sql\Driver\DriverFactory;
-use Smile\Anonymizer\Dumper\Sql\DumperConfig;
-use Smile\Anonymizer\Dumper\Sql\TableDependency\FilterBuilder;
-use Smile\Anonymizer\Dumper\Sql\TableFinder;
+use Smile\Anonymizer\Dumper\Sql\TableWheresBuilder;
 
 class SqlDumper implements DumperInterface
 {
@@ -34,67 +33,80 @@ class SqlDumper implements DumperInterface
      */
     public function dump(ConfigInterface $config): DumperInterface
     {
-        // Get the database config
+        // Create the doctrine connection
         $databaseConfig = new DatabaseConfig($config->get('database', []));
-
-        // Create a doctrine connection
         $connection = ConnectionFactory::create($databaseConfig);
 
-        // Use a config wrapper with getters/setters
-        $tableFinder = new TableFinder($connection);
-        $config = new DumperConfig($config, $tableFinder);
+        // Process the configuration
+        $processor = new ConfigProcessor($connection);
+        $config = $processor->process($config);
 
-        // Create the dumper instance
-        $dumper = $this->getDumperInstance($config);
+        // Create the MySQLDump object
+        $dumper = new Mysqldump(
+            $databaseConfig->getDsn(),
+            $databaseConfig->getUser(),
+            $databaseConfig->getPassword(),
+            $this->getDumpSettings($config),
+            $databaseConfig->getPdoSettings()
+        );
+
+        // Set the column transformer
+        $converters = $this->getTableConverters($config);
+        $columnTransformer = new ColumnTransformer($converters);
+        $dumper->setTransformColumnValueHook([$columnTransformer, 'transform']);
 
         // Set the table filters
-        $filterBuilder = new FilterBuilder($config, $connection);
-        $tableWheres = $filterBuilder->getTableFilters();
+        $tableWheresBuilder = new TableWheresBuilder($connection, $config);
+        $tableWheres = $tableWheresBuilder->getTableWheres();
         $dumper->setTableWheres($tableWheres);
 
         // Close the doctrine connection
         $connection->close();
 
-        $dumper->start($config->getDumpOutput());
+        // Create the dump
+        $output = $config->getDumpOutput();
+        $dumper->start($output);
 
         return $this;
     }
 
     /**
-     * Get the MySQL dumper.
-     *
-     * @param DumperConfig $config
-     * @return Mysqldump
-     * @throws \Exception
-     */
-    private function getDumperInstance(DumperConfig $config): Mysqldump
-    {
-        $database = $config->getDatabase();
-        $driver = DriverFactory::create($database->getDriver());
-
-        $dumper = new Mysqldump(
-            $driver->getDsn($database),
-            $database->getUser(),
-            $database->getPassword(),
-            $config->getDumpSettings(),
-            $database->getPdoSettings()
-        );
-
-        // Set the column transformer
-        $converters = $this->getConverters($config);
-        $columnTransformer = new ColumnTransformer($converters);
-        $dumper->setTransformColumnValueHook([$columnTransformer, 'transform']);
-
-        return $dumper;
-    }
-
-    /**
-     * Get the converters from the config.
+     * Get the dump settings.
      *
      * @param DumperConfig $config
      * @return array
      */
-    private function getConverters(DumperConfig $config): array
+    private function getDumpSettings(DumperConfig $config): array
+    {
+        $settings = $config->getDumpSettings();
+
+        // Output setting is only used by our app
+        unset($settings['output']);
+
+        // MySQLDump-PHP uses the '-' word separator for most settings
+        foreach ($settings as $key => $value) {
+            if ($key !== 'init_commands' && $key !== 'net_buffer_length') {
+                $newKey = str_replace('_', '-', $key);
+                $settings[$newKey] = $value;
+                unset($settings[$key]);
+            }
+        }
+
+        // Tables to whitelist/blacklist/truncate
+        $settings['include-tables'] = $config->getTablesWhitelist();
+        $settings['exclude-tables'] = $config->getTablesBlacklist();
+        $settings['no-data'] = $config->getTablesToTruncate();
+
+        return $settings;
+    }
+
+    /**
+     * Create the converters, grouped by table.
+     *
+     * @param DumperConfig $config
+     * @return array
+     */
+    private function getTableConverters(DumperConfig $config): array
     {
         $converters = [];
 

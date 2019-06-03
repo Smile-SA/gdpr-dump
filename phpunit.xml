@@ -4,13 +4,7 @@
          bootstrap="tests/bootstrap.php"
 >
     <php>
-        <var name="run_database_tests" value="1"/>
-        <var name="db_driver" value="pdo_mysql"/>
-        <var name="db_host" value="localhost"/>
-        <var name="db_user" value="test"/>
-        <var name="db_password" value="test"/>
-        <var name="db_name" value="test"/>
-        <var name="db_port" value="3306"/>
+        <var name="skip_database_tests" value="false"/>
     </php>
 
     <testsuites>

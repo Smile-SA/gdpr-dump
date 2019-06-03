@@ -11,7 +11,11 @@ class Mysql implements DriverInterface
      * @var string[]
      */
     private $params = [
-        'host', 'port', 'name' => 'dbname', 'unix_socket', 'charset'
+        'host',
+        'port',
+        'name' => 'dbname',
+        'unix_socket',
+        'charset',
     ];
 
     /**
@@ -19,7 +23,7 @@ class Mysql implements DriverInterface
      */
     public function getDsn(DatabaseConfig $config): string
     {
-        $values = $config->toArray();
+        $values = $config->getParams();
         $dsn = [];
 
         foreach ($this->params as $configParam => $driverParam) {

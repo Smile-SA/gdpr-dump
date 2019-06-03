@@ -13,6 +13,19 @@ use Symfony\Component\Yaml\Yaml;
 class SqlDumperTest extends DatabaseTestCase
 {
     /**
+     * @var string
+     */
+    private $dumpFile;
+
+    /**
+     * @inheritdoc
+     */
+    public function setUp()
+    {
+        $this->dumpFile = $this->getResource('db/dump.sql');
+    }
+
+    /**
      * Test if a dump file is created.
      */
     public function testDumper()
@@ -21,15 +34,18 @@ class SqlDumperTest extends DatabaseTestCase
         $dumper = $this->createDumper();
 
         // Make sure the dump file does not already exist
-        $dumpFile = $config->get('dump.output');
-        @unlink($dumpFile);
+        @unlink($this->dumpFile);
 
         // Create the dump
         $dumper->dump($config);
 
         // Check if the file was created
-        $this->assertFileExists($dumpFile);
-        @unlink($dumpFile);
+        $this->assertFileExists($this->dumpFile);
+
+        // Delete the file
+        if (file_exists($this->dumpFile)) {
+            @unlink($this->dumpFile);
+        }
     }
 
     /**
@@ -39,8 +55,8 @@ class SqlDumperTest extends DatabaseTestCase
      */
     private function createConfig(): Config
     {
-        $data = Yaml::parseFile($this->getResource('config/test_config.yaml'));
-        $data['dump']['output'] = $this->getResource('db/test_db_dump.sql');
+        $data = Yaml::parseFile($this->getTestConfigFile());
+        $data['dump']['output'] = $this->dumpFile;
 
         return new Config($data);
     }
@@ -52,11 +68,11 @@ class SqlDumperTest extends DatabaseTestCase
      */
     private function createDumper(): SqlDumper
     {
-        /** @var ConverterFactory $converterFactoryMock */
         $converterFactoryMock = $this->createMock(ConverterFactory::class);
         $converterFactoryMock->method('create')
             ->willReturn(new Dummy());
 
+        /** @var ConverterFactory $converterFactoryMock */
         $sqlDumper = new SqlDumper($converterFactoryMock);
 
         return $sqlDumper;

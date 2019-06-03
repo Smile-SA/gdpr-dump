@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Dumper\Sql;
 
-use Smile\Anonymizer\Converter\ConverterFactory;
-use Smile\Anonymizer\Converter\Proxy\Chain;
-
 class ColumnTransformer
 {
     /**

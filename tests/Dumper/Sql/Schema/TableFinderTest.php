@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Dumper\Sql;
+namespace Smile\Anonymizer\Tests\Dumper\Schema;
 
-use Smile\Anonymizer\Dumper\Sql\TableFinder;
+use Smile\Anonymizer\Dumper\Sql\Schema\TableFinder;
 use Smile\Anonymizer\Tests\DatabaseTestCase;
 
 class TableFinderTest extends DatabaseTestCase

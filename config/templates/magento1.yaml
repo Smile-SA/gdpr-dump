@@ -2,12 +2,6 @@
 requiresVersion: true
 
 tables:
-    '*_tmp':
-        truncate: true
-
-    '*_idx':
-        truncate: true
-
     api_session:
         truncate: true
 
@@ -51,6 +45,12 @@ tables:
         truncate: true
 
     sendfriend_log:
+        truncate: true
+
+    '*_tmp':
+        truncate: true
+
+    '*_idx':
         truncate: true
 
     admin_user:

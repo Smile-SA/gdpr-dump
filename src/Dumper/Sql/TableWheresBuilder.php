@@ -1,34 +1,36 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Dumper\Sql\TableDependency;
+namespace Smile\Anonymizer\Dumper\Sql;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use Smile\Anonymizer\Dumper\Sql\Config\DumperConfig;
 use Smile\Anonymizer\Dumper\Sql\Config\Table\Filter\Filter;
-use Smile\Anonymizer\Dumper\Sql\DumperConfig;
+use Smile\Anonymizer\Dumper\Sql\Config\Table\TableConfig;
+use Smile\Anonymizer\Dumper\Sql\Schema\TableDependencyResolver;
 
-class FilterBuilder
+class TableWheresBuilder
 {
-    /**
-     * @var DumperConfig
-     */
-    private $config;
-
     /**
      * @var Connection
      */
     private $connection;
 
     /**
-     * @param DumperConfig $config
-     * @param Connection $connection
+     * @var DumperConfig
      */
-    public function __construct(DumperConfig $config, Connection $connection)
+    private $config;
+
+    /**
+     * @param Connection $connection
+     * @param DumperConfig $config
+     */
+    public function __construct(Connection $connection, DumperConfig $config)
     {
-        $this->config = $config;
         $this->connection = $connection;
+        $this->config = $config;
     }
 
     /**
@@ -36,25 +38,26 @@ class FilterBuilder
      *
      * @return array
      */
-    public function getTableFilters(): array
+    public function getTableWheres(): array
     {
-        $tablesWheres = [];
+        // Get the tables to sort/filter
         $tablesToFilter = $this->config->getTablesToFilter();
         $tablesToSort = $this->config->getTablesToSort();
 
+        // Do nothing if there is no sort order/filter defined in the configuration
         if (empty($tablesToFilter) && empty($tablesToSort)) {
-            return $tablesWheres;
+            return [];
         }
 
-        // Get the foreign keys of each table that depends on the filters that were declared in the configuration
-        $dependencyResolver = new DependencyResolver($this->connection);
+        // Get the foreign keys of each table that depends on the filters listed in the configuration
+        $dependencyResolver = new TableDependencyResolver($this->connection);
         $dependencies = $dependencyResolver->getTablesDependencies($tablesToFilter);
 
         // Tables to query are:
-        // - tables with filters declared in the config
-        // - tables with sort orders declared in the config
+        // - tables with filters or sort orders declared in the config
         // - tables that depend on the tables to filter
         $tablesToQuery = array_unique(array_merge(array_keys($dependencies), $tablesToFilter, $tablesToSort));
+        $tableWheres = [];
 
         foreach ($tablesToQuery as $tableName) {
             // Create the query that will contain a combination of filter / sort order / limit
@@ -66,14 +69,13 @@ class FilterBuilder
             }
 
             // Convert the query to SQL, starting from the "WHERE" clause
-            $sql = $this->getQueryString($queryBuilder);
-            $tablesWheres[$tableName] = $sql;
+            $tableWheres[$tableName] = $this->getWhereSql($queryBuilder);
         }
 
         // Sort by table name (easier to debug)
-        ksort($tablesWheres);
+        ksort($tableWheres);
 
-        return $tablesWheres;
+        return $tableWheres;
     }
 
     /**
@@ -92,12 +94,14 @@ class FilterBuilder
     ) {
         /** @var ForeignKeyConstraint $dependency */
         foreach ($dependencies[$tableName] as $dependency) {
-            $qb = $this->createQueryBuilder($dependency->getForeignTableName());
+            $tableName = $dependency->getForeignTableName();
+
+            $qb = $this->createQueryBuilder($tableName);
             $qb->select($this->getColumnsSql($dependency->getForeignColumns()));
 
             // Recursively add condition on parent tables
-            if ($qb->getMaxResults() !== 0 && array_key_exists($dependency->getForeignTableName(), $dependencies)) {
-                $this->addDependentFilter($dependency->getForeignTableName(), $qb, $dependencies, $subQueryCount);
+            if ($qb->getMaxResults() !== 0 && array_key_exists($tableName, $dependencies)) {
+                $this->addDependentFilter($tableName, $qb, $dependencies, $subQueryCount);
             }
 
             // Prepare the condition data
@@ -124,25 +128,38 @@ class FilterBuilder
     }
 
     /**
-     * Create a query builder for the specified table.
+     * Create a query builder that applies the configuration of the specified table.
      *
      * @param string $tableName
      * @return QueryBuilder
      */
     private function createQueryBuilder(string $tableName): QueryBuilder
     {
-        $tableConfig = $this->config->getTableConfig($tableName);
-
-        // Initialize the query
+        // Create the query builder
         $queryBuilder = $this->connection->createQueryBuilder();
+
+        // Select all columns of the table
         $queryBuilder->select('*')
             ->from($this->connection->quoteIdentifier($tableName));
 
-        if (!$tableConfig) {
-            return $queryBuilder;
+        // Get the table configuration
+        $tableConfig = $this->config->getTableConfig($tableName);
+        if ($tableConfig) {
+            $this->applyTableConfigToQueryBuilder($queryBuilder, $tableConfig);
         }
 
-        // Filters
+        return $queryBuilder;
+    }
+
+    /**
+     * Apply a table configuration to a query builder.
+     *
+     * @param QueryBuilder $queryBuilder
+     * @param TableConfig $tableConfig
+     */
+    private function applyTableConfigToQueryBuilder(QueryBuilder $queryBuilder, TableConfig $tableConfig)
+    {
+        // Apply filters
         foreach ($tableConfig->getFilters() as $filter) {
             $value = $this->getFilterValue($filter);
 
@@ -154,7 +171,7 @@ class FilterBuilder
             $queryBuilder->andWhere($whereExpr);
         }
 
-        // Sort orders
+        // Apply sort orders
         foreach ($tableConfig->getSortOrders() as $sortOrder) {
             $queryBuilder->addOrderBy(
                 $this->connection->quoteIdentifier($sortOrder->getColumn()),
@@ -162,13 +179,11 @@ class FilterBuilder
             );
         }
 
-        // Limit
-        $limit = $tableConfig->isDataDumped() ? $tableConfig->getLimit() : 0;
+        // Apply limit
+        $limit = $tableConfig->getLimit();
         if ($limit !== null) {
             $queryBuilder->setMaxResults($limit);
         }
-
-        return $queryBuilder;
     }
 
     /**
@@ -190,6 +205,25 @@ class FilterBuilder
         }
 
         return $result;
+    }
+
+    /**
+     * Get the query as SQL, starting from the WHERE clause.
+     *
+     * @param QueryBuilder $queryBuilder
+     * @return string
+     */
+    public function getWhereSql(QueryBuilder $queryBuilder): string
+    {
+        $wherePart = $queryBuilder->getQueryPart('where');
+
+        if (empty($wherePart)) {
+            $queryBuilder->where(1);
+        }
+
+        $sql = $queryBuilder->getSQL();
+
+        return substr($sql, strpos($sql, ' WHERE ') + 7);
     }
 
     /**
@@ -239,24 +273,5 @@ class FilterBuilder
         }
 
         return $value;
-    }
-
-    /**
-     * Get the query as SQL, starting from the WHERE clause.
-     *
-     * @param QueryBuilder $queryBuilder
-     * @return string
-     */
-    private function getQueryString(QueryBuilder $queryBuilder): string
-    {
-        $wherePart = $queryBuilder->getQueryPart('where');
-
-        if (empty($wherePart)) {
-            $queryBuilder->where(1);
-        }
-
-        $sql = $queryBuilder->getSQL();
-
-        return substr($sql, strpos($sql, ' WHERE ') + 7);
     }
 }

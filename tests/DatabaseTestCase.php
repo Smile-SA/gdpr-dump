@@ -6,6 +6,7 @@ namespace Smile\Anonymizer\Tests;
 use Doctrine\DBAL\Connection;
 use Smile\Anonymizer\Dumper\Sql\Config\DatabaseConfig;
 use Smile\Anonymizer\Dumper\Sql\Doctrine\ConnectionFactory;
+use Symfony\Component\Yaml\Yaml;
 
 abstract class DatabaseTestCase extends TestCase
 {
@@ -19,21 +20,21 @@ abstract class DatabaseTestCase extends TestCase
      */
     public static function setUpBeforeClass()
     {
-        if (!static::canRunDatabaseTests()) {
+        if (static::skipDatabaseTests()) {
             static::markTestSkipped('Skip database tests.');
         }
 
-        // We can use a shared connection to speed up the tests, there are only SELECT queries
+        // Use a shared connection to speed up the tests
         if (static::$connection !== null) {
             return;
         }
 
-        $config = new DatabaseConfig(static::getConnectionParams());
-
-        static::$connection = ConnectionFactory::create($config);
+        // Create the shared connection
+        $config = Yaml::parseFile(static::getTestConfigFile());
+        static::$connection = ConnectionFactory::create(new DatabaseConfig($config['database']));
 
         // Create the tables
-        $queries = file_get_contents(APP_ROOT . '/tests/Resources/db/test_db.sql');
+        $queries = file_get_contents(static::getResource('db/test.sql'));
         $statement = static::$connection->prepare($queries);
         $statement->execute();
     }
@@ -45,13 +46,16 @@ abstract class DatabaseTestCase extends TestCase
      */
     public static function getConnectionParams(): array
     {
+        $config = Yaml::parseFile(static::getTestConfigFile());
+        $params = $config['database'];
+
         return [
-            'driver' => $GLOBALS['db_driver'],
-            'host' => $GLOBALS['db_host'],
-            'port' => $GLOBALS['db_port'],
-            'user' => $GLOBALS['db_user'],
-            'password' => $GLOBALS['db_password'],
-            'name' => $GLOBALS['db_name'],
+            'driver' => $params['driver'] ?? 'pdo_mysql',
+            'host' => $params['host'] ?? null,
+            'port' => $params['port'] ?? null,
+            'user' => $params['user'] ?? null,
+            'password' =>$params['password'] ?? null,
+            'dbname' => $params['name'] ?? null,
         ];
     }
 
@@ -60,9 +64,9 @@ abstract class DatabaseTestCase extends TestCase
      *
      * @return bool
      */
-    public static function canRunDatabaseTests(): bool
+    public static function skipDatabaseTests(): bool
     {
-        return (bool) $GLOBALS['run_database_tests'];
+        return (bool) $GLOBALS['skip_database_tests'];
     }
 
     /**

@@ -12,19 +12,6 @@ use Smile\Anonymizer\Tests\TestCase;
 class ConfigLoaderTest extends TestCase
 {
     /**
-     * @var string
-     */
-    private $configFile;
-
-    /**
-     * @inheritdoc
-     */
-    public function setUp()
-    {
-        $this->configFile = $this->getResource('config/test_config.yaml');
-    }
-
-    /**
      * Test the "loadData" method.
      */
     public function testLoadData()
@@ -50,9 +37,10 @@ class ConfigLoaderTest extends TestCase
         $config = new Config();
         $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
 
-        $configLoader->loadFile($this->configFile);
-        $this->assertSame('randomizeEmail', $config->get('tables.customers.converters.email'));
-        $this->assertSame('php://stdout', $config->get('dump.output'));
+        $configLoader->loadFile($this->getTestConfigFile());
+
+        $expectedSubset = ['customers' => ['converters' => ['email' => 'randomizeEmail']]];
+        $this->assertArraySubset($expectedSubset, $config->get('tables'));
     }
 
     public function testLoadVersionData()
@@ -61,9 +49,11 @@ class ConfigLoaderTest extends TestCase
         $config->set('version', '2.0.0');
         $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
 
-        $configLoader->loadFile($this->configFile);
+        $configLoader->loadFile($this->getTestConfigFile());
         $configLoader->loadVersionData();
-        $this->assertSame('anonymizeEmail', $config->get('tables.customers.converters.email'));
+
+        $expectedSubset = ['customers' => ['converters' => ['email' => 'anonymizeEmail']]];
+        $this->assertArraySubset($expectedSubset, $config->get('tables'));
     }
 
     /**
@@ -75,7 +65,7 @@ class ConfigLoaderTest extends TestCase
     {
         $config = new Config();
         $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
-        $configLoader->loadFile($this->configFile);
+        $configLoader->loadFile($this->getTestConfigFile());
         $configLoader->loadVersionData();
     }
 }

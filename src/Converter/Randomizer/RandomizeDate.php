@@ -40,7 +40,9 @@ class RandomizeDate implements ConverterInterface
 
         // Min year is the current year if the parameter is set to null, 1900 if the parameter is not defined
         if (array_key_exists('min_year', $parameters)) {
-            $this->minYear = (int) ($parameters['min_year'] !== null ? $parameters['min_year'] : $this->date->format('Y'));
+            $this->minYear = (int) ($parameters['min_year'] !== null
+                ? $parameters['min_year']
+                : $this->date->format('Y'));
         }
 
         // Max year is the current year if the parameter is not defined or set to null

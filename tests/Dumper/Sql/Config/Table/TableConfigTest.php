@@ -19,9 +19,6 @@ class TableConfigTest extends TestCase
         $this->assertSame('table1', $config->getName());
         $this->assertEmpty($config->getConverters());
 
-        $this->assertTrue($config->isSchemaDumped());
-        $this->assertTrue($config->isDataDumped());
-
         $this->assertFalse($config->hasLimit());
         $this->assertFalse($config->hasFilter());
         $this->assertFalse($config->hasSortOrder());
@@ -32,23 +29,14 @@ class TableConfigTest extends TestCase
     }
 
     /**
-     * Test the "ignore" parameter.
-     */
-    public function testIgnoreSchema()
-    {
-        $config = new TableConfig('table1', ['ignore' => true]);
-
-        $this->assertFalse($config->isSchemaDumped());
-    }
-
-    /**
      * Test the "truncate" parameter.
      */
-    public function testIgnoreData()
+    public function testTruncateData()
     {
         $config = new TableConfig('table1', ['truncate' => true]);
 
-        $this->assertFalse($config->isDataDumped());
+        $this->assertTrue($config->hasLimit());
+        $this->assertSame(0, $config->getLimit());
     }
 
     /**
@@ -60,19 +48,17 @@ class TableConfigTest extends TestCase
             'converters' => [
                 'column1' => 'converterName',
                 'column2' => ['converter' => 'converterName'],
-                'column3' => '', // should not be included because no converter name was specified
-                'column4' => [], // should not be included because no converter name was specified
-                'column5' => ['converter' => ''], // should not be included because no converter name was specified
+                'column3' => '',
+                'column4' => ['converter' => ''],
+                'column5' => ['converter' => '', 'disabled' => true],
             ],
         ]);
 
         $converters = $config->getConverters();
 
-        $this->assertCount(2, $converters);
-        $this->assertArrayHasKey('column1', $converters);
-        $this->assertArrayHasKey('column2', $converters);
-        $this->assertArrayNotHasKey('column3', $converters);
-        $this->assertArrayNotHasKey('column4', $converters);
+        // The config must have parsed the empty converters (data is validated in the converter factory)
+        $this->assertCount(4, $converters);
+        $this->assertArrayNotHasKey('column5', $converters);
     }
 
     /**
@@ -115,25 +101,5 @@ class TableConfigTest extends TestCase
 
         $this->assertCount(2, $config->getSortOrders());
         $this->assertTrue($config->hasSortOrder());
-    }
-
-    /**
-     * Test if an exception is thrown when the "ignore" property is combined with another property.
-     *
-     * @expectedException \UnexpectedValueException
-     */
-    public function testIgnoreSchemaConflict()
-    {
-        new TableConfig('table1', ['ignore' => true, 'limit' => 100]);
-    }
-
-    /**
-     * Test if an exception is thrown when the "ignore" property is combined with another property.
-     *
-     * @expectedException \UnexpectedValueException
-     */
-    public function testIgnoreDataConflict()
-    {
-        new TableConfig('table1', ['truncate' => true, 'limit' => 100]);
     }
 }

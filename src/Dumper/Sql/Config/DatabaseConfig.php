@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Dumper\Sql\Config;
 
-use Smile\Anonymizer\Config\ConfigInterface;
+use Smile\Anonymizer\Dumper\Sql\Driver\DriverFactory;
 
 class DatabaseConfig
 {
@@ -87,9 +87,17 @@ class DatabaseConfig
      *
      * @return string
      */
-    public function getName(): string
+    public function getDatabaseName(): string
     {
         return $this->params['name'];
+    }
+
+    /**
+     * Get all parameters values.
+     */
+    public function getParams()
+    {
+        return $this->params;
     }
 
     /**
@@ -103,17 +111,19 @@ class DatabaseConfig
     }
 
     /**
-     * Get the parameter values.
+     * Get the PDO data source name.
      *
-     * @return array
+     * @return string
      */
-    public function toArray(): array
+    public function getDsn(): string
     {
-        return $this->params;
+        $driver = DriverFactory::create($this->getDriver());
+
+        return $driver->getDsn($this);
     }
 
     /**
-     * Prepare the config.
+     * Prepare the database config.
      *
      * @param array $params
      * @throws \UnexpectedValueException
@@ -125,11 +135,12 @@ class DatabaseConfig
         }
 
         // PDO settings
-        if (array_key_exists('pdoSettings', $params)) {
-            $this->pdoSettings = $params['pdoSettings'];
-            unset($params['pdoSettings']);
+        if (array_key_exists('pdo_settings', $params)) {
+            $this->pdoSettings = $params['pdo_settings'];
+            unset($params['pdo_settings']);
         }
 
+        // Validation
         foreach ($params as $param => $value) {
             if (!array_key_exists($param, $this->params)) {
                 throw new \UnexpectedValueException(sprintf('Invalid database parameter "%s".', $param));

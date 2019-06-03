@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Dumper\TableDependency;
+namespace Smile\Anonymizer\Tests\Dumper\Schema;
 
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
-use Smile\Anonymizer\Dumper\Sql\TableDependency\DependencyResolver;
+use Smile\Anonymizer\Dumper\Sql\Schema\TableDependencyResolver;
 use Smile\Anonymizer\Tests\DatabaseTestCase;
 
 class DependencyResolverTest extends DatabaseTestCase
@@ -14,7 +14,7 @@ class DependencyResolverTest extends DatabaseTestCase
      */
     public function testTableDependencies()
     {
-        $dependencyResolver = new DependencyResolver($this->getConnection());
+        $dependencyResolver = new TableDependencyResolver($this->getConnection());
 
         // Table with no dependency
         $dependencies = $dependencyResolver->getTableDependencies('addresses');
@@ -37,7 +37,7 @@ class DependencyResolverTest extends DatabaseTestCase
      */
     public function testTablesDependencies()
     {
-        $dependencyResolver = new DependencyResolver($this->getConnection());
+        $dependencyResolver = new TableDependencyResolver($this->getConnection());
 
         $dependencies = $dependencyResolver->getTablesDependencies(['stores', 'customers', 'addresses']);
         $this->assertCount(2, $dependencies);

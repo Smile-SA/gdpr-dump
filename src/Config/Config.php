@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Smile\Anonymizer\Config;
 
-use Smile\Anonymizer\Helper\ArrayHelper;
-
 class Config implements ConfigInterface
 {
     /**
@@ -25,7 +23,7 @@ class Config implements ConfigInterface
      */
     public function get(string $key, $default = null)
     {
-        return $this->findByPath($key, $default);
+        return $this->has($key) ? $this->items[$key] : $default;
     }
 
     /**
@@ -33,9 +31,7 @@ class Config implements ConfigInterface
      */
     public function has($key): bool
     {
-        $time = microtime(true);
-
-        return $this->get($key, $time) !== $time;
+        return array_key_exists($key, $this->items);
     }
 
     /**
@@ -67,45 +63,22 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Find a config item by path.
-     *
-     * @param string $path
-     * @param mixed $default
-     * @return mixed
-     */
-    private function findByPath(string $path, $default = null)
-    {
-        $result = $this->items;
-
-        foreach (explode('.', $path) as $key) {
-            if (!isset($result[$key])) {
-                $result = $default;
-                break;
-            }
-
-            $result = $result[$key];
-        }
-
-        return $result;
-    }
-
-    /**
      * Merge two arrays.
-     * Difference with array_merge_recursive: combines array keys instead of overriding them
      *
      * @param array $data
      * @param array $override
      * @return array
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private function mergeArray(array $data, array $override)
     {
         foreach ($override as $key => $value) {
             if (array_key_exists($key, $data)) {
                 if (is_array($value) && is_array($data[$key])) {
-                    // Key is associative, merge and overwrite value
+                    // Merge values
                     $data[$key] = $this->mergeArray($data[$key], $value);
                 } else {
-                    // Key is associative, overwrite value
+                    // Overwrite value
                     $data[$key] = $value;
                 }
             } else {

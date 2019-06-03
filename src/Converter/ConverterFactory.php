@@ -55,12 +55,12 @@ class ConverterFactory
             $converter = new Unique(['converter' => $converter]);
         }
 
-        if ($definition['cache_key']) {
+        if ($definition['cache_key'] !== '') {
             $converter = new Cache(['converter' => $converter, 'cache_key' => $definition['cache_key']]);
         }
 
         // Convert data only if it matches the specified condition
-        if ($definition['condition']) {
+        if ($definition['condition'] !== '') {
             $converter = new Conditional([
                 'condition' => $definition['condition'],
                 'if_true_converter' => $converter,
@@ -92,7 +92,6 @@ class ConverterFactory
         }
 
         $definition['converter'] = (string) $definition['converter'];
-
         if ($definition['converter'] === '') {
             throw new \UnexpectedValueException('The converter name is required.');
         }
@@ -100,16 +99,16 @@ class ConverterFactory
         $definition += [
             'parameters' => [],
             'condition' => '',
-            'cache_key' => null,
+            'cache_key' => '',
             'unique' => false,
             'optional' => false,
-            'chain' => null,
         ];
 
         $definition['parameters'] =  $this->parseParameters($definition['parameters']);
         $definition['condition'] = (string) $definition['condition'];
         $definition['unique'] = (bool) $definition['unique'];
         $definition['optional'] = (bool) $definition['optional'];
+        $definition['cache_key'] = (string) $definition['cache_key'];
 
         return $definition;
     }
@@ -190,11 +189,9 @@ class ConverterFactory
      */
     private function initClassNames()
     {
-        if ($this->classNames !== null) {
-            return  $this->classNames;
+        if ($this->classNames === null) {
+            $this->classNames = $this->findClassNames(__DIR__);
         }
-
-         $this->classNames =  $this->findClassNames(__DIR__);
     }
 
     /**
@@ -205,6 +202,7 @@ class ConverterFactory
      * @param string $baseDirectory
      * @return array
      * @throws \ReflectionException
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private function findClassNames(string $directory, string $baseDirectory = ''): array
     {

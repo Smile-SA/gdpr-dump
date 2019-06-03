@@ -4,53 +4,54 @@ declare(strict_types=1);
 namespace Smile\Anonymizer\Tests\Dumper\Sql\Config;
 
 use Smile\Anonymizer\Dumper\Sql\Config\DatabaseConfig;
+use Smile\Anonymizer\Dumper\Sql\Driver\DriverFactory;
 use Smile\Anonymizer\Tests\TestCase;
 
 class DatabaseConfigTest extends TestCase
 {
     /**
-     * Test the default values of the database config.
+     * Test the getter methods.
      */
-    public function testEmptyConfig()
+    public function testGetters()
     {
-        $dbConfig = new DatabaseConfig(['name' => 'test']);
-
-        $this->assertSame('pdo_mysql', $dbConfig->getDriver());
-        $this->assertSame('localhost', $dbConfig->getHost());
-        $this->assertSame('', $dbConfig->getPort());
-        $this->assertSame('root', $dbConfig->getUser());
-        $this->assertSame('', $dbConfig->getPassword());
-        $this->assertSame('test', $dbConfig->getName());
-        $this->assertEmpty($dbConfig->getPdoSettings());
-    }
-
-    /**
-     * Test the database config with a configuration that contains all the possible parameters.
-     */
-    public function testFullConfig()
-    {
-        $data = [
-            'driver' => 'pdo_sqlite',
+        $params = [
+            'driver' => DriverFactory::DRIVER_MYSQL,
             'host' => 'mydb',
             'port' => '3306',
             'user' => 'myuser',
             'password' => 'mypassword',
             'name' => 'test',
-            'pdoSettings' => [\PDO::ATTR_TIMEOUT, 60],
+            'pdo_settings' => [\PDO::ATTR_TIMEOUT, 60],
         ];
 
-        $dbConfig = new DatabaseConfig($data);
+        $config = new DatabaseConfig($params);
 
-        $this->assertSame($data['driver'], $dbConfig->getDriver());
-        $this->assertSame($data['host'], $dbConfig->getHost());
-        $this->assertSame($data['port'], $dbConfig->getPort());
-        $this->assertSame($data['user'], $dbConfig->getUser());
-        $this->assertSame($data['password'], $dbConfig->getPassword());
-        $this->assertSame($data['name'], $dbConfig->getName());
-        $this->assertSame($data['pdoSettings'], $dbConfig->getPdoSettings());
+        $this->assertSame($params['driver'], $config->getDriver());
+        $this->assertSame($params['host'], $config->getHost());
+        $this->assertSame($params['port'], $config->getPort());
+        $this->assertSame($params['user'], $config->getUser());
+        $this->assertSame($params['password'], $config->getPassword());
+        $this->assertSame($params['name'], $config->getDatabaseName());
+        $this->assertSame($params['pdo_settings'], $config->getPdoSettings());
 
-        unset($data['pdoSettings']);
-        $this->assertEmpty(array_diff($data, $dbConfig->toArray()));
+        unset($params['pdo_settings']);
+        $this->assertEmpty(array_diff($params, $config->getParams()));
+    }
+
+    /**
+     * Test the default values of the database config.
+     */
+    public function testDefaultValues()
+    {
+        $config = new DatabaseConfig(['name' => 'test']);
+
+        $this->assertSame('pdo_mysql', $config->getDriver());
+        $this->assertSame('localhost', $config->getHost());
+        $this->assertSame('', $config->getPort());
+        $this->assertSame('root', $config->getUser());
+        $this->assertSame('', $config->getPassword());
+        $this->assertSame('test', $config->getDatabaseName());
+        $this->assertEmpty($config->getPdoSettings());
     }
 
     /**

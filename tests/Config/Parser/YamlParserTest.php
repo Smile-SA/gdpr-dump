@@ -14,7 +14,7 @@ class YamlParserTest extends TestCase
      */
     public function testParseFile()
     {
-        $fileName = APP_ROOT . '/config/templates/magento2.yaml';
+        $fileName = $this->getTestConfigFile();
 
         $parser = new YamlParser();
         $result = $parser->parse($fileName);

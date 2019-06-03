@@ -22,6 +22,9 @@ Requirements:
 - PHP >= 7.0
 - MySQL, or one of its variants (MariaDB, Percona)
 
+If you use a PHP version < 7.0, you need to upgrade to a [supported version of PHP](http://php.net/supported-versions.php).
+Each release branch of PHP is supported for 3 years (2 years of full support, then 1 year of security support).
+
 ## Installation
 
 You can create a PHAR file with the following command:
@@ -67,17 +70,6 @@ Also, there are multiple examples of config files in the config/templates direct
 
 ## FAQ
 
-**What if I don't meet the requirements?**
-
-SQL: this tool is only compatible with MySQL.
-
-If you use another DBMS  (e.g. PostgreSQL), you'll need to use another tool, or setup a script that clones a database, then anonymize and dumps the cloned database.
-
-PHP: this tool is only compatible with PHP >= 7.0.
-
-If you use a PHP version < 7.0, you need to upgrade to a [supported version of PHP](http://php.net/supported-versions.php) as soon as possible.
-Each release branch of PHP is supported for 3 years (2 years of full support, then 1 year of security support).
-
 **Why don't you use Doctrine to generate the dump?**
 
 The goal of Doctrine is to support a wide array of DBMS.
@@ -98,24 +90,8 @@ Also, the schema manager of Doctrine can only manage tables.
 It does not handle triggers, procedures, views...
 
 As a consequence, we don't use Doctrine to generate the dump file.
-The dump file is generated with [MySQLDump-PHP](https://github.com/ifsnop/mysqldump-php) instead, which is only compatible with MySQL and SQLite.
-Doctrine is used by the tool, but only to detect the dependencies between tables (forein keys).
-
-**How is the config loaded?**
-
-The config is loaded with the `load` method of the [ConfigLoader](src/Config/ConfigLoader.php) service.
-It has the following dependencies:
-
-- [Config](src/Config/Config.php): contains the parsed config
-- [ConfigParser](src/Config/ConfigParser.php): reads YAML files and returns the data
-- [PathResolver](src/Config/Resolver/PathResolver.php): resolves the path of the config files (`~` character, realpath...)
-
-At the end of the process, the [Config](src/Config/Config.php) object is filled with the config data.
-
-The config data is then [validated against a JSON schema](src/Config/Validator/JsonSchemaValidator.php).
-
-The dumper uses this configuration data to initialize its own configuration object: [DumperConfig](src/Dumper/Sql/DumperConfig.php).
-This allows to use getters/setters for each config value.
+The dump file is generated with [MySQLDump-PHP](https://github.com/ifsnop/mysqldump-php) instead, which is only compatible with MySQL.
+Doctrine is used by this tool, but only to detect the dependencies between tables (foreign keys).
 
 ## Contributing
 

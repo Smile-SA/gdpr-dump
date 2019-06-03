@@ -46,7 +46,7 @@ class SortOrder
      *
      * @return string
      */
-    public function getColumn()
+    public function getColumn(): string
     {
         return $this->column;
     }
@@ -56,7 +56,7 @@ class SortOrder
      *
      * @return string
      */
-    public function getDirection()
+    public function getDirection(): string
     {
         return $this->direction;
     }

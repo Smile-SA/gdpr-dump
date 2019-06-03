@@ -18,6 +18,6 @@ class ConnectionFactoryTest extends DatabaseTestCase
         $connection = $this->getConnection();
 
         $this->assertInstanceOf(Connection::class, $connection);
-        $this->assertSame($params['name'], $connection->getDatabase());
+        $this->assertSame($params['dbname'], $connection->getDatabase());
     }
 }

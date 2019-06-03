@@ -6,8 +6,9 @@
 - [Application Version](#user-content-application-version)
 - [Database Settings](#user-content-database-settings)
 - [Dump Settings](#user-content-dump-settings)
+- [Table Whitelist](#user-content-table-whitelist)
+- [Table Blacklist](#user-content-table-blacklist)
 - [Tables Configuration](#user-content-tables-configuration)
-    - [Tables to Ignore](#user-content-tables-to-ignore)
     - [Tables to Truncate](#user-content-tables-to-truncate)
     - [Filtering Values](#user-content-filtering-values)
     - [Data Converters](#user-content-data-converters)
@@ -89,19 +90,66 @@ If command-line options are specified (e.g. `--user`), they will have priority o
 ```yaml
 dump:
     output: 'my_dump_file.sql'
-    settings:
-        compress: true
 ```
 
-The default value of `output` is `'php://stdout'`
+Dump settings are all optional.
 
-The dump settings are listed in the [documentation](https://github.com/ifsnop/mysqldump-php/blob/v2.7/README.md#user-content-dump-settings) of the MySQLDump-PHP library.
+Available settings:
 
-The default values are the same, except for two options:
+| Parameter | Default | Description |
+| --- | --- | --- |
+| **output** | `'php://stdout'` | Dump output. By default, the dump is outputted to the terminal. |
+| **compress** | `'none'` | gzip, bzip2, none. |
+| **init_commands** | `[]` | Queries executed after the connection is established. |
+| **add_drop_database** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_add-drop-database) |
+| **add_drop_table** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_add-drop-table) |
+| **add_drop_trigger** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_add-drop-trigger) |
+| **add_locks** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_add-locks) |
+| **complete_insert** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_complete-insert) |
+| **default_character_set** | `'utf8'` | utf8 (default, compatible option), utf8mb4 (for full utf8 compliance). |
+| **disable_keys** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_disable-keys) |
+| **extended_insert** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_extended-insert) |
+| **events** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_events) |
+| **hex_blob** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_hex-blob) |
+| **insert_ignore** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_insert-ignore) |
+| **net_buffer_length** | `1000000` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_net-buffer-length) |
+| **no_autocommit** | `true` | Option to disable autocommit (faster inserts, no problems with index keys). |
+| **no_create_info** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_no-create-info) |
+| **lock_tables** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_lock-tables) |
+| **routines** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_routines) |
+| **single_transaction** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_single-transaction) |
+| **skip_triggers** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_triggers) |
+| **skip_tz_utc** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_tz-utc) |
+| **skip_comments** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_comments) |
+| **skip_dump_date** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_dump-date) |
+| **skip_definer** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqlpump.html#option_mysqlpump_skip-definer) |
 
-- add-drop-table: `true` instead of `false`
-- lock-tables: `false` instead of `true`
-- hex-blob: `false` instead of `true`
+### Table Whitelist
+
+You can specify a list of tables to include in the dump.
+If a whitelist is defined, only these tables will be dumped.
+
+```yaml
+tables_whitelist:
+    - 'table1'
+    - 'table2'
+```
+
+The wildcard character `*` can be used in table names (e.g. `cache_*`).
+
+### Table Blacklist
+
+You can specify a list of tables to exclude from the dump:
+
+```yaml
+tables_blacklist:
+    - 'table1'
+    - 'table2'
+```
+
+If a table is both blacklisted and whitelisted, it will not be included in the dump.
+
+The wildcard character `*` can be used in table names (e.g. `cache_*`).
 
 ## Tables Configuration
 
@@ -116,16 +164,6 @@ tables:
 ```
 
 The wildcard character `*` can be used in table names (e.g. `cache_*`).
-
-### Tables to Ignore
-
-You can specify tables to not include in the dump:
-
-```yaml
-tables:
-    my_table:
-        ignore: true
-```
 
 ### Tables to Truncate
 
@@ -155,7 +193,10 @@ Available properties:
 
 - `limit`: to limit the number of rows to dump
 - `orderBy`: same as SQL (e.g. `name asc, id desc`)
-- `filters`: filters applied to the table data
+- `filters`: a list of filters to apply
+
+The limit must be greater or equal than zero. If set to 0, it will be ignored.
+Use the `truncate` property if you need to empty a table.
 
 How to define a sort order:
 
@@ -177,7 +218,7 @@ tables:
             - ['type', 'in', ['simple', 'configurable']]
 ```
 
-Available filters:
+Available filter operators:
 
 - `eq` (equal to)
 - `gt` (greater than)
@@ -239,7 +280,8 @@ List of available properties:
 | **condition** | N | `''` | A PHP expression that must evaluate to `true` or `false`. The value is converted if the expression returns `true`. |
 | **parameters** | N | `{}` | e.g. `min` and `max` for `numberBetween`. Most converters don't accept any parameter. |
 | **unique** | N | `false` | Whether to generate only unique values. May result in a fatal error with converters that can't generate enough unique values. |
-| **cache_key** | N | `null` | The generated value will be used by all converters that use this cache key. |
+| **cache_key** | N | `''` | The generated value will be used by all converters that use this cache key. |
+| **disabled** | N | `false` | Can be used to disable a converter declared in a parent config file. |
 
 How to use parameters:
 
@@ -265,6 +307,7 @@ tables:
 
 The filter is a PHP expression.
 Variables must be encapsed by double brackets.
+
 
 The available variables are the columns of the table.
 For example, if the table has a `id` column, the `{{id}}` variable will be available.

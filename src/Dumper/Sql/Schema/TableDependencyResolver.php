@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Dumper\Sql\TableDependency;
+namespace Smile\Anonymizer\Dumper\Sql\Schema;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 
-class DependencyResolver
+class TableDependencyResolver
 {
     /**
      * @var Connection
@@ -104,7 +104,7 @@ class DependencyResolver
     /**
      * Build the tables dependencies (parent -> children).
      */
-    public function buildDependencyTree()
+    private function buildDependencyTree()
     {
         if ($this->foreignKeys !== null) {
             return;

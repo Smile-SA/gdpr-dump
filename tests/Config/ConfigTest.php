@@ -52,7 +52,7 @@ class ConfigTest extends TestCase
         $config->merge(['object' => ['key' => 'new value']]);
 
         // Assert that string keys are properly merged
-        $this->assertSame('new value', $config->get('object.key'));
+        $this->assertSame(['key' => 'new value'], $config->get('object'));
 
         // Assert that numeric keys are replaced
         $this->assertSame([2, 3], $config->get('array'));

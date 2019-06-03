@@ -34,16 +34,6 @@ class TableConfig
     private $converters = [];
 
     /**
-     * @var bool
-     */
-    private $dumpSchema = true;
-
-    /**
-     * @var bool
-     */
-    private $dumpData = true;
-
-    /**
      * @param string $tableName
      * @param array $tableConfig
      */
@@ -94,24 +84,6 @@ class TableConfig
     }
 
     /**
-     * Check if the table schema must be included in the dump.
-     *
-     * @return bool
-     */
-    public function isSchemaDumped(): bool
-    {
-        return $this->dumpSchema;
-    }
-
-    /**
-     * Check if the table data must be included in the dump.
-     */
-    public function isDataDumped(): bool
-    {
-        return $this->dumpData;
-    }
-
-    /**
      * Get the converter definitions of a table.
      *
      * @return array
@@ -158,19 +130,10 @@ class TableConfig
      */
     private function prepareConfig(array $tableData)
     {
-        if (isset($tableData['ignore']) && $tableData['ignore']) {
-            $this->dumpSchema = false;
-        }
-
-        if (isset($tableData['truncate']) && $tableData['truncate']) {
-            $this->dumpData = false;
-        }
-
         $this->prepareFilters($tableData);
-        $this->prepareLimit($tableData);
         $this->prepareSortOrder($tableData);
+        $this->prepareLimit($tableData);
         $this->prepareConverters($tableData);
-        $this->validateConfig();
     }
 
     /**
@@ -185,18 +148,6 @@ class TableConfig
             foreach ($tableData['filters'] as $filter) {
                 $this->filters[] = new Filter($filter[0], $filter[1], $filter[2] ?? null);
             }
-        }
-    }
-
-    /**
-     * Prepare the table limit.
-     *
-     * @param array $tableData
-     */
-    private function prepareLimit(array $tableData)
-    {
-        if (isset($tableData['limit']) && $tableData['limit'] !== null && $tableData['limit'] !== '') {
-            $this->limit = (int) $tableData['limit'];
         }
     }
 
@@ -222,13 +173,29 @@ class TableConfig
     }
 
     /**
+     * Prepare the table limit.
+     *
+     * @param array $tableData
+     */
+    private function prepareLimit(array $tableData)
+    {
+        if (isset($tableData['limit']) && $tableData['limit'] > 0) {
+            $this->limit = (int) $tableData['limit'];
+        }
+
+        if (isset($tableData['truncate']) && $tableData['truncate']) {
+            $this->limit = 0;
+        }
+    }
+
+    /**
      * Prepare the table converters.
      *
      * @param array $tableData
      */
     private function prepareConverters(array $tableData)
     {
-        if (!array_key_exists('converters', $tableData)) {
+        if (!isset($tableData['converters'])) {
             return;
         }
 
@@ -239,35 +206,12 @@ class TableConfig
                 $converterData = ['converter' => $converterData];
             }
 
-            // Allows to "cancel" a converter definition
-            if (!isset($converterData['converter']) || $converterData['converter'] === '') {
+            if (isset($converterData['disabled']) && $converterData['disabled']) {
                 continue;
             }
 
-            // Don't validate the converter data, it will be validated by the factory during the object creation
+            // Converter data will be validated by the factory during the object creation
             $this->converters[$column] = $converterData;
-        }
-    }
-
-    /**
-     * Validate the table config.
-     *
-     * @throws \UnexpectedValueException
-     */
-    private function validateConfig()
-    {
-        $hasQuery = !empty($this->sortOrders) || !empty($this->converters) || $this->limit !== null;
-
-        if (!$this->dumpSchema && ($hasQuery || !$this->dumpData)) {
-            throw new \UnexpectedValueException(
-                sprintf('Table "%s": the "ignore" property cannot be combined with other properties.', $this->name)
-            );
-        }
-
-        if (!$this->dumpData && ($hasQuery || !$this->dumpSchema)) {
-            throw new \UnexpectedValueException(
-                sprintf('Table "%s": the "truncate" property cannot be combined with other properties.', $this->name)
-            );
         }
     }
 }

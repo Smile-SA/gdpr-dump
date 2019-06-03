@@ -8,7 +8,7 @@ use Smile\Anonymizer\Config\ConfigInterface;
 interface DumperInterface
 {
     /**
-     * Create a dump file of a database.
+     * Create a dump according to the configuration.
      *
      * @param ConfigInterface $config
      * @return $this

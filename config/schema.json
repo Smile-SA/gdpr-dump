@@ -18,14 +18,18 @@
         "dump": { "$ref": "#/definitions/dump" },
         "tables": {
             "type": "object",
-            "minProperties": 1,
             "additionalProperties": { "$ref": "#/definitions/table" }
         },
-        "table_whitelist": {
+        "tables_whitelist": {
             "type": "array",
             "items": {
-                "type": "string",
-                "minLength": 1
+                "type": "string"
+            }
+        },
+        "tables_blacklist": {
+            "type": "array",
+            "items": {
+                "type": "string"
             }
         }
     },
@@ -34,26 +38,15 @@
         "if_version": {
             "type": "object",
             "properties": {
-                "database": { "$ref": "#/definitions/database" },
-                "dump": { "$ref": "#/definitions/dump" },
                 "tables": {
                     "type": "object",
-                    "minProperties": 1,
                     "additionalProperties": { "$ref": "#/definitions/table" }
-                },
-                "table_whitelist": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "minLength": 1
-                    }
                 }
             },
             "additionalProperties": false
         },
         "database": {
             "type": "object",
-            "minProperties": 1,
             "properties": {
                 "driver": {
                     "type": "string",
@@ -78,21 +71,17 @@
                     "type": "string",
                     "minLength": 1
                 },
-                "pdoSettings": {
+                "pdo_settings": {
                     "type": "object",
-                    "minProperties": 1,
                     "additionalProperties": {
                         "type": "string"
                     }
                 }
             },
-            "additionalProperties": {
-                "type": "string"
-            }
+            "additionalProperties": false
         },
         "dump": {
             "type": "object",
-            "minProperties": 1,
             "properties": {
                 "output": {
                     "type": "string",
@@ -100,80 +89,83 @@
                 },
                 "settings": {
                     "type": "object",
-                    "minProperties": 1,
                     "properties": {
                         "compress": {
                             "type": "string",
                             "enum": ["none", "gzip", "bzip2"]
                         },
-                        "reset-auto-increment": {
+                        "init_commands": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "minLength": 1
+                            }
+                        },
+                        "add_drop_database": {
                             "type": "boolean"
                         },
-                        "add-drop-database": {
+                        "add_drop_table": {
                             "type": "boolean"
                         },
-                        "add-drop-table": {
+                        "add_drop_trigger": {
                             "type": "boolean"
                         },
-                        "add-drop-trigger": {
+                        "add_locks": {
                             "type": "boolean"
                         },
-                        "add-locks": {
+                        "complete_insert": {
                             "type": "boolean"
                         },
-                        "complete-insert": {
-                            "type": "boolean"
-                        },
-                        "default-character-set": {
+                        "default_character_set": {
                             "type": "string",
                             "minLength": 1
                         },
-                        "disable-keys": {
+                        "disable_keys": {
                             "type": "boolean"
                         },
-                        "extended-insert": {
+                        "extended_insert": {
                             "type": "boolean"
                         },
                         "events": {
                             "type": "boolean"
                         },
-                        "hex-blob": {
+                        "hex_blob": {
                             "type": "boolean"
                         },
-                        "insert-ignore": {
+                        "insert_ignore": {
                             "type": "boolean"
                         },
                         "net_buffer_length": {
                             "type": "integer"
                         },
-                        "no-autocommit": {
-                            "type": "string"
-                        },
-                        "no-create-info": {
+                        "no_autocommit": {
                             "type": "boolean"
                         },
-                        "lock-tables": {
+                        "no_create_info": {
+                            "type": "boolean"
+                        },
+                        "lock_tables": {
                             "type": "boolean"
                         },
                         "routines": {
                             "type": "boolean"
                         },
-                        "single-transaction": {
+                        "single_transaction": {
                             "type": "boolean"
                         },
-                        "skip-triggers": {
+                        "skip_triggers": {
                             "type": "boolean"
                         },
-                        "skip-tz-utc": {
+                        "skip_tz_utc": {
                             "type": "boolean"
                         },
-                        "skip-comments": {
+                        "skip_comments": {
                             "type": "boolean"
                         },
-                        "skip-dump-date": {
+                        "skip_dump_date": {
                             "type": "boolean"
                         },
-                        "skip-definer": {
+                        "skip_definer": {
                             "type": "boolean"
                         }
                     }
@@ -192,7 +184,6 @@
                 },
                 "converters": {
                     "type": "object",
-                    "minProperties": 1,
                     "additionalProperties": { "$ref": "#/definitions/converter" }
                 },
                 "filters": {
@@ -207,20 +198,17 @@
                     "type": "string"
                 },
                 "limit": {
-                    "type": ["integer", "string"]
+                    "type": "integer"
                 }
             },
             "additionalProperties": false
         },
         "converter": {
-            "type": ["object", "string", "null"],
+            "type": ["object", "string"],
+            "minLength": 1,
             "properties": {
-                "field": {
-                    "type": "string",
-                    "minLength": 1
-                },
                 "converter": {
-                    "type": ["string", "null"],
+                    "type": ["string"],
                     "minLength": 1
                 },
                 "parameters": {
@@ -236,14 +224,16 @@
                     }
                 },
                 "condition": {
-                    "type": "string",
-                    "minLength": 1
+                    "type": "string"
                 },
                 "unique": {
                     "type": "boolean"
                 },
                 "cache_key": {
                     "type": "string"
+                },
+                "disabled": {
+                    "type": "boolean"
                 }
             },
             "additionalProperties": false

@@ -2,12 +2,6 @@
 requiresVersion: true
 
 tables:
-    '*_tmp':
-        truncate: true
-
-    '*_idx':
-        truncate: true
-
     admin_user_session:
         truncate: true
 
@@ -42,6 +36,12 @@ tables:
         truncate: true
 
     session:
+        truncate: true
+
+    '*_tmp':
+        truncate: true
+
+    '*_idx':
         truncate: true
 
     admin_user:

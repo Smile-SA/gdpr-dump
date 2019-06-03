@@ -10,6 +10,7 @@ interface DriverInterface
     /**
      * Get the DSN.
      *
+     * @param DatabaseConfig $config
      * @return string
      */
     public function getDsn(DatabaseConfig $config): string;
