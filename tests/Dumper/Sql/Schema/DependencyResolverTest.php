@@ -52,7 +52,7 @@ class DependencyResolverTest extends DatabaseTestCase
      * @param string $foreignTableName
      * @param array $dependencies
      */
-    private function assertHasTableDependency($localTableName, $foreignTableName, $dependencies)
+    private function assertHasTableDependency(string $localTableName, string $foreignTableName, array $dependencies)
     {
         $this->assertArrayHasKey($localTableName, $dependencies);
 

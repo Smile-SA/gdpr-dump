@@ -77,7 +77,7 @@ class ConverterFactory
      * @return array
      * @throws \UnexpectedValueException
      */
-    private function getConverterData($definition)
+    private function getConverterData($definition): array
     {
         if (!is_array($definition)) {
             $definition = ['converter' => $definition];
@@ -120,7 +120,7 @@ class ConverterFactory
      * @return array
      * @throws \UnexpectedValueException
      */
-    private function parseParameters($parameters): array
+    private function parseParameters(array $parameters): array
     {
         foreach ($parameters as $name => $value) {
             // Some converters require other converters as a parameter (e.g. unique, chain...)

@@ -20,7 +20,7 @@ interface ConfigInterface
      * @param string $key
      * @return bool
      */
-    public function has($key): bool;
+    public function has(string $key): bool;
 
     /**
      * Set a config item.
@@ -29,7 +29,7 @@ interface ConfigInterface
      * @param mixed $value
      * @return $this
      */
-    public function set($key, $value): ConfigInterface;
+    public function set(string $key, $value): ConfigInterface;
 
     /**
      * Get the configuration data.

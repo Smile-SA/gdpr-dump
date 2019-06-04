@@ -51,7 +51,7 @@ class AnonymizeDateTest extends TestCase
      * @param string $actual
      * @param string $format
      */
-    protected function assertDateIsAnonymized($anonymized, $actual, $format)
+    protected function assertDateIsAnonymized(string $anonymized, string $actual, string $format)
     {
         $anonymizedDate = \DateTime::createFromFormat($format, $anonymized);
         $actualDate = \DateTime::createFromFormat($format, $actual);

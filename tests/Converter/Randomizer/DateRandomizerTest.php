@@ -63,7 +63,7 @@ class DateRandomizerTest extends TestCase
      * @param string $actual
      * @param string $format
      */
-    protected function assertDateIsRandomized($randomized, $actual, $format)
+    protected function assertDateIsRandomized(string $randomized, string $actual, string $format)
     {
         $randomizedDate = \DateTime::createFromFormat($format, $randomized);
         $actualDate = \DateTime::createFromFormat($format, $actual);

@@ -29,7 +29,7 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function has($key): bool
+    public function has(string $key): bool
     {
         return array_key_exists($key, $this->items);
     }
@@ -37,7 +37,7 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function set($key, $value): ConfigInterface
+    public function set(string $key, $value): ConfigInterface
     {
         $this->items[$key] = $value;
 
