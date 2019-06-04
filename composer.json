@@ -1,6 +1,6 @@
 {
     "name": "smile/gdpr-dump",
-    "description": "Proof of concept of a data anonymization utility",
+    "description": "A utility to create anonymized database dumps",
     "type": "library",
     "authors": [
         {
