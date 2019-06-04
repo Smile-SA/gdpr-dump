@@ -62,26 +62,26 @@ The database information can be specified in the `dababase` object:
 
 ```yaml
 database:
-    driver: 'mysql'
     host: 'my_host'
-    port: '3306'
     user: 'my_user'
     password: 'my_password'
     name: 'my_db_name'
-    pdo_settings:
-        MY_PDO_SETTING: 'some_value'
 ```
 
-Default values:
+Only the `name` parameter is required.
+Other parameters are optional.
 
-- driver: `'mysql'`
-- host: `'localhost'`
-- user: `'root'`
-- port: `'3306'`
+Available parameters:
 
-Available drivers:
-
-- `mysql`
+| Parameter | Required | Default | Description |
+| --- | --- | --- | --- |
+| **name** | Y | | Database name. |
+| **user** | N | `'root'` | Database user. |
+| **password** | N | `''` | Database password. |
+| **host** | N | `'localhost'` | Database host. |
+| **port** | N | `'3306'` | Database port. |
+| **driver** | N | `'pdo_mysql'` | Database driver. Only `pdo_mysql` is supported as of now. |
+| **pdo_settings** | N | `[]` | An array of [PDO settings](https://www.php.net/manual/en/ref.pdo-mysql.php#pdo-mysql.constants). |
 
 If command-line options are specified (e.g. `--user`), they will have priority over the parameter in the configuration file.
 
