@@ -142,32 +142,6 @@ tables:
             billing_fax:
                 converter: 'randomizeNumber'
 
-    # TODO: only on EE in earlier versions?
-    email_abandoned_cart:
-        converters:
-            email:
-                converter: 'randomizeEmail'
-
-    email_automation:
-        converters:
-            email:
-                converter: 'randomizeEmail'
-
-    email_campaign:
-        converters:
-            email:
-                converter: 'randomizeEmail'
-
-    email_contact:
-        converters:
-            email:
-                converter: 'randomizeEmail'
-
-    email_order:
-        converters:
-            email_imported:
-                converter: 'randomizeEmail'
-
     newsletter_subscriber:
         converters:
             subscriber_email:
@@ -416,8 +390,37 @@ tables:
                 converter: 'anonymizeText'
 
 if_version:
-    '<2.2.0':
+    '>=2.2':
         tables:
+            # These tables did not exist before Magento 2.2
+            email_abandoned_cart:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+
+            email_automation:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+
+            email_campaign:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+
+            email_contact:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+
+            email_order:
+                converters:
+                    email_imported:
+                        converter: 'randomizeEmail'
+
+    '<2.2':
+        tables:
+            # Before Magento 2.2, additional data was serialized instead of JSON-encoded
             quote_payment:
                 converters:
                     additional_information:
