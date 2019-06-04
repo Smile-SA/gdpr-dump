@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Converter;
+namespace Smile\GdprDump\Converter;
 
-use Smile\Anonymizer\Converter\Proxy\Cache;
-use Smile\Anonymizer\Converter\Proxy\Conditional;
-use Smile\Anonymizer\Converter\Proxy\Unique;
-use Smile\Anonymizer\Faker\FakerService;
+use Smile\GdprDump\Converter\Proxy\Cache;
+use Smile\GdprDump\Converter\Proxy\Conditional;
+use Smile\GdprDump\Converter\Proxy\Unique;
+use Smile\GdprDump\Faker\FakerService;
 
 class ConverterFactory
 {
@@ -16,7 +16,7 @@ class ConverterFactory
     private $faker;
 
     /**
-     * e.g. ['unique' => 'Smile\Anonymizer\Data\Converter\Proxy\Unique', ...]
+     * e.g. ['unique' => 'Smile\GdprDump\Data\Converter\Proxy\Unique', ...]
      *
      * @var string[]
      */
@@ -196,7 +196,7 @@ class ConverterFactory
 
     /**
      * Get converter class names that reside in the specified directory.
-     * e.g. ['unique' => 'Smile\Anonymizer\Data\Converter\Proxy\Unique', ...]
+     * e.g. ['unique' => 'Smile\GdprDump\Data\Converter\Proxy\Unique', ...]
      *
      * @param string $directory
      * @param string $baseDirectory
@@ -225,7 +225,7 @@ class ConverterFactory
                 $fileName = pathinfo($fileName, PATHINFO_FILENAME);
 
                 // Get the class name
-                $className = 'Smile\Anonymizer\Converter\\';
+                $className = 'Smile\GdprDump\Converter\\';
                 $className .= $baseDirectory ? $baseDirectory . '\\' . $fileName : $fileName;
 
                 // Include only classes that implement the converter interface

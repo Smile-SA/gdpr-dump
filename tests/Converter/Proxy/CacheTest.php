@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter\Proxy;
+namespace Smile\GdprDump\Tests\Converter\Proxy;
 
-use Smile\Anonymizer\Converter\Proxy\Cache;
-use Smile\Anonymizer\Converter\Randomizer\RandomizeText;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Converter\Proxy\Cache;
+use Smile\GdprDump\Converter\Randomizer\RandomizeText;
+use Smile\GdprDump\Tests\TestCase;
 
 class CacheTest extends TestCase
 {

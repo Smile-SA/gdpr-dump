@@ -8,7 +8,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Anonymizer Test Suite">
+        <testsuite name="GdprDump Test Suite">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>

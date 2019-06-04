@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Converter\Anonymizer;
+namespace Smile\GdprDump\Converter\Anonymizer;
 
 class AnonymizeEmail extends AnonymizeText
 {

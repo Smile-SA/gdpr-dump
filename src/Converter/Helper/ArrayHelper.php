@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Converter\Helper;
+namespace Smile\GdprDump\Converter\Helper;
 
 class ArrayHelper
 {

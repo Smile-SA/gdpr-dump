@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Dumper\Sql\Config\Table;
+namespace Smile\GdprDump\Tests\Dumper\Sql\Config\Table;
 
-use Smile\Anonymizer\Dumper\Sql\Config\Table\Filter\Filter;
-use Smile\Anonymizer\Dumper\Sql\Config\Table\TableConfig;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Dumper\Sql\Config\Table\Filter\Filter;
+use Smile\GdprDump\Dumper\Sql\Config\Table\TableConfig;
+use Smile\GdprDump\Tests\TestCase;
 
 class TableConfigTest extends TestCase
 {

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Config\Parser;
+namespace Smile\GdprDump\Tests\Config\Parser;
 
-use Smile\Anonymizer\Config\Parser\YamlParser;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Config\Parser\YamlParser;
+use Smile\GdprDump\Tests\TestCase;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlParserTest extends TestCase
@@ -25,7 +25,7 @@ class YamlParserTest extends TestCase
     /**
      * Test if an exception is thrown when the file is not found.
      *
-     * @expectedException \Smile\Anonymizer\Config\Parser\ParseException
+     * @expectedException \Smile\GdprDump\Config\Parser\ParseException
      */
     public function testFileNotFound()
     {

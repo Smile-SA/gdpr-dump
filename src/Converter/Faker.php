@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Converter;
+namespace Smile\GdprDump\Converter;
 
 use Faker\Generator;
 

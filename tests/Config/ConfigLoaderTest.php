@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Config;
+namespace Smile\GdprDump\Tests\Config;
 
-use Smile\Anonymizer\Config\Config;
-use Smile\Anonymizer\Config\ConfigLoader;
-use Smile\Anonymizer\Config\Parser\YamlParser;
-use Smile\Anonymizer\Config\Resolver\PathResolver;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Config\ConfigLoader;
+use Smile\GdprDump\Config\Parser\YamlParser;
+use Smile\GdprDump\Config\Resolver\PathResolver;
+use Smile\GdprDump\Tests\TestCase;
 
 class ConfigLoaderTest extends TestCase
 {

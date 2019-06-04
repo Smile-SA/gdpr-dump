@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Config\Version;
+namespace Smile\GdprDump\Config\Version;
 
 class VersionCondition
 {

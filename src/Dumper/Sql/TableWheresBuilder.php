@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Dumper\Sql;
+namespace Smile\GdprDump\Dumper\Sql;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
-use Smile\Anonymizer\Dumper\Sql\Config\DumperConfig;
-use Smile\Anonymizer\Dumper\Sql\Config\Table\Filter\Filter;
-use Smile\Anonymizer\Dumper\Sql\Config\Table\TableConfig;
-use Smile\Anonymizer\Dumper\Sql\Schema\TableDependencyResolver;
+use Smile\GdprDump\Dumper\Sql\Config\DumperConfig;
+use Smile\GdprDump\Dumper\Sql\Config\Table\Filter\Filter;
+use Smile\GdprDump\Dumper\Sql\Config\Table\TableConfig;
+use Smile\GdprDump\Dumper\Sql\Schema\TableDependencyResolver;
 
 class TableWheresBuilder
 {

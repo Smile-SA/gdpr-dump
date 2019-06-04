@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Converter\Setter;
+namespace Smile\GdprDump\Converter\Setter;
 
-use Smile\Anonymizer\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\ConverterInterface;
 
 class SetNull implements ConverterInterface
 {

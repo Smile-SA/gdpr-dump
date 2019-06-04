@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter\Randomizer;
+namespace Smile\GdprDump\Tests\Converter\Randomizer;
 
-use Smile\Anonymizer\Converter\Randomizer\RandomizeText;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Converter\Randomizer\RandomizeText;
+use Smile\GdprDump\Tests\TestCase;
 
 class RandomizeTextTest extends TestCase
 {

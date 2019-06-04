@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter\Helper;
+namespace Smile\GdprDump\Tests\Converter\Helper;
 
-use Smile\Anonymizer\Converter\Helper\ArrayHelper;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Converter\Helper\ArrayHelper;
+use Smile\GdprDump\Tests\TestCase;
 
 class ArrayHelperTest extends TestCase
 {

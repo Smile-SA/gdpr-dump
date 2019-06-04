@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Dumper\Sql\Config\Table;
+namespace Smile\GdprDump\Dumper\Sql\Config\Table;
 
-use Smile\Anonymizer\Dumper\Sql\Config\Table\Filter\Filter;
-use Smile\Anonymizer\Dumper\Sql\Config\Table\Filter\SortOrder;
+use Smile\GdprDump\Dumper\Sql\Config\Table\Filter\Filter;
+use Smile\GdprDump\Dumper\Sql\Config\Table\Filter\SortOrder;
 
 class TableConfig
 {

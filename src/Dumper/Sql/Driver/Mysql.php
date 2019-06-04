@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Dumper\Sql\Driver;
+namespace Smile\GdprDump\Dumper\Sql\Driver;
 
-use Smile\Anonymizer\Dumper\Sql\Config\DatabaseConfig;
+use Smile\GdprDump\Dumper\Sql\Config\DatabaseConfig;
 
 class Mysql implements DriverInterface
 {

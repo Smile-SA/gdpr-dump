@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Config\Version;
+namespace Smile\GdprDump\Tests\Config\Version;
 
-use Smile\Anonymizer\Config\Version\VersionCondition;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Config\Version\VersionCondition;
+use Smile\GdprDump\Tests\TestCase;
 
 class VersionConditionTest extends TestCase
 {

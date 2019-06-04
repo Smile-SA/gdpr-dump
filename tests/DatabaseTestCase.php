@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests;
+namespace Smile\GdprDump\Tests;
 
 use Doctrine\DBAL\Connection;
-use Smile\Anonymizer\Dumper\Sql\Config\DatabaseConfig;
-use Smile\Anonymizer\Dumper\Sql\Doctrine\ConnectionFactory;
+use Smile\GdprDump\Dumper\Sql\Config\DatabaseConfig;
+use Smile\GdprDump\Dumper\Sql\Doctrine\ConnectionFactory;
 use Symfony\Component\Yaml\Yaml;
 
 abstract class DatabaseTestCase extends TestCase

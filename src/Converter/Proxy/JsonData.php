@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Converter\Proxy;
+namespace Smile\GdprDump\Converter\Proxy;
 
-use Smile\Anonymizer\Converter\Helper\ArrayHelper;
-use Smile\Anonymizer\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Helper\ArrayHelper;
+use Smile\GdprDump\Converter\ConverterInterface;
 
 class JsonData implements ConverterInterface
 {

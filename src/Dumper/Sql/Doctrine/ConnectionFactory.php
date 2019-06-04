@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Dumper\Sql\Doctrine;
+namespace Smile\GdprDump\Dumper\Sql\Doctrine;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
-use Smile\Anonymizer\Dumper\Sql\Config\DatabaseConfig;
+use Smile\GdprDump\Dumper\Sql\Config\DatabaseConfig;
 
 class ConnectionFactory
 {

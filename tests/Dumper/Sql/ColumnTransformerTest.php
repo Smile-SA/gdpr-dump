@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Dumper\Sql;
+namespace Smile\GdprDump\Tests\Dumper\Sql;
 
-use Smile\Anonymizer\Dumper\Sql\ColumnTransformer;
-use Smile\Anonymizer\Tests\Converter\Dummy;
-use Smile\Anonymizer\Tests\DatabaseTestCase;
+use Smile\GdprDump\Dumper\Sql\ColumnTransformer;
+use Smile\GdprDump\Tests\Converter\Dummy;
+use Smile\GdprDump\Tests\DatabaseTestCase;
 
 class ColumnTransformerTest extends DatabaseTestCase
 {

@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-use Smile\Anonymizer\Compiler;
+use Smile\GdprDump\Compiler;
 
 // Define the root directory of the application
 define('APP_ROOT', dirname(__DIR__));
@@ -10,4 +10,4 @@ require APP_ROOT . '/vendor/autoload.php';
 
 // Run the compiler
 $compiler = new Compiler();
-$compiler->compile('anonymizer.phar');
+$compiler->compile('gdpr-dump.phar');

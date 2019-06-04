@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Converter\Anonymizer;
+namespace Smile\GdprDump\Converter\Anonymizer;
 
-use Smile\Anonymizer\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\ConverterInterface;
 
 class AnonymizeDate implements ConverterInterface
 {

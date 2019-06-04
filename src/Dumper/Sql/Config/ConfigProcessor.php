@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Dumper\Sql\Config;
+namespace Smile\GdprDump\Dumper\Sql\Config;
 
 use Doctrine\DBAL\Connection;
-use Smile\Anonymizer\Config\ConfigInterface;
-use Smile\Anonymizer\Dumper\Sql\Schema\TableFinder;
+use Smile\GdprDump\Config\ConfigInterface;
+use Smile\GdprDump\Dumper\Sql\Schema\TableFinder;
 
 class ConfigProcessor
 {

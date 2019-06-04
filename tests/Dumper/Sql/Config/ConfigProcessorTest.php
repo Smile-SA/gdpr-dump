@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Dumper\Sql\Config;
+namespace Smile\GdprDump\Tests\Dumper\Sql\Config;
 
-use Smile\Anonymizer\Config\Config;
-use Smile\Anonymizer\Dumper\Sql\Config\ConfigProcessor;
-use Smile\Anonymizer\Dumper\Sql\Config\DumperConfig;
-use Smile\Anonymizer\Tests\DatabaseTestCase;
+use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Dumper\Sql\Config\ConfigProcessor;
+use Smile\GdprDump\Dumper\Sql\Config\DumperConfig;
+use Smile\GdprDump\Tests\DatabaseTestCase;
 
 class ConfigProcessorTest extends DatabaseTestCase
 {

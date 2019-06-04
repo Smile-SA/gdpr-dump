@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Dumper\Schema;
+namespace Smile\GdprDump\Tests\Dumper\Schema;
 
-use Smile\Anonymizer\Dumper\Sql\Schema\TableFinder;
-use Smile\Anonymizer\Tests\DatabaseTestCase;
+use Smile\GdprDump\Dumper\Sql\Schema\TableFinder;
+use Smile\GdprDump\Tests\DatabaseTestCase;
 
 class TableFinderTest extends DatabaseTestCase
 {

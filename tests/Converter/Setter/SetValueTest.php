@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter\Setter;
+namespace Smile\GdprDump\Tests\Converter\Setter;
 
-use Smile\Anonymizer\Converter\Setter\SetValue;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Converter\Setter\SetValue;
+use Smile\GdprDump\Tests\TestCase;
 
 class SetValueTest extends TestCase
 {

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter\Anonymizer;
+namespace Smile\GdprDump\Tests\Converter\Anonymizer;
 
-use Smile\Anonymizer\Converter\Anonymizer\AnonymizeEmail;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Converter\Anonymizer\AnonymizeEmail;
+use Smile\GdprDump\Tests\TestCase;
 
 class AnonymizeEmailTest extends TestCase
 {

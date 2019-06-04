@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter\Proxy;
+namespace Smile\GdprDump\Tests\Converter\Proxy;
 
-use Smile\Anonymizer\Converter\Proxy\Unique;
-use Smile\Anonymizer\Converter\Setter\SetNull;
-use Smile\Anonymizer\Tests\Converter\Dummy;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Converter\Proxy\Unique;
+use Smile\GdprDump\Converter\Setter\SetNull;
+use Smile\GdprDump\Tests\Converter\Dummy;
+use Smile\GdprDump\Tests\TestCase;
 
 class UniqueTest extends TestCase
 {

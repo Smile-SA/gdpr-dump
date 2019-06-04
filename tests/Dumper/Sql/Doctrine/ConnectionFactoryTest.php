@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Dumper\Sql\Doctrine;
+namespace Smile\GdprDump\Tests\Dumper\Sql\Doctrine;
 
 use Doctrine\DBAL\Connection;
-use Smile\Anonymizer\Tests\DatabaseTestCase;
+use Smile\GdprDump\Tests\DatabaseTestCase;
 
 class ConnectionFactoryTest extends DatabaseTestCase
 {

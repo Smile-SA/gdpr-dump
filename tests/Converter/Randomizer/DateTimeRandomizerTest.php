@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter\Randomizer;
+namespace Smile\GdprDump\Tests\Converter\Randomizer;
 
-use Smile\Anonymizer\Converter\Randomizer\RandomizeDateTime;
+use Smile\GdprDump\Converter\Randomizer\RandomizeDateTime;
 
 class DateTimeRandomizerTest extends DateRandomizerTest
 {

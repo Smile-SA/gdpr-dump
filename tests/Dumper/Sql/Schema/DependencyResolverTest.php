@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Dumper\Schema;
+namespace Smile\GdprDump\Tests\Dumper\Schema;
 
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
-use Smile\Anonymizer\Dumper\Sql\Schema\TableDependencyResolver;
-use Smile\Anonymizer\Tests\DatabaseTestCase;
+use Smile\GdprDump\Dumper\Sql\Schema\TableDependencyResolver;
+use Smile\GdprDump\Tests\DatabaseTestCase;
 
 class DependencyResolverTest extends DatabaseTestCase
 {

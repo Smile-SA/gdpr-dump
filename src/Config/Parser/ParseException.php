@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Config\Parser;
+namespace Smile\GdprDump\Config\Parser;
 
 class ParseException extends \Exception
 {

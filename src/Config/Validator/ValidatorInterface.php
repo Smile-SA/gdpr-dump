@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Config\Validator;
+namespace Smile\GdprDump\Config\Validator;
 
 interface ValidatorInterface
 {

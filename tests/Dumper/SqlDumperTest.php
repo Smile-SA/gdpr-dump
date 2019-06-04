@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Dumper;
+namespace Smile\GdprDump\Tests\Dumper;
 
-use Smile\Anonymizer\Config\Config;
-use Smile\Anonymizer\Converter\ConverterFactory;
-use Smile\Anonymizer\Dumper\SqlDumper;
-use Smile\Anonymizer\Tests\Converter\Dummy;
-use Smile\Anonymizer\Tests\DatabaseTestCase;
+use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Converter\ConverterFactory;
+use Smile\GdprDump\Dumper\SqlDumper;
+use Smile\GdprDump\Tests\Converter\Dummy;
+use Smile\GdprDump\Tests\DatabaseTestCase;
 use Symfony\Component\Yaml\Yaml;
 
 class SqlDumperTest extends DatabaseTestCase

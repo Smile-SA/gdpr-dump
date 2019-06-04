@@ -1,4 +1,4 @@
-# Smile Anonymizer
+# GdprDump
 
 ## Description
 
@@ -9,9 +9,11 @@ You can use a config file to specify how the database should be dumped.
 In the config file, you can:
  
 - specify data converters that allow you to transform the data before it is dumped to the file.
-  It can be used to create an anonymized dump file.
-- specify the tables to ignore (not included in the dump).
-- specify the tables to truncate (included in the dump, but without any data).
+  It can be used to create an anonymize
+  d dump file.
+- specify table filters.
+- specify a list of tables to whitelist (only these tables will be included in the dump).
+- specify a list of tables to blacklist (not included in the dump).
 - specify the database connection info (host, user, password...)
 - specify dump options (compression, output type...)
 
@@ -36,7 +38,7 @@ bin/compile
 Alternatively, you can install the project with composer:
 
 ```php
-composer create-project --repository-url=packages.json smile/database-anonymizer
+composer create-project --repository-url=packages.json smile/gdpr-dump
 ```
 
 With the following `packages.json` file:
@@ -44,10 +46,10 @@ With the following `packages.json` file:
 ```json
 {
     "package": {
-        "name": "smile/database-anonymizer",
+        "name": "smile/gdpr-dump",
         "version": "0.1.0",
         "source": {
-          "url": "/path/to/database-anonymizer/.git",
+          "url": "/path/to/gdpr-dump/.git",
           "type": "git",
           "reference": "master"
         }
@@ -55,7 +57,7 @@ With the following `packages.json` file:
 }
 ```
 
-The package is not in packagist yet, we need to find a name first.
+The package is not in packagist yet.
 
 ## Documentation
 

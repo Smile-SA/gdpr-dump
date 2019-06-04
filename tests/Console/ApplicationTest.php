@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Console;
+namespace Smile\GdprDump\Tests\Console;
 
-use Smile\Anonymizer\Console\Application;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Console\Application;
+use Smile\GdprDump\Tests\TestCase;
 
 class ApplicationTest extends TestCase
 {

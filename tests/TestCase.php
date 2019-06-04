@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests;
+namespace Smile\GdprDump\Tests;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 

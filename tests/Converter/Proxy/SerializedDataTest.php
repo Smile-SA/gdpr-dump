@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter\Proxy;
+namespace Smile\GdprDump\Tests\Converter\Proxy;
 
-use Smile\Anonymizer\Converter\Proxy\SerializedData;
-use Smile\Anonymizer\Tests\Converter\Dummy;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Converter\Proxy\SerializedData;
+use Smile\GdprDump\Tests\Converter\Dummy;
+use Smile\GdprDump\Tests\TestCase;
 
 class SerializedDataTest extends TestCase
 {

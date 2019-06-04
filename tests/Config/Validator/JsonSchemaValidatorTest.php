@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Config\Validator;
+namespace Smile\GdprDump\Tests\Config\Validator;
 
-use Smile\Anonymizer\Config\Validator\JsonSchemaValidator;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Config\Validator\JsonSchemaValidator;
+use Smile\GdprDump\Tests\TestCase;
 
 class JsonSchemaValidatorTest extends TestCase
 {
@@ -53,7 +53,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * Test if an exception is thrown when the schema file is not found.
      *
-     * @expectedException \Smile\Anonymizer\Config\Validator\ValidationException
+     * @expectedException \Smile\GdprDump\Config\Validator\ValidationException
      */
     public function testFileNotFound()
     {

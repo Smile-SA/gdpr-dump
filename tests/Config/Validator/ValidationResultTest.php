@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Config\Validator;
+namespace Smile\GdprDump\Tests\Config\Validator;
 
-use Smile\Anonymizer\Config\Validator\ValidationResult;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Config\Validator\ValidationResult;
+use Smile\GdprDump\Tests\TestCase;
 
 class ValidationResultTest extends TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter\Anonymizer;
+namespace Smile\GdprDump\Tests\Converter\Anonymizer;
 
-use Smile\Anonymizer\Converter\Anonymizer\AnonymizeDateTime;
+use Smile\GdprDump\Converter\Anonymizer\AnonymizeDateTime;
 
 class AnonymizeDateTimeTest extends AnonymizeDateTest
 {

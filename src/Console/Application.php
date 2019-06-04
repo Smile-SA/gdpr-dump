@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Console;
+namespace Smile\GdprDump\Console;
 
 use Symfony\Component\Console\Application as BaseApplication;
 
@@ -14,7 +14,7 @@ class Application extends BaseApplication
      */
     public function __construct()
     {
-        parent::__construct('anonymizer', self::VERSION);
+        parent::__construct('gdpr-dump', self::VERSION);
     }
 
     /**

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Converter\Randomizer;
+namespace Smile\GdprDump\Converter\Randomizer;
 
-use Smile\Anonymizer\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\ConverterInterface;
 
 class RandomizeNumber implements ConverterInterface
 {

@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-use Smile\Anonymizer\AppKernel;
+use Smile\GdprDump\AppKernel;
 
 // Define the root directory of the application
 define('APP_ROOT', dirname(__DIR__));

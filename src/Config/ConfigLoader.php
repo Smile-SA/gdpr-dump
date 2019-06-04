@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Config;
+namespace Smile\GdprDump\Config;
 
-use Smile\Anonymizer\Config\Parser\ParserInterface;
-use Smile\Anonymizer\Config\Resolver\PathResolverInterface;
-use Smile\Anonymizer\Config\Version\VersionCondition;
+use Smile\GdprDump\Config\Parser\ParserInterface;
+use Smile\GdprDump\Config\Resolver\PathResolverInterface;
+use Smile\GdprDump\Config\Version\VersionCondition;
 
 class ConfigLoader implements ConfigLoaderInterface
 {

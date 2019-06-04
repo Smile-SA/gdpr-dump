@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Config\Resolver;
+namespace Smile\GdprDump\Tests\Config\Resolver;
 
-use Smile\Anonymizer\Config\Resolver\PathResolver;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Config\Resolver\PathResolver;
+use Smile\GdprDump\Tests\TestCase;
 
 class PathResolverTest extends TestCase
 {

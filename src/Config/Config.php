@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Config;
+namespace Smile\GdprDump\Config;
 
 class Config implements ConfigInterface
 {

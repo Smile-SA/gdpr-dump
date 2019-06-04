@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter;
+namespace Smile\GdprDump\Tests\Converter;
 
 use Faker\Factory as FakerFactory;
-use Smile\Anonymizer\Converter\Faker;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Converter\Faker;
+use Smile\GdprDump\Tests\TestCase;
 
 class FakerTest extends TestCase
 {

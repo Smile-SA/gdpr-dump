@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Converter\Randomizer;
+namespace Smile\GdprDump\Converter\Randomizer;
 
 class RandomizeDateTime extends RandomizeDate
 {

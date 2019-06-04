@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer;
+namespace Smile\GdprDump;
 
 use Symfony\Component\Finder\Finder;
 
@@ -21,7 +21,7 @@ class Compiler
             unlink($fileName);
         }
 
-        $phar = new \Phar($fileName, 0, 'anonymizer.phar');
+        $phar = new \Phar($fileName, 0, 'gdpr-dump.phar');
         $phar->setSignatureAlgorithm(\Phar::SHA1);
         $phar->startBuffering();
 
@@ -87,7 +87,7 @@ class Compiler
     }
 
     /**
-     * Add anonymizer bin to the phar file.
+     * Add console binary to the phar file.
      *
      * @param \Phar $phar
      */
@@ -119,9 +119,20 @@ class Compiler
      *
      * @return string[]
      */
-    private function getExcludedVendorDirs()
+    private function getExcludedVendorDirs(): array
     {
-        return ['Tests', 'tests', 'test', 'unit-tests', 'fixtures', 'examples', 'build'];
+        return [
+            'bin', // doctrine/*
+            'build', // sesbastian/*
+            'examples', // phar-io/manifest
+            'demo', // justinrainbow/json-schema
+            'doc', // myclabs/deep-copy
+            'fixtures', // myclabs/deep-copy
+            'unit-tests', // ifsnop/mysqldump-php
+            'tests', // doctrine/*, phar-io/*, phpunit/*, sesbastian/*, tokenizer/*
+            'test', // fzaninotto/faker,
+            'Tests', // symfony/*
+        ];
     }
 
     /**
@@ -135,8 +146,8 @@ class Compiler
 #!/usr/bin/env php
 <?php
 Phar::interceptFileFuncs();
-Phar::mapPhar('anonymizer.phar');
-require 'phar://anonymizer.phar/bin/console';
+Phar::mapPhar('gdpr-dump.phar');
+require 'phar://gdpr-dump.phar/bin/console';
 __HALT_COMPILER();
 EOF;
     }

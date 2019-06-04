@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Dumper\Sql\Driver;
+namespace Smile\GdprDump\Tests\Dumper\Sql\Driver;
 
-use Smile\Anonymizer\Dumper\Sql\Driver\DriverFactory;
-use Smile\Anonymizer\Dumper\Sql\Driver\Mysql;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Dumper\Sql\Driver\DriverFactory;
+use Smile\GdprDump\Dumper\Sql\Driver\Mysql;
+use Smile\GdprDump\Tests\TestCase;
 
 class DriverFactoryTest extends TestCase
 {

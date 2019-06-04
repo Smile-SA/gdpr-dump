@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Console\Command;
+namespace Smile\GdprDump\Console\Command;
 
-use Smile\Anonymizer\Config\ConfigInterface;
-use Smile\Anonymizer\Config\ConfigLoader;
-use Smile\Anonymizer\Config\Validator\ValidationResultInterface;
-use Smile\Anonymizer\Config\Validator\ValidatorInterface;
-use Smile\Anonymizer\Dumper\DumperInterface;
+use Smile\GdprDump\Config\ConfigInterface;
+use Smile\GdprDump\Config\ConfigLoader;
+use Smile\GdprDump\Config\Validator\ValidationResultInterface;
+use Smile\GdprDump\Config\Validator\ValidatorInterface;
+use Smile\GdprDump\Dumper\DumperInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

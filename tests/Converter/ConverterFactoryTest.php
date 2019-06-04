@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter;
+namespace Smile\GdprDump\Tests\Converter;
 
-use Smile\Anonymizer\Converter\ConverterFactory;
-use Smile\Anonymizer\Converter\Faker;
-use Smile\Anonymizer\Converter\Proxy\Conditional;
-use Smile\Anonymizer\Converter\Proxy\Unique;
-use Smile\Anonymizer\Faker\FakerService;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Converter\ConverterFactory;
+use Smile\GdprDump\Converter\Faker;
+use Smile\GdprDump\Converter\Proxy\Conditional;
+use Smile\GdprDump\Converter\Proxy\Unique;
+use Smile\GdprDump\Faker\FakerService;
+use Smile\GdprDump\Tests\TestCase;
 
 class ConverterFactoryTest extends TestCase
 {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Config\Resolver;
+namespace Smile\GdprDump\Config\Resolver;
 
 interface PathResolverInterface
 {

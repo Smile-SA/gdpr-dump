@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Config;
+namespace Smile\GdprDump\Tests\Config;
 
-use Smile\Anonymizer\Config\Config;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Tests\TestCase;
 
 class ConfigTest extends TestCase
 {

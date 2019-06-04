@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Dumper;
+namespace Smile\GdprDump\Dumper;
 
 use Ifsnop\Mysqldump\Mysqldump;
-use Smile\Anonymizer\Config\ConfigInterface;
-use Smile\Anonymizer\Converter\ConverterFactory;
-use Smile\Anonymizer\Dumper\Sql\ColumnTransformer;
-use Smile\Anonymizer\Dumper\Sql\Config\ConfigProcessor;
-use Smile\Anonymizer\Dumper\Sql\Config\DatabaseConfig;
-use Smile\Anonymizer\Dumper\Sql\Config\DumperConfig;
-use Smile\Anonymizer\Dumper\Sql\Doctrine\ConnectionFactory;
-use Smile\Anonymizer\Dumper\Sql\TableWheresBuilder;
+use Smile\GdprDump\Config\ConfigInterface;
+use Smile\GdprDump\Converter\ConverterFactory;
+use Smile\GdprDump\Dumper\Sql\ColumnTransformer;
+use Smile\GdprDump\Dumper\Sql\Config\ConfigProcessor;
+use Smile\GdprDump\Dumper\Sql\Config\DatabaseConfig;
+use Smile\GdprDump\Dumper\Sql\Config\DumperConfig;
+use Smile\GdprDump\Dumper\Sql\Doctrine\ConnectionFactory;
+use Smile\GdprDump\Dumper\Sql\TableWheresBuilder;
 
 class SqlDumper implements DumperInterface
 {

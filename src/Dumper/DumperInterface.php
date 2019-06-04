@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Dumper;
+namespace Smile\GdprDump\Dumper;
 
-use Smile\Anonymizer\Config\ConfigInterface;
+use Smile\GdprDump\Config\ConfigInterface;
 
 interface DumperInterface
 {

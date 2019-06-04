@@ -1,5 +1,5 @@
 {
-    "name": "smile/database-anonymizer",
+    "name": "smile/gdpr-dump",
     "description": "Proof of concept of a data anonymization utility",
     "type": "library",
     "authors": [
@@ -26,7 +26,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Smile\\Anonymizer\\": "src/"
+            "Smile\\GdprDump\\": "src/"
         }
     },
     "config": {

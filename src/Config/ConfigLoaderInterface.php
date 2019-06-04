@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Config;
+namespace Smile\GdprDump\Config;
 
-use Smile\Anonymizer\Config\Parser\ParseException;
-use Smile\Anonymizer\Config\Validator\ValidationException;
+use Smile\GdprDump\Config\Parser\ParseException;
+use Smile\GdprDump\Config\Validator\ValidationException;
 
 interface ConfigLoaderInterface
 {

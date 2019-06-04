@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter;
+namespace Smile\GdprDump\Tests\Converter;
 
-use Smile\Anonymizer\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\ConverterInterface;
 
 class Dummy implements ConverterInterface
 {

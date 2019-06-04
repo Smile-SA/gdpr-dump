@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Tests\Converter\Proxy;
+namespace Smile\GdprDump\Tests\Converter\Proxy;
 
-use Smile\Anonymizer\Converter\ConverterInterface;
-use Smile\Anonymizer\Converter\Proxy\Conditional;
-use Smile\Anonymizer\Tests\Converter\Dummy;
-use Smile\Anonymizer\Tests\TestCase;
+use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Proxy\Conditional;
+use Smile\GdprDump\Tests\Converter\Dummy;
+use Smile\GdprDump\Tests\TestCase;
 
 class ConditionalTest extends TestCase
 {

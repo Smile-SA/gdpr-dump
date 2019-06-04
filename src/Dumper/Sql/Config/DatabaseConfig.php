@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Dumper\Sql\Config;
+namespace Smile\GdprDump\Dumper\Sql\Config;
 
-use Smile\Anonymizer\Dumper\Sql\Driver\DriverFactory;
+use Smile\GdprDump\Dumper\Sql\Driver\DriverFactory;
 
 class DatabaseConfig
 {

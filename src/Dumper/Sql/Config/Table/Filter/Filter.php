@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\Anonymizer\Dumper\Sql\Config\Table\Filter;
+namespace Smile\GdprDump\Dumper\Sql\Config\Table\Filter;
 
 class Filter
 {
