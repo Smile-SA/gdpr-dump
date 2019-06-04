@@ -352,7 +352,7 @@ Syntax:
 
 ```yaml
 if_version:
-    '<2.2.0':
+    '<2.2':
         # version-specific config here (e.g. tables)
 ```
 
