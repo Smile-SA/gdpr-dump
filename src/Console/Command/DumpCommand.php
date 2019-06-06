@@ -116,25 +116,19 @@ class DumpCommand extends Command
 
     private function loadConfig(InputInterface $input, OutputInterface $output)
     {
-        $prompt = (string) $input->getOption('password');
         $configFile = (string) $input->getArgument('config_file');
-
-        // Get the password
-        $password = $prompt !== '' ? $this->promptPassword($input, $output) : '';
 
         // Load the config file
         if ($configFile) {
             $this->configLoader->loadFile($configFile);
+            $this->configLoader->loadVersionData();
         }
 
         // Load the JSON-encoded config passed in the "additional-config" option
         $this->loadAdditionalConfig($input);
 
-        // Load version-specific data
-        $this->configLoader->loadVersionData();
-
         // Override the config with the console options/arguments
-        $this->overrideConfig($input, $password);
+        $this->overrideConfig($input, $output);
     }
 
     /**
@@ -161,9 +155,9 @@ class DumpCommand extends Command
      * Override the config with the console arguments/options.
      *
      * @param InputInterface $input
-     * @param string $password
+     * @param OutputInterface $output
      */
-    private function overrideConfig(InputInterface $input, string $password)
+    private function overrideConfig(InputInterface $input, OutputInterface $output)
     {
         // Database config
         $databaseInput = [
@@ -182,7 +176,7 @@ class DumpCommand extends Command
 
         // Override password only if it was prompted
         if ($input->getOption('password')) {
-            $databaseConfig['password'] = $password;
+            $databaseConfig['password'] = $this->promptPassword($input, $output);
         }
 
         if (!empty($databaseConfig)) {

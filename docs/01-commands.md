@@ -5,13 +5,13 @@
 Dump creation command:
 
 ```
-bin/console dump [--host=...] [--user=...] [--password] [--database] [<config_file>]
+bin/console dump [--host=...] [--user=...] [--password] [--database=...] [--additional-config=...] [<config_file>]
 ```
 
 Example:
 
 ```
-bin/console dump path/to/my/config.yaml 
+bin/console dump path/to/my/config.yaml
 ```
 
 **Templates**
