@@ -236,11 +236,7 @@ class TableWheresBuilder
     {
         $value = $filter->getValue();
 
-        if (in_array($filter->getOperator(), [Filter::OPERATOR_IN, Filter::OPERATOR_NOT_IN])) {
-            if (!is_array($value)) {
-                throw new \UnexpectedValueException('The IN operator requires array values.');
-            }
-
+        if (is_array($value)) {
             foreach ($value as $k => $v) {
                 $value[$k] = $this->quoteValue($v);
             }
