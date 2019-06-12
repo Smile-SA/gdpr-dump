@@ -63,6 +63,7 @@ abstract class DatabaseTestCase extends TestCase
      * Check if the database tests should be performed.
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function skipDatabaseTests(): bool
     {

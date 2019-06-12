@@ -41,7 +41,7 @@ class Unique implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        $i = 0;
+        $count = 0;
 
         do {
             $result = $this->converter->convert($value, $context);
@@ -51,8 +51,8 @@ class Unique implements ConverterInterface
                 return null;
             }
 
-            $i++;
-            if ($i > $this->maxRetries) {
+            $count++;
+            if ($count > $this->maxRetries) {
                 throw new \OverflowException(
                     sprintf('Maximum retries of %d reached without finding a unique value', $this->maxRetries)
                 );

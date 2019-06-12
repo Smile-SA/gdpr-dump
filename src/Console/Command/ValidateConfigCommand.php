@@ -95,6 +95,7 @@ class ValidateConfigCommand extends Command
      *
      * @param ValidationResultInterface $result
      * @param OutputInterface $output
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private function outputValidationResult(ValidationResultInterface $result, OutputInterface $output)
     {

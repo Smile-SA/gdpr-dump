@@ -1,4 +1,6 @@
 <?php
+// phpcs:ignoreFile
+
 // Define the root directory of the application
 define('APP_ROOT', dirname(__DIR__));
 

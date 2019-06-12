@@ -10,6 +10,9 @@ use Smile\GdprDump\Converter\Proxy\Unique;
 use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class ConverterFactoryTest extends TestCase
 {
     /**

@@ -23,7 +23,7 @@ class FakerService
      */
     public function __construct(array $options = [])
     {
-        $this->options += [
+        $this->options = $options + [
             'locale' => Factory::DEFAULT_LOCALE,
         ];
     }

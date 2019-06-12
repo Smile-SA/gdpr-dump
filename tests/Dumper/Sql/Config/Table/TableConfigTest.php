@@ -110,6 +110,6 @@ class TableConfigTest extends TestCase
      */
     public function testInvalidSortOrder()
     {
-        $config = new TableConfig('table1', ['orderBy' => 'this is not a valid sort order']);
+        new TableConfig('table1', ['orderBy' => 'this is not a valid sort order']);
     }
 }

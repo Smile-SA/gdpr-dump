@@ -60,7 +60,10 @@ class AnonymizeDateTest extends TestCase
         $this->assertSame($anonymizedDate->format('Y'), $actualDate->format('Y'));
 
         // The day and month must have been randomized
-        $this->assertTrue($anonymizedDate->format('n') !== $actualDate->format('n') || $anonymizedDate->format('j') !== $actualDate->format('j'));
+        $this->assertTrue(
+            $anonymizedDate->format('n') !== $actualDate->format('n')
+            || $anonymizedDate->format('j') !== $actualDate->format('j')
+        );
 
         // The time must not have changed
         $this->assertSame($anonymizedDate->format('H:i:s'), $actualDate->format('H:i:s'));
