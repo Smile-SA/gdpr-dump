@@ -164,6 +164,11 @@ class TableConfig
 
             foreach ($orders as $order) {
                 $parts = explode(' ', $order);
+
+                if (count($parts) > 2) {
+                    throw new \UnexpectedValueException(sprintf('The sort order "%s" is not valid.', $order));
+                }
+
                 $column = $parts[0];
                 $direction = $parts[1] ?? SortOrder::DIRECTION_ASC;
 

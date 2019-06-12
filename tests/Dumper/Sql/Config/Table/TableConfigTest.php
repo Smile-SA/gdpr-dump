@@ -102,4 +102,14 @@ class TableConfigTest extends TestCase
         $this->assertCount(2, $config->getSortOrders());
         $this->assertTrue($config->hasSortOrder());
     }
+
+    /**
+     * Test if an exception is thrown when the sort order is invalid.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testInvalidSortOrder()
+    {
+        $config = new TableConfig('table1', ['orderBy' => 'this is not a valid sort order']);
+    }
 }
