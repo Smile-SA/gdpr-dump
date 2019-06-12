@@ -22,4 +22,22 @@ tables:
                 converter: 'randomizeText'
                 unique: true
             pass:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
+
+    commerce_order:
+        converters:
+            mail:
+                converter: 'randomizeEmail'
+                unique: true
+            hostname:
+                converter: 'randomizeEmail'
+                unique: true
+
+    commerce_order_revision:
+        converters:
+            mail:
+                converter: 'randomizeEmail'
+                unique: true
+            revision_hostname:
+                converter: 'randomizeEmail'
+                unique: true

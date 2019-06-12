@@ -8,6 +8,9 @@ tables:
     sessions:
         truncate: true
 
+    commerce_payment_method*:
+        truncate: true
+
     users_field_data:
         converters:
             mail:
@@ -19,4 +22,18 @@ tables:
                 converter: 'randomizeText'
                 unique: true
             pass:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
+
+    commerce_order:
+        converters:
+            mail:
+                converter: 'randomizeEmail'
+                unique: true
+            ip_address:
+                converter: 'randomizeEmail'
+
+    commerce_store_field_data:
+        converters:
+            mail:
+                converter: 'randomizeEmail'
+                unique: true
