@@ -8,6 +8,12 @@ database:
     name: 'magento2'
 
 dump:
+    compress: 'bzip2'
     output: 'php://stdout'
-    settings:
-        compress: 'bzip2'
+
+tables:
+    my_custom_table:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+                unique: true
