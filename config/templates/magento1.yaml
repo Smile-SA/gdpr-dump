@@ -104,8 +104,7 @@ tables:
     sales_flat_creditmemo_comment:
         converters:
             comment:
-                converter: 'faker'
-                parameters: {formatter: 'text'}
+                converter: 'anonymizeText'
 
     sales_flat_creditmemo_grid:
         converters:
@@ -115,8 +114,7 @@ tables:
     sales_flat_invoice_comment:
         converters:
             comment:
-                converter: 'faker'
-                parameters: {formatter: 'text'}
+                converter: 'anonymizeText'
 
     sales_flat_invoice_grid:
         converters:
@@ -137,8 +135,7 @@ tables:
             customer_dob:
                 converter: 'anonymizeDateTime'
             customer_note:
-                converter: 'faker'
-                parameters: {formatter: 'text'}
+                converter: 'anonymizeText'
             remote_ip:
                 converter: 'faker'
                 parameters: {formatter: 'ipv4'}
@@ -218,8 +215,7 @@ tables:
             customer_dob:
                 converter: 'anonymizeDateTime'
             customer_note:
-                converter: 'faker'
-                parameters: {formatter: 'text'}
+                converter: 'anonymizeText'
             remote_ip:
                 converter: 'faker'
                 parameters: {formatter: 'ipv4'}
@@ -250,8 +246,7 @@ tables:
             fax:
                 converter: 'randomizeNumber'
             customer_notes:
-                converter: 'faker'
-                parameters: {formatter: 'text'}
+                converter: 'anonymizeText'
 
     # Not anonymized: cc_exp_month, cc_exp_year, cc_ss_start_month, cc_ss_start_year
     sales_flat_quote_payment:
@@ -270,8 +265,7 @@ tables:
     sales_flat_shipment_comment:
         converters:
             comment:
-                converter: 'faker'
-                parameters: {formatter: 'text'}
+                converter: 'anonymizeText'
 
     sales_flat_shipment_grid:
         converters:
