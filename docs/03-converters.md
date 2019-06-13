@@ -53,19 +53,6 @@ tables:
                     arguments: [1, 100]
 ```
 
-## [faker](src/Converter/Faker.php) short syntax
-
-A shorter syntax can be used to define a Faker converter.
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column: 'safeEmail'
-```
-
-How it works: if the specified converter does not exist, it automatically tries to fallback to a Faker converter, with the converter name used as the Faker formatter name.
-
 ## [anonymizeText](src/Converter/Anonymizer/AnonymizeText.php)
 
 Anonymizes string values by replacing all characters by the `*` character.

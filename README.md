@@ -4,6 +4,8 @@
 
 This tool provides a command that dumps the contents of a database to the specified output (e.g. dump file).
 
+**It is still under development (beta). There is no stable version yet.**
+
 You can use a config file to specify how the database should be dumped.
 
 In the config file, you can:
@@ -29,35 +31,17 @@ Each release branch of PHP is supported for 3 years (2 years of full support, th
 
 ## Installation
 
-You can create a PHAR file with the following command:
+**With Composer**
 
 ```php
-bin/compile
+composer create-project --no-dev --stability=dev --prefer-dist smile/gdpr-dump
 ```
 
-Alternatively, you can install the project with composer:
+Important: your composer configuration must include [Smile repositories](https://wiki.smile.fr/view/PHP/HowToConfigComposer).
 
-```php
-composer create-project --repository-url=packages.json smile/gdpr-dump
-```
+**Phar File**
 
-With the following `packages.json` file:
-
-```json
-{
-    "package": {
-        "name": "smile/gdpr-dump",
-        "version": "0.1.0",
-        "source": {
-          "url": "/path/to/gdpr-dump/.git",
-          "type": "git",
-          "reference": "master"
-        }
-    }
-}
-```
-
-The package is not in packagist yet.
+Alternatively, you can download a PHAR file [here](http://packages.vitry.intranet/products/smile/gdpr-dump/gdpr-dump-1.0.0-beta1.phar).
 
 ## Documentation
 
@@ -65,8 +49,8 @@ Table of contents:
 
 1. [Basic Usage](docs/01-commands.md)
 2. [Configuration](docs/02-configuration.md)
-3. [Template Recommendations](docs/03-template-recommendations.md)
-4. [Converters](docs/04-converters.md)
+3. [Converters](docs/03-converters.md)
+4. [Guidelines](docs/04-guidelines.md)
 
 Also, there are multiple examples of config files in the config/templates directory.
 

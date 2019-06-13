@@ -167,13 +167,7 @@ class ConverterFactory
 
         // If no class was found, check if a Faker formatter has this name
         if (!class_exists($className)) {
-            try {
-                $this->faker->getGenerator()->getFormatter($name);
-                $className = Faker::class;
-                $parameters['formatter'] = $name;
-            } catch (\InvalidArgumentException $e) {
-                throw new \RuntimeException(sprintf('The converter class "%s" was not found.', $className));
-            }
+            throw new \RuntimeException(sprintf('The converter class "%s" was not found.', $className));
         }
 
         // Faker parameter

@@ -7,14 +7,14 @@ use Symfony\Component\Console\Application as BaseApplication;
 
 class Application extends BaseApplication
 {
-    const VERSION = '0.1.0';
+    const VERSION = '1.0.0-beta1';
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        parent::__construct('gdpr-dump', self::VERSION);
+        parent::__construct('GdprDump', self::VERSION);
     }
 
     /**

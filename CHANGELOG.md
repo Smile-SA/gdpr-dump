@@ -2,6 +2,6 @@
 
 All notable changes to this project will be documented in this file.
 
-## Not Released
+## 1.0.0-beta1
 
 - First version of the tool

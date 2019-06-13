@@ -1,4 +1,4 @@
-# Template Recommendations
+# Guidelines
 
 ## Performance
 
@@ -22,7 +22,6 @@ Example of sensible data:
 - encrypted password
 - payment data
 - comment that could contain customer-related information
-
 
 ## Data Consistency
 
