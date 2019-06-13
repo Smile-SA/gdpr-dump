@@ -41,7 +41,7 @@ Important: your composer configuration must include [Smile repositories](https:/
 
 **Phar File**
 
-Alternatively, you can download a PHAR file [here](http://packages.vitry.intranet/products/smile/gdpr-dump/gdpr-dump-1.0.0-beta1.phar).
+Alternatively, you can download a PHAR file [here](http://packages.vitry.intranet/products/smile/gdpr-dump/gdpr-dump-1.0.0-beta2.phar).
 
 ## Documentation
 
