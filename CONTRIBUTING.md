@@ -6,7 +6,7 @@ When reporting issues, please try to be as descriptive as possible, and include 
 
 A step by step guide on how to reproduce the issue will greatly increase the chances of your issue being resolved in a timely manner.
 
-## Contributing Guidelines
+## Contribution Guidelines
 
 **Don't commit directly on this repository.**
 
