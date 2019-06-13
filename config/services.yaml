@@ -20,7 +20,7 @@ services:
         arguments:
             - '@config.validator'
             - '@config.parser'
-            - '@config.resolver.path'
+            - '@config.path_resolver'
         tags:
             - {name: 'console.command'}
 
@@ -33,7 +33,7 @@ services:
         arguments:
             - '@config.storage'
             - '@config.parser'
-            - '@config.resolver.path'
+            - '@config.path_resolver'
 
     config.parser:
         class: 'Smile\GdprDump\Config\Parser\YamlParser'
@@ -43,7 +43,7 @@ services:
         arguments:
             - '%config.schema_file%'
 
-    config.resolver.path:
+    config.path_resolver:
         class: 'Smile\GdprDump\Config\Resolver\PathResolver'
 
     # --- Dumper ---
