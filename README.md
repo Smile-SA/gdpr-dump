@@ -34,7 +34,7 @@ Each release branch of PHP is supported for 3 years (2 years of full support, th
 **With Composer**
 
 ```php
-composer create-project --no-dev --stability=dev --prefer-dist smile/gdpr-dump
+composer create-project --no-dev --stability=beta --prefer-dist smile/gdpr-dump
 ```
 
 Important: your composer configuration must include [Smile repositories](https://wiki.smile.fr/view/PHP/HowToConfigComposer).
