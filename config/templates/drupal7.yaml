@@ -30,8 +30,8 @@ tables:
                 converter: 'randomizeEmail'
                 unique: true
             hostname:
-                converter: 'randomizeEmail'
-                unique: true
+                converter: 'faker'
+                parameters: {formatter: 'ipv4'}
 
     commerce_order_revision:
         converters:
@@ -39,5 +39,5 @@ tables:
                 converter: 'randomizeEmail'
                 unique: true
             revision_hostname:
-                converter: 'randomizeEmail'
-                unique: true
+                converter: 'faker'
+                parameters: {formatter: 'ipv4'}
