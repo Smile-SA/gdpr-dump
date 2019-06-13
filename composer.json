@@ -8,8 +8,6 @@
             "email": "dirtech@smile.fr"
         }
     ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
         "php": "^7.0",
         "doctrine/dbal": "^2.5",
