@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 [Not Released]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta2...master
 
 - The `version` parameter is now properly parsed if specified in the `additional-config` command option
+- Fix wrong property name in magento1 template
 
 ## [1.0.0-beta2] - 2019-06-13
 [1.0.0-beta2]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta1...1.0.0-beta2

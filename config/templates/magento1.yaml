@@ -24,7 +24,7 @@ tables:
         truncate: true
 
     dataflow_import_data:
-        import: true
+        truncate: true
 
     dataflow_profile_history:
         truncate: true
