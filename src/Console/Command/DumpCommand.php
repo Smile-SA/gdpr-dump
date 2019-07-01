@@ -121,11 +121,13 @@ class DumpCommand extends Command
         // Load the config file
         if ($configFile) {
             $this->configLoader->loadFile($configFile);
-            $this->configLoader->loadVersionData();
         }
 
         // Load the JSON-encoded config passed in the "additional-config" option
         $this->loadAdditionalConfig($input);
+
+        // Load version-specific data
+        $this->configLoader->loadVersionData();
 
         // Override the config with the console options/arguments
         $this->overrideConfig($input, $output);
