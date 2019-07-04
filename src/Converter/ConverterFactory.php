@@ -101,13 +101,11 @@ class ConverterFactory
             'condition' => '',
             'cache_key' => '',
             'unique' => false,
-            'optional' => false,
         ];
 
         $definition['parameters'] =  $this->parseParameters($definition['parameters']);
         $definition['condition'] = (string) $definition['condition'];
         $definition['unique'] = (bool) $definition['unique'];
-        $definition['optional'] = (bool) $definition['optional'];
         $definition['cache_key'] = (string) $definition['cache_key'];
 
         return $definition;

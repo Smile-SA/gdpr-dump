@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [WIP]
+[WIP]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta3...master
+
+- Remove unused `optional` parameter in ConverterFactory
+
 ## [1.0.0-beta3] - 2019-07-01
 [1.0.0-beta3]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta2...1.0.0-beta3
 
@@ -15,4 +20,5 @@ All notable changes to this project will be documented in this file.
 - Use the "beta" stability in the composer-create project command
 
 ## 1.0.0-beta1 - 2019-06-13
+
 - First version of the tool
