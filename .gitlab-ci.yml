@@ -1,0 +1,21 @@
+tests:
+  script:
+    - "composer install"
+    - "sed -i 's/name=\"skip_database_tests\" value=\"false\"/name=\"skip_database_tests\" value=\"true\"/g' phpunit.xml"
+    - "composer phpcs"
+    - "composer phpmd"
+    - "composer phpunit"
+  tags:
+    - "php70"
+
+package:
+  script:
+    - "composer install --no-dev"
+    - "php -dphar.readonly=0 bin/compile"
+  artifacts:
+    paths:
+      - "build/dist/*.phar"
+  tags:
+    - "php70"
+  only:
+    - "tags"
