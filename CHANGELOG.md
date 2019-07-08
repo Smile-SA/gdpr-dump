@@ -2,8 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## [WIP]
-[WIP]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta3...master
+## [1.0.0-beta4] - 2019-07-08
+[1.0.0-beta4]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta3...1.0.0-beta4
 
 - Allow date format in dump output file name
 - Fix dump settings in schema.json

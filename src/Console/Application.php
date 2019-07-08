@@ -7,7 +7,7 @@ use Symfony\Component\Console\Application as BaseApplication;
 
 class Application extends BaseApplication
 {
-    const VERSION = '1.0.0-beta3';
+    const VERSION = '1.0.0-beta4';
 
     /**
      * Constructor.
