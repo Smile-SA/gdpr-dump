@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Allow date format in dump output file name
 - Fix dump settings in schema.json
 - Remove unused `optional` parameter in ConverterFactory
+- Generate the phar file in the `build/dist` directory
 
 ## [1.0.0-beta3] - 2019-07-01
 [1.0.0-beta3]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta2...1.0.0-beta3

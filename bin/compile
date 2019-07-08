@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+use Smile\GdprDump\Console\Application;
 use Smile\GdprDump\Compiler;
 
 // Define the root directory of the application
@@ -8,6 +9,9 @@ define('APP_ROOT', dirname(__DIR__));
 // Initialize autoload
 require APP_ROOT . '/vendor/autoload.php';
 
-// Run the compiler
+// Prepare the file name
+$filename = APP_ROOT . '/build/dist/gdpr-dump-' . Application::VERSION . '.phar';
+
+// Create the phar file
 $compiler = new Compiler();
-$compiler->compile('gdpr-dump.phar');
+$compiler->compile($filename);

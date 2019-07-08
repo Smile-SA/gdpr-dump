@@ -2,4 +2,3 @@
 /build
 /vendor
 /composer.lock
-*.phar

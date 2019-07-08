@@ -13,12 +13,18 @@ class Compiler
     /**
      * Generate a phar file.
      *
+     * @param string $directory
      * @param string $fileName
      */
     public function compile(string $fileName)
     {
         if (file_exists($fileName)) {
             unlink($fileName);
+        }
+
+        $directory = pathinfo($fileName, PATHINFO_DIRNAME);
+        if (!is_dir($directory)) {
+            $this->createDirectory($directory);
         }
 
         $phar = new \Phar($fileName, 0, 'gdpr-dump.phar');
@@ -112,6 +118,19 @@ class Compiler
         $relativePath = ($pos !== false) ? substr_replace($realPath, '', $pos, strlen($pathPrefix)) : $realPath;
 
         return strtr($relativePath, '\\', '/');
+    }
+
+    /**
+     * Create a directory.
+     *
+     * @param string $path
+     * @throws \RuntimeException
+     */
+    private function createDirectory(string $path)
+    {
+        if (!mkdir($path, 0775, true)) {
+            throw new \RuntimeException('Failed to create the directory "%s".', $path);
+        }
     }
 
     /**
