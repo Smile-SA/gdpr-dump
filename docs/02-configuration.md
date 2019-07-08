@@ -89,7 +89,7 @@ If command-line options are specified (e.g. `--user`), they will have priority o
 
 ```yaml
 dump:
-    output: 'my_dump_file.sql'
+    output: 'my_dump_file-{Y-m-d H:i:s}.sql'
 ```
 
 Dump settings are all optional.
@@ -98,7 +98,7 @@ Available settings:
 
 | Parameter | Default | Description |
 | --- | --- | --- |
-| **output** | `'php://stdout'` | Dump output. By default, the dump is outputted to the terminal. |
+| **output** | `'php://stdout'` | Dump output. By default, the dump is outputted to the terminal. A date format can be specified using curly brackets, e.g. `{Y-m-d}`.  |
 | **compress** | `'none'` | gzip, bzip2, none. |
 | **init_commands** | `[]` | Queries executed after the connection is established. |
 | **add_drop_database** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_add-drop-database) |

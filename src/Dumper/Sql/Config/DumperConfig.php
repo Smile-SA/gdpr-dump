@@ -206,6 +206,15 @@ class DumperConfig
 
             $this->dumpSettings[$param] = $value;
         }
+
+        // Replace {...} by the current date in dump output
+        $this->dumpSettings['output'] = preg_replace_callback(
+            '/{([^}]+)}/',
+            function ($matches) {
+                return date($matches[1]);
+            },
+            $this->dumpSettings['output']
+        );
     }
 
     /**
