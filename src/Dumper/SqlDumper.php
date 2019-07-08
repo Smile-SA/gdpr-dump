@@ -87,8 +87,11 @@ class SqlDumper implements DumperInterface
         foreach ($settings as $key => $value) {
             if ($key !== 'init_commands' && $key !== 'net_buffer_length') {
                 $newKey = str_replace('_', '-', $key);
-                $settings[$newKey] = $value;
-                unset($settings[$key]);
+
+                if ($newKey !== $key) {
+                    $settings[$newKey] = $value;
+                    unset($settings[$key]);
+                }
             }
         }
 

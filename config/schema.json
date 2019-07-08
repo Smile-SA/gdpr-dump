@@ -87,88 +87,83 @@
                     "type": "string",
                     "minLength": 1
                 },
-                "settings": {
-                    "type": "object",
-                    "properties": {
-                        "compress": {
-                            "type": "string",
-                            "enum": ["none", "gzip", "bzip2"]
-                        },
-                        "init_commands": {
-                            "type": "array",
-                            "items": {
-                                "type": "string",
-                                "minLength": 1
-                            }
-                        },
-                        "add_drop_database": {
-                            "type": "boolean"
-                        },
-                        "add_drop_table": {
-                            "type": "boolean"
-                        },
-                        "add_drop_trigger": {
-                            "type": "boolean"
-                        },
-                        "add_locks": {
-                            "type": "boolean"
-                        },
-                        "complete_insert": {
-                            "type": "boolean"
-                        },
-                        "default_character_set": {
-                            "type": "string",
-                            "minLength": 1
-                        },
-                        "disable_keys": {
-                            "type": "boolean"
-                        },
-                        "extended_insert": {
-                            "type": "boolean"
-                        },
-                        "events": {
-                            "type": "boolean"
-                        },
-                        "hex_blob": {
-                            "type": "boolean"
-                        },
-                        "insert_ignore": {
-                            "type": "boolean"
-                        },
-                        "net_buffer_length": {
-                            "type": "integer"
-                        },
-                        "no_autocommit": {
-                            "type": "boolean"
-                        },
-                        "no_create_info": {
-                            "type": "boolean"
-                        },
-                        "lock_tables": {
-                            "type": "boolean"
-                        },
-                        "routines": {
-                            "type": "boolean"
-                        },
-                        "single_transaction": {
-                            "type": "boolean"
-                        },
-                        "skip_triggers": {
-                            "type": "boolean"
-                        },
-                        "skip_tz_utc": {
-                            "type": "boolean"
-                        },
-                        "skip_comments": {
-                            "type": "boolean"
-                        },
-                        "skip_dump_date": {
-                            "type": "boolean"
-                        },
-                        "skip_definer": {
-                            "type": "boolean"
-                        }
+                "compress": {
+                    "type": "string",
+                    "enum": ["none", "gzip", "bzip2"]
+                },
+                "init_commands": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
                     }
+                },
+                "add_drop_database": {
+                    "type": "boolean"
+                },
+                "add_drop_table": {
+                    "type": "boolean"
+                },
+                "add_drop_trigger": {
+                    "type": "boolean"
+                },
+                "add_locks": {
+                    "type": "boolean"
+                },
+                "complete_insert": {
+                    "type": "boolean"
+                },
+                "default_character_set": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "disable_keys": {
+                    "type": "boolean"
+                },
+                "extended_insert": {
+                    "type": "boolean"
+                },
+                "events": {
+                    "type": "boolean"
+                },
+                "hex_blob": {
+                    "type": "boolean"
+                },
+                "insert_ignore": {
+                    "type": "boolean"
+                },
+                "net_buffer_length": {
+                    "type": "integer"
+                },
+                "no_autocommit": {
+                    "type": "boolean"
+                },
+                "no_create_info": {
+                    "type": "boolean"
+                },
+                "lock_tables": {
+                    "type": "boolean"
+                },
+                "routines": {
+                    "type": "boolean"
+                },
+                "single_transaction": {
+                    "type": "boolean"
+                },
+                "skip_triggers": {
+                    "type": "boolean"
+                },
+                "skip_tz_utc": {
+                    "type": "boolean"
+                },
+                "skip_comments": {
+                    "type": "boolean"
+                },
+                "skip_dump_date": {
+                    "type": "boolean"
+                },
+                "skip_definer": {
+                    "type": "boolean"
                 }
             },
             "additionalProperties": false
