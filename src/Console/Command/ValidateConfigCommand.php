@@ -5,8 +5,8 @@ namespace Smile\GdprDump\Console\Command;
 
 use Smile\GdprDump\Config\Parser\ParserInterface;
 use Smile\GdprDump\Config\Resolver\PathResolverInterface;
-use Smile\GdprDump\Config\Validator\ValidatorInterface;
 use Smile\GdprDump\Config\Validator\ValidationResultInterface;
+use Smile\GdprDump\Config\Validator\ValidatorInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -31,7 +31,6 @@ class ValidateConfigCommand extends Command
      * @var PathResolverInterface
      */
     private $pathResolver;
-
 
     /**
      * @param ValidatorInterface $validator

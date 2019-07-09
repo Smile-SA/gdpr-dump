@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
-use Smile\GdprDump\Console\Application;
 use Smile\GdprDump\Compiler;
+use Smile\GdprDump\Console\Application;
 
 // Define the root directory of the application
 define('APP_ROOT', dirname(__DIR__));

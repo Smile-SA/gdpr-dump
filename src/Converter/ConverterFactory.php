@@ -41,14 +41,14 @@ class ConverterFactory
      */
     public function create($definition): ConverterInterface
     {
-        $definition =  $this->getConverterData($definition);
+        $definition = $this->getConverterData($definition);
 
         // Get the converter name and parameters
         $name = $definition['converter'];
         $parameters = $definition['parameters'];
 
         // Create the converter
-        $converter =  $this->createConverter($name, $parameters);
+        $converter = $this->createConverter($name, $parameters);
 
         // Generate only unique values
         if ($definition['unique']) {
@@ -103,7 +103,7 @@ class ConverterFactory
             'unique' => false,
         ];
 
-        $definition['parameters'] =  $this->parseParameters($definition['parameters']);
+        $definition['parameters'] = $this->parseParameters($definition['parameters']);
         $definition['condition'] = (string) $definition['condition'];
         $definition['unique'] = (bool) $definition['unique'];
         $definition['cache_key'] = (string) $definition['cache_key'];
@@ -129,13 +129,13 @@ class ConverterFactory
                 }
 
                 foreach ($value as $k => $v) {
-                    $value[$k] =  $this->create($v);
+                    $value[$k] = $this->create($v);
                 }
 
                 $parameters[$name] = $value;
             } elseif ($name === 'converter' || strpos($name, '_converter') !== false) {
                 // Param is a converter definition
-                $parameters[$name] =  $this->create($value);
+                $parameters[$name] = $this->create($value);
             }
         }
 
@@ -170,7 +170,7 @@ class ConverterFactory
 
         // Faker parameter
         if (($className === Faker::class || is_subclass_of($className, Faker::class)) && !isset($parameters['faker'])) {
-            $parameters['faker'] =  $this->faker->getGenerator();
+            $parameters['faker'] = $this->faker->getGenerator();
         }
 
         return new $className($parameters);

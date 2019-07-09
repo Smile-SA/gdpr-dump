@@ -12,13 +12,21 @@
         },
         "if_version": {
             "type": "object",
-            "additionalProperties": { "$ref": "#/definitions/if_version" }
+            "additionalProperties": {
+                "$ref": "#/definitions/if_version"
+            }
         },
-        "database": { "$ref": "#/definitions/database" },
-        "dump": { "$ref": "#/definitions/dump" },
+        "database": {
+            "$ref": "#/definitions/database"
+        },
+        "dump": {
+            "$ref": "#/definitions/dump"
+        },
         "tables": {
             "type": "object",
-            "additionalProperties": { "$ref": "#/definitions/table" }
+            "additionalProperties": {
+                "$ref": "#/definitions/table"
+            }
         },
         "tables_whitelist": {
             "type": "array",
@@ -40,7 +48,9 @@
             "properties": {
                 "tables": {
                     "type": "object",
-                    "additionalProperties": { "$ref": "#/definitions/table" }
+                    "additionalProperties": {
+                        "$ref": "#/definitions/table"
+                    }
                 }
             },
             "additionalProperties": false
@@ -179,7 +189,9 @@
                 },
                 "converters": {
                     "type": "object",
-                    "additionalProperties": { "$ref": "#/definitions/converter" }
+                    "additionalProperties": {
+                        "$ref": "#/definitions/converter"
+                    }
                 },
                 "filters": {
                     "type": "array",
@@ -211,10 +223,14 @@
                     "properties": {
                         "converters": {
                             "type": ["array", "object"],
-                            "items": { "$ref": "#/definitions/converter" }
+                            "items": {
+                                "$ref": "#/definitions/converter"
+                            }
                         },
                         "converter": {
-                            "type": { "$ref": "#/definitions/converter" }
+                            "type": {
+                                "$ref": "#/definitions/converter"
+                            }
                         }
                     }
                 },

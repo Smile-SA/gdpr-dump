@@ -36,7 +36,7 @@ class JsonDataTest extends TestCase
         $jsonData = json_encode('stringValue');
 
         $parameters = [
-            'converters' => ['email' => new Dummy()]
+            'converters' => ['email' => new Dummy()],
         ];
 
         $converter = new JsonData($parameters);

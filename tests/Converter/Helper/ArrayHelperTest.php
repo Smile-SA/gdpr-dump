@@ -16,7 +16,7 @@ class ArrayHelperTest extends TestCase
         $data = [
             'customer' => [
                 'email' => 'email@example.org',
-            ]
+            ],
         ];
 
         $this->assertSame('email@example.org', ArrayHelper::getPath($data, 'customer.email'));

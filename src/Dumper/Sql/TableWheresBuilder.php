@@ -114,7 +114,7 @@ class TableWheresBuilder
             // because otherwise a sub query cannot declare the LIMIT clause)
             $expr = $queryBuilder
                 ->expr()
-                ->comparison($columnsSql, 'IN', '(SELECT * FROM (' . $qb. ') ' . $subQueryName . ')');
+                ->comparison($columnsSql, 'IN', '(SELECT * FROM (' . $qb . ') ' . $subQueryName . ')');
 
             // Allow null values
             foreach ($dependency->getLocalColumns() as $column) {

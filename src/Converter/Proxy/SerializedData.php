@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Proxy;
 
-use Smile\GdprDump\Converter\Helper\ArrayHelper;
 use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Helper\ArrayHelper;
 
 class SerializedData implements ConverterInterface
 {
@@ -50,7 +50,6 @@ class SerializedData implements ConverterInterface
             // Replace the original value in the JSON by the converted value
             ArrayHelper::setPath($decoded, $path, $nestedValue);
         }
-
 
         $encoded = serialize($decoded);
 

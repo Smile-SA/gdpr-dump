@@ -54,7 +54,7 @@ abstract class DatabaseTestCase extends TestCase
             'host' => $params['host'] ?? null,
             'port' => $params['port'] ?? null,
             'user' => $params['user'] ?? null,
-            'password' =>$params['password'] ?? null,
+            'password' => $params['password'] ?? null,
             'dbname' => $params['name'] ?? null,
         ];
     }

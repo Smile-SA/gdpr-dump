@@ -34,12 +34,12 @@ bin/console dump --database=mydb --user=myuser --password magento2
 
 **Application Version**
 
-If you use a default configuration template (e.g. "magento2"), you will need to specify the application version (e.g. "2.2.8").
+If you use a default configuration template (e.g. "magento2"), you will need to specify the application version (e.g. "2.3.2").
 
 To specify the application version, there are two alternatives:
 
 1. Using the `additional-config` option in the command line:  
-   `bin/console dump magento2 --additional-config='{"version":"2.2.8"}'`
+   `bin/console dump magento2 --additional-config='{"version":"2.3.2"}'`
 2. Using a custom configuration file:  
    `bin/console dump myproject.yaml`
 
@@ -47,7 +47,7 @@ myproject.yaml:
 
 ```yaml
 extends: 'magento2'
-version: '2.2.8'
+version: '2.3.2'
 ```
 
 If you don't use one of the default templates provided by this tool, you don't need to specify any version.

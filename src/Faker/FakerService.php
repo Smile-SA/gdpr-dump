@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Faker;
 
-use Faker\Generator;
 use Faker\Factory;
+use Faker\Generator;
 
 class FakerService
 {
@@ -24,8 +24,8 @@ class FakerService
     public function __construct(array $options = [])
     {
         $this->options = $options + [
-            'locale' => Factory::DEFAULT_LOCALE,
-        ];
+                'locale' => Factory::DEFAULT_LOCALE,
+            ];
     }
 
     /**

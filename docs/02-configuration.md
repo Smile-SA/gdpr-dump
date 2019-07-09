@@ -99,14 +99,14 @@ Available settings:
 | Parameter | Default | Description |
 | --- | --- | --- |
 | **output** | `'php://stdout'` | Dump output. By default, the dump is outputted to the terminal. A date format can be specified using curly brackets, e.g. `{Y-m-d}`.  |
-| **compress** | `'none'` | gzip, bzip2, none. |
+| **compress** | `'none'` | `none`, `gzip` (.gz file extension), `bzip2` (.bz2 file extension). |
 | **init_commands** | `[]` | Queries executed after the connection is established. |
 | **add_drop_database** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_add-drop-database) |
 | **add_drop_table** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_add-drop-table) |
 | **add_drop_trigger** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_add-drop-trigger) |
 | **add_locks** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_add-locks) |
 | **complete_insert** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_complete-insert) |
-| **default_character_set** | `'utf8'` | utf8 (default, compatible option), utf8mb4 (for full utf8 compliance). |
+| **default_character_set** | `'utf8'` | `utf8` (default, compatible option), `utf8mb4` (for full utf8 compliance). |
 | **disable_keys** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_disable-keys) |
 | **extended_insert** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_extended-insert) |
 | **events** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_events) |

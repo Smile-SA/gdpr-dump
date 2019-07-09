@@ -36,7 +36,7 @@ class SerializedDataTest extends TestCase
         $serializedData = serialize('stringValue');
 
         $parameters = [
-            'converters' => ['email' => new Dummy()]
+            'converters' => ['email' => new Dummy()],
         ];
 
         $converter = new SerializedData($parameters);
