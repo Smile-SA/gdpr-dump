@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [1.0.0-beta5] - 2019-07-09
+[1.0.0-beta5]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta4...1.0.0-beta5
 
 - Truncate tables named `*_replica` in magento2 template
 - Code cleanup
