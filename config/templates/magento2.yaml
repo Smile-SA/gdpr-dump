@@ -44,6 +44,9 @@ tables:
     '*_idx':
         truncate: true
 
+    '*_replica':
+        truncate: true
+
     admin_user:
         converters:
             email:
