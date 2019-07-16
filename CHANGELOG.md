@@ -2,11 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-WIP:
+## [1.0.0-beta6] - 2019-07-16
+[1.0.0-beta6]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta5...1.0.0-beta6
 
-- Anonymize password_hash customer attribute in magento 1
+- Anonymize `password_hash` customer attribute in magento 1
 - Add documentation about the `chain` converter
-- Allow disabling converters defined as parameters of other converters
+- Allow disabling converters that are defined as parameters of other converters
 - Add `setPrefix` and `setSuffix` converters
 
 ## [1.0.0-beta5] - 2019-07-09
