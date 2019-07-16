@@ -74,19 +74,25 @@ tables:
                 converter: 'randomizeEmail'
                 unique: true
 
-    # Customer date of birth
     customer_entity_datetime:
         converters:
             value:
+                ## dob (11)
                 converter: 'anonymizeDateTime'
                 condition: '{{attribute_id}} == 11'
 
-    # Customer firstname, middlename, lastname
     customer_entity_varchar:
         converters:
             value:
-                converter: 'anonymizeText'
-                condition: '{{attribute_id}} == 5 || {{attribute_id}} == 6 || {{attribute_id}} == 7'
+                converter: chain
+                parameters:
+                    converters:
+                        # firstname (5), middlename (6), lastname (7)
+                        - converter: 'anonymizeText'
+                          condition: '{{attribute_id}} == 5 || {{attribute_id}} == 6 || {{attribute_id}} == 7'
+                        # password_hash (12)
+                        - converter: 'randomizeText'
+                          condition: '{{attribute_id}} == 12'
 
     newsletter_subscriber:
         converters:
