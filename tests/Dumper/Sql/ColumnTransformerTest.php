@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Dumper\Sql;
 
 use Smile\GdprDump\Dumper\Sql\ColumnTransformer;
-use Smile\GdprDump\Tests\Converter\Dummy;
+use Smile\GdprDump\Tests\Converter\TestConverter;
 use Smile\GdprDump\Tests\DatabaseTestCase;
 
 class ColumnTransformerTest extends DatabaseTestCase
@@ -62,7 +62,7 @@ class ColumnTransformerTest extends DatabaseTestCase
     {
         $converters = [
             'mytable' => [
-                'mycolumn' => new Dummy(),
+                'mycolumn' => new TestConverter(),
             ],
         ];
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Converter;
 
 use Smile\GdprDump\Converter\ConverterFactory;
+use Smile\GdprDump\Converter\Dummy;
 use Smile\GdprDump\Converter\Faker;
 use Smile\GdprDump\Converter\Proxy\Conditional;
 use Smile\GdprDump\Converter\Proxy\Unique;
@@ -22,8 +23,8 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
 
-        $converter = $factory->create(Dummy::class);
-        $this->assertInstanceOf(Dummy::class, $converter);
+        $converter = $factory->create(TestConverter::class);
+        $this->assertInstanceOf(TestConverter::class, $converter);
     }
 
     /**
@@ -33,8 +34,8 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
 
-        $converter = $factory->create(['converter' => Dummy::class]);
-        $this->assertInstanceOf(Dummy::class, $converter);
+        $converter = $factory->create(['converter' => TestConverter::class]);
+        $this->assertInstanceOf(TestConverter::class, $converter);
     }
 
     /**
@@ -49,17 +50,28 @@ class ConverterFactoryTest extends TestCase
     }
 
     /**
+     * Test the creation of a disabled converter.
+     */
+    public function testDisabledParameter()
+    {
+        $factory = $this->createFactory();
+
+        $converter = $factory->create(['converter' => 'faker', 'disabled' => true]);
+        $this->assertInstanceOf(Dummy::class, $converter);
+    }
+
+    /**
      * Test the "unique" definition parameter.
      */
     public function testUniqueParameter()
     {
         $factory = $this->createFactory();
 
-        $converter = $factory->create(['converter' => Dummy::class, 'unique' => true]);
+        $converter = $factory->create(['converter' => TestConverter::class, 'unique' => true]);
         $this->assertInstanceOf(Unique::class, $converter);
 
-        $converter = $factory->create(['converter' => Dummy::class, 'unique' => false]);
-        $this->assertInstanceOf(Dummy::class, $converter);
+        $converter = $factory->create(['converter' => TestConverter::class, 'unique' => false]);
+        $this->assertInstanceOf(TestConverter::class, $converter);
     }
 
     /**
@@ -69,7 +81,7 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
 
-        $converter = $factory->create(['converter' => Dummy::class, 'condition' => '{{id}} === 1']);
+        $converter = $factory->create(['converter' => TestConverter::class, 'condition' => '{{id}} === 1']);
         $this->assertInstanceOf(Conditional::class, $converter);
     }
 
@@ -106,7 +118,7 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
 
-        $factory->create(['converter' => Dummy::class, 'parameters' => '']);
+        $factory->create(['converter' => TestConverter::class, 'parameters' => '']);
     }
 
     /**
@@ -119,7 +131,7 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
 
-        $factory->create(['converter' => Dummy::class, 'parameters' => ['converter' => null]]);
+        $factory->create(['converter' => TestConverter::class, 'parameters' => ['converter' => null]]);
     }
 
     /**
@@ -132,7 +144,7 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
 
-        $factory->create(['converter' => Dummy::class, 'parameters' => ['converters' => null]]);
+        $factory->create(['converter' => TestConverter::class, 'parameters' => ['converters' => null]]);
     }
 
     /**
@@ -145,7 +157,7 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
 
-        $factory->create(['converter' => Dummy::class, 'parameters' => ['converters' => [null]]]);
+        $factory->create(['converter' => TestConverter::class, 'parameters' => ['converters' => [null]]]);
     }
 
     /**

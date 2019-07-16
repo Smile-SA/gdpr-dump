@@ -5,7 +5,7 @@ namespace Smile\GdprDump\Tests\Converter\Proxy;
 
 use Smile\GdprDump\Converter\Proxy\Unique;
 use Smile\GdprDump\Converter\Setter\SetNull;
-use Smile\GdprDump\Tests\Converter\Dummy;
+use Smile\GdprDump\Tests\Converter\TestConverter;
 use Smile\GdprDump\Tests\TestCase;
 
 class UniqueTest extends TestCase
@@ -16,7 +16,7 @@ class UniqueTest extends TestCase
     public function testConverter()
     {
         $parameters = [
-            'converter' => new Dummy(),
+            'converter' => new TestConverter(),
         ];
 
         $converter = new Unique($parameters);
@@ -51,7 +51,7 @@ class UniqueTest extends TestCase
     public function testFailedUniqueValue()
     {
         $parameters = [
-            'converter' => new Dummy(),
+            'converter' => new TestConverter(),
         ];
 
         $converter = new Unique($parameters);

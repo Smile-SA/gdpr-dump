@@ -5,13 +5,16 @@ namespace Smile\GdprDump\Tests\Converter;
 
 use Smile\GdprDump\Converter\ConverterInterface;
 
-class Dummy implements ConverterInterface
+class TestConverter implements ConverterInterface
 {
     /**
      * @var string
      */
     private $prefix;
 
+    /**
+     * @param array $parameters
+     */
     public function __construct(array $parameters = [])
     {
         $this->prefix = $parameters['prefix'] ?? 'test_';

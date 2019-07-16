@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Converter\Proxy;
 
 use Smile\GdprDump\Converter\Proxy\Chain;
-use Smile\GdprDump\Tests\Converter\Dummy;
+use Smile\GdprDump\Tests\Converter\TestConverter;
 use Smile\GdprDump\Tests\TestCase;
 
 class ChainTest extends TestCase
@@ -16,8 +16,8 @@ class ChainTest extends TestCase
     {
         $parameters = [
             'converters' => [
-                new Dummy(),
-                new Dummy(),
+                new TestConverter(),
+                new TestConverter(),
             ],
         ];
 

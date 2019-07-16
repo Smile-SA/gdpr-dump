@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Dumper;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\Dumper\SqlDumper;
-use Smile\GdprDump\Tests\Converter\Dummy;
+use Smile\GdprDump\Tests\Converter\TestConverter;
 use Smile\GdprDump\Tests\DatabaseTestCase;
 use Symfony\Component\Yaml\Yaml;
 
@@ -70,7 +70,7 @@ class SqlDumperTest extends DatabaseTestCase
     {
         $converterFactoryMock = $this->createMock(ConverterFactory::class);
         $converterFactoryMock->method('create')
-            ->willReturn(new Dummy());
+            ->willReturn(new TestConverter());
 
         /** @var ConverterFactory $converterFactoryMock */
         $sqlDumper = new SqlDumper($converterFactoryMock);

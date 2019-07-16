@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Converter\Proxy;
 
 use Smile\GdprDump\Converter\Proxy\SerializedData;
-use Smile\GdprDump\Tests\Converter\Dummy;
+use Smile\GdprDump\Tests\Converter\TestConverter;
 use Smile\GdprDump\Tests\TestCase;
 
 class SerializedDataTest extends TestCase
@@ -16,9 +16,9 @@ class SerializedDataTest extends TestCase
     {
         $parameters = [
             'converters' => [
-                'customer.firstname' => new Dummy(),
-                'customer.lastname' => new Dummy(),
-                'customer.notExists' => new Dummy(), // should not trigger an exception
+                'customer.firstname' => new TestConverter(),
+                'customer.lastname' => new TestConverter(),
+                'customer.notExists' => new TestConverter(), // should not trigger an exception
             ],
         ];
 
@@ -36,7 +36,7 @@ class SerializedDataTest extends TestCase
         $serializedData = serialize('stringValue');
 
         $parameters = [
-            'converters' => ['email' => new Dummy()],
+            'converters' => ['address' => new TestConverter()],
         ];
 
         $converter = new SerializedData($parameters);

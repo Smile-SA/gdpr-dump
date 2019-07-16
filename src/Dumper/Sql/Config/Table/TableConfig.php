@@ -211,10 +211,6 @@ class TableConfig
                 $converterData = ['converter' => $converterData];
             }
 
-            if (isset($converterData['disabled']) && $converterData['disabled']) {
-                continue;
-            }
-
             // Converter data will be validated by the factory during the object creation
             $this->converters[$column] = $converterData;
         }

@@ -43,6 +43,11 @@ class ConverterFactory
     {
         $definition = $this->getConverterData($definition);
 
+        // If converter is disabled, return a dummy converter
+        if ($definition['disabled']) {
+            return new Dummy();
+        }
+
         // Get the converter name and parameters
         $name = $definition['converter'];
         $parameters = $definition['parameters'];
@@ -101,12 +106,17 @@ class ConverterFactory
             'condition' => '',
             'cache_key' => '',
             'unique' => false,
+            'disabled' => false,
         ];
 
+        // Parse the parameters
         $definition['parameters'] = $this->parseParameters($definition['parameters']);
+
+        // Cast values
         $definition['condition'] = (string) $definition['condition'];
         $definition['unique'] = (bool) $definition['unique'];
         $definition['cache_key'] = (string) $definition['cache_key'];
+        $definition['disabled'] = (bool) $definition['disabled'];
 
         return $definition;
     }
@@ -121,32 +131,20 @@ class ConverterFactory
     private function parseParameters(array $parameters): array
     {
         foreach ($parameters as $name => $value) {
-            // Some converters require other converters as a parameter (e.g. unique, chain...)
             if ($name === 'converters' || strpos($name, '_converters') !== false) {
-                // Param is an array of converter definitions
+                // Param is an array of converter definitions (e.g. "converters" param of the "chain" converter)
                 if (!is_array($value)) {
                     throw new \UnexpectedValueException('The "converters" parameter must be an array.');
                 }
 
                 foreach ($value as $k => $v) {
-                    if (isset($v['disabled']) && $v['disabled']) {
-                        // Skip if the converter is disabled
-                        unset($value[$k]);
-                    } else {
-                        // Param is a converter
-                        $value[$k] = $this->create($v);
-                    }
+                    $value[$k] = $this->create($v);
                 }
 
                 $parameters[$name] = $value;
             } elseif ($name === 'converter' || strpos($name, '_converter') !== false) {
-                if (isset($value['disabled']) && $value['disabled']) {
-                    // Skip if the converter is disabled
-                    unset($parameters[$name]);
-                } else {
-                    // Create the converter
-                    $parameters[$name] = $this->create($value);
-                }
+                // Param is a converter definition (e.g. "converter" param of the "unique" converter
+                $parameters[$name] = $this->create($value);
             }
         }
 
@@ -154,7 +152,7 @@ class ConverterFactory
     }
 
     /**
-     * Get the class name of a converter.
+     * Create a converter object from its name and parameters.
      *
      * @param string $name
      * @param array $parameters

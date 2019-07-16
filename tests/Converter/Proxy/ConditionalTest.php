@@ -5,7 +5,7 @@ namespace Smile\GdprDump\Tests\Converter\Proxy;
 
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Proxy\Conditional;
-use Smile\GdprDump\Tests\Converter\Dummy;
+use Smile\GdprDump\Tests\Converter\TestConverter;
 use Smile\GdprDump\Tests\TestCase;
 
 class ConditionalTest extends TestCase
@@ -134,22 +134,22 @@ class ConditionalTest extends TestCase
     }
 
     /**
-     * Create a dummy converter.
+     * Create a test converter for conditions that evaluate to true.
      *
-     * @return Dummy
+     * @return TestConverter
      */
     private function createIfTrueConverter(): ConverterInterface
     {
-        return new Dummy(['prefix' => 'true_']);
+        return new TestConverter(['prefix' => 'true_']);
     }
 
     /**
-     * Create a dummy converter.
+     * Create a test converter for conditions that evaluate to false.
      *
-     * @return Dummy
+     * @return TestConverter
      */
     private function createIfFalseConverter(): ConverterInterface
     {
-        return new Dummy(['prefix' => 'false_']);
+        return new TestConverter(['prefix' => 'false_']);
     }
 }

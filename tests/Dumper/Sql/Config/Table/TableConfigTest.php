@@ -56,9 +56,8 @@ class TableConfigTest extends TestCase
 
         $converters = $config->getConverters();
 
-        // The config must have parsed the empty converters (data is validated in the converter factory)
-        $this->assertCount(4, $converters);
-        $this->assertArrayNotHasKey('column5', $converters);
+        // The config must have parsed empty/disabled converters (data is validated in the converter factory)
+        $this->assertCount(5, $converters);
     }
 
     /**
