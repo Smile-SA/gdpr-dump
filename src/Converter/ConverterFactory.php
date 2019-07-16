@@ -129,13 +129,24 @@ class ConverterFactory
                 }
 
                 foreach ($value as $k => $v) {
-                    $value[$k] = $this->create($v);
+                    if (isset($v['disabled']) && $v['disabled']) {
+                        // Skip if the converter is disabled
+                        unset($value[$k]);
+                    } else {
+                        // Param is a converter
+                        $value[$k] = $this->create($v);
+                    }
                 }
 
                 $parameters[$name] = $value;
             } elseif ($name === 'converter' || strpos($name, '_converter') !== false) {
-                // Param is a converter definition
-                $parameters[$name] = $this->create($value);
+                if (isset($value['disabled']) && $value['disabled']) {
+                    // Skip if the converter is disabled
+                    unset($parameters[$name]);
+                } else {
+                    // Create the converter
+                    $parameters[$name] = $this->create($value);
+                }
             }
         }
 
