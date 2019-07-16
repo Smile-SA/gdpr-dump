@@ -61,7 +61,7 @@ To speed up the dump creation, temporary tables are automatically truncated:
 - cache tables
 - session tables
 - log tables
-- index tables: `*_idx`, `*_cl`
+- index tables: `*_idx`, `*_cl`, `*_replica`
 - temporary tables: `*_tmp`
 
 Quote tables are not truncated by default.
