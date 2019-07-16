@@ -323,3 +323,42 @@ tables:
 Same as `jsonData` converter, but works with serialized data instead.
 
 The serialized data must be an array.
+
+## [chain](src/Converter/Proxy/Chain.php)
+
+This converter executes a list of converters.
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **converters** | Y | | A list of converter definitions. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column: 'chain'
+            parameters:
+                converters:
+                    - converter: 'anonymizeText'
+                      condition: 'another_column == 0'
+                    - converter: 'randomizeText'
+                      condition: 'another_column == 1'
+```
+
+If you need to override a chained converter defined in a parent config file, you must specify the key index.
+For example, to disable the 2nd converter of a chain:
+
+```
+tables:
+    my_table:
+        converters:
+            my_column:
+                parameters:
+                    converters:
+                        1:
+                            disabled: true
+```

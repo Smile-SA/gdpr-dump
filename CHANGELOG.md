@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 WIP:
 
 - Anonymize password_hash customer attribute in magento 1
+- Add documentation about the `chain` converter
 
 ## [1.0.0-beta5] - 2019-07-09
 [1.0.0-beta5]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta4...1.0.0-beta5
