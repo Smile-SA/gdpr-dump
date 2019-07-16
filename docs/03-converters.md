@@ -15,8 +15,11 @@
 - [randomizeDateTime](#user-content-randomizedatetime)
 - [setNull](#user-content-setnull)
 - [setValue](#user-content-setvalue)
+- [setPrefix](#user-content-setprefix)
+- [setSuffix](#user-content-setsuffix)
 - [jsonData](#user-content-jsondata)
 - [serializedData](#user-content-serializeddata)
+- [chain](#user-content-chain)
 
 ## [faker](src/Converter/Faker.php)
 
@@ -288,6 +291,52 @@ tables:
             my_column:
                 converter: 'setValue'
                 parameters: {value: 0}
+```
+
+## [setPrefix](src/Converter/Setter/SetPrefix.php)
+
+This converter adds a prefix to every value.
+
+For example, the value `value` is converted to `anonymized_value` if the prefix is `anonymized_`.
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **prefix** | Y | | The prefix to add. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'setSuffix'
+                parameters: {suffix: '_test'}
+```
+
+## [setSuffix](src/Converter/Setter/SetSuffix.php)
+
+This converter adds a suffix to every value.
+
+For example, the value `value` is converted to `value_anonymized` if the suffix is `_anonymized_`.
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **suffix** | Y | | The suffix to add. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'setPrefix'
+                parameters: {prefix: 'test_'}
 ```
 
 ## [jsonData](src/Converter/Proxy/JsonData.php)
