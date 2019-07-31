@@ -5,6 +5,7 @@ namespace Smile\GdprDump\Dumper\Sql\Config\Table;
 
 use Smile\GdprDump\Dumper\Sql\Config\Table\Filter\Filter;
 use Smile\GdprDump\Dumper\Sql\Config\Table\Filter\SortOrder;
+use UnexpectedValueException;
 
 class TableConfig
 {
@@ -140,7 +141,7 @@ class TableConfig
      * Prepare the table filters.
      *
      * @param array $tableData
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     private function prepareFilters(array $tableData)
     {
@@ -166,7 +167,7 @@ class TableConfig
                 $parts = explode(' ', $order);
 
                 if (count($parts) > 2) {
-                    throw new \UnexpectedValueException(sprintf('The sort order "%s" is not valid.', $order));
+                    throw new UnexpectedValueException(sprintf('The sort order "%s" is not valid.', $order));
                 }
 
                 $column = $parts[0];

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Proxy;
 
+use InvalidArgumentException;
+use RuntimeException;
 use Smile\GdprDump\Converter\ConverterInterface;
 
 class Conditional implements ConverterInterface
@@ -24,17 +26,17 @@ class Conditional implements ConverterInterface
 
     /**
      * @param array $parameters
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
     public function __construct(array $parameters)
     {
         if (!isset($parameters['condition']) || $parameters['condition'] === '') {
-            throw new \InvalidArgumentException('The conditional converter requires a "condition" parameter.');
+            throw new InvalidArgumentException('The conditional converter requires a "condition" parameter.');
         }
 
         if (!isset($parameters['if_true_converter']) && !isset($parameters['if_false_converter'])) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'The conditional converter requires a "if_true_converter" and/or "if_false_converter" parameter.'
             );
         }
@@ -74,7 +76,7 @@ class Conditional implements ConverterInterface
      *
      * @param string $filter
      * @return string
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function sanitize(string $filter): string
     {
@@ -106,30 +108,30 @@ class Conditional implements ConverterInterface
      * Validate the filter.
      *
      * @param string $filter
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function validate(string $filter)
     {
         // Prevent usage of "=" operator
         if (preg_match('/[^=!]=[^=]/', $filter)) {
-            throw new \RuntimeException('The "=" operator is not allowed in a filter.');
+            throw new RuntimeException('The "=" operator is not allowed in a filter.');
         }
 
         // Prevent usage of "$" character
         if (preg_match('/\$/', $filter)) {
-            throw new \RuntimeException('The "$" character is not allowed in a filter.');
+            throw new RuntimeException('The "$" character is not allowed in a filter.');
         }
 
         // Prevent the use of some statements
         foreach ($this->getStatementBlacklist() as $statement) {
             if (strpos($filter, $statement) !== false) {
-                throw new \RuntimeException(sprintf('The statement "%s" is not allowed in a filter.', $statement));
+                throw new RuntimeException(sprintf('The statement "%s" is not allowed in a filter.', $statement));
             }
         }
 
         // Prevent the use of static functions
         if (preg_match('/::(\w+) *\(/', $filter)) {
-            throw new \RuntimeException('Static functions are not allowed in a filter.');
+            throw new RuntimeException('Static functions are not allowed in a filter.');
         }
 
         // Allow only specific functions
@@ -138,7 +140,7 @@ class Conditional implements ConverterInterface
 
             foreach ($matches[1] as $function) {
                 if (!in_array($function, $functionWhitelist)) {
-                    throw new \RuntimeException(sprintf('The function "%s" is not allowed in a filter.', $function));
+                    throw new RuntimeException(sprintf('The function "%s" is not allowed in a filter.', $function));
                 }
             }
         }

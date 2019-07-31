@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Setter;
 
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\ConverterInterface;
 
 class SetValue implements ConverterInterface
@@ -14,12 +15,12 @@ class SetValue implements ConverterInterface
 
     /**
      * @param array $parameters
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(array $parameters)
     {
         if (!array_key_exists('value', $parameters)) {
-            throw new \InvalidArgumentException('The setValue converter requires a "value" parameter.');
+            throw new InvalidArgumentException('The setValue converter requires a "value" parameter.');
         }
 
         $this->value = $parameters['value'];

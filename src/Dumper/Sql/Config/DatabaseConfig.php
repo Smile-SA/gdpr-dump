@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Dumper\Sql\Config;
 
 use Smile\GdprDump\Dumper\Sql\Driver\DriverFactory;
+use UnexpectedValueException;
 
 class DatabaseConfig
 {
@@ -126,12 +127,12 @@ class DatabaseConfig
      * Prepare the database config.
      *
      * @param array $params
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     private function prepareConfig(array $params)
     {
         if (!isset($params['name'])) {
-            throw new \UnexpectedValueException(sprintf('Missing database name.'));
+            throw new UnexpectedValueException(sprintf('Missing database name.'));
         }
 
         // PDO settings
@@ -143,7 +144,7 @@ class DatabaseConfig
         // Validation
         foreach ($params as $param => $value) {
             if (!array_key_exists($param, $this->params)) {
-                throw new \UnexpectedValueException(sprintf('Invalid database parameter "%s".', $param));
+                throw new UnexpectedValueException(sprintf('Invalid database parameter "%s".', $param));
             }
 
             $this->params[$param] = $value;

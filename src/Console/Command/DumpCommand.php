@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Console\Command;
 
+use Exception;
+use RuntimeException;
 use Smile\GdprDump\Config\ConfigInterface;
-use Smile\GdprDump\Config\ConfigLoader;
+use Smile\GdprDump\Config\ConfigLoaderInterface;
 use Smile\GdprDump\Config\Validator\ValidationResultInterface;
 use Smile\GdprDump\Config\Validator\ValidatorInterface;
 use Smile\GdprDump\Dumper\DumperInterface;
@@ -31,7 +33,7 @@ class DumpCommand extends Command
     private $config;
 
     /**
-     * @var ConfigLoader
+     * @var ConfigLoaderInterface
      */
     private $configLoader;
 
@@ -43,13 +45,13 @@ class DumpCommand extends Command
     /**
      * @param DumperInterface $dumper
      * @param ConfigInterface $config
-     * @param ConfigLoader $configLoader
+     * @param ConfigLoaderInterface $configLoader
      * @param ValidatorInterface $validator
      */
     public function __construct(
         DumperInterface $dumper,
         ConfigInterface $config,
-        ConfigLoader $configLoader,
+        ConfigLoaderInterface $configLoader,
         ValidatorInterface $validator
     ) {
         $this->dumper = $dumper;
@@ -87,7 +89,7 @@ class DumpCommand extends Command
 
         try {
             if ($configFile === '' && $database === '') {
-                throw new \Exception('You must provide a config file or a database name.');
+                throw new Exception('You must provide a config file or a database name.');
             }
 
             // Load the config
@@ -102,7 +104,7 @@ class DumpCommand extends Command
             }
 
             $this->dumper->dump($this->config);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if ($output->isVerbose()) {
                 throw $e;
             }
@@ -146,7 +148,7 @@ class DumpCommand extends Command
             $decodedData = json_decode($additionalConfig, true);
 
             if ($decodedData === null) {
-                throw new \RuntimeException(sprintf('Invalid JSON "%s".', $additionalConfig));
+                throw new RuntimeException(sprintf('Invalid JSON "%s".', $additionalConfig));
             }
 
             $this->configLoader->loadData($decodedData);

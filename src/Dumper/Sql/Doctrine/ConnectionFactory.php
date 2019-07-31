@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Dumper\Sql\Doctrine;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\DriverManager;
 use Smile\GdprDump\Dumper\Sql\Config\DatabaseConfig;
 
@@ -14,7 +15,7 @@ class ConnectionFactory
      *
      * @param DatabaseConfig $config
      * @return Connection
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public static function create(DatabaseConfig $config): Connection
     {

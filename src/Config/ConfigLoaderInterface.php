@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config;
 
+use RuntimeException;
 use Smile\GdprDump\Config\Parser\ParseException;
 use Smile\GdprDump\Config\Validator\ValidationException;
 
@@ -30,7 +31,7 @@ interface ConfigLoaderInterface
      * Load version-specific configuration.
      *
      * @return $this
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function loadVersionData(): ConfigLoaderInterface;
 }

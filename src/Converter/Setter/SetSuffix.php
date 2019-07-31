@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Setter;
 
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\ConverterInterface;
 
 class SetSuffix implements ConverterInterface
@@ -18,7 +19,7 @@ class SetSuffix implements ConverterInterface
     public function __construct(array $parameters = [])
     {
         if (!array_key_exists('suffix', $parameters)) {
-            throw new \InvalidArgumentException('The setSuffix converter requires a "suffix" parameter.');
+            throw new InvalidArgumentException('The setSuffix converter requires a "suffix" parameter.');
         }
 
         $this->suffix = $parameters['suffix'];

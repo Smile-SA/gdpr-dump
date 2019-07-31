@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Proxy;
 
+use InvalidArgumentException;
+use OverflowException;
 use Smile\GdprDump\Converter\ConverterInterface;
 
 class Unique implements ConverterInterface
@@ -24,12 +26,12 @@ class Unique implements ConverterInterface
 
     /**
      * @param array $parameters
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(array $parameters)
     {
         if (!isset($parameters['converter'])) {
-            throw new \InvalidArgumentException('The unique converter requires a "converter" parameter.');
+            throw new InvalidArgumentException('The unique converter requires a "converter" parameter.');
         }
 
         $this->converter = $parameters['converter'];
@@ -53,7 +55,7 @@ class Unique implements ConverterInterface
 
             $count++;
             if ($count > $this->maxRetries) {
-                throw new \OverflowException(
+                throw new OverflowException(
                     sprintf('Maximum retries of %d reached without finding a unique value', $this->maxRetries)
                 );
             }

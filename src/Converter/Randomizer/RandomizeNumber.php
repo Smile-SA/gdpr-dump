@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Randomizer;
 
+use Closure;
 use Smile\GdprDump\Converter\ConverterInterface;
 
 class RandomizeNumber implements ConverterInterface
 {
     /**
-     * @var \Closure
+     * @var Closure
      */
     private $replaceCallback;
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter;
 
 use Faker\Generator;
+use InvalidArgumentException;
 
 class Faker implements ConverterInterface
 {
@@ -29,16 +30,16 @@ class Faker implements ConverterInterface
 
     /**
      * @param array $parameters
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(array $parameters)
     {
         if (empty($parameters['faker'])) {
-            throw new \InvalidArgumentException('The Faker converter requires the "faker" parameter.');
+            throw new InvalidArgumentException('The Faker converter requires the "faker" parameter.');
         }
 
         if (empty($parameters['formatter'])) {
-            throw new \InvalidArgumentException('The Faker converter requires the "formatter" parameter.');
+            throw new InvalidArgumentException('The Faker converter requires the "formatter" parameter.');
         }
 
         $parameters += [

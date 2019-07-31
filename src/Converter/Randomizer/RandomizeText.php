@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Randomizer;
 
+use Closure;
 use Smile\GdprDump\Converter\ConverterInterface;
 
 class RandomizeText implements ConverterInterface
@@ -18,7 +19,7 @@ class RandomizeText implements ConverterInterface
     private $replacementsCount;
 
     /**
-     * @var \Closure
+     * @var Closure
      */
     private $replaceCallback;
 

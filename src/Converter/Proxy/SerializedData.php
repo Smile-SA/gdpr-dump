@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Proxy;
 
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Helper\ArrayHelper;
 
@@ -19,7 +20,7 @@ class SerializedData implements ConverterInterface
     public function __construct(array $parameters)
     {
         if (empty($parameters['converters'])) {
-            throw new \InvalidArgumentException('The serialized data converter requires a "converters" parameter.');
+            throw new InvalidArgumentException('The serialized data converter requires a "converters" parameter.');
         }
 
         $this->converters = (array) $parameters['converters'];

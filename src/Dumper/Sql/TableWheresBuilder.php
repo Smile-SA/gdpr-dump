@@ -10,6 +10,7 @@ use Smile\GdprDump\Dumper\Sql\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Sql\Config\Table\Filter\Filter;
 use Smile\GdprDump\Dumper\Sql\Config\Table\TableConfig;
 use Smile\GdprDump\Dumper\Sql\Schema\TableDependencyResolver;
+use UnexpectedValueException;
 
 class TableWheresBuilder
 {
@@ -257,7 +258,7 @@ class TableWheresBuilder
     private function quoteValue($value)
     {
         if ($value !== null && !is_scalar($value)) {
-            throw new \UnexpectedValueException('Non-scalar values can not be used in filters.');
+            throw new UnexpectedValueException('Non-scalar values can not be used in filters.');
         }
 
         if (is_bool($value)) {

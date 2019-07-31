@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Resolver;
 
+use RuntimeException;
+
 class PathResolver implements PathResolverInterface
 {
     /**
@@ -33,7 +35,7 @@ class PathResolver implements PathResolverInterface
         if ($toAbsolutePath) {
             $realpath = realpath($path);
             if ($realpath === false) {
-                throw new \RuntimeException(sprintf('The file "%s" was not found.', $path));
+                throw new RuntimeException(sprintf('The file "%s" was not found.', $path));
             }
             $path = $realpath;
         }

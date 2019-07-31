@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump;
 
+use Phar;
+use RuntimeException;
+use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -13,7 +16,6 @@ class Compiler
     /**
      * Generate a phar file.
      *
-     * @param string $directory
      * @param string $fileName
      */
     public function compile(string $fileName)
@@ -27,8 +29,8 @@ class Compiler
             $this->createDirectory($directory);
         }
 
-        $phar = new \Phar($fileName, 0, 'gdpr-dump.phar');
-        $phar->setSignatureAlgorithm(\Phar::SHA1);
+        $phar = new Phar($fileName, 0, 'gdpr-dump.phar');
+        $phar->setSignatureAlgorithm(Phar::SHA1);
         $phar->startBuffering();
 
         // Add source files
@@ -50,19 +52,19 @@ class Compiler
     /**
      * Add files to the phar file.
      *
-     * @param \Phar $phar
+     * @param Phar $phar
      * @param string $directory
      * @param string[] $patterns
      * @param string[] $exclude
      */
-    private function addFiles(\Phar $phar, string $directory, array $patterns = [], array $exclude = [])
+    private function addFiles(Phar $phar, string $directory, array $patterns = [], array $exclude = [])
     {
         $finder = new Finder();
         $finder->files()
             ->ignoreVCS(true)
             ->exclude($exclude)
             ->in($directory)
-            ->sort(function (\SplFileInfo $a, \SplFileInfo $b) {
+            ->sort(function (SplFileInfo $a, SplFileInfo $b) {
                 return strcmp(strtr($a->getRealPath(), '\\', '/'), strtr($b->getRealPath(), '\\', '/'));
             });
 
@@ -78,10 +80,10 @@ class Compiler
     /**
      * Add a file to the phar file.
      *
-     * @param \Phar $phar
-     * @param \SplFileInfo $file
+     * @param Phar $phar
+     * @param SplFileInfo $file
      */
-    private function addFile(\Phar $phar, \SplFileInfo $file)
+    private function addFile(Phar $phar, SplFileInfo $file)
     {
         // Path must be relative
         $path = $this->getRelativeFilePath($file);
@@ -95,9 +97,9 @@ class Compiler
     /**
      * Add console binary to the phar file.
      *
-     * @param \Phar $phar
+     * @param Phar $phar
      */
-    private function addConsoleBin(\Phar $phar)
+    private function addConsoleBin(Phar $phar)
     {
         $content = php_strip_whitespace(APP_ROOT . '/bin/console');
         $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $content);
@@ -107,10 +109,10 @@ class Compiler
     /**
      * Get the relative path to the file.
      *
-     * @param \SplFileInfo $file
+     * @param SplFileInfo $file
      * @return string
      */
-    private function getRelativeFilePath(\SplFileInfo $file): string
+    private function getRelativeFilePath(SplFileInfo $file): string
     {
         $realPath = $file->getRealPath();
         $pathPrefix = APP_ROOT . DIRECTORY_SEPARATOR;
@@ -124,12 +126,12 @@ class Compiler
      * Create a directory.
      *
      * @param string $path
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function createDirectory(string $path)
     {
         if (!mkdir($path, 0775, true)) {
-            throw new \RuntimeException('Failed to create the directory "%s".', $path);
+            throw new RuntimeException('Failed to create the directory "%s".', $path);
         }
     }
 

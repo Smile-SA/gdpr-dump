@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump;
 
+use ErrorException;
+use Exception;
 use Smile\GdprDump\Console\Application;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -16,7 +18,7 @@ class AppKernel
     /**
      * Run the console application.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function run()
     {
@@ -67,7 +69,7 @@ class AppKernel
                 return false;
             }
 
-            throw new \ErrorException($message, 0, $severity, $file, $line);
+            throw new ErrorException($message, 0, $severity, $file, $line);
         });
     }
 }

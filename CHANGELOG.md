@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Fix errors detected by the "MissingImport" PHPMD rule
+
 ## [1.0.0-beta6] - 2019-07-16
 [1.0.0-beta6]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta5...1.0.0-beta6
 

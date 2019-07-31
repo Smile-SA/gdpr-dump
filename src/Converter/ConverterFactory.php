@@ -3,10 +3,14 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter;
 
+use ReflectionClass;
+use ReflectionException;
+use RuntimeException;
 use Smile\GdprDump\Converter\Proxy\Cache;
 use Smile\GdprDump\Converter\Proxy\Conditional;
 use Smile\GdprDump\Converter\Proxy\Unique;
 use Smile\GdprDump\Faker\FakerService;
+use UnexpectedValueException;
 
 class ConverterFactory
 {
@@ -37,7 +41,7 @@ class ConverterFactory
      *
      * @param string|array $definition
      * @return ConverterInterface
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function create($definition): ConverterInterface
     {
@@ -80,7 +84,7 @@ class ConverterFactory
      *
      * @param string|array $definition
      * @return array
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     private function getConverterData($definition): array
     {
@@ -89,16 +93,16 @@ class ConverterFactory
         }
 
         if (!array_key_exists('converter', $definition)) {
-            throw new \UnexpectedValueException('The converter name is required.');
+            throw new UnexpectedValueException('The converter name is required.');
         }
 
         if (array_key_exists('parameters', $definition) && !is_array($definition['parameters'])) {
-            throw new \UnexpectedValueException('The converter parameters must be an array.');
+            throw new UnexpectedValueException('The converter parameters must be an array.');
         }
 
         $definition['converter'] = (string) $definition['converter'];
         if ($definition['converter'] === '') {
-            throw new \UnexpectedValueException('The converter name is required.');
+            throw new UnexpectedValueException('The converter name is required.');
         }
 
         $definition += [
@@ -126,7 +130,7 @@ class ConverterFactory
      *
      * @param array $parameters
      * @return array
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     private function parseParameters(array $parameters): array
     {
@@ -134,7 +138,7 @@ class ConverterFactory
             if ($name === 'converters' || strpos($name, '_converters') !== false) {
                 // Param is an array of converter definitions (e.g. "converters" param of the "chain" converter)
                 if (!is_array($value)) {
-                    throw new \UnexpectedValueException('The "converters" parameter must be an array.');
+                    throw new UnexpectedValueException('The "converters" parameter must be an array.');
                 }
 
                 foreach ($value as $k => $v) {
@@ -174,7 +178,7 @@ class ConverterFactory
 
         // If no class was found, check if a Faker formatter has this name
         if (!class_exists($className)) {
-            throw new \RuntimeException(sprintf('The converter class "%s" was not found.', $className));
+            throw new RuntimeException(sprintf('The converter class "%s" was not found.', $className));
         }
 
         // Faker parameter
@@ -202,7 +206,7 @@ class ConverterFactory
      * @param string $directory
      * @param string $baseDirectory
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private function findClassNames(string $directory, string $baseDirectory = ''): array
@@ -230,7 +234,7 @@ class ConverterFactory
                 $className .= $baseDirectory ? $baseDirectory . '\\' . $fileName : $fileName;
 
                 // Include only classes that implement the converter interface
-                $reflection = new \ReflectionClass($className);
+                $reflection = new ReflectionClass($className);
 
                 if ($reflection->isSubclassOf(ConverterInterface::class)) {
                     $result[lcfirst($fileName)] = $className;

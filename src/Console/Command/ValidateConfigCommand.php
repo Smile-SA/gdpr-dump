@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Console\Command;
 
+use Exception;
 use Smile\GdprDump\Config\Parser\ParserInterface;
 use Smile\GdprDump\Config\Resolver\PathResolverInterface;
 use Smile\GdprDump\Config\Validator\ValidationResultInterface;
@@ -77,7 +78,7 @@ class ValidateConfigCommand extends Command
 
             // Output the results
             $this->outputValidationResult($result, $output);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if ($output->isVerbose()) {
                 throw $e;
             }

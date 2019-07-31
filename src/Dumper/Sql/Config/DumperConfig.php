@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Dumper\Sql\Config;
 use Ifsnop\Mysqldump\Mysqldump;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Dumper\Sql\Config\Table\TableConfig;
+use UnexpectedValueException;
 
 class DumperConfig
 {
@@ -201,7 +202,7 @@ class DumperConfig
 
         foreach ($settings as $param => $value) {
             if (!array_key_exists($param, $this->dumpSettings)) {
-                throw new \UnexpectedValueException(sprintf('Invalid dump setting "%s".', $param));
+                throw new UnexpectedValueException(sprintf('Invalid dump setting "%s".', $param));
             }
 
             $this->dumpSettings[$param] = $value;

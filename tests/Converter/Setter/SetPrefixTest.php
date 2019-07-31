@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Converter\Setter;
 
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\Setter\SetPrefix;
 use Smile\GdprDump\Tests\TestCase;
 
@@ -22,7 +23,7 @@ class SetPrefixTest extends TestCase
     /**
      * Assert that an exception is thrown when the prefix is not set.
      *
-     * @expectedException \InvalidArgumentException
+     * @expectedException InvalidArgumentException
      */
     public function testPrefixNotSet()
     {

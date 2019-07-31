@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Setter;
 
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\ConverterInterface;
 
 class SetPrefix implements ConverterInterface
@@ -18,7 +19,7 @@ class SetPrefix implements ConverterInterface
     public function __construct(array $parameters = [])
     {
         if (!array_key_exists('prefix', $parameters)) {
-            throw new \InvalidArgumentException('The setPrefix converter requires a "prefix" parameter.');
+            throw new InvalidArgumentException('The setPrefix converter requires a "prefix" parameter.');
         }
 
         $this->prefix = $parameters['prefix'];

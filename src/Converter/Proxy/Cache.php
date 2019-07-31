@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Proxy;
 
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\ConverterInterface;
 
 class Cache implements ConverterInterface
@@ -28,7 +29,7 @@ class Cache implements ConverterInterface
     public function __construct(array $parameters)
     {
         if (!isset($parameters['converter'])) {
-            throw new \InvalidArgumentException('The cache converter requires a "converter" parameter.');
+            throw new InvalidArgumentException('The cache converter requires a "converter" parameter.');
         }
 
         $this->converter = $parameters['converter'];

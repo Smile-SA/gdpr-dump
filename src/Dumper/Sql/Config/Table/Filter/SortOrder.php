@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Sql\Config\Table\Filter;
 
+use UnexpectedValueException;
+
 class SortOrder
 {
     /**
@@ -34,7 +36,7 @@ class SortOrder
         $direction = strtoupper($direction);
 
         if ($direction !== self::DIRECTION_ASC && $direction !== self::DIRECTION_DESC) {
-            throw new \UnexpectedValueException(sprintf('Invalid sort direction "%s".', $direction));
+            throw new UnexpectedValueException(sprintf('Invalid sort direction "%s".', $direction));
         }
 
         $this->column = $column;

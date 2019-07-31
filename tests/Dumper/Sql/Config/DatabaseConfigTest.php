@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Dumper\Sql\Config;
 
+use PDO;
 use Smile\GdprDump\Dumper\Sql\Config\DatabaseConfig;
 use Smile\GdprDump\Dumper\Sql\Driver\DriverFactory;
 use Smile\GdprDump\Tests\TestCase;
@@ -21,7 +22,7 @@ class DatabaseConfigTest extends TestCase
             'user' => 'myuser',
             'password' => 'mypassword',
             'name' => 'test',
-            'pdo_settings' => [\PDO::ATTR_TIMEOUT, 60],
+            'pdo_settings' => [PDO::ATTR_TIMEOUT, 60],
         ];
 
         $config = new DatabaseConfig($params);

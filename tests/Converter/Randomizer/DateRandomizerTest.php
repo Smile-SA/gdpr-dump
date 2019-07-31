@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Converter\Randomizer;
 
+use DateTime;
 use Smile\GdprDump\Converter\Randomizer\RandomizeDate;
 use Smile\GdprDump\Tests\TestCase;
 
@@ -65,8 +66,8 @@ class DateRandomizerTest extends TestCase
      */
     protected function assertDateIsRandomized(string $randomized, string $actual, string $format)
     {
-        $randomizedDate = \DateTime::createFromFormat($format, $randomized);
-        $actualDate = \DateTime::createFromFormat($format, $actual);
+        $randomizedDate = DateTime::createFromFormat($format, $randomized);
+        $actualDate = DateTime::createFromFormat($format, $actual);
 
         $this->assertTrue($randomizedDate != $actualDate);
     }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config;
 
+use RuntimeException;
 use Smile\GdprDump\Config\Parser\ParserInterface;
 use Smile\GdprDump\Config\Resolver\PathResolverInterface;
 use Smile\GdprDump\Config\Version\VersionCondition;
@@ -97,7 +98,7 @@ class ConfigLoader implements ConfigLoaderInterface
             // Check if version is mandatory
             if ($requiresVersion) {
                 // phpcs:disable Generic.Files.LineLength.TooLong
-                throw new \RuntimeException('The application version must be specified in the configuration, or with the "--additional-config" option.');
+                throw new RuntimeException('The application version must be specified in the configuration, or with the "--additional-config" option.');
                 // phpcs:enable
             }
 

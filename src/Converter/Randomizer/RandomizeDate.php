@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Randomizer;
 
+use DateTime;
 use Smile\GdprDump\Converter\ConverterInterface;
+use UnexpectedValueException;
 
 class RandomizeDate implements ConverterInterface
 {
@@ -23,16 +25,17 @@ class RandomizeDate implements ConverterInterface
     protected $maxYear;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     protected $date;
 
     /**
      * @param array $parameters
+     * @throws UnexpectedValueException
      */
     public function __construct(array $parameters = [])
     {
-        $this->date = new \DateTime();
+        $this->date = new DateTime();
 
         if (isset($parameters['format'])) {
             $this->format = (string) $parameters['format'];
@@ -49,7 +52,7 @@ class RandomizeDate implements ConverterInterface
         $this->maxYear = (int) ($parameters['max_year'] ?? $this->date->format('Y'));
 
         if ($this->minYear > $this->maxYear) {
-            throw new \UnexpectedValueException('The minYear parameter must be lower than the maxYear parameter.');
+            throw new UnexpectedValueException('The minYear parameter must be lower than the maxYear parameter.');
         }
     }
 
