@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [1.0.0-beta7] - 2019-07-31
+[1.0.0-beta7]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta6...1.0.0-beta7
 
 - Fix errors detected by the "MissingImport" PHPMD rule
 - Add `ext-json` requirement in composer.json
