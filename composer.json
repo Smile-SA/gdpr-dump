@@ -10,6 +10,7 @@
     ],
     "require": {
         "php": "^7.0",
+        "ext-json": "*",
         "doctrine/dbal": "^2.5",
         "fzaninotto/faker": "^1.8",
         "ifsnop/mysqldump-php": "^2.7",
