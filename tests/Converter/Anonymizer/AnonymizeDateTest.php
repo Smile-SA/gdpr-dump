@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Converter\Anonymizer;
 
+use DateTime;
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeDate;
 use Smile\GdprDump\Tests\TestCase;
 
@@ -53,8 +54,8 @@ class AnonymizeDateTest extends TestCase
      */
     protected function assertDateIsAnonymized(string $anonymized, string $actual, string $format)
     {
-        $anonymizedDate = \DateTime::createFromFormat($format, $anonymized);
-        $actualDate = \DateTime::createFromFormat($format, $actual);
+        $anonymizedDate = DateTime::createFromFormat($format, $anonymized);
+        $actualDate = DateTime::createFromFormat($format, $actual);
 
         // The year must not have changed
         $this->assertSame($anonymizedDate->format('Y'), $actualDate->format('Y'));
