@@ -47,13 +47,13 @@ In the above example, the files will be loaded in this order:
 
 Some templates (e.g. `magento2`) require to specify the version of the application.
 
-The version is required if the template file contains the `if_version` parameter (version-specific configuration).
+The version is required if the template file contains the `requiresVersion` parameter.
 
 To define the application version:
 
 ```yaml
 extends: 'magento2'
-version: '2.2.8'
+version: '2.3.2'
 ```
 
 ## Database Settings
@@ -204,7 +204,7 @@ How to define a sort order:
 tables:
     my_table:
         orderBy: 'sku, entity_id desc'
-        
+
 ```
 
 How to define a filter:
@@ -241,8 +241,6 @@ tables:
             - ['updated_at', 'gt', 'expr: DATE_SUB(now(), INTERVAL 30 DAY)']
             - ['website_id', 'eq', 'expr: (SELECT website_id FROM store_website WHERE name = "base")']
 ```
-
-Note: as of now, it is impossible to define expressions with the `in` and `notIn` operators, because the value must be an array of scalar values.
 
 ### Data Converters
 

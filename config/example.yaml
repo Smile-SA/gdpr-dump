@@ -1,6 +1,6 @@
 ---
 extends: 'magento2'
-version: '2.3.0'
+version: '2.3.2'
 
 database:
     user: 'magento2'
@@ -8,8 +8,8 @@ database:
     name: 'magento2'
 
 dump:
+    output: 'magento2-{Y-m-d H:i:s}.sql.bz2'
     compress: 'bzip2'
-    output: 'php://stdout'
 
 tables:
     my_custom_table:
