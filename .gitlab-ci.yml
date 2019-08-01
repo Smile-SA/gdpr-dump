@@ -1,21 +1,53 @@
-tests:
-  script:
-    - "composer install"
-    - "sed -i 's/name=\"skip_database_tests\" value=\"false\"/name=\"skip_database_tests\" value=\"true\"/g' phpunit.xml"
-    - "composer phpcs"
-    - "composer phpmd"
-    - "composer phpunit"
-  tags:
-    - "php70"
+stages:
+    - "test"
+    - "deploy"
 
+# Run code quality tools (phpcs, phpmd, phpunit) on each commit
+php_tests:
+    stage: "test"
+    script:
+        - "composer install"
+        - "composer phpcs"
+        - "composer phpmd"
+        - "sed -i 's/name=\"skip_database_tests\" value=\"false\"/name=\"skip_database_tests\" value=\"true\"/g' phpunit.xml"
+        - "composer phpunit"
+    tags:
+        - "php70"
+
+# Run the full test suite
+# Manual execution only, because it runs slowly (the CI doesn't allow custom images)
+database_tests:
+    stage: "test"
+    image: "php:7.0-cli"
+    services:
+        - name: "mysql:5.7"
+          alias: "mysql"
+    variables:
+        MYSQL_DATABASE: "test"
+        MYSQL_USER: "test"
+        MYSQL_PASSWORD: "test"
+        MYSQL_ROOT_PASSWORD: "78UvxLmL3Xgh9eZL"
+    script:
+        # php-zip is required by composer, php-mysql is required to run the unit tests
+        - "apt-get update && apt-get install -y --no-install-recommends zlib1g-dev"
+        - "docker-php-ext-install zip pdo_mysql"
+        - "curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer"
+        - "composer install"
+        - "composer phpunit"
+    tags:
+        - "docker"
+    when: "manual"
+
+# Create a phar file when a tag is created (only if the "test" stage succeeded)
 package:
-  script:
-    - "composer install --no-dev"
-    - "php -dphar.readonly=0 bin/compile"
-  artifacts:
-    paths:
-      - "build/dist/*.phar"
-  tags:
-    - "php70"
-  only:
-    - "tags"
+    stage: "deploy"
+    script:
+        - "composer install --no-dev"
+        - "php -dphar.readonly=0 bin/compile"
+    artifacts:
+        paths:
+            - "build/dist/*.phar"
+    tags:
+        - "php70"
+    only:
+        - "tags"

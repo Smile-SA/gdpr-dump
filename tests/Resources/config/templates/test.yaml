@@ -2,6 +2,7 @@
 requiresVersion: true
 
 database:
+    host: 'mysql'
     name: 'test'
     user: 'test'
     password: 'test'

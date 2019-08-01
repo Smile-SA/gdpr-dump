@@ -40,26 +40,6 @@ abstract class DatabaseTestCase extends TestCase
     }
 
     /**
-     * Get the database configuration.
-     *
-     * @return array
-     */
-    public static function getConnectionParams(): array
-    {
-        $config = Yaml::parseFile(static::getTestConfigFile());
-        $params = $config['database'];
-
-        return [
-            'driver' => $params['driver'] ?? 'pdo_mysql',
-            'host' => $params['host'] ?? null,
-            'port' => $params['port'] ?? null,
-            'user' => $params['user'] ?? null,
-            'password' => $params['password'] ?? null,
-            'dbname' => $params['name'] ?? null,
-        ];
-    }
-
-    /**
      * Check if the database tests should be performed.
      *
      * @return bool
