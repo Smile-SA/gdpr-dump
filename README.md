@@ -4,20 +4,22 @@
 
 This tool provides a command that dumps the contents of a database to the specified output (e.g. dump file).
 
+It is the equivalent of mysqldump, with additional features, at the cost of performance (PHP implementation).
+The main purpose of this tool is to create anonymized dumps, in order to comply with GDPR regulations.
+
 **It is still under development (beta). There is no stable version yet.**
 
 You can use a config file to specify how the database should be dumped.
-
 In the config file, you can:
- 
+
 - specify data converters that allow you to transform the data before it is dumped to the file.
   It can be used to create an anonymize
   d dump file.
 - specify table filters.
 - specify a list of tables to whitelist (only these tables will be included in the dump).
 - specify a list of tables to blacklist (not included in the dump).
-- specify the database connection info (host, user, password...)
-- specify dump options (compression, output type...)
+- specify the database connection info (host, user, password...).
+- specify dump options (compression, output type...).
 
 ## Prerequisites
 
