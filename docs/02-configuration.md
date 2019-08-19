@@ -39,8 +39,8 @@ extends:
 
 In the above example, the files will be loaded in this order:
 
-1. config/templates/magento2.yml
-2. path/to/config/file.yml
+1. config/templates/magento2.yaml
+2. path/to/config/file.yaml
 3. your config file
 
 ## Application Version
@@ -89,7 +89,8 @@ If command-line options are specified (e.g. `--user`), they will have priority o
 
 ```yaml
 dump:
-    output: 'my_dump_file-{Y-m-d H:i:s}.sql'
+    output: 'my_dump_file-{Y-m-d H:i:s}.sql.gz'
+    compress: 'gzip'
 ```
 
 Dump settings are all optional.
