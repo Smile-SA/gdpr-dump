@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.0-beta8] - 2019-08-19
+[1.0.0-beta8]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta7...1.0.0-beta8
+
+- Add `--port` option in the dump command
+- Documentation improvements
+
 ## [1.0.0-beta7] - 2019-07-31
 [1.0.0-beta7]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta6...1.0.0-beta7
 
