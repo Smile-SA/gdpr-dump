@@ -69,11 +69,11 @@ class DumpCommand extends Command
         // phpcs:disable Generic.Files.LineLength.TooLong
         $this->setName('dump')
             ->setDescription('Create an anonymized dump')
-            ->addOption('driver', null, InputOption::VALUE_OPTIONAL, 'Database driver')
-            ->addOption('host', null, InputOption::VALUE_REQUIRED, 'Database host')
+            ->addOption('database', null, InputOption::VALUE_REQUIRED, 'Database name')
             ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Database user')
             ->addOption('password', null, InputOption::VALUE_NONE, 'Whether to prompt a password')
-            ->addOption('database', null, InputOption::VALUE_REQUIRED, 'Database name')
+            ->addOption('host', null, InputOption::VALUE_REQUIRED, 'Database host')
+            ->addOption('port', null, InputOption::VALUE_REQUIRED, 'Database port')
             ->addOption('additional-config', null, InputOption::VALUE_REQUIRED, 'JSON-encoded config to load in addition to the configuration file')
             ->addArgument('config_file', InputArgument::OPTIONAL, 'Dump configuration file');
         // phpcs:enable
@@ -121,7 +121,7 @@ class DumpCommand extends Command
         $configFile = (string) $input->getArgument('config_file');
 
         // Load the config file
-        if ($configFile) {
+        if ($configFile !== '') {
             $this->configLoader->loadFile($configFile);
         }
 
@@ -142,9 +142,9 @@ class DumpCommand extends Command
      */
     private function loadAdditionalConfig(InputInterface $input)
     {
-        $additionalConfig = $input->getOption('additional-config');
+        $additionalConfig = (string) $input->getOption('additional-config');
 
-        if ($additionalConfig) {
+        if ($additionalConfig !== '') {
             $decodedData = json_decode($additionalConfig, true);
 
             if ($decodedData === null) {
@@ -165,15 +165,16 @@ class DumpCommand extends Command
     {
         // Database config
         $databaseInput = [
-            'host' => $input->getOption('host'),
-            'user' => $input->getOption('user'),
-            'name' => $input->getOption('database'),
+            'name' => (string) $input->getOption('database'),
+            'user' => (string) $input->getOption('user'),
+            'host' => (string) $input->getOption('host'),
+            'port' => (string) $input->getOption('port'),
         ];
 
         $databaseConfig = $this->config->get('database', []);
 
         foreach ($databaseInput as $key => $value) {
-            if ($value !== null) {
+            if ($value !== '') {
                 $databaseConfig[$key] = $value;
             }
         }

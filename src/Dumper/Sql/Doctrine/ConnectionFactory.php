@@ -24,8 +24,14 @@ class ConnectionFactory
             'user' => $config->getUser(),
             'password' => $config->getPassword(),
             'host' => $config->getHost(),
+            'port' => $config->getPort(),
             'driver' => $config->getDriver(),
         ];
+
+        // Remove empty elements
+        $params = array_filter($params, function ($value) {
+            return $value !== null && $value !== '' && $value !== false;
+        });
 
         /** @var Connection $connection */
         $connection = DriverManager::getConnection($params);
