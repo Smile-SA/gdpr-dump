@@ -14,20 +14,25 @@ Fork the project, create a feature branch, and send a pull request.
 
 Unauthorized commits will always be removed.
 
-## Unit Tests
+## Code Quality
 
-To run the unit tests:
+This project uses phpcs (PSR-12 coding standard), phpmd and phpunit.
 
+To run these tools, the following commands are available:
+
+```php
+composer phpcs
+composer phpmd
+composer phpunit
 ```
-vendor/bin/phpunit
-```
 
-The tests require the following MySQL database:
+The functional tests require the following MySQL database:
 
+- Host: `mysql`
 - Name: `test`
 - User: `test`
 - Password: `test`
 
-These parameters can be modified in the [test.yaml](tests/Resources/config/templates/test.yaml) template file.
+These parameters can be modified in the [test.yaml](tests/functional/Resources/config/templates/test.yaml) template file.
 
 It is also possible to disable the unit tests that depend on the database, by setting the `skip_database_tests` to `true` in the [phpunit.xml](phpunit.xml) file.
