@@ -7,8 +7,12 @@
     </php>
 
     <testsuites>
-        <testsuite name="GdprDump Test Suite">
-            <directory>./tests/</directory>
+        <testsuite name="functional">
+            <directory>./tests/functional</directory>
+        </testsuite>
+
+        <testsuite name="unit">
+            <directory>./tests/unit</directory>
         </testsuite>
     </testsuites>
 

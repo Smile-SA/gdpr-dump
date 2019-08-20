@@ -1,0 +1,27 @@
+---
+database:
+    host: 'mysql'
+    name: 'test'
+    user: 'test'
+    password: 'test'
+
+dump:
+    output: 'php://stdout'
+
+tables:
+    stores:
+        limit: 1
+
+    customers:
+        orderBy: 'email'
+        converters:
+            email: 'randomizeEmail'
+            firstname: 'anonymizeText'
+            lastname: 'anonymizeText'
+            phone_number: 'randomizeNumber'
+
+    addresses:
+        converters:
+            street: 'anonymizeText'
+            postcode: 'randomizeNumber'
+            city: 'anonymizeText'

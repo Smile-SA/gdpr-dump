@@ -1,0 +1,24 @@
+---
+requiresVersion: true
+
+tables:
+    table1:
+        truncate: true
+
+    table2:
+        limit: 1
+
+    table3:
+        orderBy: 'field1'
+
+    table4:
+        converters:
+            field1: 'randomizeEmail'
+            field2: 'anonymizeText'
+
+if_version:
+    '<2.3.0':
+        tables:
+            table3:
+                converters:
+                    field1: 'anonymizeEmail'
