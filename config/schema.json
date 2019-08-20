@@ -84,7 +84,7 @@
                 "pdo_settings": {
                     "type": "object",
                     "additionalProperties": {
-                        "type": "string"
+                        "type": ["string", "integer", "boolean"]
                     }
                 }
             },
