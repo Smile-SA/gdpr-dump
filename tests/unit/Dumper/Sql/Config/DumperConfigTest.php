@@ -7,7 +7,6 @@ use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Dumper\Sql\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Sql\Config\Table\TableConfig;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use Symfony\Component\Yaml\Yaml;
 
 class DumperConfigTest extends TestCase
 {
