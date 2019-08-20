@@ -22,7 +22,7 @@
         "symfony/yaml": "^3.4"
     },
     "require-dev": {
-        "phpmd/phpmd": "^2.6",
+        "phpmd/phpmd": "^2.7",
         "phpunit/phpunit": "^6.5",
         "squizlabs/php_codesniffer": "^3.4"
     },
@@ -35,7 +35,7 @@
         "sort-packages": true
     },
     "scripts": {
-        "phpcs": "phpcs src tests -s --standard=PSR2 --extensions=php",
+        "phpcs": "phpcs src tests -s --standard=PSR12 --extensions=php",
         "phpmd": "phpmd src,tests xml phpmd.xml",
         "phpunit": "phpunit"
     },

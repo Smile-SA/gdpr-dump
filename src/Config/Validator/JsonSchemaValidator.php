@@ -43,7 +43,7 @@ class JsonSchemaValidator implements ValidatorInterface
         $dataToValidate = json_decode(json_encode($data));
 
         if ($dataToValidate === null) {
-            $dataToValidate = new stdClass;
+            $dataToValidate = new stdClass();
         }
 
         // Validate the data against the schema file

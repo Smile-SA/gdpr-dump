@@ -32,6 +32,7 @@ class DriverFactory
             throw new UnexpectedValueException(sprintf('The driver "%s" is not defined.', $name));
         }
 
+        // phpcs:ignore
         return new static::$drivers[$name];
     }
 }
