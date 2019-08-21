@@ -118,12 +118,12 @@ class PathResolver implements PathResolverInterface
      */
     private function realpath(string $path): string
     {
-        $path = realpath($path);
-        if ($path === false) {
+        $realpath = realpath($path);
+        if ($realpath === false) {
             throw new FileNotFoundException(sprintf('The file "%s" was not found.', $path));
         }
 
-        return $path;
+        return $realpath;
     }
 
     /**
