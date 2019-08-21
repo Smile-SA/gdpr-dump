@@ -47,6 +47,21 @@ class DateRandomizerTest extends TestCase
     }
 
     /**
+     * Test if the current year is used if the min/max years are set to null.
+     */
+    public function testNullYears()
+    {
+        $converter = new RandomizeDate(['min_year' => null, 'max_year' => null]);
+
+        $date = '1990-12-31';
+        $randomizedDate = $converter->convert($date);
+
+        $currentYear = (new DateTime())->format('Y');
+        $randomizedYear = (new DateTime($randomizedDate))->format('Y');
+        $this->assertSame($currentYear, $randomizedYear);
+    }
+
+    /**
      * Test if an exception is thrown when the min year is higher than the max year.
      *
      * @expectedException \Exception
