@@ -48,30 +48,6 @@ class TableDependencyResolverTest extends TestCase
     }
 
     /**
-     * Create a table finder object.
-     *
-     * @return TableDependencyResolver
-     */
-    private function createTableDependencyResolver(): TableDependencyResolver
-    {
-        $tables = [
-            'stores' => $this->createTable(),
-            'customers' => $this->createTable([$this->createForeignKey('customers', 'stores')]),
-            'addresses' => $this->createTable([$this->createForeignKey('addresses', 'customers')]),
-        ];
-
-        $schemaManagerMock = $this->createMock(MySqlSchemaManager::class);
-        $schemaManagerMock->method('listTables')
-            ->willReturn($tables);
-
-        $connectionMock = $this->createMock(Connection::class);
-        $connectionMock->method('getSchemaManager')
-            ->willReturn($schemaManagerMock);
-
-        return new TableDependencyResolver($connectionMock);
-    }
-
-    /**
      * Assert that a dependency exists between a child table and a parent table.
      *
      * @param string $localTableName
@@ -93,6 +69,30 @@ class TableDependencyResolverTest extends TestCase
                 $this->assertSame($localTableName, $foreignKey->getLocalTableName());
             }
         }
+    }
+
+    /**
+     * Create a table dependency resolver object.
+     *
+     * @return TableDependencyResolver
+     */
+    private function createTableDependencyResolver(): TableDependencyResolver
+    {
+        $tables = [
+            'stores' => $this->createTable(),
+            'customers' => $this->createTable([$this->createForeignKey('customers', 'stores')]),
+            'addresses' => $this->createTable([$this->createForeignKey('addresses', 'customers')]),
+        ];
+
+        $schemaManagerMock = $this->createMock(MySqlSchemaManager::class);
+        $schemaManagerMock->method('listTables')
+            ->willReturn($tables);
+
+        $connectionMock = $this->createMock(Connection::class);
+        $connectionMock->method('getSchemaManager')
+            ->willReturn($schemaManagerMock);
+
+        return new TableDependencyResolver($connectionMock);
     }
 
     /**
