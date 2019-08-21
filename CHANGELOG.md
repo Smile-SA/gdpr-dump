@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [WIP]
 [WIP]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta8...master
 
+- Paths specified in the `extends` parameter are now relative to the current configuration file (instead of the current working directory)
 - Split functional and unit tests into two tests suites
 - Use the PSR-12 coding standard (instead of PSR-2)
 - Update the contribution guidelines

@@ -1,0 +1,29 @@
+---
+requiresVersion: true
+
+tables:
+    table1:
+        converters:
+            field1:
+                converter: 'randomizeEmail'
+
+    table2:
+        truncate: true
+
+    table3:
+        limit: 100
+
+if_version:
+    '<1.1.0':
+        tables:
+            table1:
+                converters:
+                    field1:
+                        disabled: true
+
+    '>=1.1.0':
+        tables:
+            table1:
+                converters:
+                    field1:
+                        converter: 'anonymizeEmail'

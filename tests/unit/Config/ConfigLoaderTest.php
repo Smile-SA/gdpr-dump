@@ -36,45 +36,77 @@ class ConfigLoaderTest extends TestCase
     {
         $config = new Config();
         $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
-
         $configLoader->loadFile($this->getTestConfigFile());
 
-        $expectedSubset = ['table1' => ['truncate' => true]];
+        $expectedSubset = ['table1' => ['converters' => ['field1' => ['converter' => 'randomizeEmail']]]];
         $this->assertArraySubset($expectedSubset, $config->get('tables'));
 
-        $expectedSubset = ['table2' => ['limit' => 1]];
+        $expectedSubset = ['table1' => ['converters' => ['field2' => ['converter' => 'anonymizeText']]]];
         $this->assertArraySubset($expectedSubset, $config->get('tables'));
 
-        $expectedSubset = ['table3' => ['orderBy' => 'field1']];
+        $expectedSubset = ['table2' => ['truncate' => true]];
         $this->assertArraySubset($expectedSubset, $config->get('tables'));
 
-        $expectedSubset = ['table4' => ['converters' => ['field1' => 'randomizeEmail']]];
+        $expectedSubset = ['table3' => ['limit' => 10]];
+        $this->assertArraySubset($expectedSubset, $config->get('tables'));
+
+        $expectedSubset = ['table4' => ['orderBy' => 'field1']];
         $this->assertArraySubset($expectedSubset, $config->get('tables'));
     }
 
+    /**
+     * Test the "loadVersionData" method.
+     */
     public function testLoadVersionData()
     {
         $config = new Config();
-        $config->set('version', '2.0.0');
         $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
-
         $configLoader->loadFile($this->getTestConfigFile());
         $configLoader->loadVersionData();
 
-        $expectedSubset = ['table3' => ['converters' => ['field1' => 'anonymizeEmail']]];
+        $expectedSubset = ['table1' => ['converters' => ['field1' =>  ['disabled' => true]]]];
         $this->assertArraySubset($expectedSubset, $config->get('tables'));
+    }
+
+    /**
+     * Check if an exception is thrown when the config file is not found.
+     *
+     * @expectedException \Smile\GdprDump\Config\Resolver\FileNotFoundException
+     */
+    public function testFileNotFoundException()
+    {
+        $config = new Config();
+        $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
+        $configLoader->loadFile('notExists.yaml');
     }
 
     /**
      * Check if an exception is thrown when the version was not specified.
      *
-     * @expectedException \RuntimeException
+     * @expectedException \Smile\GdprDump\Config\Parser\ParseException
      */
     public function testVersionNotSpecifiedException()
     {
         $config = new Config();
         $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
         $configLoader->loadFile($this->getTestConfigFile());
+
+        $config->set('version', null);
+        $configLoader->loadVersionData();
+    }
+
+    /**
+     * Check if an exception is thrown when the version condition is badly formatted.
+     *
+     * @expectedException \Smile\GdprDump\Config\Parser\ParseException
+     */
+    public function testInvalidVersionFormatException()
+    {
+        $config = new Config();
+        $config->set('version', '1.0.0');
+        $config->set('if_version', ['notValid' => []]);
+
+        $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
         $configLoader->loadVersionData();
     }
 }

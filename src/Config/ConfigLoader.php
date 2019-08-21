@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config;
 
-use RuntimeException;
+use Exception;
+use Smile\GdprDump\Config\Parser\ParseException;
 use Smile\GdprDump\Config\Parser\ParserInterface;
 use Smile\GdprDump\Config\Resolver\PathResolverInterface;
 use Smile\GdprDump\Config\Version\VersionCondition;
@@ -31,6 +32,11 @@ class ConfigLoader implements ConfigLoaderInterface
     private $parentTemplates = [];
 
     /**
+     * @var string|null
+     */
+    private $currentDirectory;
+
+    /**
      * @param ConfigInterface $config
      * @param ParserInterface $parser
      * @param PathResolverInterface $pathResolver
@@ -51,13 +57,23 @@ class ConfigLoader implements ConfigLoaderInterface
     public function loadFile(string $fileName): ConfigLoaderInterface
     {
         // Resolve the path
-        $fileName = $this->pathResolver->resolve($fileName);
+        $fileName = $this->pathResolver->resolve($fileName, $this->currentDirectory);
 
-        // Parse the data
-        $data = $this->parser->parse($fileName);
+        // Load the file contents
+        $data = file_get_contents($fileName);
+        if ($data === false) {
+            throw new ParseException(sprintf('The file "%s" is not readable.', $fileName));
+        }
+
+        // Parse the file
+        $data = $this->parser->parse(file_get_contents($fileName));
+
+        // Parent config files must be loaded relatively to the path of the config file
+        $this->currentDirectory = dirname($fileName);
 
         // Merge the data into the config
         $this->loadData($data);
+        $this->currentDirectory = null;
 
         return $this;
     }
@@ -97,11 +113,9 @@ class ConfigLoader implements ConfigLoaderInterface
         if ($version === '') {
             // Check if version is mandatory
             if ($requiresVersion) {
-                // phpcs:disable Generic.Files.LineLength.TooLong
-                throw new RuntimeException('The application version must be specified in the configuration, or with the "--additional-config" option.');
-                // phpcs:enable
+                // phpcs:ignore Generic.Files.LineLength.TooLong
+                throw new ParseException('The application version must be specified in the configuration, or with the "--additional-config" option.');
             }
-
             return $this;
         }
 
@@ -117,7 +131,11 @@ class ConfigLoader implements ConfigLoaderInterface
 
             // Check if all requirements match
             foreach ($conditions as $condition) {
-                $condition = new VersionCondition($condition);
+                try {
+                    $condition = new VersionCondition($condition);
+                } catch (Exception $e) {
+                    throw new ParseException($e->getMessage(), $e);
+                }
 
                 if (!$condition->match($version)) {
                     $matchVersion = false;

@@ -1,24 +1,15 @@
 ---
-requiresVersion: true
+extends: 'test_parent.yaml'
+version: '1.0.0'
 
 tables:
     table1:
-        truncate: true
-
-    table2:
-        limit: 1
+        converters:
+            field2:
+                converter: 'anonymizeText'
 
     table3:
-        orderBy: 'field1'
+        limit: 10
 
     table4:
-        converters:
-            field1: 'randomizeEmail'
-            field2: 'anonymizeText'
-
-if_version:
-    '<2.3.0':
-        tables:
-            table3:
-                converters:
-                    field1: 'anonymizeEmail'
+        orderBy: 'field1'

@@ -17,19 +17,37 @@
 
 ## Overriding Configuration
 
-You can create a custom config file that inherits the properties of another config file, by specifying the following parameter:
+You can create a custom config file that inherits the properties of another config file, by using the `extends` parameter.
+
+**Syntax**
 
 ```yaml
 extends: path/to/config/file.yaml
 ```
 
-If you override a default template, the path to the file and the extension may be omitted:
+It can be an absolute path, or relative to the configuration file.
+
+**Default Templates**
+
+If you override a default template, the template name can be used instead:
 
 ```yaml
 extends: magento2
 ```
 
-It is also possible to override multiple config files:
+List of default templates:
+
+- drupal7
+- drupal8
+- magento1
+- magento1_commerce
+- magento2
+- magento2_b2b
+- magento2_commerce
+
+**Extending Multiple Files**
+
+It is possible to override multiple config files:
 
 ```yaml
 extends:
@@ -39,7 +57,7 @@ extends:
 
 In the above example, the files will be loaded in this order:
 
-1. config/templates/magento2.yaml
+1. "magento2" default template
 2. path/to/config/file.yaml
 3. your config file
 
@@ -87,19 +105,21 @@ If command-line options are specified (e.g. `--user`), they will have priority o
 
 ## Dump Settings
 
+Dump settings are all optional.
+
+Example:
+
 ```yaml
 dump:
     output: 'my_dump_file-{Y-m-d H:i:s}.sql.gz'
     compress: 'gzip'
 ```
 
-Dump settings are all optional.
-
 Available settings:
 
 | Parameter | Default | Description |
 | --- | --- | --- |
-| **output** | `'php://stdout'` | Dump output. By default, the dump is outputted to the terminal. A date format can be specified using curly brackets, e.g. `{Y-m-d}`.  |
+| **output** | `'php://stdout'` | Dump output. By default, the dump is outputted to the terminal.<br><br>If a relative path is specified, it is relative to the current working directory.<br><br>A date format can be specified using curly brackets, e.g. `{Y-m-d}`. |
 | **compress** | `'none'` | `none`, `gzip` (.gz file extension), `bzip2` (.bz2 file extension). |
 | **init_commands** | `[]` | Queries executed after the connection is established. |
 | **add_drop_database** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_add-drop-database) |

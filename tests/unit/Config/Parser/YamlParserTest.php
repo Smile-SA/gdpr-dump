@@ -5,21 +5,19 @@ namespace Smile\GdprDump\Tests\Unit\Config\Parser;
 
 use Smile\GdprDump\Config\Parser\YamlParser;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use Symfony\Component\Yaml\Yaml;
 
 class YamlParserTest extends TestCase
 {
     /**
-     * Test the parsing of a YAML file.
+     * Test the parsing of YAML input.
      */
-    public function testParseFile()
+    public function testYamlInput()
     {
-        $fileName = $this->getTestConfigFile();
-
+        $input = '{"object": {"key": "value"}}';
         $parser = new YamlParser();
-        $result = $parser->parse($fileName);
+        $result = $parser->parse($input);
 
-        $this->assertSame(Yaml::parseFile($fileName), $result);
+        $this->assertSame(['object' => ['key' => 'value']], $result);
     }
 
     /**
@@ -27,9 +25,9 @@ class YamlParserTest extends TestCase
      *
      * @expectedException \Smile\GdprDump\Config\Parser\ParseException
      */
-    public function testFileNotFound()
+    public function testInvalidInput()
     {
         $parser = new YamlParser();
-        $parser->parse('notExists.yaml');
+        $parser->parse('[invalid]Yaml');
     }
 }

@@ -61,9 +61,9 @@ class PathResolverTest extends TestCase
     /**
      * Test if the condition is properly parsed.
      *
-     * @expectedException \RuntimeException
+     * @expectedException \Smile\GdprDump\Config\Resolver\FileNotFoundException
      */
-    public function testFileNotFound()
+    public function testFileNotFoundException()
     {
         $resolver = new PathResolver();
         $resolver->resolve('notExists');

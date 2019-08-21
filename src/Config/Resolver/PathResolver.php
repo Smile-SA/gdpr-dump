@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Resolver;
 
-use RuntimeException;
-
 class PathResolver implements PathResolverInterface
 {
     /**
@@ -15,14 +13,14 @@ class PathResolver implements PathResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve(string $path): string
+    public function resolve(string $path, string $currentPath = null): string
     {
-        $toAbsolutePath = true;
+        $isTemplate = $this->isTemplate($path);
 
         // Check if it is a config template
-        if ($this->isTemplate($path)) {
+        if ($isTemplate) {
             $path = $this->getTemplate($path);
-            $toAbsolutePath = false;
+            return $this->realpath($path);
         }
 
         // Handle "~" character
@@ -31,16 +29,22 @@ class PathResolver implements PathResolverInterface
             $path = str_replace('~', $info['dir'], $path);
         }
 
-        // Compatibility with phar files: relative paths must be resolved with realpath
-        if ($toAbsolutePath) {
-            $realpath = realpath($path);
-            if ($realpath === false) {
-                throw new RuntimeException(sprintf('The file "%s" was not found.', $path));
+        // Absolute path: check if file exists and return the path
+        if ($this->isAbsolutePath($path)) {
+            if (!file_exists($path)) {
+                throw new FileNotFoundException(sprintf('The file "%s" was not found.', $path));
             }
-            $path = $realpath;
+
+            return $path;
         }
 
-        return $path;
+        // Append the current path if specified
+        if ($currentPath !== null) {
+            $path = $currentPath . '/' . $path;
+        }
+
+        // Get the absolute path (to ensure compatibility with phar file)
+        return $this->realpath($path);
     }
 
     /**
@@ -103,5 +107,43 @@ class PathResolver implements PathResolverInterface
     private function getTemplatesDirectory(): string
     {
         return APP_ROOT . '/config/templates';
+    }
+
+    /**
+     * Get the absolute path of a file.
+     *
+     * @param string $path
+     * @return string
+     * @throws FileNotFoundException
+     */
+    private function realpath(string $path): string
+    {
+        $path = realpath($path);
+        if ($path === false) {
+            throw new FileNotFoundException(sprintf('The file "%s" was not found.', $path));
+        }
+
+        return $path;
+    }
+
+    /**
+     * Returns whether the file path is an absolute path.
+     *
+     * @param string $path
+     * @return bool
+     */
+    private function isAbsolutePath(string $path): bool
+    {
+        if ($path[0] === '/' || $path[0] === '\\'
+            || (strlen($path) > 3 && ctype_alpha($path[0])
+                && $path[1] === ':'
+                && ($path[2] === '\\' || $path[2] === '/')
+            )
+            || parse_url($path, PHP_URL_SCHEME) !== null
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

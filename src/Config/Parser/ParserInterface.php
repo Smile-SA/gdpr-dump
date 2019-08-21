@@ -6,11 +6,11 @@ namespace Smile\GdprDump\Config\Parser;
 interface ParserInterface
 {
     /**
-     * Parse a config file.
+     * Parse input into PHP.
      *
-     * @param string $fileName
+     * @param string $input
      * @return mixed
      * @throws ParseException
      */
-    public function parse(string $fileName);
+    public function parse(string $input);
 }

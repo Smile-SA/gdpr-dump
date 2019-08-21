@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config;
 
-use RuntimeException;
 use Smile\GdprDump\Config\Parser\ParseException;
-use Smile\GdprDump\Config\Validator\ValidationException;
+use Smile\GdprDump\Config\Resolver\FileNotFoundException;
 
 interface ConfigLoaderInterface
 {
@@ -14,8 +13,8 @@ interface ConfigLoaderInterface
      *
      * @param string $fileName
      * @return $this
+     * @throws FileNotFoundException
      * @throws ParseException
-     * @throws ValidationException
      */
     public function loadFile(string $fileName): ConfigLoaderInterface;
 
@@ -24,6 +23,8 @@ interface ConfigLoaderInterface
      *
      * @param array $data
      * @return $this
+     * @throws FileNotFoundException
+     * @throws ParseException
      */
     public function loadData(array $data): ConfigLoaderInterface;
 
@@ -31,7 +32,7 @@ interface ConfigLoaderInterface
      * Load version-specific configuration.
      *
      * @return $this
-     * @throws RuntimeException
+     * @throws ParseException
      */
     public function loadVersionData(): ConfigLoaderInterface;
 }

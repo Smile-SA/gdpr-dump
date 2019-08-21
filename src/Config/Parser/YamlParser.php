@@ -11,12 +11,12 @@ class YamlParser implements ParserInterface
     /**
      * @inheritdoc
      */
-    public function parse(string $fileName)
+    public function parse(string $input)
     {
         try {
-            return Yaml::parseFile($fileName);
+            return Yaml::parse($input);
         } catch (Exception $e) {
-            throw new ParseException(sprintf('Failed to parse the file "%s".', $fileName), $e);
+            throw new ParseException('Unable to parse the YAML input.', $e);
         }
     }
 }
