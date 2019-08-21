@@ -25,7 +25,7 @@ class Application extends BaseApplication
      *
      * @return string
      */
-    public function getConfigPath()
+    public function getConfigPath(): string
     {
         return APP_ROOT . '/config';
     }
@@ -35,7 +35,7 @@ class Application extends BaseApplication
      *
      * @return string
      */
-    public function getVendorPath()
+    public function getVendorPath(): string
     {
         return APP_ROOT . '/vendor';
     }

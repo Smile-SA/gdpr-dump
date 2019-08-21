@@ -70,7 +70,7 @@ class Config implements ConfigInterface
      * @return array
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    private function mergeArray(array $data, array $override)
+    private function mergeArray(array $data, array $override): array
     {
         foreach ($override as $key => $value) {
             if (array_key_exists($key, $data)) {

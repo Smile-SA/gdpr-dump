@@ -33,7 +33,7 @@ class FakerService
      *
      * @return Generator
      */
-    public function getGenerator()
+    public function getGenerator(): Generator
     {
         if ($this->generator === null) {
             $this->generator = Factory::create($this->options['locale']);

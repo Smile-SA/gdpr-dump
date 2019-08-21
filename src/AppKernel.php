@@ -49,7 +49,7 @@ class AppKernel
      * @param string $configPath
      * @return ContainerBuilder
      */
-    private function buildContainer(string $configPath)
+    private function buildContainer(string $configPath): ContainerBuilder
     {
         $container = new ContainerBuilder();
         $loader = new YamlFileLoader($container, new FileLocator($configPath));
