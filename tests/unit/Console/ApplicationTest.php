@@ -17,5 +17,6 @@ class ApplicationTest extends TestCase
 
         $this->assertSame(APP_ROOT . '/config', $application->getConfigPath());
         $this->assertSame(APP_ROOT . '/vendor', $application->getVendorPath());
+        $this->assertSame(Application::VERSION, $application->getVersion());
     }
 }
