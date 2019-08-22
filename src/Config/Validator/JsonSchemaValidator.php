@@ -39,16 +39,14 @@ class JsonSchemaValidator implements ValidatorInterface
     {
         $validator = $this->getValidator();
 
-        // Make sure the data is compatible with JSON
-        $dataToValidate = json_decode(json_encode($data));
-
-        if ($dataToValidate === null) {
-            $dataToValidate = new stdClass();
+        // Automatically convert associative arrays to stdClass (required for object validation)
+        if (is_array($data)) {
+            $data = json_decode(json_encode($data));
         }
 
         // Validate the data against the schema file
         try {
-            $validator->validate($dataToValidate, (object) ['$ref' => $this->schemaFile]);
+            $validator->validate($data, (object) ['$ref' => $this->schemaFile]);
         } catch (Exception $e) {
             throw new ValidationException($e->getMessage(), $e);
         }
