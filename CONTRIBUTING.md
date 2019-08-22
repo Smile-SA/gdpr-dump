@@ -35,4 +35,4 @@ The functional tests require the following MySQL database:
 
 These parameters can be modified in the [test.yaml](tests/functional/Resources/config/templates/test.yaml) template file.
 
-It is also possible to disable the unit tests that depend on the database, by setting the `skip_database_tests` to `true` in the [phpunit.xml](phpunit.xml) file.
+It is also possible to disable the unit tests that depend on the database, by setting `skip_database_tests` to `true` in the [phpunit.xml](phpunit.xml) file.
