@@ -6,9 +6,22 @@ namespace Smile\GdprDump\Config\Resolver;
 class PathResolver implements PathResolverInterface
 {
     /**
+     * @var string
+     */
+    private $templatesDirectory;
+
+    /**
      * @var array
      */
     private $templates;
+
+    /**
+     * @param string $templatesDirectory
+     */
+    public function __construct(string $templatesDirectory)
+    {
+        $this->templatesDirectory = $templatesDirectory;
+    }
 
     /**
      * @inheritdoc
@@ -75,10 +88,8 @@ class PathResolver implements PathResolverInterface
             return $this->templates;
         }
 
-        $templatesDirectory = $this->getTemplatesDirectory();
-
         // Can't use glob, doesn't work with phar
-        $files = scandir($templatesDirectory);
+        $files = scandir($this->templatesDirectory);
 
         foreach ($files as $fileName) {
             if ($fileName === '.' || $fileName === '..') {
@@ -86,20 +97,10 @@ class PathResolver implements PathResolverInterface
             }
 
             $template = pathinfo($fileName, PATHINFO_FILENAME);
-            $this->templates[$template] = $templatesDirectory . '/' . $fileName;
+            $this->templates[$template] = $this->templatesDirectory . '/' . $fileName;
         }
 
         return $this->templates;
-    }
-
-    /**
-     * Get the templates directory.
-     *
-     * @return string
-     */
-    private function getTemplatesDirectory(): string
-    {
-        return APP_ROOT . '/config/templates';
     }
 
     /**

@@ -40,7 +40,6 @@
         "phpunit": "phpunit"
     },
     "bin": [
-        "bin/compile",
-        "bin/console"
+        "bin/gdpr-dump"
     ]
 }

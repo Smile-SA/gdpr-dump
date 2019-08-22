@@ -29,17 +29,13 @@ class AppKernel
         $application = new Application();
 
         // Initialize the container
-        $container = $this->buildContainer($application->getConfigPath());
-        $container->setParameter('app_root', APP_ROOT);
+        $basePath = dirname(__DIR__);
+        $container = $this->buildContainer($basePath . '/app/config');
+        $container->setParameter('app_root', $basePath);
 
-        // Add commands to the application
-        $commands = array_keys($container->findTaggedServiceIds('console.command'));
-        foreach ($commands as $command) {
-            if ($container->has($command)) {
-                $application->add($container->get($command));
-            }
-        }
-
+        // Add the main command and run the application
+        $application->add($container->get('command.dump'));
+        $application->setDefaultCommand('dump', true);
         $application->run();
     }
 

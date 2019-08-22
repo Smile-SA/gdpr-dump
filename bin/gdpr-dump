@@ -2,11 +2,8 @@
 <?php
 use Smile\GdprDump\AppKernel;
 
-// Define the root directory of the application
-define('APP_ROOT', dirname(__DIR__));
-
 // Initialize autoload
-require APP_ROOT . '/vendor/autoload.php';
+require dirname(__DIR__) . '/app/bootstrap.php';
 
 // Run the console application
 $application = new AppKernel();

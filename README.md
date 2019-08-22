@@ -35,6 +35,9 @@ Each release branch of PHP is supported for 3 years (2 years of full support, th
 
 **With Composer**
 
+This tool is designed to be used as a standalone application.
+It can be installed with the following command:
+
 ```php
 composer create-project --no-dev --stability=beta --prefer-dist smile/gdpr-dump
 ```

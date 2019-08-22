@@ -19,24 +19,4 @@ class Application extends BaseApplication
     {
         parent::__construct('GdprDump', self::VERSION);
     }
-
-    /**
-     * Get the config path.
-     *
-     * @return string
-     */
-    public function getConfigPath(): string
-    {
-        return APP_ROOT . '/config';
-    }
-
-    /**
-     * Get the vendor path.
-     *
-     * @return string
-     */
-    public function getVendorPath(): string
-    {
-        return APP_ROOT . '/vendor';
-    }
 }

@@ -20,7 +20,7 @@ class ConfigLoaderTest extends TestCase
         $data2 = ['key2' => 'value2'];
 
         $config = new Config();
-        $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
+        $configLoader = $this->createConfigLoader($config);
 
         $configLoader->loadData($data1);
         $this->assertSame($data1, $config->toArray());
@@ -35,7 +35,7 @@ class ConfigLoaderTest extends TestCase
     public function testLoadFile()
     {
         $config = new Config();
-        $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
+        $configLoader = $this->createConfigLoader($config);
         $configLoader->loadFile($this->getTestConfigFile());
 
         $expectedSubset = ['table1' => ['converters' => ['field1' => ['converter' => 'randomizeEmail']]]];
@@ -60,7 +60,7 @@ class ConfigLoaderTest extends TestCase
     public function testLoadVersionData()
     {
         $config = new Config();
-        $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
+        $configLoader = $this->createConfigLoader($config);
         $configLoader->loadFile($this->getTestConfigFile());
         $configLoader->loadVersionData();
 
@@ -76,7 +76,7 @@ class ConfigLoaderTest extends TestCase
     public function testFileNotFoundException()
     {
         $config = new Config();
-        $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
+        $configLoader = $this->createConfigLoader($config);
         $configLoader->loadFile('notExists.yaml');
     }
 
@@ -88,7 +88,7 @@ class ConfigLoaderTest extends TestCase
     public function testVersionNotSpecifiedException()
     {
         $config = new Config();
-        $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
+        $configLoader = $this->createConfigLoader($config);
         $configLoader->loadFile($this->getTestConfigFile());
 
         $config->set('version', null);
@@ -106,7 +106,20 @@ class ConfigLoaderTest extends TestCase
         $config->set('version', '1.0.0');
         $config->set('if_version', ['notValid' => []]);
 
-        $configLoader = new ConfigLoader($config, new YamlParser(), new PathResolver());
+        $configLoader = $this->createConfigLoader($config);
         $configLoader->loadVersionData();
+    }
+
+    /**
+     * Create a config loader object.
+     *
+     * @param Config $config
+     * @return ConfigLoader
+     */
+    private function createConfigLoader(Config $config): ConfigLoader
+    {
+        $templatesDirectory = $this->getResource('config/templates');
+
+        return new ConfigLoader($config, new YamlParser(), new PathResolver($templatesDirectory));
     }
 }

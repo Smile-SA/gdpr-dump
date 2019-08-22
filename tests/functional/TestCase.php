@@ -8,7 +8,17 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 abstract class TestCase extends BaseTestCase
 {
     /**
-     * Get a file resource.
+     * Get the absolute path of the application.
+     *
+     * @return string
+     */
+    protected static function getBasePath(): string
+    {
+        return dirname(dirname(__DIR__));
+    }
+
+    /**
+     * Get a resource file.
      *
      * @param string $fileName
      * @return string

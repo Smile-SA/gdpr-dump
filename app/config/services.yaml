@@ -1,10 +1,11 @@
 ---
 parameters:
-    config.schema_file: '%app_root%/config/schema.json'
+    config.schema_file: '%app_root%/app/config/schema.json'
+    config.templates_dir: '%app_root%/app/config/templates'
     faker.locale: 'en_US'
 
 services:
-    # --- Commands ---
+    # --- Dump Command ---
     command.dump:
         class: 'Smile\GdprDump\Console\Command\DumpCommand'
         arguments:
@@ -12,17 +13,6 @@ services:
             - '@config.storage'
             - '@config.loader'
             - '@config.validator'
-        tags:
-            - {name: 'console.command'}
-
-    command.validate_config:
-        class: 'Smile\GdprDump\Console\Command\ValidateConfigCommand'
-        arguments:
-            - '@config.validator'
-            - '@config.parser'
-            - '@config.path_resolver'
-        tags:
-            - {name: 'console.command'}
 
     # --- Configuration ---
     config.storage:
@@ -45,6 +35,8 @@ services:
 
     config.path_resolver:
         class: 'Smile\GdprDump\Config\Resolver\PathResolver'
+        arguments:
+            - '%config.templates_dir%'
 
     # --- Dumper ---
     dumper.sql:

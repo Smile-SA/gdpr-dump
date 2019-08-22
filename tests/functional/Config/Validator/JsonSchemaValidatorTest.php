@@ -19,7 +19,8 @@ class JsonSchemaValidatorTest extends TestCase
      */
     public function setUp()
     {
-        $this->validator = new JsonSchemaValidator(APP_ROOT . '/config/schema.json');
+        $schemaFile = $this->getBasePath() . '/app/config/schema.json';
+        $this->validator = new JsonSchemaValidator($schemaFile);
     }
 
     /**
@@ -37,7 +38,7 @@ class JsonSchemaValidatorTest extends TestCase
                 'driver' => 'pdo_mysql',
                 'pdo_settings' => [
                     1001 => true,
-                ]
+                ],
             ],
         ];
 
@@ -48,7 +49,7 @@ class JsonSchemaValidatorTest extends TestCase
     }
 
     /**
-     * Test the dump settings
+     * Test the dump settings.
      */
     public function testDumpSettings()
     {
@@ -107,6 +108,55 @@ class JsonSchemaValidatorTest extends TestCase
     {
         $data = [
             'tables_blacklist' => ['table1', 'table2'],
+        ];
+
+        $this->assertDataIsValid($data);
+    }
+
+    /**
+     * Test the data converters.
+     */
+    public function testDataConverters()
+    {
+        $data = [
+            'tables' => [
+                'table1' => [
+                    'converters' => [
+                        'email' => [
+                            'converter' => 'randomizeEmail',
+                            'unique' => true,
+                            'cache_key' => 'user_email',
+                        ],
+                        'firstname' => [
+                            'converter' => 'anonymizeText',
+                        ],
+                        'lastname' => [
+                            'disabled' => true,
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->assertDataIsValid($data);
+    }
+
+    /**
+     * Test the data filters.
+     */
+    public function testDataFilters()
+    {
+        $data = [
+            'tables' => [
+                'table1' => [
+                    'limit' => 100,
+                    'orderBy' => 'id desc',
+                    'filters' => [
+                        ['email', 'like', '%@example.org'],
+                        ['created_at', 'gt', 'expr: date_sub(now(), interval 60 day)'],
+                    ],
+                ],
+            ],
         ];
 
         $this->assertDataIsValid($data);

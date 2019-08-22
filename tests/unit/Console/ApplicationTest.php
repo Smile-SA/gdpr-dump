@@ -14,9 +14,6 @@ class ApplicationTest extends TestCase
     public function testConsoleApplication()
     {
         $application = new Application();
-
-        $this->assertSame(APP_ROOT . '/config', $application->getConfigPath());
-        $this->assertSame(APP_ROOT . '/vendor', $application->getVendorPath());
         $this->assertSame(Application::VERSION, $application->getVersion());
     }
 }

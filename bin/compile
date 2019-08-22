@@ -3,15 +3,18 @@
 use Smile\GdprDump\Compiler;
 use Smile\GdprDump\Console\Application;
 
-// Define the root directory of the application
-define('APP_ROOT', dirname(__DIR__));
+$basePath = dirname(__DIR__);
 
 // Initialize autoload
-require APP_ROOT . '/vendor/autoload.php';
+require $basePath . '/app/bootstrap.php';
 
 // Prepare the file name
-$filename = APP_ROOT . '/build/dist/gdpr-dump-' . Application::VERSION . '.phar';
+$fileName = $basePath . '/build/dist/gdpr-dump-' . Application::VERSION . '.phar';
 
 // Create the phar file
-$compiler = new Compiler();
-$compiler->compile($filename);
+try {
+    $compiler = new Compiler();
+    $compiler->compile($fileName);
+} catch (RuntimeException $e) {
+    die('ERROR: ' . $e->getMessage() . "\n");
+}

@@ -89,7 +89,9 @@ class DumpCommand extends Command
 
         try {
             if ($configFile === '' && $database === '') {
-                throw new Exception('You must provide a config file or a database name.');
+                $output->writeln('You must provide a configuration file or a database name.');
+                $output->writeln('Use the "--help" option for more information.');
+                return 1;
             }
 
             // Load the config

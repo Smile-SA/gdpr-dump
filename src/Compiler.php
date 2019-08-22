@@ -14,6 +14,19 @@ use Symfony\Component\Finder\Finder;
 class Compiler
 {
     /**
+     * @var string
+     */
+    private $basePath;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->basePath = dirname(__DIR__);
+    }
+
+    /**
      * Generate a phar file.
      *
      * @param string $fileName
@@ -34,13 +47,13 @@ class Compiler
         $phar->startBuffering();
 
         // Add source files
-        $this->addFiles($phar, APP_ROOT . '/src', ['*.php']);
+        $this->addFiles($phar, $this->basePath . '/src', ['*.php']);
 
         // Add vendor files
-        $this->addFiles($phar, APP_ROOT . '/vendor', ['*.php'], $this->getExcludedVendorDirs());
+        $this->addFiles($phar, $this->basePath . '/vendor', ['*.php'], $this->getExcludedVendorDirs());
 
-        // Add config files
-        $this->addFiles($phar, APP_ROOT . '/config');
+        // Add application files
+        $this->addFiles($phar, $this->basePath . '/app');
 
         // Add bin file
         $this->addConsoleBin($phar);
@@ -89,7 +102,7 @@ class Compiler
         $path = $this->getRelativeFilePath($file);
 
         // Strip whitespace before adding the file
-        $content = php_strip_whitespace(APP_ROOT . '/' . $path);
+        $content = php_strip_whitespace($file->getRealPath());
 
         $phar->addFromString($path, $content);
     }
@@ -101,9 +114,9 @@ class Compiler
      */
     private function addConsoleBin(Phar $phar)
     {
-        $content = php_strip_whitespace(APP_ROOT . '/bin/console');
+        $content = php_strip_whitespace($this->basePath . '/bin/gdpr-dump');
         $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $content);
-        $phar->addFromString('bin/console', $content);
+        $phar->addFromString('bin/gdpr-dump', $content);
     }
 
     /**
@@ -115,7 +128,9 @@ class Compiler
     private function getRelativeFilePath(SplFileInfo $file): string
     {
         $realPath = $file->getRealPath();
-        $pathPrefix = APP_ROOT . DIRECTORY_SEPARATOR;
+
+        // Remove the base path of the application from the string
+        $pathPrefix = $this->basePath . '/';
         $pos = strpos($realPath, $pathPrefix);
         $relativePath = ($pos !== false) ? substr_replace($realPath, '', $pos, strlen($pathPrefix)) : $realPath;
 
@@ -143,14 +158,10 @@ class Compiler
     private function getExcludedVendorDirs(): array
     {
         return [
-            'bin', // doctrine/*
-            'build', // sesbastian/*
-            'examples', // phar-io/manifest
+            'bin', // composer, doctrine/*
             'demo', // justinrainbow/json-schema
-            'doc', // myclabs/deep-copy
-            'fixtures', // myclabs/deep-copy
             'unit-tests', // ifsnop/mysqldump-php
-            'tests', // doctrine/*, phar-io/*, phpunit/*, sesbastian/*, tokenizer/*
+            'tests', // doctrine/*
             'test', // fzaninotto/faker,
             'Tests', // symfony/*
         ];
@@ -168,7 +179,7 @@ class Compiler
 <?php
 Phar::interceptFileFuncs();
 Phar::mapPhar('gdpr-dump.phar');
-require 'phar://gdpr-dump.phar/bin/console';
+require 'phar://gdpr-dump.phar/bin/gdpr-dump';
 __HALT_COMPILER();
 EOF;
     }

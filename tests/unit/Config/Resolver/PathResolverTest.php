@@ -13,11 +13,11 @@ class PathResolverTest extends TestCase
      */
     public function testResolveRelativePath()
     {
-        $path = 'config/templates/magento2.yaml';
+        $relativePath = 'tests/unit/Resources/config/templates/test.yaml';
 
-        $resolver = new PathResolver();
-        $resolvedPath = $resolver->resolve($path);
-        $this->assertContains(DIRECTORY_SEPARATOR . $path, $resolvedPath);
+        $resolver = $this->createPathResolver();
+        $resolvedPath = $resolver->resolve($relativePath);
+        $this->assertSame($this->getBasePath() . '/' . $relativePath, $resolvedPath);
     }
 
     /**
@@ -25,11 +25,11 @@ class PathResolverTest extends TestCase
      */
     public function testResolveAbsolutePath()
     {
-        $path = APP_ROOT . '/config/templates/magento2.yaml';
+        $absolutePath = $this->getResource('config/templates/test.yaml');
 
-        $resolver = new PathResolver();
-        $resolvedPath = $resolver->resolve($path);
-        $this->assertSame($path, $resolvedPath);
+        $resolver = $this->createPathResolver();
+        $resolvedPath = $resolver->resolve($absolutePath);
+        $this->assertSame($absolutePath, $resolvedPath);
     }
 
     /**
@@ -37,9 +37,11 @@ class PathResolverTest extends TestCase
      */
     public function testResolveTemplate()
     {
-        $resolver = new PathResolver();
-        $resolvedPath = $resolver->resolve('magento2');
-        $this->assertContains('magento2.yaml', $resolvedPath);
+        $resolver = $this->createPathResolver();
+
+        // 'test' should be resolved into the "test.yaml" template
+        $resolvedPath = $resolver->resolve('test');
+        $this->assertContains('test.yaml', $resolvedPath);
     }
 
     /**
@@ -49,7 +51,7 @@ class PathResolverTest extends TestCase
      */
     public function testFileWithRelativePathNotFound()
     {
-        $resolver = new PathResolver();
+        $resolver = $this->createPathResolver();
         $resolver->resolve('notExists');
     }
 
@@ -60,7 +62,19 @@ class PathResolverTest extends TestCase
      */
     public function testFileWithAbsolutePathNotFound()
     {
-        $resolver = new PathResolver();
+        $resolver = $this->createPathResolver();
         $resolver->resolve('/not/exists');
+    }
+
+    /**
+     * Create a path resolver object.
+     *
+     * @return PathResolver
+     */
+    private function createPathResolver(): PathResolver
+    {
+        $templatesDirectory = $this->getResource('config/templates');
+
+        return new PathResolver($templatesDirectory);
     }
 }

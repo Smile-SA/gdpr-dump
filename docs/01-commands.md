@@ -5,7 +5,7 @@
 Dump creation command:
 
 ```
-bin/console dump [--database=...] [--user=...] [--password] [--host=...] [--port=...] [--driver=...] [--additional-config=...] [<config_file>]
+bin/gdpr-dump [--database=...] [--user=...] [--password] [--host=...] [--port=...] [--driver=...] [--additional-config=...] [<config_file>]
 ```
 
 Arguments:
@@ -21,24 +21,30 @@ Options:
 - --port: database port
 - --additional-config: JSON-formatted data that will be merged with the config file data
 
+The complete list of options can be displayed with the following command:
+
+```
+bin/gdpr-dump --help
+```
+
 **Examples**
 
 With config file:
 
 ```
-bin/console dump path/to/my/config.yaml > dump.sql
+bin/gdpr-dump path/to/my/config.yaml > dump.sql
 ```
 
 No config file:
 
 ```
-bin/console dump --database=mydb --user=myuser --password > dump.sql
+bin/gdpr-dump --database=mydb --user=myuser --password > dump.sql
 ```
 
 With the `--additional-config` option:
 
 ```
-bin/console dump --database=mydb --user=myuser --password --additional-config='{"dump":{"output":"dump-{YmdHis}.sql.gz","compress":"gzip"}}'
+bin/gdpr-dump --database=mydb --user=myuser --password --additional-config='{"dump":{"output":"dump-{YmdHis}.sql.gz","compress":"gzip"}}'
 ```
 
 **Templates**
@@ -59,7 +65,7 @@ To specify the application version, there are two alternatives:
 
 - Using the `additional-config` option in the command line:
     ```
-    bin/console dump --database=mydb --user=myuser --password --additional-config='{"version":"2.3.2"}' magento2
+    bin/gdpr-dump --database=mydb --user=myuser --password --additional-config='{"version":"2.3.2"}' magento2
     ```
 
 - Using a custom configuration file with the following contents:
@@ -69,13 +75,3 @@ To specify the application version, there are two alternatives:
     ```
 
 If you don't use one of the default templates provided by this tool, you don't need to specify any version.
-
-## Configuration File Validation
-
-The following command checks if a configuration file is valid:
-
-```
-bin/console config:validate <config_file>
-```
-
-If the file is invalid, the command will output the validation errors.
