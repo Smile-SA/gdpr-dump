@@ -19,8 +19,7 @@ class PathResolver implements PathResolverInterface
 
         // Check if it is a config template
         if ($isTemplate) {
-            $path = $this->getTemplate($path);
-            return $this->realpath($path);
+            return $this->getTemplate($path);
         }
 
         // Absolute path: check if file exists and return the path
