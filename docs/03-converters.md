@@ -70,7 +70,8 @@ Example:
 tables:
     my_table:
         converters:
-            my_column: 'anonymizeText'
+            my_column:
+                converter: 'anonymizeText'
 ```
 
 ## [anonymizeNumber](src/Converter/Anonymizer/AnonymizeNumber.php)
@@ -86,7 +87,8 @@ Example:
 tables:
     my_table:
         converters:
-            my_column: 'anonymizeNumber'
+            my_column:
+                converter: 'anonymizeNumber'
 ```
 
 ## [anonymizeEmail](src/Converter/Anonymizer/AnonymizeEmail.php)
@@ -108,7 +110,8 @@ Example:
 tables:
     my_table:
         converters:
-            my_column: 'anonymizeEmail'
+            my_column:
+                converter: 'anonymizeEmail'
 ```
 
 ## [anonymizeDate](src/Converter/Anonymizer/AnonymizeDate.php)
@@ -132,7 +135,8 @@ Example:
 tables:
     my_table:
         converters:
-            my_column: 'anonymizeDate'
+            my_column:
+                converter: 'anonymizeDate'
 ```
 
 ## [anonymizeDateTime](src/Converter/Anonymizer/AnonymizeDateTime.php)
@@ -151,7 +155,8 @@ Example:
 tables:
     my_table:
         converters:
-            my_column: 'anonymizeDateTime'
+            my_column:
+                converter: 'anonymizeDateTime'
 ```
 
 ## [randomizeText](src/Converter/Randomizer/RandomizeText.php)
@@ -172,7 +177,8 @@ Example:
 tables:
     my_table:
         converters:
-            my_column: 'randomizeText'
+            my_column:
+                converter: 'randomizeText'
 ```
 
 ## [randomizeNumber](src/Converter/Randomizer/RandomizeNumber.php)
@@ -187,7 +193,8 @@ Example:
 tables:
     my_table:
         converters:
-            my_column: 'randomizeNumber'
+            my_column:
+                converter: 'randomizeNumber'
 ```
 
 ## [randomizeEmail](src/Converter/Randomizer/RandomizeEmail.php)
@@ -210,7 +217,8 @@ Example:
 tables:
     my_table:
         converters:
-            my_column: 'randomizeEmail'
+            my_column:
+                converter: 'randomizeEmail'
 ```
 
 ## [randomizeDate](src/Converter/Randomizer/RandomizeDate.php)
@@ -233,7 +241,8 @@ Example:
 tables:
     my_table:
         converters:
-            my_column: 'randomizeDate'
+            my_column:
+                converter: 'randomizeDate'
 ```
 
 ## [randomizeDateTime](src/Converter/Randomizer/RandomizeDateTime.php)
@@ -256,7 +265,8 @@ Example:
 tables:
     my_table:
         converters:
-            my_column: 'randomizeDateTime'
+            my_column:
+                converter: 'randomizeDateTime'
 ```
 
 ## [setNull](src/Converter/Setter/SetNull.php)
@@ -269,7 +279,8 @@ Example:
 tables:
     my_table:
         converters:
-            my_column: 'setNull'
+            my_column:
+                converter: 'setNull'
 ```
 
 ## [setValue](src/Converter/Setter/SetValue.php)
@@ -389,13 +400,14 @@ Example:
 tables:
     my_table:
         converters:
-            my_column: 'chain'
-            parameters:
-                converters:
-                    - converter: 'anonymizeText'
-                      condition: 'another_column == 0'
-                    - converter: 'randomizeText'
-                      condition: 'another_column == 1'
+            my_column:
+                converter: 'chain'
+                parameters:
+                    converters:
+                        - converter: 'anonymizeText'
+                          condition: 'another_column == 0'
+                        - converter: 'randomizeText'
+                          condition: 'another_column == 1'
 ```
 
 If you need to override a chained converter defined in a parent config file, you must specify the key index.

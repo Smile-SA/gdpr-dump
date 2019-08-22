@@ -267,18 +267,7 @@ tables:
 
 It is possible to define data converters for any column.
 
-Short syntax:
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column: 'randomizeEmail'
-```
-
-The key is the column name, the value is the converter name.
-
-Extended syntax:
+Syntax:
 
 ```yaml
 tables:
@@ -289,7 +278,16 @@ tables:
                 unique: true
 ```
 
-The key is the column name, the value is the converter definition.
+The key is the column name, the value is the converter name.
+
+A short syntax is also available:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column: 'randomizeEmail'
+```
 
 List of available properties:
 
