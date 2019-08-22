@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
 
+use DateTime;
 use Smile\GdprDump\Converter\Randomizer\RandomizeDateTime;
 
 class DateTimeRandomizerTest extends DateRandomizerTest
@@ -42,6 +43,21 @@ class DateTimeRandomizerTest extends DateRandomizerTest
         $date = '1990-12-31 12:05:41';
         $randomizedDate = $converter->convert($date);
         $this->assertDateIsRandomized($randomizedDate, $date, 'Y-m-d H:i:s');
+    }
+
+    /**
+     * Test if the current year is used if the min/max years are set to null.
+     */
+    public function testNullYears()
+    {
+        $converter = new RandomizeDateTime(['min_year' => null, 'max_year' => null]);
+
+        $date = '1990-12-31 12:05:41';
+        $randomizedDate = $converter->convert($date);
+
+        $currentYear = (new DateTime())->format('Y');
+        $randomizedYear = (new DateTime($randomizedDate))->format('Y');
+        $this->assertSame($currentYear, $randomizedYear);
     }
 
     /**
