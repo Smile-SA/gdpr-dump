@@ -10,13 +10,15 @@ dump:
 
 tables:
     stores:
-        limit: 1
+        orderBy: 'code'
+        filters:
+            - ['store_id', 'in', [1, 2]]
 
     customers:
-        orderBy: 'email'
+        limit: 3
         filters:
             - ['email', 'like', '%@example.org']
-            - ['customer_id', 'in', [1, 2, 3]]
+            - ['created_at', 'gt', 'expr: date_sub(now(), interval 60 day)']
         converters:
             email: 'randomizeEmail'
             firstname: 'anonymizeText'
@@ -24,6 +26,8 @@ tables:
             phone_number: 'randomizeNumber'
 
     addresses:
+        filters:
+            - ['country_id', 'eq', 'FR']
         converters:
             street: 'anonymizeText'
             postcode: 'randomizeNumber'
