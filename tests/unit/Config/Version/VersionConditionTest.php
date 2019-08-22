@@ -33,12 +33,22 @@ class VersionConditionTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the condition is invalid.
+     * Test if an exception is thrown when the condition syntax is invalid.
      *
      * @expectedException \InvalidArgumentException
      */
-    public function testConditionError()
+    public function testInvalidConditionSyntax()
     {
         new VersionCondition('notValid');
+    }
+
+    /**
+     * Test if an exception is thrown when the condition does not contain at least 3 characters.
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testErrorWithLessThanThreeCharacters()
+    {
+        new VersionCondition('<1');
     }
 }

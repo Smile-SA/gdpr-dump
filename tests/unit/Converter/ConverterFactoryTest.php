@@ -6,6 +6,8 @@ namespace Smile\GdprDump\Tests\Unit\Converter;
 use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\Converter\Dummy;
 use Smile\GdprDump\Converter\Faker;
+use Smile\GdprDump\Converter\Proxy\Cache;
+use Smile\GdprDump\Converter\Proxy\Chain;
 use Smile\GdprDump\Converter\Proxy\Conditional;
 use Smile\GdprDump\Converter\Proxy\Unique;
 use Smile\GdprDump\Faker\FakerService;
@@ -35,7 +37,7 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
 
-        $converter = $factory->create(['converter' => ConverterMock::class]);
+        $converter = $factory->create(['converter' => ConverterMock::class, 'parameters' => ['prefix' => '']]);
         $this->assertInstanceOf(ConverterMock::class, $converter);
     }
 
@@ -53,7 +55,7 @@ class ConverterFactoryTest extends TestCase
     /**
      * Test the creation of a disabled converter.
      */
-    public function testDisabledParameter()
+    public function testDisabledConverter()
     {
         $factory = $this->createFactory();
 
@@ -62,9 +64,9 @@ class ConverterFactoryTest extends TestCase
     }
 
     /**
-     * Test the "unique" definition parameter.
+     * Test the creation of a unique converter.
      */
-    public function testUniqueParameter()
+    public function testUniqueConverter()
     {
         $factory = $this->createFactory();
 
@@ -76,9 +78,9 @@ class ConverterFactoryTest extends TestCase
     }
 
     /**
-     * Test the "condition" definition parameter.
+     * Test the creation of a conditional converter.
      */
-    public function testConditionParameter()
+    public function testConditionConverter()
     {
         $factory = $this->createFactory();
 
@@ -87,15 +89,33 @@ class ConverterFactoryTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the converter is not set.
-     *
-     * @expectedException \UnexpectedValueException
+     * Test the creation of a cache converter.
      */
-    public function testConverterNotSet()
+    public function testCacheConverter()
     {
         $factory = $this->createFactory();
 
-        $factory->create([]);
+        $converter = $factory->create(['converter' => ConverterMock::class, 'cache_key' => 'test']);
+        $this->assertInstanceOf(Cache::class, $converter);
+    }
+
+    /**
+     * Test the creation of nested converters.
+     */
+    public function testNestedConverters()
+    {
+        $factory = $this->createFactory();
+
+        $converter = $factory->create([
+            'converter' => Chain::class,
+            'parameters' => [
+                'converters' => [
+                    ['converter' => ConverterMock::class],
+                    ['converter' => ConverterMock::class],
+                ],
+            ]
+        ]);
+        $this->assertInstanceOf(Chain::class, $converter);
     }
 
     /**
@@ -106,8 +126,29 @@ class ConverterFactoryTest extends TestCase
     public function testEmptyConverter()
     {
         $factory = $this->createFactory();
-
         $factory->create(['converter' => null]);
+    }
+
+    /**
+     * Test if an exception is thrown when the converter is not set.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testConverterNotSet()
+    {
+        $factory = $this->createFactory();
+        $factory->create([]);
+    }
+
+    /**
+     * Test if an exception is thrown when the converter is not defined.
+     *
+     * @expectedException \RuntimeException
+     */
+    public function testConverterNotDefined()
+    {
+        $factory = $this->createFactory();
+        $factory->create(['converter' => 'notExists']);
     }
 
     /**
@@ -118,7 +159,6 @@ class ConverterFactoryTest extends TestCase
     public function testParametersNotAnArray()
     {
         $factory = $this->createFactory();
-
         $factory->create(['converter' => ConverterMock::class, 'parameters' => '']);
     }
 
@@ -131,7 +171,6 @@ class ConverterFactoryTest extends TestCase
     public function testConverterParameterMalformed()
     {
         $factory = $this->createFactory();
-
         $factory->create(['converter' => ConverterMock::class, 'parameters' => ['converter' => null]]);
     }
 
@@ -144,7 +183,6 @@ class ConverterFactoryTest extends TestCase
     public function testConvertersParameterNotAnArray()
     {
         $factory = $this->createFactory();
-
         $factory->create(['converter' => ConverterMock::class, 'parameters' => ['converters' => null]]);
     }
 
@@ -157,7 +195,6 @@ class ConverterFactoryTest extends TestCase
     public function testConvertersParameterMalformed()
     {
         $factory = $this->createFactory();
-
         $factory->create(['converter' => ConverterMock::class, 'parameters' => ['converters' => [null]]]);
     }
 

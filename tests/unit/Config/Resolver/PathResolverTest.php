@@ -59,13 +59,24 @@ class PathResolverTest extends TestCase
     }
 
     /**
-     * Test if the condition is properly parsed.
+     * Test if an exception is thrown when a file with a relative path is not found.
      *
      * @expectedException \Smile\GdprDump\Config\Resolver\FileNotFoundException
      */
-    public function testFileNotFoundException()
+    public function testFileWithRelativePathNotFound()
     {
         $resolver = new PathResolver();
         $resolver->resolve('notExists');
+    }
+
+    /**
+     * Test if an exception is thrown when a file with an absolute path is not found.
+     *
+     * @expectedException \Smile\GdprDump\Config\Resolver\FileNotFoundException
+     */
+    public function testFileWithAbsolutePathNotFound()
+    {
+        $resolver = new PathResolver();
+        $resolver->resolve('/not/exists');
     }
 }
