@@ -71,7 +71,7 @@ class ValidateConfigCommand extends Command
             $fileName = $this->pathResolver->resolve($fileName);
 
             // Load the data
-            $data = $this->parser->parse($fileName);
+            $data = $this->parser->parse(file_get_contents($fileName));
 
             // Validate the data against the schema
             $result = $this->validator->validate($data);
