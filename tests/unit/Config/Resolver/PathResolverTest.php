@@ -43,22 +43,6 @@ class PathResolverTest extends TestCase
     }
 
     /**
-     * Check if the resolver can resolve paths that start with the "~/" shortcut.
-     *
-     * @doesNotPerformAssertions
-     */
-    public function testResolveHomePath()
-    {
-        if (!function_exists('posix_getuid')) {
-            return;
-        }
-
-        $resolver = new PathResolver();
-        $resolvedPath = $resolver->resolve('~/');
-        $this->assertDirectoryExists($resolvedPath);
-    }
-
-    /**
      * Test if an exception is thrown when a file with a relative path is not found.
      *
      * @expectedException \Smile\GdprDump\Config\Resolver\FileNotFoundException

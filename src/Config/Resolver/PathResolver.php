@@ -23,12 +23,6 @@ class PathResolver implements PathResolverInterface
             return $this->realpath($path);
         }
 
-        // Handle "~" character
-        if (function_exists('posix_getuid') && strpos($path, '~') !== false) {
-            $info = posix_getpwuid(posix_getuid());
-            $path = str_replace('~', $info['dir'], $path);
-        }
-
         // Absolute path: check if file exists and return the path
         if ($this->isAbsolutePath($path)) {
             if (!file_exists($path)) {
