@@ -133,6 +133,12 @@ class JsonSchemaValidatorTest extends TestCase
                         'lastname' => [
                             'disabled' => true,
                         ],
+                        'additional_info' => [
+                            'converter' => 'jsonData',
+                            'parameters' => [
+                                'user.phone' => 'anonymizeNumber',
+                            ],
+                        ],
                     ],
                 ],
             ],
