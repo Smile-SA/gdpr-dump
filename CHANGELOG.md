@@ -2,13 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [WIP]
-[WIP]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta8...master
+## [1.0.0-beta9] - 2019-08-26
+[1.0.0-beta9]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta8...1.0.0-beta9
 
 - **Compatibility break**:
     - Move bin/console to bin/gdpr-dump
-    - Move the configuration to the "app" directory
     - The console application now runs as a single command application
+    - Move the configuration to the "app" directory
 - Paths specified in the `extends` parameter are now relative to the current configuration file (instead of the current working directory)
 - Allow integer and boolean types in PDO settings
 - Split functional and unit tests into two tests suites
