@@ -16,7 +16,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->schemaFile = $this->getResource('config/schema.json');
     }

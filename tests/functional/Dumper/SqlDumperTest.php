@@ -20,7 +20,7 @@ class SqlDumperTest extends DatabaseTestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->dumpFile = $this->getResource('db/dump.sql');
     }
