@@ -6,6 +6,7 @@ namespace Smile\GdprDump;
 use ErrorException;
 use Smile\GdprDump\Console\Application;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
@@ -22,17 +23,19 @@ class AppKernel
         // Convert notices/warnings into exceptions
         $this->initErrorHandler();
 
-        // Initialize the application
-        $application = new Application();
-
         // Initialize the container
         $basePath = dirname(__DIR__);
         $container = $this->buildContainer($basePath . '/app/config');
         $container->setParameter('app_root', $basePath);
 
-        // Add the main command and run the application
-        $application->add($container->get('command.dump'));
-        $application->setDefaultCommand('dump', true);
+        // Initialize and run the application
+        $application = new Application();
+
+        /** @var Command $command */
+        $command = $container->get('command.dump');
+        $application->add($command);
+        $application->setDefaultCommand($command->getName(), true);
+
         $application->run();
     }
 

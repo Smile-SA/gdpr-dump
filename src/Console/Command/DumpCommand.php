@@ -67,7 +67,7 @@ class DumpCommand extends Command
     public function configure()
     {
         // phpcs:disable Generic.Files.LineLength.TooLong
-        $this->setName('dump')
+        $this->setName('gdpr-dump')
             ->setDescription('Create an anonymized dump')
             ->addOption('database', null, InputOption::VALUE_REQUIRED, 'Database name')
             ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Database user')
