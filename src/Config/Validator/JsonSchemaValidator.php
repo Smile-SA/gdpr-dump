@@ -5,7 +5,6 @@ namespace Smile\GdprDump\Config\Validator;
 
 use Exception;
 use JsonSchema\Validator;
-use stdClass;
 
 class JsonSchemaValidator implements ValidatorInterface
 {
