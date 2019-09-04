@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Converter\Helper;
 class ArrayHelper
 {
     /**
-     * Check whether the path exists in the array.
+     * Get an array value by path.
      *
      * @param array $array
      * @param string $path
