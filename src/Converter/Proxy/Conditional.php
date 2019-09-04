@@ -149,7 +149,7 @@ class Conditional implements ConverterInterface
     /**
      * Get the statements forbidden in a filter.
      *
-     * @return array
+     * @return string[]
      */
     private function getStatementBlacklist(): array
     {
