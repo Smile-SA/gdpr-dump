@@ -323,8 +323,8 @@ tables:
     my_table:
         converters:
             my_column:
-                converter: 'setSuffix'
-                parameters: {suffix: '_test'}
+                converter: 'setPrefix'
+                parameters: {prefix: 'test_'}
 ```
 
 ## [setSuffix](src/Converter/Setter/SetSuffix.php)
@@ -346,8 +346,8 @@ tables:
     my_table:
         converters:
             my_column:
-                converter: 'setPrefix'
-                parameters: {prefix: 'test_'}
+                converter: 'setSuffix'
+                parameters: {suffix: '_test'}
 ```
 
 ## [jsonData](src/Converter/Proxy/JsonData.php)
@@ -413,7 +413,7 @@ tables:
 If you need to override a chained converter defined in a parent config file, you must specify the key index.
 For example, to disable the 2nd converter of a chain:
 
-```
+```yaml
 tables:
     my_table:
         converters:
