@@ -128,13 +128,13 @@ class PathResolver implements PathResolverInterface
      */
     private function isAbsolutePath(string $path): bool
     {
-        if ($path[0] === '/' || $path[0] === '\\'
-            || (strlen($path) > 3 && ctype_alpha($path[0])
-                && $path[1] === ':'
-                && ($path[2] === '\\' || $path[2] === '/')
-            )
-            || parse_url($path, PHP_URL_SCHEME) !== null
-        ) {
+        // Unix filesystem or network path
+        if ($path[0] === '/' || $path[0] === '\\') {
+            return true;
+        }
+
+        // Windows filesystem
+        if (strlen($path) > 3 && ctype_alpha($path[0]) && $path[1] === ':' && ($path[2] === '\\' || $path[2] === '/')) {
             return true;
         }
 
