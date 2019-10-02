@@ -35,7 +35,7 @@
         "sort-packages": true
     },
     "scripts": {
-        "phpcs": "phpcs src tests -s --standard=PSR12 --extensions=php",
+        "phpcs": "phpcs src tests -s --standard=PSR2",
         "phpmd": "phpmd src,tests xml phpmd.xml",
         "phpunit": "phpunit"
     },
