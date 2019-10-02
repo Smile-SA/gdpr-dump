@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.0-beta10] - 2019-10-02
+[1.0.0-beta10]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta9...1.0.0-beta10
+
+- Revert to PSR-2 coding standard (PSR-12 is not stable enough)
+- Refactor the `isAbsolutePath` method of the config path resolver
+- Update the contribution guidelines.
+
 ## [1.0.0-beta9] - 2019-08-26
 [1.0.0-beta9]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta8...1.0.0-beta9
 
