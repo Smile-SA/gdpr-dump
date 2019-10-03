@@ -13,6 +13,7 @@
     - [Filtering Values](#user-content-filtering-values)
     - [Data Converters](#user-content-data-converters)
     - [Sharing Converter Results](#user-content-sharing-converter-results)
+- [User-Defined Variables](#user-content-user-defined-variables)
 - [Version-specific Configuration](#user-content-version-specific-configuration)
 
 ## Overriding Configuration
@@ -360,6 +361,37 @@ Notes:
 - If you use the `unique` parameter, it must be specified in all converters that share the same cache key.
   If the parameter is missing somewhere, it can result in a infinite loop situation.
 - This feature is not used in the default templates (`magento2`, ...), because it may require a lot of memory, depending on the size of the tables.
+
+### User-Defined Variables
+
+It is possible to store SQL query results in user-defined variables:
+
+```yaml
+variables:
+    firstname_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "firstname" and entity_type_id = 1'
+    lastname_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "lastname" and entity_type_id = 1'
+```
+
+It can then be used in query filters and converter conditions.
+
+Using variables in query filters:
+
+```yaml
+tables:
+    my_table:
+      filters:
+        - ['attribute_id', 'eq', 'expr: @firstname_attribute_id']
+```
+
+Using variables in converter conditions:
+
+```yaml
+tables:
+    customer_entity_varchar:
+        converters:
+            converter: 'anonymizeText'
+            condition: '{{attribute_id}} == @firstname_attribute_id'
+```
 
 ### Version-specific Configuration
 

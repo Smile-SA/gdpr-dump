@@ -41,18 +41,28 @@ class SqlDumper implements DumperInterface
         $processor = new ConfigProcessor($connection);
         $config = $processor->process($config);
 
+        // Set the SQL variables
+        $dumpSettings = $this->getDumpSettings($config);
+        $context = ['vars' => []];
+
+        foreach ($config->getVarQueries() as $varName => $query) {
+            $value = $connection->fetchColumn($query);
+            $context['vars'][$varName] = $value;
+            $dumpSettings['init_commands'][] = 'SET @' . $varName . ' = ' . $connection->quote($value);
+        }
+
         // Create the MySQLDump object
         $dumper = new Mysqldump(
             $databaseConfig->getDsn(),
             $databaseConfig->getUser(),
             $databaseConfig->getPassword(),
-            $this->getDumpSettings($config),
+            $dumpSettings,
             $databaseConfig->getPdoSettings()
         );
 
         // Set the column transformer
         $converters = $this->getTableConverters($config);
-        $columnTransformer = new ColumnTransformer($converters);
+        $columnTransformer = new ColumnTransformer($converters, $context);
         $dumper->setTransformColumnValueHook([$columnTransformer, 'transform']);
 
         // Set the table filters

@@ -122,4 +122,14 @@ class ConfigLoaderTest extends TestCase
 
         return new ConfigLoader($config, new YamlParser(), new PathResolver($templatesDirectory));
     }
+
+    /**
+     * Get the config file used for the tests.
+     *
+     * @return string
+     */
+    private static function getTestConfigFile(): string
+    {
+        return static::getResource('config/templates/test.yaml');
+    }
 }

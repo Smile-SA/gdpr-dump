@@ -13,21 +13,24 @@ class ConditionalTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testCondition()
     {
         $parameters = [
-            'condition' => '{{id}} === 1',
+            'condition' => '{{id}} === @my_var',
             'if_true_converter' => $this->createIfTrueConverter(),
             'if_false_converter' => $this->createIfFalseConverter(),
         ];
 
         $converter = new Conditional($parameters);
 
-        $value = $converter->convert('notAnonymized', ['id' => 1]);
-        $this->assertSame('true_notAnonymized', $value);
+        $value = $converter->convert('value', ['row_data' => ['id' => 1], 'vars' => ['my_var' => 1]]);
+        $this->assertSame('success_value', $value);
 
-        $value = $converter->convert('notAnonymized', ['id' => 2]);
-        $this->assertSame('false_notAnonymized', $value);
+        $value = $converter->convert('value', ['row_data' => ['id' => 1], 'vars' => ['my_var' => 2]]);
+        $this->assertSame('failure_value', $value);
+
+        $value = $converter->convert('value', ['row_data' => ['id' => 2], 'vars' => ['my_var' => 1]]);
+        $this->assertSame('failure_value', $value);
     }
 
     /**
@@ -140,7 +143,7 @@ class ConditionalTest extends TestCase
      */
     private function createIfTrueConverter(): ConverterInterface
     {
-        return new ConverterMock(['prefix' => 'true_']);
+        return new ConverterMock(['prefix' => 'success_']);
     }
 
     /**
@@ -150,6 +153,6 @@ class ConditionalTest extends TestCase
      */
     private function createIfFalseConverter(): ConverterInterface
     {
-        return new ConverterMock(['prefix' => 'false_']);
+        return new ConverterMock(['prefix' => 'failure_']);
     }
 }

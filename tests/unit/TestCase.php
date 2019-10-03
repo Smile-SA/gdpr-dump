@@ -30,14 +30,4 @@ abstract class TestCase extends BaseTestCase
     {
         return __DIR__ . '/Resources/' . $fileName;
     }
-
-    /**
-     * Get the config file used for the tests.
-     *
-     * @return string
-     */
-    protected static function getTestConfigFile(): string
-    {
-        return static::getResource('config/templates/test.yaml');
-    }
 }

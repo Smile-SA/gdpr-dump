@@ -3,19 +3,28 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Sql;
 
+use Smile\GdprDump\Converter\ConverterInterface;
+
 class ColumnTransformer
 {
     /**
-     * @var array
+     * @var ConverterInterface[]
      */
     private $converters = [];
 
     /**
-     * @param array $converters
+     * @var array
      */
-    public function __construct(array $converters = [])
+    private $context = [];
+
+    /**
+     * @param ConverterInterface[] $converters
+     * @param array $context
+     */
+    public function __construct(array $converters, array $context = [])
     {
         $this->converters = $converters;
+        $this->context = $context;
     }
 
     /**
@@ -38,7 +47,8 @@ class ColumnTransformer
         }
 
         if (isset($this->converters[$table][$column])) {
-            $value = $this->converters[$table][$column]->convert($value, $row);
+            $this->context['row_data'] = $row;
+            $value = $this->converters[$table][$column]->convert($value, $this->context);
         }
 
         return $value;

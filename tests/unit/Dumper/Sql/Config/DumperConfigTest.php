@@ -35,7 +35,7 @@ class DumperConfigTest extends TestCase
      */
     public function testTablesData()
     {
-        $tablesData = [
+        $configData = [
             'tables' => [
                 'table1' => ['truncate' => true],
                 'table2' => ['limit' => 1],
@@ -44,7 +44,7 @@ class DumperConfigTest extends TestCase
             ],
         ];
 
-        $config = $this->createConfig($tablesData);
+        $config = $this->createConfig($configData);
 
         $this->assertSame(['table1'], $config->getTablesToTruncate());
         $this->assertSame(['table1', 'table2'], $config->getTablesToFilter());
@@ -70,6 +70,19 @@ class DumperConfigTest extends TestCase
         if (array_key_exists('hex_blob', $settings)) {
             $this->assertTrue($settings['hex_blob']);
         }
+    }
+
+    /**
+     * Test the variables to initialize with SQL queries.
+     */
+    public function testVarQueries()
+    {
+        $queries = [
+            'my_var' => 'select my_col from my_table where other_col = "something"',
+        ];
+
+        $config = $this->createConfig(['variables' => $queries]);
+        $this->assertSame($queries, $config->getVarQueries());
     }
 
     /**

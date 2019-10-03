@@ -8,6 +8,9 @@ database:
 dump:
     output: 'php://stdout'
 
+variables:
+    main_store_id: 'select store_id from stores where code = "store1"'
+
 tables:
     stores:
         orderBy: 'code'
@@ -17,18 +20,24 @@ tables:
     customers:
         limit: 3
         filters:
-            - ['email', 'like', '%@example.org']
+            - ['email', 'like', '%@test.org']
             - ['created_at', 'gt', 'expr: date_sub(now(), interval 60 day)']
         converters:
-            email: 'randomizeEmail'
-            firstname: 'anonymizeText'
-            lastname: 'anonymizeText'
-            phone_number: 'randomizeNumber'
+            email:
+                converter: 'randomizeEmail'
+                condition: '{{store_id}} == @main_store_id'
+            firstname:
+                converter: 'anonymizeText'
+            lastname:
+                converter: 'anonymizeText'
 
     addresses:
         filters:
             - ['country_id', 'eq', 'FR']
         converters:
-            street: 'anonymizeText'
-            postcode: 'randomizeNumber'
-            city: 'anonymizeText'
+            street:
+                converter: 'anonymizeText'
+            postcode:
+                converter: 'randomizeNumber'
+            city:
+                converter: 'anonymizeText'

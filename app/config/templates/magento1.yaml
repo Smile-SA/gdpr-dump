@@ -1,6 +1,13 @@
 ---
 requiresVersion: true
 
+variables:
+    firstname_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "firstname" and entity_type_id = 1'
+    middlename_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "middlename" and entity_type_id = 1'
+    lastname_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "lastname" and entity_type_id = 1'
+    dob_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "dob" and entity_type_id = 1'
+    password_hash_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "password_hash" and entity_type_id = 1'
+
 tables:
     api_session:
         truncate: true
@@ -79,7 +86,7 @@ tables:
             value:
                 ## dob (11)
                 converter: 'anonymizeDateTime'
-                condition: '{{attribute_id}} == 11'
+                condition: '{{attribute_id}} == @dob_attribute_id'
 
     customer_entity_varchar:
         converters:
@@ -87,12 +94,10 @@ tables:
                 converter: chain
                 parameters:
                     converters:
-                        # firstname (5), middlename (6), lastname (7)
                         - converter: 'anonymizeText'
-                          condition: '{{attribute_id}} == 5 || {{attribute_id}} == 6 || {{attribute_id}} == 7'
-                        # password_hash (12)
+                          condition: '{{attribute_id}} == @firstname_attribute_id || {{attribute_id}} == @middlename_attribute_id || {{attribute_id}} == @lastname_attribute_id'
                         - converter: 'randomizeText'
-                          condition: '{{attribute_id}} == 12'
+                          condition: '{{attribute_id}} == @password_hash_attribute_id'
 
     newsletter_subscriber:
         converters:

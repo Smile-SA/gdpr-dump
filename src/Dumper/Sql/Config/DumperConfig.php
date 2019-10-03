@@ -18,6 +18,11 @@ class DumperConfig
     /**
      * @var string[]
      */
+    private $varQueries = [];
+
+    /**
+     * @var string[]
+     */
     private $tablesWhitelist = [];
 
     /**
@@ -122,6 +127,19 @@ class DumperConfig
     }
 
     /**
+     * Get the SQL queries to run.
+     *
+     * The result of each query will then be injected into user-defined variables.
+     * Array keys are the variable names, array values are the database queries.
+     *
+     * @return string[]
+     */
+    public function getVarQueries(): array
+    {
+        return $this->varQueries;
+    }
+
+    /**
      * Get the tables to whitelist.
      *
      * @return string[]
@@ -183,6 +201,9 @@ class DumperConfig
 
         // Tables config
         $this->prepareTablesConfig($config);
+
+        // Queries to run
+        $this->varQueries = $config->get('variables', []);
 
         // Tables whitelist
         $this->tablesWhitelist = $config->get('tables_whitelist', []);

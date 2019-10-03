@@ -25,13 +25,13 @@ CREATE TABLE `customers`(
     FOREIGN KEY (`store_id`) REFERENCES `stores` (`store_id`)
 );
 
-INSERT INTO `customers` VALUES(1, 'user1@example.org', 'firstname1', 'lastname1', 1, date_sub(now(), interval 90 day), 1);
-INSERT INTO `customers` VALUES(2, 'user2@example.org', 'firstname2', 'lastname2', 1, date_sub(now(), interval 35 day), 1);
-INSERT INTO `customers` VALUES(3, 'user3@example.org', 'firstname3', 'lastname3', 0, date_sub(now(), interval 30 day), 1);
-INSERT INTO `customers` VALUES(4, 'user4@example.org', 'firstname4', 'lastname4', 1, date_sub(now(), interval 25 day), 2);
-INSERT INTO `customers` VALUES(5, 'user5@example.org', 'firstname5', 'lastname5', 1, date_sub(now(), interval 20 day), 2);
-INSERT INTO `customers` VALUES(6, 'user6@example.org', 'firstname6', 'lastname6', 0, date_sub(now(), interval 15 day), 2);
-INSERT INTO `customers` VALUES(7, 'user7@example.org', 'firstname7', 'lastname7', 1, date_sub(now(), interval 10 day), 3);
+INSERT INTO `customers` VALUES(1, 'user1@test.org', 'firstname1', 'lastname1', 1, date_sub(now(), interval 90 day), 1);
+INSERT INTO `customers` VALUES(2, 'user2@test.org', 'firstname2', 'lastname2', 1, date_sub(now(), interval 35 day), 1);
+INSERT INTO `customers` VALUES(3, 'user3@test.org', 'firstname3', 'lastname3', 0, date_sub(now(), interval 30 day), 1);
+INSERT INTO `customers` VALUES(4, 'user4@test.org', 'firstname4', 'lastname4', 1, date_sub(now(), interval 25 day), 2);
+INSERT INTO `customers` VALUES(5, 'user5@test.org', 'firstname5', 'lastname5', 1, date_sub(now(), interval 20 day), 2);
+INSERT INTO `customers` VALUES(6, 'user6@test.org', 'firstname6', 'lastname6', 0, date_sub(now(), interval 15 day), 2);
+INSERT INTO `customers` VALUES(7, 'user7@test.org', 'firstname7', 'lastname7', 1, date_sub(now(), interval 10 day), 3);
 
 CREATE TABLE `addresses`(
     `address_id` int(10) unsigned NOT NULL auto_increment,

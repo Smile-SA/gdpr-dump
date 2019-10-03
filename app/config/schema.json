@@ -22,6 +22,12 @@
         "dump": {
             "$ref": "#/definitions/dump"
         },
+        "variables": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
+        },
         "tables": {
             "type": "object",
             "additionalProperties": {
