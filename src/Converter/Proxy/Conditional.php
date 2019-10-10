@@ -27,9 +27,7 @@ class Conditional implements ConverterInterface
     /**
      * @var array
      */
-    private $statementBlacklist = [
-        '<?php', '<?', '?>',
-    ];
+    private $statementBlacklist = ['<?php', '<?', '?>'];
 
     /**
      * @var array

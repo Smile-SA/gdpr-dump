@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.0-beta11] - 2019-10-10
+[1.0.0-beta11]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta10...1.0.0-beta11
+
+- Allow to define and use SQL variables
+- Better converter condition parsing (tokens + regexp)
+
 ## [1.0.0-beta10] - 2019-10-02
 [1.0.0-beta10]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta9...1.0.0-beta10
 
