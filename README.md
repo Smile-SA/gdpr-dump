@@ -13,8 +13,7 @@ You can use a config file to specify how the database should be dumped.
 In the config file, you can:
 
 - specify data converters that allow you to transform the data before it is dumped to the file.
-  It can be used to create an anonymize
-  d dump file.
+  It can be used to create an anonymized dump file.
 - specify table filters.
 - specify a list of tables to whitelist (only these tables will be included in the dump).
 - specify a list of tables to blacklist (not included in the dump).
