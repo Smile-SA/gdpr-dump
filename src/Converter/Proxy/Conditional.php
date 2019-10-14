@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Converter\Proxy;
 use InvalidArgumentException;
 use RuntimeException;
 use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Proxy\Conditional\Token;
 
 class Conditional implements ConverterInterface
 {
@@ -59,7 +60,7 @@ class Conditional implements ConverterInterface
             );
         }
 
-        $this->condition = $this->parseCondition($parameters['condition']);
+        $this->condition = $this->prepareCondition($parameters['condition']);
 
         if (isset($parameters['if_true_converter'])) {
             $this->ifTrueConverter = $parameters['if_true_converter'];
@@ -90,12 +91,12 @@ class Conditional implements ConverterInterface
     }
 
     /**
-     * Parse the condition.
+     * Prepare the condition.
      *
      * @param string $condition
      * @return string
      */
-    private function parseCondition(string $condition): string
+    private function prepareCondition(string $condition): string
     {
         // Sanitize the condition
         $condition = $this->sanitizeCondition($condition);
@@ -103,20 +104,8 @@ class Conditional implements ConverterInterface
         // Validate the condition
         $this->validateCondition($this->removeQuotedValues($condition));
 
-        // Replace SQL column names by their values in the condition
-        // e.g. {{identifier}} replaced by $context['row_data']['identifier']
-        $condition = preg_replace("/(?<=[^\w[}@]){{(\w+)}}(?=[^\w{}@])/", "\$context['row_data']['$1']", $condition);
-
-        // Replace SQL variable names by their values in the condition
-        // e.g. @identifier replaced by $context['vars']['identifier']
-        $condition = preg_replace('/(?<=[^\w{}@])@(\w+)(?=[^\w{}@])/', "\$context['vars']['$1']", $condition);
-
-        // If there are still "{", "}" or "@" characters, they were incorrectly used
-        if (preg_match('/[@{}]/', $condition, $matches)) {
-            throw new RuntimeException(sprintf('Invalid use of "%s" character in condition.', $matches[0]));
-        }
-
-        return $condition;
+        // Parse the condition and return the result
+        return $this->parseCondition($condition);
     }
 
     /**
@@ -154,12 +143,12 @@ class Conditional implements ConverterInterface
     {
         // Prevent usage of "=" operator
         if (preg_match('/[^=!]=[^=]/', $condition)) {
-            throw new RuntimeException('The "=" operator is not allowed in a filter.');
+            throw new RuntimeException('The "=" operator is not allowed in converter conditions.');
         }
 
         // Prevent usage of "$" character
         if (preg_match('/\$/', $condition)) {
-            throw new RuntimeException('The "$" character is not allowed in a filter.');
+            throw new RuntimeException('The "$" character is not allowed in converter conditions.');
         }
 
         // Prevent the use of some statements
@@ -187,32 +176,136 @@ class Conditional implements ConverterInterface
     }
 
     /**
-     * Remove quoted values from a variable,
-     * e.g. "$s = 'value'" is converted to "$s = ''"
+     * Parse the tokens that represent the condition, and return the parsed condition.
      *
      * @param string $condition
      * @return string
      */
-    private function removeQuotedValues(string $condition): string
+    private function parseCondition(string $condition): string
     {
         // Split the condition into PHP tokens
         $tokens = token_get_all('<?php ' . $condition . ' ?>');
-        $condition = '';
+        $result = '';
+        $index = -1;
 
         foreach ($tokens as $token) {
-            if (!is_array($token)) {
-                $condition .= $token;
+            $index++;
+            $token = new Token($token);
+
+            // Skip characters representing a variable
+            if ($this->isVariableToken($token)) {
                 continue;
             }
 
-            // Remove magic strings
-            $condition .= ($token[0] === T_CONSTANT_ENCAPSED_STRING ? "''" : $token[1]);
+            // Replace SQL column names by their values in the condition
+            // e.g. {{identifier}} replaced by $context['row_data']['identifier']
+            if ($this->isDbColumnToken($token, $index, $tokens)) {
+                $result .= "\$context['row_data']['{$token->getValue()}']";
+                continue;
+            }
+
+            // Replace SQL variable names by their values in the condition
+            // e.g. @identifier replaced by $context['vars']['identifier']
+            if ($this->isDbVariableToken($token, $index, $tokens)) {
+                $result .= "\$context['vars']['{$token->getValue()}']";
+                continue;
+            }
+
+            $result .= $token->getValue();
         }
 
         // Remove the opening and closing tag that were added to generate the tokens
-        $condition = ltrim($condition, '<?php ');
-        $condition = rtrim($condition, ' ?>');
+        $result = $this->removePhpTags($result);
 
-        return $condition;
+        return $result;
+    }
+
+    /**
+     * Remove quoted values from a variable,
+     * e.g. "$s = 'value'" is converted to "$s = ''"
+     *
+     * @param string $input
+     * @return string
+     */
+    private function removeQuotedValues(string $input): string
+    {
+        // Split the condition into PHP tokens
+        $tokens = token_get_all('<?php ' . $input . ' ?>');
+        $result = '';
+
+        foreach ($tokens as $token) {
+            $token = new Token($token);
+
+            // Remove quoted values
+            $result .= $token->getType() === T_CONSTANT_ENCAPSED_STRING ? "''" : $token->getValue();
+        }
+
+        // Remove the opening and closing tag that were added to generate the tokens
+        $result = $this->removePhpTags($result);
+
+        return $result;
+    }
+
+    /**
+     * Remove opening and closing PHP tags from a string.
+     *
+     * @param string $input
+     * @return string
+     */
+    private function removePhpTags(string $input): string
+    {
+        $input = ltrim($input, '<?php ');
+        $input = rtrim($input, ' ?>');
+
+        return $input;
+    }
+
+    /**
+     * Check if the token represents a variable.
+     *
+     * @param Token $token
+     * @return bool
+     */
+    private function isVariableToken(Token $token): bool
+    {
+        if ($token->getType() !== Token::T_UNKNOWN) {
+            return false;
+        }
+
+        $value = $token->getValue();
+
+        return $value === '{' || $value === '}' || $value === '@';
+    }
+
+    /**
+     * Check if a token represents a database column (string encapsed in brackets, e.g. "{{identifier}}").
+     *
+     * @param Token $token
+     * @param int $index
+     * @param array $tokens
+     * @return bool
+     */
+    private function isDbColumnToken(Token $token, int $index, array $tokens): bool
+    {
+        $count = count($tokens);
+
+        return $token->getType() === T_STRING
+            && $index >= 2 && $index <= $count - 3
+            && $tokens[$index - 1] === '{' && $tokens[$index - 2] === '{'
+            && $tokens[$index + 1] === '}' && $tokens[$index + 2] === '}';
+    }
+
+    /**
+     * Check if a token represents a database variable (string suffixed by "@", e.g. "@identifier").
+     *
+     * @param Token $token
+     * @param int $index
+     * @param array $tokens
+     * @return bool
+     */
+    private function isDbVariableToken(Token $token, int $index, array $tokens): bool
+    {
+        return $token->getType() === T_STRING
+            && $index >= 1 && $tokens[$index - 1] === '@';
     }
 }

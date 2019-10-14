@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Fix converter condition sometimes parsed incorrectly
+
 ## [1.0.0-beta11] - 2019-10-10
 [1.0.0-beta11]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta10...1.0.0-beta11
 
