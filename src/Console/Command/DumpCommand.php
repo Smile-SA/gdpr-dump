@@ -118,6 +118,12 @@ class DumpCommand extends Command
         return 0;
     }
 
+    /**
+     * Load the dump config.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     private function loadConfig(InputInterface $input, OutputInterface $output)
     {
         $configFile = (string) $input->getArgument('config_file');
@@ -141,6 +147,7 @@ class DumpCommand extends Command
      * Load the additional configuration (JSON-encoded data passed in the "additional-config" option).
      *
      * @param InputInterface $input
+     * @throws RuntimeException
      */
     private function loadAdditionalConfig(InputInterface $input)
     {
