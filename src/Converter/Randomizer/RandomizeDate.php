@@ -52,7 +52,7 @@ class RandomizeDate implements ConverterInterface
         $this->maxYear = (int) ($parameters['max_year'] ?? $this->date->format('Y'));
 
         if ($this->minYear > $this->maxYear) {
-            throw new UnexpectedValueException('The minYear parameter must be lower than the maxYear parameter.');
+            throw new UnexpectedValueException('The min_year parameter must be lower than the max_year parameter.');
         }
     }
 
