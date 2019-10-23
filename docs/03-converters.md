@@ -169,7 +169,8 @@ Parameters:
 
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
-| **replacements** | N | [Check here](src/Converter/Randomizer/RandomizeText.php) | A string that contains the replacements characters. |
+| **min_length** | N | 3 | The minimum length of the generated value. |
+| **replacements** | N | [Check here](src/Converter/Randomizer/RandomizeText.php) | A string that contains the replacement characters. |
 
 Example:
 
@@ -208,8 +209,9 @@ Parameters:
 
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
-| **replacements** | N | [Check here](src/Converter/Randomizer/RandomizeText.php) | A string that contains the replacements characters. |
 | **domains** | N | `['example.com', 'example.net', 'example.org']` | A list of email domains. |
+| **min_length** | N | 3 | The minimum length of the generated username. |
+| **replacements** | N | [Check here](src/Converter/Randomizer/RandomizeText.php) | A string that contains the replacement characters. |
 
 Example:
 

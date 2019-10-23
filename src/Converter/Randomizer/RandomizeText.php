@@ -3,11 +3,15 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Randomizer;
 
-use Closure;
 use Smile\GdprDump\Converter\ConverterInterface;
 
 class RandomizeText implements ConverterInterface
 {
+    /**
+     * @var int
+     */
+    private $minLength = 3;
+
     /**
      * @var string
      */
@@ -19,25 +23,19 @@ class RandomizeText implements ConverterInterface
     private $replacementsCount;
 
     /**
-     * @var Closure
-     */
-    private $replaceCallback;
-
-    /**
      * @param array $parameters
      */
     public function __construct(array $parameters = [])
     {
+        if (isset($parameters['min_length'])) {
+            $this->minLength = (int) $parameters['min_length'];
+        }
+
         if (isset($parameters['replacements'])) {
             $this->replacements = (string) $parameters['replacements'];
         }
 
         $this->replacementsCount = strlen($this->replacements);
-
-        $this->replaceCallback = function () {
-            $index = mt_rand(0, $this->replacementsCount - 1);
-            return $this->replacements[$index];
-        };
     }
 
     /**
@@ -45,6 +43,18 @@ class RandomizeText implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        return preg_replace_callback('/\w/u', $this->replaceCallback, $value);
+        $length = strlen((string) $value);
+        $value = '';
+
+        if ($length < $this->minLength) {
+            $length = $this->minLength;
+        }
+
+        for ($index = 0; $index < $length; $index++) {
+            $replacementIndex = mt_rand(0, $this->replacementsCount - 1);
+            $value .=  $this->replacements[$replacementIndex];
+        }
+
+        return $value;
     }
 }
