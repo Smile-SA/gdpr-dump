@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Sql\Config;
 
-use Smile\GdprDump\Dumper\Sql\Driver\DriverFactory;
 use UnexpectedValueException;
 
 class DatabaseConfig
@@ -109,18 +108,6 @@ class DatabaseConfig
     public function getPdoSettings(): array
     {
         return $this->pdoSettings;
-    }
-
-    /**
-     * Get the PDO data source name.
-     *
-     * @return string
-     */
-    public function getDsn(): string
-    {
-        $driver = DriverFactory::create($this->getDriver());
-
-        return $driver->getDsn($this);
     }
 
     /**

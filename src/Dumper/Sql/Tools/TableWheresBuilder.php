@@ -1,15 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Sql;
+namespace Smile\GdprDump\Dumper\Sql\Tools;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Smile\GdprDump\Dumper\Sql\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Sql\Config\Table\Filter\Filter;
 use Smile\GdprDump\Dumper\Sql\Config\Table\TableConfig;
-use Smile\GdprDump\Dumper\Sql\Schema\TableDependencyResolver;
+use Smile\GdprDump\Dumper\Sql\DatabaseInterface;
+use Smile\GdprDump\Dumper\Sql\Metadata\Definition\Constraint\ForeignKey;
+use Smile\GdprDump\Dumper\Sql\Metadata\MetadataInterface;
 use UnexpectedValueException;
 
 class TableWheresBuilder
@@ -20,17 +21,23 @@ class TableWheresBuilder
     private $connection;
 
     /**
+     * @var MetadataInterface
+     */
+    private $metadata;
+
+    /**
      * @var DumperConfig
      */
     private $config;
 
     /**
-     * @param Connection $connection
+     * @param DatabaseInterface $database
      * @param DumperConfig $config
      */
-    public function __construct(Connection $connection, DumperConfig $config)
+    public function __construct(DatabaseInterface $database, DumperConfig $config)
     {
-        $this->connection = $connection;
+        $this->connection = $database->getConnection();
+        $this->metadata = $database->getMetadata();
         $this->config = $config;
     }
 
@@ -51,7 +58,7 @@ class TableWheresBuilder
         }
 
         // Get the foreign keys of each table that depends on the filters listed in the configuration
-        $dependencyResolver = new TableDependencyResolver($this->connection);
+        $dependencyResolver = new TableDependencyResolver($this->metadata);
         $dependencies = $dependencyResolver->getTablesDependencies($tablesToFilter);
 
         // Tables to query are:
@@ -93,7 +100,7 @@ class TableWheresBuilder
         &$dependencies,
         &$subQueryCount = 0
     ) {
-        /** @var ForeignKeyConstraint $dependency */
+        /** @var ForeignKey $dependency */
         foreach ($dependencies[$tableName] as $dependency) {
             $tableName = $dependency->getForeignTableName();
 

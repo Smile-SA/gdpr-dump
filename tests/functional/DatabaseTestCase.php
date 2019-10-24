@@ -3,17 +3,16 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Functional;
 
-use Doctrine\DBAL\Connection;
 use Smile\GdprDump\Dumper\Sql\Config\DatabaseConfig;
-use Smile\GdprDump\Dumper\Sql\Doctrine\ConnectionFactory;
+use Smile\GdprDump\Dumper\Sql\Database;
 use Symfony\Component\Yaml\Yaml;
 
 abstract class DatabaseTestCase extends TestCase
 {
     /**
-     * @var Connection
+     * @var Database
      */
-    protected static $connection;
+    protected static $database;
 
     /**
      * @inheritdoc
@@ -25,17 +24,19 @@ abstract class DatabaseTestCase extends TestCase
         }
 
         // Use a shared connection to speed up the tests
-        if (static::$connection !== null) {
+        if (static::$database !== null) {
             return;
         }
 
         // Create the shared connection
-        $config = Yaml::parseFile(static::getTestConfigFile());
-        static::$connection = ConnectionFactory::create(new DatabaseConfig($config['database']));
+        $databaseInfo = Yaml::parseFile(static::getTestConfigFile());
+        $config = new DatabaseConfig($databaseInfo['database']);
+        static::$database = new Database($config);
 
         // Create the tables
+        $connection = static::$database->getConnection();
         $queries = file_get_contents(static::getResource('db/test.sql'));
-        $statement = static::$connection->prepare($queries);
+        $statement = $connection->prepare($queries);
         $statement->execute();
     }
 
@@ -51,12 +52,12 @@ abstract class DatabaseTestCase extends TestCase
     }
 
     /**
-     * Get the connection object.
+     * Get the database wrapper.
      *
-     * @return Connection
+     * @return Database
      */
-    protected function getConnection(): Connection
+    protected function getDatabase(): Database
     {
-        return static::$connection;
+        return static::$database;
     }
 }

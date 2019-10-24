@@ -6,12 +6,12 @@ namespace Smile\GdprDump\Dumper;
 use Ifsnop\Mysqldump\Mysqldump;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Converter\ConverterFactory;
-use Smile\GdprDump\Dumper\Sql\ColumnTransformer;
 use Smile\GdprDump\Dumper\Sql\Config\ConfigProcessor;
 use Smile\GdprDump\Dumper\Sql\Config\DatabaseConfig;
 use Smile\GdprDump\Dumper\Sql\Config\DumperConfig;
-use Smile\GdprDump\Dumper\Sql\Doctrine\ConnectionFactory;
-use Smile\GdprDump\Dumper\Sql\TableWheresBuilder;
+use Smile\GdprDump\Dumper\Sql\Database;
+use Smile\GdprDump\Dumper\Sql\Tools\ColumnTransformer;
+use Smile\GdprDump\Dumper\Sql\Tools\TableWheresBuilder;
 
 class SqlDumper implements DumperInterface
 {
@@ -33,15 +33,16 @@ class SqlDumper implements DumperInterface
      */
     public function dump(ConfigInterface $config): DumperInterface
     {
-        // Create the doctrine connection
+        // Create the database connection
         $databaseConfig = new DatabaseConfig($config->get('database', []));
-        $connection = ConnectionFactory::create($databaseConfig);
+        $database = new Database($databaseConfig);
 
         // Process the configuration
-        $processor = new ConfigProcessor($connection);
+        $processor = new ConfigProcessor($database->getMetadata());
         $config = $processor->process($config);
 
         // Set the SQL variables
+        $connection = $database->getConnection();
         $dumpSettings = $this->getDumpSettings($config);
         $context = ['vars' => []];
 
@@ -53,7 +54,7 @@ class SqlDumper implements DumperInterface
 
         // Create the MySQLDump object
         $dumper = new Mysqldump(
-            $databaseConfig->getDsn(),
+            $database->getDriver()->getDsn(),
             $databaseConfig->getUser(),
             $databaseConfig->getPassword(),
             $dumpSettings,
@@ -66,12 +67,12 @@ class SqlDumper implements DumperInterface
         $dumper->setTransformColumnValueHook([$columnTransformer, 'transform']);
 
         // Set the table filters
-        $tableWheresBuilder = new TableWheresBuilder($connection, $config);
+        $tableWheresBuilder = new TableWheresBuilder($database, $config);
         $tableWheres = $tableWheresBuilder->getTableWheres();
         $dumper->setTableWheres($tableWheres);
 
-        // Close the doctrine connection
-        $connection->close();
+        // Unset the database object to close the database connection
+        unset($database);
 
         // Create the dump
         $output = $config->getDumpOutput();

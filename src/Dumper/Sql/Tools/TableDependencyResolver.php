@@ -1,29 +1,29 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Sql\Schema;
+namespace Smile\GdprDump\Dumper\Sql\Tools;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use Smile\GdprDump\Dumper\Sql\Metadata\Definition\Constraint\ForeignKey;
+use Smile\GdprDump\Dumper\Sql\Metadata\MetadataInterface;
 
 class TableDependencyResolver
 {
     /**
-     * @var Connection
+     * @var MetadataInterface
      */
-    private $connection;
+    private $metadata;
 
     /**
-     * @var array
+     * @var ForeignKey[]
      */
     private $foreignKeys;
 
     /**
-     * @param Connection $connection
+     * @param MetadataInterface $metadata
      */
-    public function __construct(Connection $connection)
+    public function __construct(MetadataInterface $metadata)
     {
-        $this->connection = $connection;
+        $this->metadata = $metadata;
     }
 
     /**
@@ -83,18 +83,18 @@ class TableDependencyResolver
             return $resolved;
         }
 
-        $dependencies = $this->foreignKeys[$tableName];
+        $foreignKeys = $this->foreignKeys[$tableName];
 
-        /** @var ForeignKeyConstraint $dependency */
-        foreach ($dependencies as $dependency) {
-            $dependencyTable = $dependency->getLocalTableName();
+        /** @var ForeignKey $foreignKey */
+        foreach ($foreignKeys as $foreignKey) {
+            $dependencyTable = $foreignKey->getLocalTableName();
 
             // Detect cyclic dependencies
             if ($dependencyTable === $tableName) {
                 continue;
             }
 
-            $resolved[$dependencyTable][$tableName] = $dependency;
+            $resolved[$dependencyTable][$tableName] = $foreignKey;
             $resolved = $this->resolveDependencies($dependencyTable, $resolved);
         }
 
@@ -110,15 +110,15 @@ class TableDependencyResolver
             return;
         }
 
-        $tables = $this->connection->getSchemaManager()->listTables();
+        $tableNames = $this->metadata->getTableNames();
 
-        foreach ($tables as $table) {
-            foreach ($table->getForeignKeys() as $foreignKey) {
+        foreach ($tableNames as $tableName) {
+            $foreignKeys = $this->metadata->getForeignKeys($tableName);
+
+            foreach ($foreignKeys as $foreignKey) {
                 $foreignTableName = $foreignKey->getForeignTableName();
                 $this->foreignKeys[$foreignTableName][] = $foreignKey;
             }
         }
-
-        unset($tables);
     }
 }

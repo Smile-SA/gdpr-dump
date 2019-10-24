@@ -5,7 +5,6 @@ namespace Smile\GdprDump\Tests\Unit\Dumper\Sql\Config;
 
 use PDO;
 use Smile\GdprDump\Dumper\Sql\Config\DatabaseConfig;
-use Smile\GdprDump\Dumper\Sql\Driver\DriverFactory;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class DatabaseConfigTest extends TestCase
@@ -16,7 +15,7 @@ class DatabaseConfigTest extends TestCase
     public function testGetters()
     {
         $params = [
-            'driver' => DriverFactory::DRIVER_MYSQL,
+            'driver' => 'pdo_mysql',
             'host' => 'mydb',
             'port' => '3306',
             'user' => 'myuser',

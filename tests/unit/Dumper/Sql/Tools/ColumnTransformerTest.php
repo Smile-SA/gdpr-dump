@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Dumper\Sql;
+namespace Smile\GdprDump\Tests\Unit\Dumper\Sql\Tools;
 
-use Smile\GdprDump\Dumper\Sql\ColumnTransformer;
+use Smile\GdprDump\Dumper\Sql\Tools\ColumnTransformer;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\TestCase;
 

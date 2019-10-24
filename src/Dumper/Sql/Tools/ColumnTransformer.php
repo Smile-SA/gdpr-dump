@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Sql;
+namespace Smile\GdprDump\Dumper\Sql\Tools;
 
 use Smile\GdprDump\Converter\ConverterInterface;
 

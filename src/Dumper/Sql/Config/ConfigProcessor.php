@@ -3,23 +3,27 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Sql\Config;
 
-use Doctrine\DBAL\Connection;
 use Smile\GdprDump\Config\ConfigInterface;
-use Smile\GdprDump\Dumper\Sql\Schema\TableFinder;
+use Smile\GdprDump\Dumper\Sql\Metadata\MetadataInterface;
 
 class ConfigProcessor
 {
     /**
-     * @var TableFinder
+     * @var MetadataInterface
      */
-    private $tableFinder;
+    private $metadata;
 
     /**
-     * @param Connection $connection
+     * @var string[]
      */
-    public function __construct(Connection $connection)
+    private $tableNames;
+
+    /**
+     * @param MetadataInterface $metadata
+     */
+    public function __construct(MetadataInterface $metadata)
     {
-        $this->tableFinder = new TableFinder($connection);
+        $this->metadata = $metadata;
     }
 
     /**
@@ -82,7 +86,7 @@ class ConfigProcessor
         $resolved = [];
 
         foreach ($tableNames as $tableName) {
-            $matches = $this->tableFinder->findByName($tableName);
+            $matches = $this->findTablesByName($tableName);
             if (empty($matches)) {
                 continue;
             }
@@ -103,7 +107,7 @@ class ConfigProcessor
     {
         foreach ($tablesData as $tableName => $tableData) {
             // Find all tables matching the pattern
-            $matches = $this->tableFinder->findByName($tableName);
+            $matches = $this->findTablesByName($tableName);
 
             // Table found is the same as the table name -> nothing to do
             if (count($matches) === 1 && $matches[0] === $tableName) {
@@ -124,5 +128,28 @@ class ConfigProcessor
         }
 
         return $tablesData;
+    }
+
+    /**
+     * Get the table names that match a pattern.
+     *
+     * @param string $pattern
+     * @return string[]
+     */
+    private function findTablesByName(string $pattern): array
+    {
+        if ($this->tableNames === null) {
+            $this->tableNames = $this->metadata->getTableNames();
+        }
+
+        $matches = [];
+
+        foreach ($this->tableNames as $tableName) {
+            if (fnmatch($pattern, $tableName)) {
+                $matches[] = $tableName;
+            }
+        }
+
+        return $matches;
     }
 }

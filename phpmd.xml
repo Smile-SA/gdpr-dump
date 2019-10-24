@@ -16,8 +16,6 @@
                     \Doctrine\DBAL\DriverManager,
                     \Faker\Factory,
                     \Smile\GdprDump\Converter\Helper\ArrayHelper,
-                    \Smile\GdprDump\Dumper\Sql\Doctrine\ConnectionFactory,
-                    \Smile\GdprDump\Dumper\Sql\Driver\DriverFactory,
                     \Symfony\Component\Yaml\Yaml
                 </value>
             </property>

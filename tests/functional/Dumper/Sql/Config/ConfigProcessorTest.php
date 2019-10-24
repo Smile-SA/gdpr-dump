@@ -61,8 +61,8 @@ class ConfigProcessorTest extends DatabaseTestCase
      */
     private function createConfigProcessor(): ConfigProcessor
     {
-        $connection = $this->getConnection();
+        $metadata = $this->getDatabase()->getMetadata();
 
-        return new ConfigProcessor($connection);
+        return new ConfigProcessor($metadata);
     }
 }

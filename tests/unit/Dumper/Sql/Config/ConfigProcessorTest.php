@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Dumper\Sql\Config;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Schema\MySqlSchemaManager;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Dumper\Sql\Config\ConfigProcessor;
+use Smile\GdprDump\Dumper\Sql\Metadata\MysqlMetadata;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class ConfigProcessorTest extends TestCase
@@ -72,14 +71,10 @@ class ConfigProcessorTest extends TestCase
      */
     private function createConfigProcessor(): ConfigProcessor
     {
-        $schemaManagerMock = $this->createMock(MySqlSchemaManager::class);
-        $schemaManagerMock->method('listTableNames')
+        $metadataMock = $this->createMock(MysqlMetadata::class);
+        $metadataMock->method('getTableNames')
             ->willReturn(['table1', 'table2', 'table3']);
 
-        $connectionMock = $this->createMock(Connection::class);
-        $connectionMock->method('getSchemaManager')
-            ->willReturn($schemaManagerMock);
-
-        return new ConfigProcessor($connectionMock);
+        return new ConfigProcessor($metadataMock);
     }
 }
