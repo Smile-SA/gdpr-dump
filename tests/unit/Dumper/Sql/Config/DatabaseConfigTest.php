@@ -15,27 +15,24 @@ class DatabaseConfigTest extends TestCase
     public function testGetters()
     {
         $params = [
-            'driver' => 'pdo_mysql',
             'host' => 'mydb',
             'port' => '3306',
             'user' => 'myuser',
             'password' => 'mypassword',
             'name' => 'test',
-            'pdo_settings' => [PDO::ATTR_TIMEOUT, 60],
+            'charset' => 'utf8mb4',
+            'driver' => 'pdo_mysql',
+            'driver_options' => [PDO::ATTR_TIMEOUT, 60],
         ];
 
         $config = new DatabaseConfig($params);
 
         $this->assertSame($params['driver'], $config->getDriver());
-        $this->assertSame($params['host'], $config->getHost());
-        $this->assertSame($params['port'], $config->getPort());
-        $this->assertSame($params['user'], $config->getUser());
-        $this->assertSame($params['password'], $config->getPassword());
-        $this->assertSame($params['name'], $config->getDatabaseName());
-        $this->assertSame($params['pdo_settings'], $config->getPdoSettings());
+        $this->assertSame($params['driver_options'], $config->getDriverOptions());
 
-        unset($params['pdo_settings']);
-        $this->assertEmpty(array_diff($params, $config->getParams()));
+        unset($params['driver']);
+        unset($params['driver_options']);
+        $this->assertEmpty(array_diff($params, $config->getConnectionParams()));
     }
 
     /**
@@ -46,12 +43,11 @@ class DatabaseConfigTest extends TestCase
         $config = new DatabaseConfig(['name' => 'test']);
 
         $this->assertSame('pdo_mysql', $config->getDriver());
-        $this->assertSame('localhost', $config->getHost());
-        $this->assertSame('', $config->getPort());
-        $this->assertSame('root', $config->getUser());
-        $this->assertSame('', $config->getPassword());
-        $this->assertSame('test', $config->getDatabaseName());
-        $this->assertEmpty($config->getPdoSettings());
+        $this->assertSame('test', $config->getConnectionParam('name'));
+        $this->assertSame('localhost', $config->getConnectionParam('host'));
+        $this->assertNull($config->getConnectionParam('port'));
+        $this->assertSame('root', $config->getConnectionParam('user'));
+        $this->assertEmpty($config->getDriverOptions());
     }
 
     /**
@@ -62,15 +58,5 @@ class DatabaseConfigTest extends TestCase
     public function testMissingDatabaseName()
     {
         new DatabaseConfig([]);
-    }
-
-    /**
-     * Test if an exception is thrown when an invalid parameter is used.
-     *
-     * @expectedException \UnexpectedValueException
-     */
-    public function testInvalidParameterName()
-    {
-        new DatabaseConfig(['name' => 'test', 'notExists' => true]);
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Console\Command;
 
 use Exception;
-use RuntimeException;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Config\ConfigLoaderInterface;
 use Smile\GdprDump\Config\Validator\ValidationResultInterface;
@@ -13,9 +12,7 @@ use Smile\GdprDump\Dumper\DumperInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
 
 /**
  * @codeCoverageIgnore
@@ -69,13 +66,7 @@ class DumpCommand extends Command
         // phpcs:disable Generic.Files.LineLength.TooLong
         $this->setName('gdpr-dump')
             ->setDescription('Create an anonymized dump')
-            ->addOption('database', null, InputOption::VALUE_REQUIRED, 'Database name')
-            ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Database user')
-            ->addOption('password', null, InputOption::VALUE_NONE, 'Whether to prompt a password')
-            ->addOption('host', null, InputOption::VALUE_REQUIRED, 'Database host')
-            ->addOption('port', null, InputOption::VALUE_REQUIRED, 'Database port')
-            ->addOption('additional-config', null, InputOption::VALUE_REQUIRED, 'JSON-encoded config to load in addition to the configuration file')
-            ->addArgument('config_file', InputArgument::OPTIONAL, 'Dump configuration file');
+            ->addArgument('config_file', InputArgument::IS_ARRAY | InputArgument::REQUIRED, 'Dump configuration file(s)');
         // phpcs:enable
     }
 
@@ -84,18 +75,9 @@ class DumpCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $database = (string) $input->getOption('database');
-        $configFile = (string) $input->getArgument('config_file');
-
         try {
-            if ($configFile === '' && $database === '') {
-                $output->writeln('You must provide a configuration file or a database name.');
-                $output->writeln('Use the "--help" option for more information.');
-                return 1;
-            }
-
             // Load the config
-            $this->loadConfig($input, $output);
+            $this->loadConfig($input);
 
             // Validate the config data
             $result = $this->validator->validate($this->config->toArray());
@@ -122,99 +104,20 @@ class DumpCommand extends Command
      * Load the dump config.
      *
      * @param InputInterface $input
-     * @param OutputInterface $output
      */
-    private function loadConfig(InputInterface $input, OutputInterface $output)
+    private function loadConfig(InputInterface $input)
     {
-        $configFile = (string) $input->getArgument('config_file');
+        // Load the config file(s)
+        $configFiles = $input->getArgument('config_file');
 
-        // Load the config file
-        if ($configFile !== '') {
-            $this->configLoader->loadFile($configFile);
+        if (!empty($configFiles)) {
+            foreach ($configFiles as $configFile) {
+                $this->configLoader->loadFile($configFile);
+            }
         }
-
-        // Load the JSON-encoded config passed in the "additional-config" option
-        $this->loadAdditionalConfig($input);
 
         // Load version-specific data
         $this->configLoader->loadVersionData();
-
-        // Override the config with the console options/arguments
-        $this->overrideConfig($input, $output);
-    }
-
-    /**
-     * Load the additional configuration (JSON-encoded data passed in the "additional-config" option).
-     *
-     * @param InputInterface $input
-     * @throws RuntimeException
-     */
-    private function loadAdditionalConfig(InputInterface $input)
-    {
-        $additionalConfig = (string) $input->getOption('additional-config');
-
-        if ($additionalConfig !== '') {
-            $decodedData = json_decode($additionalConfig, true);
-
-            if ($decodedData === null) {
-                throw new RuntimeException(sprintf('Invalid JSON "%s".', $additionalConfig));
-            }
-
-            $this->configLoader->loadData($decodedData);
-        }
-    }
-
-    /**
-     * Override the config with the console arguments/options.
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     */
-    private function overrideConfig(InputInterface $input, OutputInterface $output)
-    {
-        // Database config
-        $databaseInput = [
-            'name' => (string) $input->getOption('database'),
-            'user' => (string) $input->getOption('user'),
-            'host' => (string) $input->getOption('host'),
-            'port' => (string) $input->getOption('port'),
-        ];
-
-        $databaseConfig = $this->config->get('database', []);
-
-        foreach ($databaseInput as $key => $value) {
-            if ($value !== '') {
-                $databaseConfig[$key] = $value;
-            }
-        }
-
-        // Override password only if it was prompted
-        if ($input->getOption('password')) {
-            $databaseConfig['password'] = $this->promptPassword($input, $output);
-        }
-
-        if (!empty($databaseConfig)) {
-            $this->config->set('database', $databaseConfig);
-        }
-    }
-
-    /**
-     * Prompt the user for a password.
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return string
-     */
-    private function promptPassword(InputInterface $input, OutputInterface $output): string
-    {
-        $helper = $this->getHelper('question');
-        $question = new Question('Enter password: ', '');
-        $question->setHidden(true);
-        $question->setHiddenFallback(false);
-
-        $password = trim($helper->ask($input, $output, $question));
-
-        return $password;
     }
 
     /**

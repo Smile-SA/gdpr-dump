@@ -28,6 +28,6 @@ class SortOrderTest extends TestCase
      */
     public function testInvalidDirection()
     {
-        new SortOrder('column1', 'notExists');
+        new SortOrder('column1', 'not_exists');
     }
 }

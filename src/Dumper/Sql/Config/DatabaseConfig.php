@@ -8,21 +8,26 @@ use UnexpectedValueException;
 class DatabaseConfig
 {
     /**
-     * @var array
+     * @var string
      */
-    private $params = [
-        'driver' => 'pdo_mysql',
-        'host' => 'localhost',
-        'port' => '',
-        'user' => 'root',
-        'password' => '',
-        'name' => '',
-    ];
+    private $driver = 'pdo_mysql';
 
     /**
      * @var array
      */
-    private $pdoSettings = [];
+    private $driverOptions = [];
+
+    /**
+     * @var array
+     */
+    private $connectionParams = [];
+
+    /**
+     * @var array
+     */
+    private $defaults = [
+        'pdo_mysql' => ['host' => 'localhost', 'user' => 'root'],
+    ];
 
     /**
      * @param array $params
@@ -39,75 +44,38 @@ class DatabaseConfig
      */
     public function getDriver(): string
     {
-        return $this->params['driver'];
+        return $this->driver;
     }
 
     /**
-     * Get the database host.
-     *
-     * @return string
-     */
-    public function getHost(): string
-    {
-        return $this->params['host'];
-    }
-
-    /**
-     * Get the database port.
-     *
-     * @return string
-     */
-    public function getPort(): string
-    {
-        return $this->params['port'];
-    }
-
-    /**
-     * Get the database user.
-     *
-     * @return string
-     */
-    public function getUser(): string
-    {
-        return $this->params['user'];
-    }
-
-    /**
-     * Get the database password.
-     *
-     * @return string
-     */
-    public function getPassword(): string
-    {
-        return $this->params['password'];
-    }
-
-    /**
-     * Get the database name.
-     *
-     * @return string
-     */
-    public function getDatabaseName(): string
-    {
-        return $this->params['name'];
-    }
-
-    /**
-     * Get all parameters values.
-     */
-    public function getParams()
-    {
-        return $this->params;
-    }
-
-    /**
-     * Get the PDO settings.
+     * Get the driver options.
      *
      * @return array
      */
-    public function getPdoSettings(): array
+    public function getDriverOptions(): array
     {
-        return $this->pdoSettings;
+        return $this->driverOptions;
+    }
+
+    /**
+     * Get the connection parameters (host, port, user...).
+     *
+     * @return array
+     */
+    public function getConnectionParams(): array
+    {
+        return $this->connectionParams;
+    }
+
+    /**
+     * Get the value of a connection parameter.
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function getConnectionParam(string $name)
+    {
+        return $this->connectionParams[$name] ?? null;
     }
 
     /**
@@ -118,23 +86,31 @@ class DatabaseConfig
      */
     private function prepareConfig(array $params)
     {
+        // The database name is mandatory, no matter what driver is used
+        // (this will require some refactoring if SQLite compatibility is added)
         if (!isset($params['name'])) {
             throw new UnexpectedValueException(sprintf('Missing database name.'));
         }
 
-        // PDO settings
-        if (array_key_exists('pdo_settings', $params)) {
-            $this->pdoSettings = $params['pdo_settings'];
-            unset($params['pdo_settings']);
+        // Set the driver
+        if (isset($params['driver'])) {
+            $this->driver = $params['driver'];
+            unset($params['driver']);
         }
 
-        // Validation
-        foreach ($params as $param => $value) {
-            if (!array_key_exists($param, $this->params)) {
-                throw new UnexpectedValueException(sprintf('Invalid database parameter "%s".', $param));
-            }
+        // Set the driver options (PDO settings)
+        if (array_key_exists('driver_options', $params)) {
+            $this->driverOptions = $params['driver_options'];
+            unset($params['driver_options']);
+        }
 
-            $this->params[$param] = $value;
+        // Set connection parameters values
+        if (isset($this->defaults[$this->driver])) {
+            $this->connectionParams = $this->defaults[$this->driver];
+        }
+
+        foreach ($params as $param => $value) {
+            $this->connectionParams[$param] = $value;
         }
     }
 }

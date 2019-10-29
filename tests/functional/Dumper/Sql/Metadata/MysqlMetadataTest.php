@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Functional\Dumper\Sql\Doctrine;
+namespace Smile\GdprDump\Tests\Functional\Dumper\Sql\Metadata;
 
 use Smile\GdprDump\Dumper\Sql\Metadata\Definition\Constraint\ForeignKey;
 use Smile\GdprDump\Dumper\Sql\Metadata\MetadataInterface;

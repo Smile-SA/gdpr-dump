@@ -68,35 +68,17 @@ class ConfigLoader implements ConfigLoaderInterface
         // Parse the file
         $data = $this->parser->parse(file_get_contents($fileName));
 
+        // Make sure it was parsed into an array
+        if (!is_array($data)) {
+            throw new ParseException(sprintf('The file "%s" could not be parsed into an array.', $fileName));
+        }
+
         // Parent config files must be loaded relatively to the path of the config file
         $this->currentDirectory = dirname($fileName);
 
         // Merge the data into the config
         $this->loadData($data);
         $this->currentDirectory = null;
-
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function loadData(array $data): ConfigLoaderInterface
-    {
-        // Recursively load parent config files
-        if (isset($data['extends'])) {
-            foreach ((array) $data['extends'] as $parentFile) {
-                // Load the parent template if it was not already loaded
-                if (!in_array($parentFile, $this->parentTemplates, true)) {
-                    $this->loadFile($parentFile);
-                    $this->parentTemplates[] = $parentFile;
-                }
-            }
-
-            unset($data['extends']);
-        }
-
-        $this->config->merge($data);
 
         return $this;
     }
@@ -148,6 +130,29 @@ class ConfigLoader implements ConfigLoaderInterface
                 $this->config->merge($versionData);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    private function loadData(array $data): ConfigLoaderInterface
+    {
+        // Recursively load parent config files
+        if (isset($data['extends'])) {
+            foreach ((array) $data['extends'] as $parentFile) {
+                // Load the parent template if it was not already loaded
+                if (!in_array($parentFile, $this->parentTemplates, true)) {
+                    $this->loadFile($parentFile);
+                    $this->parentTemplates[] = $parentFile;
+                }
+            }
+
+            unset($data['extends']);
+        }
+
+        $this->config->merge($data);
 
         return $this;
     }

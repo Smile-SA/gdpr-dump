@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Functional\Config;
 
+use PDO;
 use Smile\GdprDump\Config\Validator\JsonSchemaValidator;
 use Smile\GdprDump\Tests\Functional\TestCase;
 use stdClass;
@@ -36,15 +37,25 @@ class JsonSchemaValidatorTest extends TestCase
                 'host' => 'myhost',
                 'port' => '3306',
                 'driver' => 'pdo_mysql',
-                'pdo_settings' => [
-                    1001 => true,
+                'charset' => 'utf8mb',
+                'driver_options' => [
+                    PDO::MYSQL_ATTR_LOCAL_INFILE => true,
                 ],
             ],
         ];
 
         $this->assertDataIsValid($data);
 
-        $data['database']['not_exists'] = true;
+        // Check if the validation fails when an invalid driver is used
+        $data = ['database' => ['driver' => 'not_exists']];
+        $this->assertDataIsNotValid($data);
+
+        // Check if the validation fails when an unknown parameter is used
+        $data = ['database' => ['not_exists' => true]];
+        $this->assertDataIsNotValid($data);
+
+        // Check if the validation fails when a parameter has the wrong type
+        $data = ['database' => ['charset' => 1.5]];
         $this->assertDataIsNotValid($data);
     }
 
@@ -85,7 +96,16 @@ class JsonSchemaValidatorTest extends TestCase
 
         $this->assertDataIsValid($data);
 
-        $data['dump']['not_exists'] = true;
+        // Check if the validation fails when an invalid driver is used
+        $data = ['dump' => ['compress' => 'not_exists']];
+        $this->assertDataIsNotValid($data);
+
+        // Check if the validation fails when an unknown parameter is used
+        $data = ['dump' => ['not_exists' => true]];
+        $this->assertDataIsNotValid($data);
+
+        // Check if the validation fails when a parameter has the wrong type
+        $data = ['dump' => ['output' => 1.5]];
         $this->assertDataIsNotValid($data);
     }
 
@@ -171,7 +191,7 @@ class JsonSchemaValidatorTest extends TestCase
     public function testInvalidSection()
     {
         $data = [
-            'notExists' => ['table1'],
+            'not_exists' => ['table1'],
         ];
 
         $this->assertDataIsNotValid($data);
@@ -193,34 +213,6 @@ class JsonSchemaValidatorTest extends TestCase
             'tables' => new stdClass(),
         ];
         $this->assertDataIsValid($data);
-    }
-
-    /**
-     * Test with an invalid database driver.
-     */
-    public function testInvalidDatabaseDriver()
-    {
-        $data = [
-            'database' => [
-                'driver' => 'not_exists',
-            ],
-        ];
-
-        $this->assertDataIsNotValid($data);
-    }
-
-    /**
-     * Test with an invalid compression algorithm.
-     */
-    public function testInvalidCompression()
-    {
-        $data = [
-            'dump' => [
-                'compress' => 'not_exists',
-            ],
-        ];
-
-        $this->assertDataIsNotValid($data);
     }
 
     /**

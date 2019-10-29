@@ -114,7 +114,7 @@ class DumperConfigTest extends TestCase
      */
     public function testInvalidDumpParameter()
     {
-        $this->createConfig(['dump' => ['notExists' => true]]);
+        $this->createConfig(['dump' => ['not_exists' => true]]);
     }
 
     /**

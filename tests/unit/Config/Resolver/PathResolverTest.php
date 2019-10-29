@@ -52,7 +52,7 @@ class PathResolverTest extends TestCase
     public function testFileWithRelativePathNotFound()
     {
         $resolver = $this->createPathResolver();
-        $resolver->resolve('notExists');
+        $resolver->resolve('not_exists');
     }
 
     /**

@@ -20,8 +20,8 @@ class ArrayHelperTest extends TestCase
         ];
 
         $this->assertSame('email@example.org', ArrayHelper::getPath($data, 'customer.email'));
-        $this->assertNull(ArrayHelper::getPath($data, 'notExists'));
-        $this->assertSame('defaultValue', ArrayHelper::getPath($data, 'notExists', 'defaultValue'));
+        $this->assertNull(ArrayHelper::getPath($data, 'not_exists'));
+        $this->assertSame('defaultValue', ArrayHelper::getPath($data, 'not_exists', 'defaultValue'));
     }
 
     /**

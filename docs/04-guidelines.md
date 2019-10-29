@@ -1,10 +1,33 @@
 # Guidelines
 
+## Table of Contents
+
+- [Performance](#user-content-performance)
+- [Security](#user-content-security)
+- [Custom Tables](#user-content-custom-tables)
+- [Data Consistency](#user-content-data-consistency)
+- [Magento](#user-content-magento)
+
 ## Performance
 
 Since this tool is a pure PHP implementation of a MySQL dumper, it is way slower than mysqldump.
 
 If the database to dump has very large tables, it is strongly recommended to use the [table filter](docs/02-configuration.md#user-content-filtering-values) mechanism.
+
+## Security
+
+On production environments, it is recommended to use two separate configuration files:
+
+- A file that contains the dump output settings and the anonymization rules.
+  This file should be versioned in the VCS repository of your project.
+- A file that contains the database information (name, host, user, password...).
+  This file **must not** be versioned, it contains the database password.
+
+Example:
+
+```
+bin/gdpr-dump path/to/project_anonymization.yaml path/to/database_info.yaml
+```
 
 ## Custom Tables
 

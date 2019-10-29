@@ -1,25 +1,16 @@
 # Basic Usage
 
-## Dump Creation
+## Command Usage
 
-Dump creation command:
+Usage:
 
 ```
-bin/gdpr-dump [--database=...] [--user=...] [--password] [--host=...] [--port=...] [--driver=...] [--additional-config=...] [<config_file>]
+bin/gdpr-dump <config_file>...
 ```
 
 Arguments:
 
-- config_file (optional): path to a YAML [configuration file](02-configuration.md).
-
-Options:
-
-- --database: database name
-- --user: database user (defaults to `root`)
-- --password: whether to prompt a password
-- --host: database host (defaults to `localhost`)
-- --port: database port
-- --additional-config: JSON-formatted data that will be merged with the config file data
+- config_file: path(s) to a [configuration file](02-configuration.md).
 
 The complete list of options can be displayed with the following command:
 
@@ -27,51 +18,44 @@ The complete list of options can be displayed with the following command:
 bin/gdpr-dump --help
 ```
 
-**Examples**
-
-With config file:
+Example:
 
 ```
 bin/gdpr-dump path/to/my/config.yaml > dump.sql
 ```
 
-No config file:
+## Configuration Templates
 
-```
-bin/gdpr-dump --database=mydb --user=myuser --password > dump.sql
-```
+The following configuration templates are available:
 
-With the `--additional-config` option:
+- [drupal7](app/config/templates/drupal7.yaml)
+- [drupal8](app/config/templates/drupal8.yaml)
+- [magento1](app/config/templates/magento1.yaml)
+- [magento1_commerce](app/config/templates/magento1_commerce.yaml)
+- [magento2](app/config/templates/magento2.yaml)
+- [magento2_b2b](app/config/templates/magento2_b2b.yaml)
+- [magento2_commerce](app/config/templates/magento2_commerce.yaml)
 
-```
-bin/gdpr-dump --database=mydb --user=myuser --password --additional-config='{"dump":{"output":"dump-{YmdHis}.sql.gz","compress":"gzip"}}'
-```
+Each template provides anonymization rules for a specific framework (e.g. "magento1" is for Magento 1 Community Edition).
 
-**Templates**
+If you use a configuration template, you **must** specify the application version (e.g. "2.3.2").
 
-Instead of using a custom config file, you can use one of the default templates available:
+**How to use a configuration template:**
 
-- drupal7
-- drupal8
-- magento1
-- magento1_commerce
-- magento2
-- magento2_b2b
-- magento2_commerce
+1. Create your configuration file:
 
-If you use a default template (e.g. "magento2"), you will need to specify the application version (e.g. "2.3.2").
-
-To specify the application version, there are two alternatives:
-
-- Using the `additional-config` option in the command line:
-    ```
-    bin/gdpr-dump --database=mydb --user=myuser --password --additional-config='{"version":"2.3.2"}' magento2
-    ```
-
-- Using a custom configuration file with the following contents:
     ```yaml
     extends: 'magento2'
     version: '2.3.2'
+  
+    database:
+        name: 'mydatabase'
+        user: 'myuser'
+        password: 'mypassword'
     ```
 
-If you don't use one of the default templates provided by this tool, you don't need to specify any version.
+2. Execute the gdpr-dump command:
+
+    ```
+    bin/gdpr-dump my_project.yaml
+    ```

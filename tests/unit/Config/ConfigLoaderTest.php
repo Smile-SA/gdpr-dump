@@ -12,24 +12,6 @@ use Smile\GdprDump\Tests\Unit\TestCase;
 class ConfigLoaderTest extends TestCase
 {
     /**
-     * Test the "loadData" method.
-     */
-    public function testLoadData()
-    {
-        $data1 = ['key1' => 'value1'];
-        $data2 = ['key2' => 'value2'];
-
-        $config = new Config();
-        $configLoader = $this->createConfigLoader($config);
-
-        $configLoader->loadData($data1);
-        $this->assertSame($data1, $config->toArray());
-
-        $configLoader->loadData($data2);
-        $this->assertSame($data1 + $data2, $config->toArray());
-    }
-
-    /**
      * Test the "loadFile" method.
      */
     public function testLoadFile()
@@ -77,7 +59,7 @@ class ConfigLoaderTest extends TestCase
     {
         $config = new Config();
         $configLoader = $this->createConfigLoader($config);
-        $configLoader->loadFile('notExists.yaml');
+        $configLoader->loadFile('not_exists.yaml');
     }
 
     /**
@@ -93,6 +75,18 @@ class ConfigLoaderTest extends TestCase
 
         $config->set('version', null);
         $configLoader->loadVersionData();
+    }
+
+    /**
+     * Check if an exception is thrown when the parsed data is not an array.
+     *
+     * @expectedException \Smile\GdprDump\Config\Parser\ParseException
+     */
+    public function testDataIsNotAnArray()
+    {
+        $config = new Config();
+        $configLoader = $this->createConfigLoader($config);
+        $configLoader->loadFile(static::getResource('config/templates/invalid_data.yaml'));
     }
 
     /**

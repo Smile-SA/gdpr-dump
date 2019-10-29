@@ -68,6 +68,12 @@
                     "type": "string",
                     "enum": ["pdo_mysql"]
                 },
+                "driver_options": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": ["string", "integer", "boolean"]
+                    }
+                },
                 "host": {
                     "type": "string",
                     "minLength": 1
@@ -87,11 +93,13 @@
                     "type": "string",
                     "minLength": 1
                 },
-                "pdo_settings": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": ["string", "integer", "boolean"]
-                    }
+                "charset": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "unix_socket": {
+                    "type": "string",
+                    "minLength": 1
                 }
             },
             "additionalProperties": false

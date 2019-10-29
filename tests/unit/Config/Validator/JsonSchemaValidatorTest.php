@@ -57,7 +57,7 @@ class JsonSchemaValidatorTest extends TestCase
      */
     public function testFileNotFound()
     {
-        $schemaFile = 'notExists.json';
+        $schemaFile = 'not_exists.json';
 
         $validator = new JsonSchemaValidator($schemaFile);
         $validator->validate(['key' => 'value']);

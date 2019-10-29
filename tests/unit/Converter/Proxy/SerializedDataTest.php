@@ -18,7 +18,7 @@ class SerializedDataTest extends TestCase
             'converters' => [
                 'customer.firstname' => new ConverterMock(),
                 'customer.lastname' => new ConverterMock(),
-                'customer.notExists' => new ConverterMock(), // should not trigger an exception
+                'customer.not_exists' => new ConverterMock(), // should not trigger an exception
             ],
         ];
 

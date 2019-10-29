@@ -19,16 +19,6 @@ interface ConfigLoaderInterface
     public function loadFile(string $fileName): ConfigLoaderInterface;
 
     /**
-     * Merge the specified data to the config storage.
-     *
-     * @param array $data
-     * @return $this
-     * @throws FileNotFoundException
-     * @throws ParseException
-     */
-    public function loadData(array $data): ConfigLoaderInterface;
-
-    /**
      * Load version-specific configuration.
      *
      * @return $this

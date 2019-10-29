@@ -55,10 +55,10 @@ class SqlDumper implements DumperInterface
         // Create the MySQLDump object
         $dumper = new Mysqldump(
             $database->getDriver()->getDsn(),
-            $databaseConfig->getUser(),
-            $databaseConfig->getPassword(),
+            $databaseConfig->getConnectionParam('user'),
+            $databaseConfig->getConnectionParam('password'),
             $dumpSettings,
-            $databaseConfig->getPdoSettings()
+            $databaseConfig->getDriverOptions()
         );
 
         // Set the column transformer

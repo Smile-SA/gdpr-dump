@@ -15,9 +15,7 @@ class MysqlDriverTest extends TestCase
     public function testDsn()
     {
         $driver = $this->getMysqlDriver();
-        var_dump($driver->getDsn());
-
-        $this->assertSame('mysql:host=localhost;dbname=mydatabase', $driver->getDsn());
+        $this->assertSame('mysql:host=localhost;dbname=mydatabase;charset=utf8mb4', $driver->getDsn());
     }
 
     /**
@@ -27,11 +25,17 @@ class MysqlDriverTest extends TestCase
      */
     private function getMysqlDriver(): MysqlDriver
     {
+        $params = [
+            'host' => 'localhost',
+            'dbname' => 'mydatabase',
+            'user' => 'my_user',
+            'password' => 'my_password',
+            'charset' => 'utf8mb4',
+        ];
+
         $connectionMock = $this->createMock(Connection::class);
         $connectionMock->method('getParams')
-            ->willReturn(
-                ['host' => 'localhost', 'dbname' => 'mydatabase', 'user' => 'my_user', 'password' => 'my_password']
-            );
+            ->willReturn($params);
 
         return new MysqlDriver($connectionMock);
     }

@@ -53,8 +53,8 @@ Table of contents:
 
 1. [Basic Usage](docs/01-commands.md)
 2. [Configuration](docs/02-configuration.md)
-3. [Converters](docs/03-converters.md)
-4. [Guidelines](docs/04-guidelines.md)
+3. [Data Converters](docs/03-converters.md)
+4. [Guidelines](docs/04-guidelines.md) (read this before deploying the tool to a production server!)
 
 Also, there are multiple examples of config files in the config/templates directory.
 
@@ -81,7 +81,6 @@ It does not handle triggers, procedures, views...
 
 As a consequence, we don't use Doctrine to generate the dump file.
 The dump file is generated with [MySQLDump-PHP](https://github.com/ifsnop/mysqldump-php) instead, which is only compatible with MySQL.
-Doctrine is used by this tool, but only to detect the dependencies between tables (foreign keys).
 
 ## Contributing
 

@@ -101,19 +101,21 @@ class Database implements DatabaseInterface
      */
     private function createConnection(DatabaseConfig $config): Connection
     {
-        $params = [
-            'dbname' => $config->getDatabaseName(),
-            'user' => $config->getUser(),
-            'password' => $config->getPassword(),
-            'host' => $config->getHost(),
-            'port' => $config->getPort(),
-            'driver' => $config->getDriver(),
-        ];
+        // Get the connection parameters from the config
+        $params = $config->getConnectionParams();
+
+        // Rename parameters that do not match Doctrine naming conventions (name -> dbname)
+        $params['dbname'] = $params['name'];
+        unset($params['name']);
 
         // Remove empty elements
         $params = array_filter($params, function ($value) {
             return $value !== null && $value !== '' && $value !== false;
         });
+
+        // Set the driver
+        $params['driver'] = $config->getDriver();
+        $params['driverOptions'] = $config->getDriverOptions();
 
         return DriverManager::getConnection($params);
     }

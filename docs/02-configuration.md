@@ -28,23 +28,14 @@ extends: path/to/config/file.yaml
 
 It can be an absolute path, or relative to the configuration file.
 
-**Default Templates**
+**Configuration Templates**
 
-If you override a default template, the template name can be used instead:
+If you override a [configuration template](02-configuration.md#user-content-configuration-templates), the application version must be defined:
 
 ```yaml
 extends: magento2
+version: '2.3.2'
 ```
-
-List of default templates:
-
-- drupal7
-- drupal8
-- magento1
-- magento1_commerce
-- magento2
-- magento2_b2b
-- magento2_commerce
 
 **Extending Multiple Files**
 
@@ -58,22 +49,9 @@ extends:
 
 In the above example, the files will be loaded in this order:
 
-1. "magento2" default template
+1. "magento2" template
 2. path/to/config/file.yaml
 3. your config file
-
-## Application Version
-
-Some templates (e.g. `magento2`) require to specify the version of the application.
-
-The version is required if the template file contains the `requiresVersion` parameter.
-
-To define the application version:
-
-```yaml
-extends: 'magento2'
-version: '2.3.2'
-```
 
 ## Database Settings
 
@@ -96,11 +74,13 @@ Available parameters:
 | --- | --- | --- | --- |
 | **name** | Y | | Database name. |
 | **user** | N | `'root'` | Database user. |
-| **password** | N | `''` | Database password. |
+| **password** | N | | Database password. |
 | **host** | N | `'localhost'` | Database host. |
-| **port** | N | `'3306'` | Database port. |
+| **port** | N | | Database port. |
+| **charset** | N | | Charset to use. |
+| **unix_socket** | N | | Name of the socket to use. |
 | **driver** | N | `'pdo_mysql'` | Database driver. Only `pdo_mysql` is supported as of now. |
-| **pdo_settings** | N | `[]` | An array of [PDO settings](https://www.php.net/manual/en/ref.pdo-mysql.php#pdo-mysql.constants). |
+| **driver_options** | N | `[]` | An array of [PDO settings](https://www.php.net/manual/en/ref.pdo-mysql.php#pdo-mysql.constants). |
 
 If command-line options are specified (e.g. `--user`), they will have priority over the parameter in the configuration file.
 

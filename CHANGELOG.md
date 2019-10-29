@@ -4,8 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
-- Add a "min_length" parameter in the RandomizeText and RandomizeEmail converters
+- **Compatibility break**:
+    - Remove driver-specific options from the command-line utility (--database, --host...)
+    - Rename `pdo_settings` database parameter to `driver_options`
 - Compatibility with databases that use custom Doctrine types
+- Allow using driver-specific parameters in the database config
+- Add a `min_length` parameter in the RandomizeText and RandomizeEmail converters
 
 ## [1.0.0-beta12] - 2019-10-21
 [1.0.0-beta12]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta11...1.0.0-beta12
