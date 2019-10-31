@@ -225,8 +225,7 @@
             "additionalProperties": false
         },
         "converter": {
-            "type": ["object", "string"],
-            "minLength": 1,
+            "type": ["object"],
             "properties": {
                 "converter": {
                     "type": ["string"],
@@ -239,9 +238,22 @@
                             "type": ["array", "object"],
                             "items": {
                                 "$ref": "#/definitions/converter"
+                            },
+                            "additionalProperties": {
+                                "$ref": "#/definitions/converter"
                             }
                         },
                         "converter": {
+                            "type": {
+                                "$ref": "#/definitions/converter"
+                            }
+                        },
+                        "if_true_converter": {
+                            "type": {
+                                "$ref": "#/definitions/converter"
+                            }
+                        },
+                        "if_false_converter": {
                             "type": {
                                 "$ref": "#/definitions/converter"
                             }

@@ -4,10 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
+This update aims to reduce the complexity of the configuration.
+For example, there were two ways to declare a converter, there is now only one.
+
 - **Compatibility break**:
     - Remove driver-specific options from the command-line utility (--database, --host...)
     - Rename `pdo_settings` database parameter to `driver_options`
     - Rename `requiresVersion` parameter to `requires_version`
+    - Allow only array type for converter definitions
 - Compatibility with databases that use custom Doctrine types
 - Allow using multiple configuration files in the command-line
 - Allow using driver-specific parameters in the database config

@@ -149,7 +149,8 @@ tables:
                 converter: 'anonymizeText'
             remote_ip:
                 converter: 'faker'
-                parameters: {formatter: 'ipv4'}
+                parameters:
+                    formatter: 'ipv4'
 
     # Not anonymized: prefix, suffix, region, region_id, country_id
     sales_flat_order_address:
@@ -210,7 +211,9 @@ tables:
             additional_information:
                 converter: 'serializedData'
                 parameters:
-                    converters: {CC_CN: 'anonymizeText'}
+                    converters:
+                        CC_CN:
+                            converter: 'anonymizeText'
 
     # Not anonymized: customer_prefix, customer_suffix ,customer_gender, coupon_code
     sales_flat_quote:
@@ -229,7 +232,8 @@ tables:
                 converter: 'anonymizeText'
             remote_ip:
                 converter: 'faker'
-                parameters: {formatter: 'ipv4'}
+                parameters:
+                    formatter: 'ipv4'
             password_hash:
                 converter: 'setNull'
 
@@ -271,7 +275,9 @@ tables:
             additional_information:
                 converter: 'serializedData'
                 parameters:
-                    converters: {CC_CN: 'anonymizeText'}
+                    converters:
+                        CC_CN:
+                            converter: 'anonymizeText'
 
     sales_flat_shipment_comment:
         converters:

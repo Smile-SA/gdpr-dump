@@ -31,7 +31,8 @@ tables:
                 unique: true
             hostname:
                 converter: 'faker'
-                parameters: {formatter: 'ipv4'}
+                parameters:
+                    formatter: 'ipv4'
 
     commerce_order_revision:
         converters:
@@ -40,4 +41,5 @@ tables:
                 unique: true
             revision_hostname:
                 converter: 'faker'
-                parameters: {formatter: 'ipv4'}
+                parameters:
+                    formatter: 'ipv4'

@@ -63,7 +63,8 @@ tables:
                 converter: 'randomizeText'
             failures_num:
                 converter: 'setValue'
-                parameters: {value: 0}
+                parameters:
+                    value: 0
             first_failure:
                 converter: 'setNull'
             lock_expires:
@@ -87,7 +88,8 @@ tables:
                 converter: 'randomizeText'
             failures_num:
                 converter: 'setValue'
-                parameters: {value: 0}
+                parameters:
+                    value: 0
             first_failure:
                 converter: 'setNull'
             lock_expires:
@@ -169,7 +171,8 @@ tables:
                 converter: 'anonymizeText'
             remote_ip:
                 converter: 'faker'
-                parameters: {formatter: 'ipv4'}
+                parameters:
+                    formatter: 'ipv4'
             password_hash:
                 converter: 'setNull'
 
@@ -211,7 +214,9 @@ tables:
             additional_information:
                 converter: 'jsonData'
                 parameters:
-                    converters: {CC_CN: 'anonymizeText'}
+                    converters:
+                        CC_CN:
+                            converter: 'anonymizeText'
 
     # Not anonymized: title, detail
     review_detail:
@@ -282,7 +287,8 @@ tables:
                 converter: 'anonymizeText'
             remote_ip:
                 converter: 'faker'
-                parameters: {formatter: 'ipv4'}
+                parameters:
+                    formatter: 'ipv4'
 
     # Not anonymized: prefix, suffix, region, region_id, country_id
     sales_order_address:
@@ -351,7 +357,11 @@ tables:
             additional_information:
                 converter: 'jsonData'
                 parameters:
-                    converters: {CC_CN: 'anonymizeText', method_title: 'anonymizeText'}
+                    converters:
+                        CC_CN:
+                            converter: 'anonymizeText'
+                        method_title:
+                            converter: 'anonymizeText'
 
     sales_shipment:
         converters:

@@ -31,7 +31,8 @@ tables:
                 unique: true
             ip_address:
                 converter: 'faker'
-                parameters: {formatter: 'ipv4'}
+                parameters:
+                    formatter: 'ipv4'
 
     commerce_store_field_data:
         converters:

@@ -259,16 +259,7 @@ tables:
                 unique: true
 ```
 
-The key is the column name, the value is the converter name.
-
-A short syntax is also available:
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column: 'randomizeEmail'
-```
+The key is the column name, the value is the converter definition.
 
 List of available properties:
 

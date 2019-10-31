@@ -206,12 +206,6 @@ class TableConfig
         }
 
         foreach ($tableData['converters'] as $column => $converterData) {
-            // In the config, converters can be an object or a string, or null
-            // Cast it to array in order to simplify the next condition
-            if (!is_array($converterData)) {
-                $converterData = ['converter' => $converterData];
-            }
-
             // Converter data will be validated by the factory during the object creation
             $this->converters[$column] = $converterData;
         }

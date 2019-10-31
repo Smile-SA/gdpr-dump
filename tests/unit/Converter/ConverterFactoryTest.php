@@ -20,20 +20,9 @@ use Smile\GdprDump\Tests\Unit\TestCase;
 class ConverterFactoryTest extends TestCase
 {
     /**
-     * Test the converter creation from a string definition.
-     */
-    public function testStringDefinition()
-    {
-        $factory = $this->createFactory();
-
-        $converter = $factory->create(ConverterMock::class);
-        $this->assertInstanceOf(ConverterMock::class, $converter);
-    }
-
-    /**
      * Test the converter creation from an array definition.
      */
-    public function testArrayDefinition()
+    public function testConverterCreation()
     {
         $factory = $this->createFactory();
 

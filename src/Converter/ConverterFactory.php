@@ -20,7 +20,7 @@ class ConverterFactory
     private $faker;
 
     /**
-     * e.g. ['unique' => 'Smile\GdprDump\Data\Converter\Proxy\Unique', ...]
+     * e.g. ['unique' => 'Smile\GdprDump\Converter\Proxy\Unique', ...]
      *
      * @var string[]
      */
@@ -39,11 +39,11 @@ class ConverterFactory
      * It can be either a string that represents the converter name,
      * or an array that represents the converter data.
      *
-     * @param string|array $definition
+     * @param array $definition
      * @return ConverterInterface
      * @throws UnexpectedValueException
      */
-    public function create($definition): ConverterInterface
+    public function create(array $definition): ConverterInterface
     {
         $definition = $this->getConverterData($definition);
 
@@ -82,16 +82,12 @@ class ConverterFactory
     /**
      * Get the converter data.
      *
-     * @param string|array $definition
+     * @param array $definition
      * @return array
      * @throws UnexpectedValueException
      */
-    private function getConverterData($definition): array
+    private function getConverterData(array $definition): array
     {
-        if (!is_array($definition)) {
-            $definition = ['converter' => $definition];
-        }
-
         if (!array_key_exists('converter', $definition)) {
             throw new UnexpectedValueException('The converter name is required.');
         }
@@ -137,22 +133,55 @@ class ConverterFactory
         foreach ($parameters as $name => $value) {
             if ($name === 'converters' || strpos($name, '_converters') !== false) {
                 // Param is an array of converter definitions (e.g. "converters" param of the "chain" converter)
-                if (!is_array($value)) {
-                    throw new UnexpectedValueException('The "converters" parameter must be an array.');
-                }
+                $parameters[$name] = $this->parseConvertersParameter($name, $value);
+                continue;
+            }
 
-                foreach ($value as $k => $v) {
-                    $value[$k] = $this->create($v);
-                }
-
-                $parameters[$name] = $value;
-            } elseif ($name === 'converter' || strpos($name, '_converter') !== false) {
+            if ($name === 'converter' || strpos($name, '_converter') !== false) {
                 // Param is a converter definition (e.g. "converter" param of the "unique" converter
-                $parameters[$name] = $this->create($value);
+                $parameters[$name] = $this->parseConverterParameter($name, $value);
             }
         }
 
         return $parameters;
+    }
+
+    /**
+     * Parse a parameter that defines an array of converter definitions.
+     *
+     * @param string $name
+     * @param mixed $parameter
+     * @return ConverterInterface[]
+     * @throws UnexpectedValueException
+     */
+    private function parseConvertersParameter(string $name, $parameter): array
+    {
+        if (!is_array($parameter)) {
+            throw new UnexpectedValueException(sprintf('The parameter "%s" must be an array.', $name));
+        }
+
+        foreach ($parameter as $index => $definition) {
+            $parameter[$index] = $this->parseConverterParameter($name . '[' . $index . ']', $definition);
+        }
+
+        return $parameter;
+    }
+
+    /**
+     * Parse a parameter that defines a converter definition.
+     *
+     * @param string $name
+     * @param mixed $parameter
+     * @return ConverterInterface
+     * @throws UnexpectedValueException
+     */
+    private function parseConverterParameter(string $name, $parameter): ConverterInterface
+    {
+        if (!is_array($parameter)) {
+            throw new UnexpectedValueException(sprintf('The parameter "%s" must be an array.', $name));
+        }
+
+        return $this->create($parameter);
     }
 
     /**

@@ -376,8 +376,10 @@ tables:
                 converter: 'jsonData'
                 parameters:
                     converters:
-                        customer.email: 'anonymizeEmail'
-                        customer.username: 'anonymizeText'
+                        customer.email:
+                            converter: 'anonymizeEmail'
+                        customer.username:
+                            converter: 'anonymizeText'
 ```
 
 ## [serializedData](src/Converter/Proxy/SerializedData.php)
