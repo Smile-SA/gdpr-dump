@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [1.0.0-beta13] - 2019-10-31
+[1.0.0-beta13]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta12...1.0.0-beta13
 
 This update aims to reduce the complexity of the configuration.
 For example, there were two ways to declare a converter, there is now only one.
