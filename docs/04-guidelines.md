@@ -133,13 +133,17 @@ tables:
         converters:
             additional_information:
                 parameters:
-                    converters: {fieldToAnonymize: 'anonymizeText'}
+                    converters:
+                        fieldToAnonymize:
+                            converter: 'anonymizeText'
 
     sales_flat_order_payment:
         converters:
             additional_information:
                 parameters:
-                    converters: {fieldToAnonymize: 'anonymizeText'}
+                    converters:
+                        fieldToAnonymize:
+                            converter: 'anonymizeText'
 ```
 
 In Magento 2:
@@ -150,13 +154,17 @@ tables:
         converters:
             additional_information:
                 parameters:
-                    converters: {fieldToAnonymize: 'anonymizeText'}
+                    converters:
+                        fieldToAnonymize:
+                            converter: 'anonymizeText'
 
     sales_order_payment:
         converters:
             additional_information:
                 parameters:
-                    converters: {fieldToAnonymize: 'anonymizeText'}
+                    converters:
+                        fieldToAnonymize:
+                            converter: 'anonymizeText'
 ```
 
 The fields to anonymize will depend on the payment methods that are used in the project.
