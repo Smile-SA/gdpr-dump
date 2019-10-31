@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Converter\Proxy\Conditional;
+namespace Smile\GdprDump\Tokenizer;
 
 class Token
 {
@@ -21,20 +21,13 @@ class Token
     private $value;
 
     /**
-     * Build a token object from the token data.
-     *
-     * @param array|string $rawToken
+     * @param int $type
+     * @param string $value
      */
-    public function __construct($rawToken)
+    public function __construct(int $type, string $value)
     {
-        if (!is_array($rawToken)) {
-            $this->value = (string) $rawToken;
-            $this->type = self::T_UNKNOWN;
-            return;
-        }
-
-        $this->type = (int) $rawToken[0];
-        $this->value = (string) $rawToken[1];
+        $this->type = $type;
+        $this->value = $value;
     }
 
     /**

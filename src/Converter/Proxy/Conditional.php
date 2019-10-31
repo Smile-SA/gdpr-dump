@@ -6,10 +6,16 @@ namespace Smile\GdprDump\Converter\Proxy;
 use InvalidArgumentException;
 use RuntimeException;
 use Smile\GdprDump\Converter\ConverterInterface;
-use Smile\GdprDump\Converter\Proxy\Conditional\Token;
+use Smile\GdprDump\Tokenizer\PhpTokenizer;
+use Smile\GdprDump\Tokenizer\Token;
 
 class Conditional implements ConverterInterface
 {
+    /**
+     * @var PhpTokenizer
+     */
+    private $tokenizer;
+
     /**
      * @var string
      */
@@ -26,12 +32,12 @@ class Conditional implements ConverterInterface
     private $ifFalseConverter;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $statementBlacklist = ['<?php', '<?', '?>'];
 
     /**
-     * @var array
+     * @var string[]
      */
     private $functionWhitelist = [
         'addslashes', 'chr', 'date', 'empty', 'implode', 'is_null', 'is_numeric', 'lcfirst', 'ltrim',
@@ -60,6 +66,7 @@ class Conditional implements ConverterInterface
             );
         }
 
+        $this->tokenizer = new PhpTokenizer();
         $this->condition = $this->prepareCondition($parameters['condition']);
 
         if (isset($parameters['if_true_converter'])) {
@@ -180,17 +187,18 @@ class Conditional implements ConverterInterface
      *
      * @param string $condition
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function parseCondition(string $condition): string
     {
         // Split the condition into PHP tokens
-        $tokens = token_get_all('<?php ' . $condition . ' ?>');
+        $tokens = $this->tokenizer->tokenize('<?php ' . $condition . ' ?>');
+        $tokenCount = count($tokens);
         $result = '';
         $index = -1;
 
         foreach ($tokens as $token) {
-            $index++;
-            $token = new Token($token);
+            ++$index;
 
             // Skip characters representing a variable
             if ($this->isVariableToken($token)) {
@@ -198,15 +206,17 @@ class Conditional implements ConverterInterface
             }
 
             // Replace SQL column names by their values in the condition
-            // e.g. {{identifier}} replaced by $context['row_data']['identifier']
-            if ($this->isDbColumnToken($token, $index, $tokens)) {
+            if ($token->getType() === T_STRING
+                && $index >= 2 && $index <= $tokenCount - 3
+                && $tokens[$index - 1]->getValue() === '{' && $tokens[$index - 2]->getValue() === '{'
+                && $tokens[$index + 1]->getValue() === '}' && $tokens[$index + 2]->getValue() === '}'
+            ) {
                 $result .= "\$context['row_data']['{$token->getValue()}']";
                 continue;
             }
 
             // Replace SQL variable names by their values in the condition
-            // e.g. @identifier replaced by $context['vars']['identifier']
-            if ($this->isDbVariableToken($token, $index, $tokens)) {
+            if ($token->getType() === T_STRING && $index >= 1 && $tokens[$index - 1]->getValue() === '@') {
                 $result .= "\$context['vars']['{$token->getValue()}']";
                 continue;
             }
@@ -230,12 +240,10 @@ class Conditional implements ConverterInterface
     private function removeQuotedValues(string $input): string
     {
         // Split the condition into PHP tokens
-        $tokens = token_get_all('<?php ' . $input . ' ?>');
+        $tokens = $this->tokenizer->tokenize('<?php ' . $input . ' ?>');
         $result = '';
 
         foreach ($tokens as $token) {
-            $token = new Token($token);
-
             // Remove quoted values
             $result .= $token->getType() === T_CONSTANT_ENCAPSED_STRING ? "''" : $token->getValue();
         }
@@ -275,37 +283,5 @@ class Conditional implements ConverterInterface
         $value = $token->getValue();
 
         return $value === '{' || $value === '}' || $value === '@';
-    }
-
-    /**
-     * Check if a token represents a database column (string encapsed in brackets, e.g. "{{identifier}}").
-     *
-     * @param Token $token
-     * @param int $index
-     * @param array $tokens
-     * @return bool
-     */
-    private function isDbColumnToken(Token $token, int $index, array $tokens): bool
-    {
-        $count = count($tokens);
-
-        return $token->getType() === T_STRING
-            && $index >= 2 && $index <= $count - 3
-            && $tokens[$index - 1] === '{' && $tokens[$index - 2] === '{'
-            && $tokens[$index + 1] === '}' && $tokens[$index + 2] === '}';
-    }
-
-    /**
-     * Check if a token represents a database variable (string suffixed by "@", e.g. "@identifier").
-     *
-     * @param Token $token
-     * @param int $index
-     * @param array $tokens
-     * @return bool
-     */
-    private function isDbVariableToken(Token $token, int $index, array $tokens): bool
-    {
-        return $token->getType() === T_STRING
-            && $index >= 1 && $tokens[$index - 1] === '@';
     }
 }

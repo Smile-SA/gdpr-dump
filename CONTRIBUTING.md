@@ -55,3 +55,13 @@ The functional tests require the following MySQL database:
 - Password: `test`
 
 These parameters can be modified in the [test.yaml](tests/functional/Resources/config/templates/test.yaml) template file.
+
+## Database Driver Compatibility
+
+As of now, GdprDump only supports the pdo_mysql driver.
+
+To add compatibility with other drivers, the following actions would be required:
+
+- Replace the dependency to mysqldump-php by a tool that is compatible with multiple drivers.
+- Make the database name optional in the DatabaseConfig class.
+- Replace the "SET" queries that define SQL variables by a database agnostic implementation.

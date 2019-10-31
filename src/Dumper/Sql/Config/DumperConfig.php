@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Dumper\Sql\Config;
 use Ifsnop\Mysqldump\Mysqldump;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Dumper\Sql\Config\Table\TableConfig;
+use Smile\GdprDump\Dumper\Sql\Config\Validation\QueryValidator;
 use UnexpectedValueException;
 
 class DumperConfig
@@ -203,7 +204,7 @@ class DumperConfig
         $this->prepareTablesConfig($config);
 
         // Queries to run
-        $this->varQueries = $config->get('variables', []);
+        $this->prepareVarQueries($config);
 
         // Tables whitelist
         $this->tablesWhitelist = $config->get('tables_whitelist', []);
@@ -264,5 +265,22 @@ class DumperConfig
                 $this->tablesToFilter[] = $tableConfig->getName();
             }
         }
+    }
+
+    /**
+     * Prepare the SQL queries to run.
+     *
+     * @param ConfigInterface $config
+     */
+    private function prepareVarQueries(ConfigInterface $config)
+    {
+        $queries = $config->get('variables', []);
+        $queryValidator = new QueryValidator();
+
+        foreach ($queries as $query) {
+            $queryValidator->validate($query);
+        }
+
+        $this->varQueries = $queries;
     }
 }

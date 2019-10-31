@@ -118,6 +118,16 @@ class DumperConfigTest extends TestCase
     }
 
     /**
+     * Test if an exception is thrown when a var query contains a forbidden statement.
+     *
+     * @expectedException \Smile\GdprDump\Dumper\Sql\Config\Validation\ValidationException
+     */
+    public function testInvalidStatementInQuery()
+    {
+        $this->createConfig(['variables' => ['my_var' => 'select my_col from my_table; delete from my_table']]);
+    }
+
+    /**
      * Create a dumper config object that stores the specified data.
      *
      * @param array $data
