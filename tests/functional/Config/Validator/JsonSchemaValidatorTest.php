@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Functional\Config;
+namespace Smile\GdprDump\Tests\Functional\Config\Validator;
 
 use PDO;
 use Smile\GdprDump\Config\Validator\JsonSchemaValidator;
