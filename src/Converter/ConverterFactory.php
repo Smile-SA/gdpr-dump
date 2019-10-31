@@ -41,7 +41,6 @@ class ConverterFactory
      *
      * @param array $definition
      * @return ConverterInterface
-     * @throws UnexpectedValueException
      */
     public function create(array $definition): ConverterInterface
     {
@@ -190,6 +189,7 @@ class ConverterFactory
      * @param string $name
      * @param array $parameters
      * @return ConverterInterface
+     * @throws RuntimeException
      */
     private function createConverter(string $name, array $parameters = []): ConverterInterface
     {
