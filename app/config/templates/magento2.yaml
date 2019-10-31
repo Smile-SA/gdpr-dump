@@ -1,5 +1,5 @@
 ---
-requiresVersion: true
+requires_version: true
 
 tables:
     admin_user_session:

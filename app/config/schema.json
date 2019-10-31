@@ -4,7 +4,7 @@
         "extends": {
             "type": ["string", "array"]
         },
-        "requiresVersion": {
+        "requires_version": {
             "type": "boolean"
         },
         "version": {

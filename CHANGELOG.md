@@ -7,7 +7,9 @@ All notable changes to this project will be documented in this file.
 - **Compatibility break**:
     - Remove driver-specific options from the command-line utility (--database, --host...)
     - Rename `pdo_settings` database parameter to `driver_options`
+    - Rename `requiresVersion` parameter to `requires_version`
 - Compatibility with databases that use custom Doctrine types
+- Allow using multiple configuration files in the command-line
 - Allow using driver-specific parameters in the database config
 - Add a `min_length` parameter in the RandomizeText and RandomizeEmail converters
 

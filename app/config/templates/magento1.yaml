@@ -1,5 +1,5 @@
 ---
-requiresVersion: true
+requires_version: true
 
 variables:
     firstname_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "firstname" and entity_type_id = 1'

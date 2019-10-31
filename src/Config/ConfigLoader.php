@@ -88,7 +88,7 @@ class ConfigLoader implements ConfigLoaderInterface
      */
     public function loadVersionData(): ConfigLoaderInterface
     {
-        $requiresVersion = (bool) $this->config->get('requiresVersion');
+        $requiresVersion = (bool) $this->config->get('requires_version');
         $version = (string) $this->config->get('version');
         $versionsData = (array) $this->config->get('if_version');
 
@@ -96,7 +96,7 @@ class ConfigLoader implements ConfigLoaderInterface
             // Check if version is mandatory
             if ($requiresVersion) {
                 // phpcs:ignore Generic.Files.LineLength.TooLong
-                throw new ParseException('The application version must be specified in the configuration, or with the "--additional-config" option.');
+                throw new ParseException('The application version must be specified in the configuration.');
             }
             return $this;
         }
