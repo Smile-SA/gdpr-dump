@@ -37,20 +37,6 @@ class ConfigLoaderTest extends TestCase
     }
 
     /**
-     * Test the "loadVersionData" method.
-     */
-    public function testLoadVersionData()
-    {
-        $config = new Config();
-        $configLoader = $this->createConfigLoader($config);
-        $configLoader->loadFile($this->getTestConfigFile());
-        $configLoader->loadVersionData();
-
-        $expectedSubset = ['table1' => ['converters' => ['field1' =>  ['disabled' => true]]]];
-        $this->assertArraySubset($expectedSubset, $config->get('tables'));
-    }
-
-    /**
      * Check if an exception is thrown when the config file is not found.
      *
      * @expectedException \Smile\GdprDump\Config\Resolver\FileNotFoundException
@@ -63,21 +49,6 @@ class ConfigLoaderTest extends TestCase
     }
 
     /**
-     * Check if an exception is thrown when the version was not specified.
-     *
-     * @expectedException \Smile\GdprDump\Config\Parser\ParseException
-     */
-    public function testVersionNotSpecifiedException()
-    {
-        $config = new Config();
-        $configLoader = $this->createConfigLoader($config);
-        $configLoader->loadFile($this->getTestConfigFile());
-
-        $config->set('version', null);
-        $configLoader->loadVersionData();
-    }
-
-    /**
      * Check if an exception is thrown when the parsed data is not an array.
      *
      * @expectedException \Smile\GdprDump\Config\Parser\ParseException
@@ -87,21 +58,6 @@ class ConfigLoaderTest extends TestCase
         $config = new Config();
         $configLoader = $this->createConfigLoader($config);
         $configLoader->loadFile(static::getResource('config/templates/invalid_data.yaml'));
-    }
-
-    /**
-     * Check if an exception is thrown when the version condition is badly formatted.
-     *
-     * @expectedException \Smile\GdprDump\Config\Parser\ParseException
-     */
-    public function testInvalidVersionFormatException()
-    {
-        $config = new Config();
-        $config->set('version', '1.0.0');
-        $config->set('if_version', ['notValid' => []]);
-
-        $configLoader = $this->createConfigLoader($config);
-        $configLoader->loadVersionData();
     }
 
     /**

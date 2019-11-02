@@ -3,11 +3,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config;
 
-use Exception;
 use Smile\GdprDump\Config\Parser\ParseException;
 use Smile\GdprDump\Config\Parser\ParserInterface;
 use Smile\GdprDump\Config\Resolver\PathResolverInterface;
-use Smile\GdprDump\Config\Version\VersionCondition;
 
 class ConfigLoader implements ConfigLoaderInterface
 {
@@ -79,57 +77,6 @@ class ConfigLoader implements ConfigLoaderInterface
         // Merge the data into the config
         $this->loadData($data);
         $this->currentDirectory = null;
-
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function loadVersionData(): ConfigLoaderInterface
-    {
-        $requiresVersion = (bool) $this->config->get('requires_version');
-        $version = (string) $this->config->get('version');
-        $versionsData = (array) $this->config->get('if_version');
-
-        if ($version === '') {
-            // Check if version is mandatory
-            if ($requiresVersion) {
-                // phpcs:ignore Generic.Files.LineLength.TooLong
-                throw new ParseException('The application version must be specified in the configuration.');
-            }
-            return $this;
-        }
-
-        if (empty($versionsData)) {
-            return $this;
-        }
-
-        // Merge version-specific data into the configuration
-        foreach ($versionsData as $requirement => $versionData) {
-            // Get the requirements as an array (e.g. '>2.0, <2.3' becomes an array of 2 elements)
-            $conditions = array_map('trim', explode(',', $requirement));
-            $matchVersion = true;
-
-            // Check if all requirements match
-            foreach ($conditions as $condition) {
-                try {
-                    $condition = new VersionCondition($condition);
-                } catch (Exception $e) {
-                    throw new ParseException($e->getMessage(), $e);
-                }
-
-                if (!$condition->match($version)) {
-                    $matchVersion = false;
-                    break;
-                }
-            }
-
-            // If all requirements match, merge the version-specific data into the configuration
-            if ($matchVersion) {
-                $this->config->merge($versionData);
-            }
-        }
 
         return $this;
     }

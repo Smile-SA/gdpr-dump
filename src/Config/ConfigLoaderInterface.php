@@ -17,12 +17,4 @@ interface ConfigLoaderInterface
      * @throws ParseException
      */
     public function loadFile(string $fileName): ConfigLoaderInterface;
-
-    /**
-     * Load version-specific configuration.
-     *
-     * @return $this
-     * @throws ParseException
-     */
-    public function loadVersionData(): ConfigLoaderInterface;
 }

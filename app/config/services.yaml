@@ -12,6 +12,7 @@ services:
             - '@dumper.sql'
             - '@config.storage'
             - '@config.loader'
+            - '@config.version_loader'
             - '@config.validator'
 
     # --- Configuration ---
@@ -24,6 +25,9 @@ services:
             - '@config.storage'
             - '@config.parser'
             - '@config.path_resolver'
+
+    config.version_loader:
+        class: 'Smile\GdprDump\Config\Version\VersionLoader'
 
     config.parser:
         class: 'Smile\GdprDump\Config\Parser\YamlParser'

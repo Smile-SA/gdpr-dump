@@ -8,6 +8,7 @@ use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Config\ConfigLoaderInterface;
 use Smile\GdprDump\Config\Validator\ValidationResultInterface;
 use Smile\GdprDump\Config\Validator\ValidatorInterface;
+use Smile\GdprDump\Config\Version\VersionLoaderInterface;
 use Smile\GdprDump\Dumper\DumperInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -35,6 +36,11 @@ class DumpCommand extends Command
     private $configLoader;
 
     /**
+     * @var VersionLoaderInterface
+     */
+    private $configVersionLoader;
+
+    /**
      * @var ValidatorInterface
      */
     private $validator;
@@ -43,17 +49,20 @@ class DumpCommand extends Command
      * @param DumperInterface $dumper
      * @param ConfigInterface $config
      * @param ConfigLoaderInterface $configLoader
+     * @param VersionLoaderInterface $configVersionLoader
      * @param ValidatorInterface $validator
      */
     public function __construct(
         DumperInterface $dumper,
         ConfigInterface $config,
         ConfigLoaderInterface $configLoader,
+        VersionLoaderInterface $configVersionLoader,
         ValidatorInterface $validator
     ) {
         $this->dumper = $dumper;
         $this->config = $config;
         $this->configLoader = $configLoader;
+        $this->configVersionLoader = $configVersionLoader;
         $this->validator = $validator;
         parent::__construct();
     }
@@ -117,7 +126,7 @@ class DumpCommand extends Command
         }
 
         // Load version-specific data
-        $this->configLoader->loadVersionData();
+        $this->configVersionLoader->load($this->config);
     }
 
     /**

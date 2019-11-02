@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Version;
 
-use InvalidArgumentException;
-
 class VersionCondition
 {
     /**
@@ -24,7 +22,7 @@ class VersionCondition
 
     /**
      * @param string $condition
-     * @throws InvalidArgumentException
+     * @throws InvalidVersionException
      */
     public function __construct(string $condition)
     {
@@ -52,27 +50,16 @@ class VersionCondition
     }
 
     /**
-     * Check if the condition matches the specified version.
-     *
-     * @param string $version
-     * @return bool
-     */
-    public function match(string $version): bool
-    {
-        return version_compare($version, $this->getVersion(), $this->getOperator());
-    }
-
-    /**
      * Get the version and operator from a condition, e.g. `<=2.3`.
      *
      * @param string $condition
-     * @throws InvalidArgumentException
+     * @throws InvalidVersionException
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private function parseCondition(string $condition)
     {
         if (strlen($condition) < 3) {
-            throw new InvalidArgumentException(sprintf('Invalid condition "%s".', $condition));
+            throw new InvalidVersionException(sprintf('Invalid condition "%s".', $condition));
         }
 
         $start = substr($condition, 0, 2);
@@ -89,7 +76,7 @@ class VersionCondition
         }
 
         if (!preg_match('/^[a-z0-9.-]+$/', $version)) {
-            throw new InvalidArgumentException(sprintf('Invalid version "%s".', $version));
+            throw new InvalidVersionException(sprintf('Invalid version "%s".', $version));
         }
 
         $this->operator = $operator;
