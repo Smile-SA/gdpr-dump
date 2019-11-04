@@ -108,7 +108,7 @@ class ConverterFactoryTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the converter is set but empty.
+     * Assert that an exception is thrown when the converter is set but empty.
      *
      * @expectedException \UnexpectedValueException
      */
@@ -119,7 +119,7 @@ class ConverterFactoryTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the converter is not set.
+     * Assert that an exception is thrown when the converter is not set.
      *
      * @expectedException \UnexpectedValueException
      */
@@ -130,7 +130,7 @@ class ConverterFactoryTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the converter is not defined.
+     * Assert that an exception is thrown when the converter is not defined.
      *
      * @expectedException \RuntimeException
      */
@@ -141,7 +141,7 @@ class ConverterFactoryTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the "parameters" parameter is not an array.
+     * Assert that an exception is thrown when the "parameters" parameter is not an array.
      *
      * @expectedException \UnexpectedValueException
      */
@@ -152,7 +152,7 @@ class ConverterFactoryTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when a "converter" parameter is used,
+     * Assert that an exception is thrown when a "converter" parameter is used,
      * but the value is not a converter definition.
      *
      * @expectedException \UnexpectedValueException
@@ -164,7 +164,7 @@ class ConverterFactoryTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when a "converters" parameter is used,
+     * Assert that an exception is thrown when a "converters" parameter is used,
      * but the value is not an array.
      *
      * @expectedException \UnexpectedValueException
@@ -176,7 +176,7 @@ class ConverterFactoryTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when a "converters" parameter is used,
+     * Assert that an exception is thrown when a "converters" parameter is used,
      * but the value is not an array of converter definition.
      *
      * @expectedException \UnexpectedValueException

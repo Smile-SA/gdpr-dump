@@ -27,7 +27,7 @@ class CacheTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the converter cache is not set.
+     * Assert that an exception is thrown when the converter cache is not set.
      *
      * @expectedException \InvalidArgumentException
      */

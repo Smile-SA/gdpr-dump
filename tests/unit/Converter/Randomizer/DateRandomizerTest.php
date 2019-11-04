@@ -62,7 +62,7 @@ class DateRandomizerTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the min year is higher than the max year.
+     * Assert that an exception is thrown when the min year is higher than the max year.
      *
      * @expectedException \Exception
      */

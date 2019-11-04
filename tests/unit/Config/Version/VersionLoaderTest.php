@@ -44,7 +44,7 @@ class VersionLoaderTest extends TestCase
     }
 
     /**
-     * Check if an exception is thrown when the version was not specified.
+     * Assert that an exception is thrown when the version was not specified.
      *
      * @expectedException \Smile\GdprDump\Config\Version\MissingVersionException
      */

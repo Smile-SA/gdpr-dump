@@ -51,7 +51,7 @@ class JsonSchemaValidatorTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the schema file is not found.
+     * Assert that an exception is thrown when the schema file is not found.
      *
      * @expectedException \Smile\GdprDump\Config\Validator\ValidationException
      */

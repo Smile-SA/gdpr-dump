@@ -22,7 +22,7 @@ class SortOrderTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the direction is invalid.
+     * Assert that an exception is thrown when the direction is invalid.
      *
      * @expectedException \UnexpectedValueException
      */

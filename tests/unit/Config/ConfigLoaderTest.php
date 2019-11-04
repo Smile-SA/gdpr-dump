@@ -37,7 +37,7 @@ class ConfigLoaderTest extends TestCase
     }
 
     /**
-     * Check if an exception is thrown when the config file is not found.
+     * Assert that an exception is thrown when the config file is not found.
      *
      * @expectedException \Smile\GdprDump\Config\Resolver\FileNotFoundException
      */
@@ -49,7 +49,7 @@ class ConfigLoaderTest extends TestCase
     }
 
     /**
-     * Check if an exception is thrown when the parsed data is not an array.
+     * Assert that an exception is thrown when the parsed data is not an array.
      *
      * @expectedException \Smile\GdprDump\Config\Parser\ParseException
      */

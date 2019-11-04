@@ -33,7 +33,7 @@ class FilterTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when an invalid operator is used.
+     * Assert that an exception is thrown when an invalid operator is used.
      *
      * @expectedException \UnexpectedValueException
      */
@@ -43,11 +43,11 @@ class FilterTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the value is an array and the operator is neither "in" or "notIn".
+     * Assert that an exception is thrown when the value is an array and the operator is neither "in" or "notIn".
      *
      * @expectedException \UnexpectedValueException
      */
-    public function testInOperatorInvalidValue()
+    public function testArrayValueWithIncompatibleOperator()
     {
         new Filter('column', Filter::OPERATOR_EQ, [1]);
     }

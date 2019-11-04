@@ -34,7 +34,7 @@ class ConditionalTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the condition is not set.
+     * Assert that an exception is thrown when the condition is not set.
      *
      * @expectedException \InvalidArgumentException
      */
@@ -48,7 +48,7 @@ class ConditionalTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the converters are not set.
+     * Assert that an exception is thrown when the converters are not set.
      *
      * @expectedException \InvalidArgumentException
      */
@@ -62,7 +62,7 @@ class ConditionalTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the condition contains a dollar symbol.
+     * Assert that an exception is thrown when the condition contains a dollar symbol.
      *
      * @expectedException \RuntimeException
      */
@@ -77,7 +77,7 @@ class ConditionalTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the condition contains a variable assignment.
+     * Assert that an exception is thrown when the condition contains a variable assignment.
      *
      * @expectedException \RuntimeException
      */
@@ -92,7 +92,7 @@ class ConditionalTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the condition contains a PHP tag.
+     * Assert that an exception is thrown when the condition contains a PHP tag.
      *
      * @expectedException \RuntimeException
      */
@@ -107,7 +107,7 @@ class ConditionalTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the condition contains a static function call
+     * Assert that an exception is thrown when the condition contains a static function call
      *
      * @expectedException \RuntimeException
      */
@@ -122,7 +122,7 @@ class ConditionalTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the condition contains a forbidden function.
+     * Assert that an exception is thrown when the condition contains a forbidden function.
      *
      * @expectedException \RuntimeException
      */

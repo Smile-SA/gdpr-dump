@@ -46,7 +46,7 @@ class SerializedDataTest extends TestCase
     }
 
     /**
-     * Check if an exception is thrown when the converters are not set.
+     * Assert that an exception is thrown when the converters are not set.
      *
      * @expectedException \InvalidArgumentException
      */

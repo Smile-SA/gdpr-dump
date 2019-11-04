@@ -24,7 +24,7 @@ class SetValueTest extends TestCase
     }
 
     /**
-     * Check if an exception is thrown when the value is not set.
+     * Assert that an exception is thrown when the value is not set.
      *
      * @expectedException \InvalidArgumentException
      */

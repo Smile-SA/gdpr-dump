@@ -21,7 +21,7 @@ class YamlParserTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the file is not found.
+     * Assert that an exception is thrown when the file is not found.
      *
      * @expectedException \Smile\GdprDump\Config\Parser\ParseException
      */

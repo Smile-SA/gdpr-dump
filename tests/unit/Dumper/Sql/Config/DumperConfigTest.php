@@ -108,7 +108,7 @@ class DumperConfigTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when an invalid parameter is used.
+     * Assert that an exception is thrown when an invalid parameter is used.
      *
      * @expectedException \UnexpectedValueException
      */
@@ -118,7 +118,7 @@ class DumperConfigTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when a var query contains a forbidden statement.
+     * Assert that an exception is thrown when a var query contains a forbidden statement.
      *
      * @expectedException \Smile\GdprDump\Dumper\Sql\Config\Validation\ValidationException
      */

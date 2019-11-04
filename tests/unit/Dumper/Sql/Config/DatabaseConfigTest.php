@@ -51,7 +51,7 @@ class DatabaseConfigTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the database name is missing.
+     * Assert that an exception is thrown when the database name is missing.
      *
      * @expectedException \UnexpectedValueException
      */

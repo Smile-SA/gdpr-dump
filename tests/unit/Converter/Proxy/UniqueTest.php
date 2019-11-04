@@ -44,7 +44,7 @@ class UniqueTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the converter fails to generate a unique value.
+     * Assert that an exception is thrown when the converter fails to generate a unique value.
      *
      * @expectedException \OverflowException
      */
@@ -60,7 +60,7 @@ class UniqueTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the converter is not set.
+     * Assert that an exception is thrown when the converter is not set.
      *
      * @expectedException \InvalidArgumentException
      */

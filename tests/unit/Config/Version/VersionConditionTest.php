@@ -20,7 +20,7 @@ class VersionConditionTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the condition syntax is invalid.
+     * Assert that an exception is thrown when the condition syntax is invalid.
      *
      * @expectedException \Smile\GdprDump\Config\Version\InvalidVersionException
      */
@@ -30,7 +30,7 @@ class VersionConditionTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the condition does not contain at least 3 characters.
+     * Assert that an exception is thrown when the condition does not contain at least 3 characters.
      *
      * @expectedException \Smile\GdprDump\Config\Version\InvalidVersionException
      */

@@ -44,7 +44,7 @@ class FakerTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the Faker provider is not set.
+     * Assert that an exception is thrown when the Faker provider is not set.
      *
      * @expectedException \InvalidArgumentException
      */
@@ -55,7 +55,7 @@ class FakerTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the Faker formatter is not set.
+     * Assert that an exception is thrown when the Faker formatter is not set.
      *
      * @expectedException \InvalidArgumentException
      */

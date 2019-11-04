@@ -45,7 +45,7 @@ class PathResolverTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when a file with a relative path is not found.
+     * Assert that an exception is thrown when a file with a relative path is not found.
      *
      * @expectedException \Smile\GdprDump\Config\Resolver\FileNotFoundException
      */
@@ -56,7 +56,7 @@ class PathResolverTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when a file with an absolute path is not found.
+     * Assert that an exception is thrown when a file with an absolute path is not found.
      *
      * @expectedException \Smile\GdprDump\Config\Resolver\FileNotFoundException
      */

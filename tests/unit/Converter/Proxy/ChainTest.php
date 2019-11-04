@@ -28,7 +28,7 @@ class ChainTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the converter chain is not set.
+     * Assert that an exception is thrown when the converter chain is not set.
      *
      * @expectedException \InvalidArgumentException
      */

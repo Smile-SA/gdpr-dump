@@ -35,7 +35,7 @@ class AnonymizeDateTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when an invalid date is provided.
+     * Assert that an exception is thrown when an invalid date is provided.
      *
      * @expectedException \UnexpectedValueException
      */

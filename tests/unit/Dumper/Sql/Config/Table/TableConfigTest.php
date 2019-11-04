@@ -103,7 +103,7 @@ class TableConfigTest extends TestCase
     }
 
     /**
-     * Test if an exception is thrown when the sort order is invalid.
+     * Assert that an exception is thrown when the sort order is invalid.
      *
      * @expectedException \UnexpectedValueException
      */
