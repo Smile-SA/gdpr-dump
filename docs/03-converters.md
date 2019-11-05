@@ -32,18 +32,7 @@ Parameters:
 | **formatter** | Y | | The formatter name. |
 | **arguments** | N | `[]` | The formatter arguments. |
 
-Example without arguments:
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column:
-                converter: 'faker'
-                parameters: {formatter: 'safeEmail'}
-```
-
-Example with arguments:
+Example:
 
 ```yaml
 tables:
@@ -54,6 +43,19 @@ tables:
                 parameters:
                     formatter: 'numberBetween'
                     arguments: [1, 100]
+```
+
+To use a formatter that requires the original value as an argument, you can use the `{{value}}` placeholder:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'faker'
+                parameters:
+                    formatter: 'shuffle'
+                    arguments: ['{{value}}']
 ```
 
 ## [anonymizeText](src/Converter/Anonymizer/AnonymizeText.php)
@@ -303,7 +305,8 @@ tables:
         converters:
             my_column:
                 converter: 'setValue'
-                parameters: {value: 0}
+                parameters:
+                    value: 0
 ```
 
 ## [setPrefix](src/Converter/Setter/SetPrefix.php)
@@ -326,7 +329,8 @@ tables:
         converters:
             my_column:
                 converter: 'setPrefix'
-                parameters: {prefix: 'test_'}
+                parameters:
+                    prefix: 'test_'
 ```
 
 ## [setSuffix](src/Converter/Setter/SetSuffix.php)
@@ -349,7 +353,8 @@ tables:
         converters:
             my_column:
                 converter: 'setSuffix'
-                parameters: {suffix: '_test'}
+                parameters:
+                    suffix: '_test'
 ```
 
 ## [jsonData](src/Converter/Proxy/JsonData.php)

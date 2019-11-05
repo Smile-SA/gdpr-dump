@@ -280,7 +280,8 @@ tables:
         converters:
             my_column:
                 converter: 'randomizeEmail'
-                parameters: {domains: ['example.org']}
+                parameters:
+                    domains: ['example.org']
 ```
 
 How to define a condition:
