@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Converter\Randomizer;
 class RandomizeEmail extends RandomizeText
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $domains = [
         'example.com',

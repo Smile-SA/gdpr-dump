@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Converter\Anonymizer;
 class AnonymizeEmail extends AnonymizeText
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $domains = [
         'example.com',
