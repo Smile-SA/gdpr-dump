@@ -75,7 +75,7 @@ class VersionCondition
             $version = $condition;
         }
 
-        if (!preg_match('/^[a-z0-9.-]+$/', $version)) {
+        if (!preg_match('/^[a-zA-Z0-9.-]+$/', $version)) {
             throw new InvalidVersionException(sprintf('Invalid version "%s".', $version));
         }
 
