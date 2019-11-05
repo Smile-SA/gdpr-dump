@@ -26,7 +26,7 @@ class VersionConditionTest extends TestCase
      */
     public function testInvalidConditionSyntax()
     {
-        new VersionCondition('notValid');
+        new VersionCondition('not_valid');
     }
 
     /**
