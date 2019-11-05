@@ -16,7 +16,7 @@ class VersionCondition
     private $operator;
 
     /**
-     * @var array
+     * @var string[]
      */
     private static $versionOperators = ['<', '>', '<=', '>=', '<>'];
 
@@ -34,7 +34,7 @@ class VersionCondition
      *
      * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->version;
     }
@@ -44,7 +44,7 @@ class VersionCondition
      *
      * @return string
      */
-    public function getOperator()
+    public function getOperator(): string
     {
         return $this->operator;
     }
