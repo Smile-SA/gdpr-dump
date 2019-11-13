@@ -70,7 +70,6 @@ tables:
             lock_expires:
                 converter: 'setNull'
 
-    # Not anonymized: prefix, suffix, gender
     customer_entity:
         converters:
             email:
@@ -95,7 +94,6 @@ tables:
             lock_expires:
                 converter: 'setNull'
 
-    # Not anonymized: country_id, prefix, region, region_id, suffix
     customer_address_entity:
         converters:
             firstname:
@@ -117,7 +115,6 @@ tables:
             company:
                 converter: 'anonymizeText'
 
-    # Not anonymized: gender, billing_country_id, billing_region
     customer_grid_flat:
         converters:
             name:
@@ -154,7 +151,6 @@ tables:
             subscriber_confirm_code:
                 converter: 'randomizeText'
 
-    # Not anonymized: customer_prefix, customer_suffix ,customer_gender, coupon_code
     quote:
         converters:
             customer_email:
@@ -176,7 +172,6 @@ tables:
             password_hash:
                 converter: 'setNull'
 
-    # Not anonymized: prefix, suffix, region, region_id, country_id
     quote_address:
         converters:
             email:
@@ -202,7 +197,6 @@ tables:
             customer_notes:
                 converter: 'anonymizeText'
 
-    # Not anonymized: cc_exp_month, cc_exp_year, cc_ss_start_month, cc_ss_start_year
     quote_payment:
         converters:
             cc_owner:
@@ -218,7 +212,6 @@ tables:
                         CC_CN:
                             converter: 'anonymizeText'
 
-    # Not anonymized: title, detail
     review_detail:
         converters:
             nickname:
@@ -270,7 +263,6 @@ tables:
             shipping_address:
                 converter: 'anonymizeText'
 
-    # Not anonymized: customer_prefix, customer_suffix, customer_gender, coupon_code
     sales_order:
         converters:
             customer_email:
@@ -290,7 +282,6 @@ tables:
                 parameters:
                     formatter: 'ipv4'
 
-    # Not anonymized: prefix, suffix, region, region_id, country_id
     sales_order_address:
         converters:
             email:
@@ -329,7 +320,6 @@ tables:
             shipping_address:
                 converter: 'anonymizeText'
 
-    # Not anonymized: cc_exp_month, cc_exp_year, cc_ss_start_month, cc_ss_start_year
     sales_order_payment:
         converters:
             last_trans_id:
@@ -391,6 +381,191 @@ tables:
     sales_shipment_track:
         converters:
             track_number:
+                converter: 'anonymizeText'
+
+    # --- Commerce tables ---
+
+    magento_logging_event:
+        truncate: true
+
+    magento_logging_event_changes:
+        truncate: true
+
+    '*_cl':
+        truncate: true
+
+    magento_giftregistry_entity:
+        converters:
+            title:
+                converter: 'anonymizeText'
+            message:
+                converter: 'anonymizeText'
+            shipping_address:
+                converter: 'jsonData'
+                parameters:
+                    converters:
+                        firstname:
+                            converter: 'anonymizeText'
+                        middlename:
+                            converter: 'anonymizeText'
+                        lastname:
+                            converter: 'anonymizeText'
+                        company:
+                            converter: 'anonymizeText'
+                        street:
+                            converter: 'anonymizeText'
+                        postcode:
+                            converter: 'randomizeNumber'
+                        city:
+                            converter: 'anonymizeText'
+                        telephone:
+                            converter: 'randomizeNumber'
+                        fax:
+                            converter: 'randomizeNumber'
+
+    magento_giftregistry_person:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+            firstname:
+                converter: 'anonymizeText'
+            lastname:
+                converter: 'anonymizeText'
+
+    magento_invitation:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+            message:
+                converter: 'anonymizeText'
+
+    magento_rma:
+        converters:
+            customer_custom_email:
+                converter: 'randomizeEmail'
+
+    magento_rma_shipping_label:
+        converters:
+            track_number:
+                converter: 'anonymizeText'
+
+    magento_rma_status_history:
+        converters:
+            comment:
+                converter: 'anonymizeText'
+
+    magento_sales_creditmemo_grid_archive:
+        converters:
+            customer_email:
+                converter: 'randomizeEmail'
+            customer_name:
+                converter: 'anonymizeText'
+            billing_name:
+                converter: 'anonymizeText'
+            billing_address:
+                converter: 'anonymizeText'
+            shipping_address:
+                converter: 'anonymizeText'
+            shipping_information:
+                converter: 'anonymizeText'
+
+    magento_sales_invoice_grid_archive:
+        converters:
+            customer_email:
+                converter: 'randomizeEmail'
+            customer_name:
+                converter: 'anonymizeText'
+            billing_name:
+                converter: 'anonymizeText'
+            billing_address:
+                converter: 'anonymizeText'
+            shipping_address:
+                converter: 'anonymizeText'
+            shipping_information:
+                converter: 'anonymizeText'
+
+    magento_sales_order_grid_archive:
+        converters:
+            customer_email:
+                converter: 'randomizeEmail'
+            customer_name:
+                converter: 'anonymizeText'
+            billing_name:
+                converter: 'anonymizeText'
+            shipping_name:
+                converter: 'anonymizeText'
+            billing_address:
+                converter: 'anonymizeText'
+            shipping_address:
+                converter: 'anonymizeText'
+            shipping_information:
+                converter: 'anonymizeText'
+
+    magento_sales_shipment_grid_archive:
+        converters:
+            customer_email:
+                converter: 'randomizeEmail'
+            customer_name:
+                converter: 'anonymizeText'
+            billing_name:
+                converter: 'anonymizeText'
+            shipping_name:
+                converter: 'anonymizeText'
+            billing_address:
+                converter: 'anonymizeText'
+            shipping_address:
+                converter: 'anonymizeText'
+            shipping_information:
+                converter: 'anonymizeText'
+
+    # --- B2B tables ---
+
+    company:
+        converters:
+            company_email:
+                converter: 'randomizeEmail'
+            company_name:
+                converter: 'anonymizeText'
+            legal_name:
+                converter: 'anonymizeText'
+            comment:
+                converter: 'anonymizeText'
+            street:
+                converter: 'anonymizeText'
+            city:
+                converter: 'anonymizeText'
+            postcode:
+                converter: 'randomizeNumber'
+            telephone:
+                converter: 'randomizeNumber'
+            reject_reason:
+                converter: 'anonymizeText'
+
+    company_advanced_customer_entity:
+        converters:
+            telephone:
+                converter: 'randomizeNumber'
+
+    company_credit_history:
+        converters:
+            comment:
+                converter: 'anonymizeText'
+
+    company_order_entity:
+        converters:
+            company_name:
+                converter: 'anonymizeText'
+
+    negotiable_quote_comment:
+        converters:
+            comment:
+                converter: 'anonymizeText'
+
+    negotiable_quote_grid:
+        converters:
+            company_name:
+                converter: 'anonymizeText'
+            sales_rep:
                 converter: 'anonymizeText'
 
 if_version:

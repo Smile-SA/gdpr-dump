@@ -84,7 +84,6 @@ tables:
     customer_entity_datetime:
         converters:
             value:
-                ## dob (11)
                 converter: 'anonymizeDateTime'
                 condition: '{{attribute_id}} == @dob_attribute_id'
 
@@ -106,7 +105,6 @@ tables:
             subscriber_confirm_code:
                 converter: 'randomizeText'
 
-    # Not anonymized: title, detail
     review_detail:
         converters:
             nickname:
@@ -132,7 +130,6 @@ tables:
             billing_name:
                 converter: 'anonymizeText'
 
-    # Not anonymized: customer_prefix, customer_suffix, customer_gender, coupon_code
     sales_flat_order:
         converters:
             customer_email:
@@ -152,7 +149,6 @@ tables:
                 parameters:
                     formatter: 'ipv4'
 
-    # Not anonymized: prefix, suffix, region, region_id, country_id
     sales_flat_order_address:
         converters:
             email:
@@ -183,7 +179,6 @@ tables:
             shipping_name:
                 converter: 'anonymizeText'
 
-    # Not anonymized: cc_exp_month, cc_exp_year, cc_ss_start_month, cc_ss_start_year
     sales_flat_order_payment:
         converters:
             last_trans_id:
@@ -215,7 +210,6 @@ tables:
                         CC_CN:
                             converter: 'anonymizeText'
 
-    # Not anonymized: customer_prefix, customer_suffix ,customer_gender, coupon_code
     sales_flat_quote:
         converters:
             customer_email:
@@ -237,7 +231,6 @@ tables:
             password_hash:
                 converter: 'setNull'
 
-    # Not anonymized: prefix, suffix, region, region_id, country_id
     sales_flat_quote_address:
         converters:
             email:
@@ -263,7 +256,6 @@ tables:
             customer_notes:
                 converter: 'anonymizeText'
 
-    # Not anonymized: cc_exp_month, cc_exp_year, cc_ss_start_month, cc_ss_start_year
     sales_flat_quote_payment:
         converters:
             cc_owner:
@@ -292,4 +284,100 @@ tables:
     sales_flat_shipment_track:
         converters:
             track_number:
+                converter: 'anonymizeText'
+
+    # --- Enterprise Edition tables ---
+
+    enterprise_admin_passwords:
+        truncate: true
+
+    enterprise_logging_event:
+        truncate: true
+
+    enterprise_logging_event_changes:
+        truncate: true
+
+    '*_cl':
+        truncate: true
+
+    enterprise_giftregistry_entity:
+        converters:
+            title:
+                converter: 'anonymizeText'
+            message:
+                converter: 'anonymizeText'
+            shipping_address:
+                converter: 'serializedData'
+                parameters:
+                    converters:
+                        firstname:
+                            converter: 'anonymizeText'
+                        middlename:
+                            converter: 'anonymizeText'
+                        lastname:
+                            converter: 'anonymizeText'
+                        company:
+                            converter: 'anonymizeText'
+                        street:
+                            converter: 'anonymizeText'
+                        postcode:
+                            converter: 'randomizeNumber'
+                        city:
+                            converter: 'anonymizeText'
+                        telephone:
+                            converter: 'randomizeNumber'
+                        fax:
+                            converter: 'randomizeNumber'
+
+    enterprise_giftregistry_person:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+            firstname:
+                converter: 'anonymizeText'
+            middlename:
+                converter: 'anonymizeText'
+            lastname:
+                converter: 'anonymizeText'
+
+    enterprise_rma:
+        converters:
+            customer_custom_email:
+                converter: 'randomizeEmail'
+
+    enterprise_rma_grid:
+        converters:
+            customer_name:
+                converter: 'anonymizeText'
+
+    enterprise_rma_shipping_label:
+        converters:
+            track_number:
+                converter: 'anonymizeText'
+
+    enterprise_rma_status_history:
+        converters:
+            comment:
+                converter: 'anonymizeText'
+
+    enterprise_sales_creditmemo_grid_archive:
+        converters:
+            billing_name:
+                converter: 'anonymizeText'
+
+    enterprise_sales_invoice_grid_archive:
+        converters:
+            billing_name:
+                converter: 'anonymizeText'
+
+    enterprise_sales_order_grid_archive:
+        converters:
+            billing_name:
+                converter: 'anonymizeText'
+            shipping_name:
+                converter: 'anonymizeText'
+
+    enterprise_sales_shipment_grid_archive:
+        converters:
+            shipping_name:
                 converter: 'anonymizeText'

@@ -31,10 +31,7 @@ The following configuration templates are available:
 - [drupal7](app/config/templates/drupal7.yaml)
 - [drupal8](app/config/templates/drupal8.yaml)
 - [magento1](app/config/templates/magento1.yaml)
-- [magento1_commerce](app/config/templates/magento1_commerce.yaml)
 - [magento2](app/config/templates/magento2.yaml)
-- [magento2_b2b](app/config/templates/magento2_b2b.yaml)
-- [magento2_commerce](app/config/templates/magento2_commerce.yaml)
 
 Each template provides anonymization rules for a specific framework (e.g. "magento1" is for Magento 1 Community Edition).
 
