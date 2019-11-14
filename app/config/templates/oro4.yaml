@@ -1,0 +1,787 @@
+---
+requires_version: true
+
+tables:
+    oro_logger_log_entry:
+        truncate: true
+
+    acl_classes:
+        truncate: true
+
+    acl_entries:
+        truncate: true
+
+    acl_object_identities:
+        truncate: true
+
+    acl_object_identity_ancestors:
+        truncate: true
+
+    acl_security_identities:
+        truncate: true
+
+    oro_entity_config_index_value:
+        truncate: true
+
+    oro_search_index_datetime:
+        truncate: true
+
+    oro_search_index_decimal:
+        truncate: true
+
+    oro_search_index_integer:
+        truncate: true
+
+    oro_search_index_text:
+        truncate: true
+
+    oro_entity_config_log:
+        truncate: true
+
+    oro_entity_config_log_diff:
+        truncate: true
+
+    oro_workflow_transition_log:
+        truncate: true
+
+    orocrm_dm_change_field_log:
+        truncate: true
+
+    oro_address:
+        converters:
+            street:
+                converter: 'anonymizeText'
+            street2:
+                converter: 'anonymizeText'
+            city:
+                converter: 'anonymizeText'
+            postal_code:
+                converter: 'randomizeNumber'
+            name_prefix:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            middle_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            name_suffix:
+                converter: 'anonymizeText'
+
+    oro_audit:
+        converters:
+            object_name:
+                converter: 'anonymizeText'
+            owner_description:
+                converter: 'anonymizeText'
+
+    oro_audit_field:
+        converters:
+            old_text:
+                converter: 'anonymizeText'
+            new_text:
+                converter: 'anonymizeText'
+
+    oro_business_unit:
+        converters:
+            name:
+                converter: 'anonymizeText'
+            phone:
+                converter: 'randomizeNumber'
+            website:
+                converter: 'anonymizeText'
+            email:
+                converter: 'randomizeEmail'
+
+    oro_calendar_event:
+        converters:
+            title:
+                converter: 'anonymizeText'
+            description:
+                converter: 'anonymizeText'
+            organizer_email:
+                converter: 'randomizeEmail'
+            organizer_display_name:
+                converter: 'anonymizeText'
+
+    oro_calendar_event_attendee:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+            display_name:
+                converter: 'anonymizeText'
+
+    oro_checkout:
+        converters:
+            customer_notes:
+                converter: 'randomizeText'
+            payment_method:
+                converter: 'randomizeText'
+
+    oro_customer:
+        converters:
+            name:
+                converter: 'anonymizeText'
+
+    oro_customer_address:
+        converters:
+            street:
+                converter: 'anonymizeText'
+            street2:
+                converter: 'anonymizeText'
+            city:
+                converter: 'anonymizeText'
+            postal_code:
+                converter: 'randomizeNumber'
+            organization:
+                converter: 'anonymizeText'
+            name_prefix:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            middle_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            name_suffix:
+                converter: 'anonymizeText'
+            phone:
+                converter: 'randomizeNumber'
+
+    oro_customer_user:
+        converters:
+            username:
+                converter: 'randomizeText'
+            email:
+                converter: 'randomizeEmail'
+                unique: true
+            email_lowercase:
+                converter: 'chain'
+                parameters:
+                    converters:
+                        - converter: 'fromContext'
+                          parameters:
+                              key: 'processed.email'
+                        - converter: 'toLower'
+            name_prefix:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            middle_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            name_suffix:
+                converter: 'anonymizeText'
+            birthday:
+                converter: 'anonymizeText'
+            salt:
+                converter: 'anonymizeText'
+            password:
+                converter: 'anonymizeText'
+
+    oro_customer_user_address:
+        converters:
+            street:
+                converter: 'anonymizeText'
+            street2:
+                converter: 'anonymizeText'
+            city:
+                converter: 'anonymizeText'
+            postal_code:
+                converter: 'randomizeNumber'
+            organization:
+                converter: 'anonymizeText'
+            name_prefix:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            middle_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            name_suffix:
+                converter: 'anonymizeText'
+            phone:
+                converter: 'randomizeNumber'
+
+    oro_email:
+        converters:
+            subject:
+                converter: 'anonymizeText'
+            from_name:
+                converter: 'anonymizeText'
+
+    oro_email_address:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+
+    oro_email_body:
+        converters:
+            body:
+                converter: 'anonymizeText'
+            text_body:
+                converter: 'anonymizeText'
+
+    oro_email_mailbox:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+
+    oro_email_recipient:
+        converters:
+            name:
+                converter: 'randomizeText'
+
+    oro_notification_mass_notif:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+            sender:
+                converter: 'anonymizeText'
+            subject:
+                converter: 'anonymizeText'
+
+    oro_notification_recip_list:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+
+    oro_order:
+        converters:
+            customer_notes:
+                converter: 'anonymizeText'
+            shipping_method:
+                converter: 'anonymizeText'
+            shipping_method_type:
+                converter: 'anonymizeText'
+
+    oro_order_address:
+        converters:
+            street:
+                converter: 'anonymizeText'
+            street2:
+                converter: 'anonymizeText'
+            city:
+                converter: 'anonymizeText'
+            postal_code:
+                converter: 'randomizeNumber'
+            organization:
+                converter: 'anonymizeText'
+            name_prefix:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            middle_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            name_suffix:
+                converter: 'anonymizeText'
+            phone:
+                converter: 'randomizeNumber'
+
+    oro_organization:
+        converters:
+            name:
+                converter: 'anonymizeText'
+            description:
+                converter: 'anonymizeText'
+
+    oro_quote_address:
+        converters:
+            street:
+                converter: 'anonymizeText'
+            street2:
+                converter: 'anonymizeText'
+            city:
+                converter: 'anonymizeText'
+            postal_code:
+                converter: 'randomizeNumber'
+            organization:
+                converter: 'anonymizeText'
+            name_prefix:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            middle_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            name_suffix:
+                converter: 'anonymizeText'
+            phone:
+                converter: 'randomizeNumber'
+
+    oro_rfp_request:
+        converters:
+            first_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            email:
+                converter: 'randomizeEmail'
+            phone:
+                converter: 'randomizeNumber'
+            company:
+                converter: 'anonymizeText'
+            note:
+                converter: 'anonymizeText'
+
+    oro_sale_quote_product:
+        converters:
+            comment_customer:
+                converter: 'anonymizeText'
+
+    oro_tax_value:
+        converters:
+            address:
+                converter: 'anonymizeText'
+
+    oro_tracking_data:
+        converters:
+            data:
+                converter: 'anonymizeText'
+
+    oro_tracking_visit:
+        converters:
+            ip:
+                converter: 'faker'
+                parameters:
+                    formatter: 'ipv4'
+            client:
+                converter: 'randomizeText'
+            client_type:
+                converter: 'randomizeText'
+            client_version:
+                converter: 'randomizeText'
+            os:
+                converter: 'randomizeText'
+            os_version:
+                converter: 'randomizeText'
+
+    oro_user:
+        converters:
+            username:
+                converter: 'randomizeText'
+                unique: true
+            username_lowercase:
+                converter: 'chain'
+                parameters:
+                    converters:
+                        - converter: 'fromContext'
+                          parameters:
+                              key: 'processed.username'
+                        - converter: 'toLower'
+            email:
+                converter: 'randomizeEmail'
+                unique: true
+            email_lowercase:
+                converter: 'chain'
+                parameters:
+                    converters:
+                        - converter: 'fromContext'
+                          parameters:
+                              key: 'processed.email'
+                        - converter: 'toLower'
+            phone:
+                converter: 'randomizeNumber'
+            name_prefix:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            middle_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            name_suffix:
+                converter: 'anonymizeText'
+            birthday:
+                converter: 'anonymizeDate'
+            salt:
+                converter: 'randomizeText'
+            password:
+                converter: 'randomizeText'
+            title:
+                converter: 'anonymizeText'
+
+    oro_user_email:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+
+    oro_user_impersonation:
+        converters:
+            ip_address:
+                converter: 'faker'
+                parameters:
+                    formatter: 'ipv4'
+
+    orocrm_account:
+        converters:
+            name_prefix:
+                converter: 'anonymizeText'
+
+    orocrm_call:
+        converters:
+            subject:
+                converter: 'anonymizeText'
+            phone_number:
+                converter: 'randomizeNumber'
+            notes:
+                converter: 'anonymizeText'
+
+    orocrm_campaign:
+        converters:
+            name:
+                converter: 'anonymizeText'
+
+    orocrm_campaign_email:
+        converters:
+            name:
+                converter: 'anonymizeText'
+            description:
+                converter: 'anonymizeText'
+            sender_email:
+                converter: 'randomizeEmail'
+            sender_name:
+                converter: 'anonymizeText'
+
+    orocrm_contact:
+        converters:
+            name_prefix:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            middle_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            name_suffix:
+                converter: 'anonymizeText'
+            gender:
+                converter: 'faker'
+                parameters:
+                    formatter: 'title'
+            birthday:
+                converter: 'anonymizeDate'
+            description:
+                converter: 'anonymizeText'
+            job_title:
+                converter: 'anonymizeText'
+            fax:
+                converter: 'randomizeNumber'
+            skype:
+                converter: 'anonymizeText'
+            twitter:
+                converter: 'anonymizeText'
+            facebook:
+                converter: 'anonymizeText'
+            google_plus:
+                converter: 'anonymizeText'
+            linkedin:
+                converter: 'anonymizeText'
+            email:
+                converter: 'randomizeEmail'
+
+    orocrm_contact_address:
+        converters:
+            street:
+                converter: 'anonymizeText'
+            street2:
+                converter: 'anonymizeText'
+            city:
+                converter: 'anonymizeText'
+            postal_code:
+                converter: 'anonymizeText'
+            organization:
+                converter: 'anonymizeText'
+            name_prefix:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            middle_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            name_suffix:
+                converter: 'anonymizeText'
+
+    orocrm_contact_email:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+
+    orocrm_contact_phone:
+        converters:
+            phone:
+                converter: 'randomizeNumber'
+
+    orocrm_contactus_request:
+        converters:
+            organization_name:
+                converter: 'anonymizeText'
+            feedback:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            email_address:
+                converter: 'randomizeEmail'
+            phone:
+                converter: 'randomizeNumber'
+            comment:
+                converter: 'anonymizeText'
+
+    orocrm_dm_activity:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+
+    orocrm_dm_address_book:
+        converters:
+            name:
+                converter: 'anonymizeText'
+
+    orocrm_dm_contact:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+            first_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            full_name:
+                converter: 'anonymizeText'
+            gender:
+                converter: 'faker'
+                parameters:
+                    formatter: 'title'
+            postcode:
+                converter: 'randomizeNumber'
+
+    orocrm_magento_cart:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+            payment_details:
+                converter: 'anonymizeText'
+            notes:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+
+    orocrm_magento_cart_address:
+        converters:
+            street:
+                converter: 'anonymizeText'
+            street2:
+                converter: 'anonymizeText'
+            city:
+                converter: 'anonymizeText'
+            postal_code:
+                converter: 'randomizeNumber'
+            organization:
+                converter: 'anonymizeText'
+            name_prefix:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            middle_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            name_suffix:
+                converter: 'anonymizeText'
+            phone:
+                converter: 'randomizeNumber'
+
+    orocrm_magento_customer:
+        converters:
+            name_prefix:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            middle_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            name_suffix:
+                converter: 'anonymizeText'
+            gender:
+                converter: 'faker'
+                parameters:
+                    formatter: 'title'
+            birthday:
+                converter: 'anonymizeDate'
+            email:
+                converter: 'randomizeEmail'
+            password:
+                converter: 'randomizeText'
+
+    orocrm_magento_customer_addr:
+        converters:
+            street:
+                converter: 'anonymizeText'
+            street2:
+                converter: 'anonymizeText'
+            city:
+                converter: 'anonymizeText'
+            postal_code:
+                converter: 'randomizeNumber'
+            organization:
+                converter: 'anonymizeText'
+            name_prefix:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            middle_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            name_suffix:
+                converter: 'anonymizeText'
+            phone:
+                converter: 'randomizeNumber'
+
+    orocrm_magento_newsl_subscr:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+
+    orocrm_magento_order:
+        converters:
+            remote_ip:
+                converter: 'faker'
+                parameters:
+                    formatter: 'ipv4'
+            notes:
+                converter: 'anonymizeText'
+            feedback:
+                converter: 'anonymizeText'
+            customer_email:
+                converter: 'randomizeEmail'
+            payment_details:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+
+    orocrm_magento_order_address:
+        converters:
+            fax:
+                converter: 'randomizeNumber'
+            phone:
+                converter: 'randomizeNumber'
+            street:
+                converter: 'anonymizeText'
+            city:
+                converter: 'anonymizeText'
+            postal_code:
+                converter: 'randomizeNumber'
+            organization:
+                converter: 'anonymizeText'
+            country_text:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+
+    orocrm_sales_b2bcustomer:
+        converters:
+            name:
+                converter: 'anonymizeText'
+            website:
+                converter: 'anonymizeText'
+
+    orocrm_sales_b2bcustomer_email:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+
+    orocrm_sales_b2bcustomer_phone:
+        converters:
+            phone:
+                converter: 'randomizeNumber'
+
+    orocrm_sales_lead:
+        converters:
+            name:
+                converter: 'anonymizeText'
+            name_prefix:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            middle_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            name_suffix:
+                converter: 'anonymizeText'
+            company_name:
+                converter: 'anonymizeText'
+            website:
+                converter: 'anonymizeText'
+            notes:
+                converter: 'anonymizeText'
+            twitter:
+                converter: 'anonymizeText'
+            linkedin:
+                converter: 'anonymizeText'
+
+    orocrm_sales_lead_address:
+        converters:
+            street:
+                converter: 'anonymizeText'
+            street2:
+                converter: 'anonymizeText'
+            city:
+                converter: 'anonymizeText'
+            postal_code:
+                converter: 'randomizeNumber'
+            organization:
+                converter: 'anonymizeText'
+            name_prefix:
+                converter: 'anonymizeText'
+            first_name:
+                converter: 'anonymizeText'
+            middle_name:
+                converter: 'anonymizeText'
+            last_name:
+                converter: 'anonymizeText'
+            name_suffix:
+                converter: 'anonymizeText'
+            phone:
+                converter: 'randomizeNumber'
+
+    orocrm_sales_lead_email:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+
+    orocrm_sales_lead_phone:
+        converters:
+            phone:
+                converter: 'randomizeNumber'
+
+    orocrm_sales_opportunity:
+        converters:
+            name:
+                converter: 'anonymizeText'
+
+    orocrm_zd_user:
+        converters:
+            name:
+                converter: 'anonymizeText'
+            notes:
+                converter: 'anonymizeText'
+            email:
+                converter: 'randomizeEmail'
+            phone:
+                converter: 'randomizeNumber'

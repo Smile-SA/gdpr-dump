@@ -4,13 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
+- Add oro4 configuration template
+- Move contents of magento1_* and magento2_* templates to magento1 and magento2 templates
 - Rename setPrefix/setSuffix converters to addPrefix/addSuffix
 - New converters: numberBetween, toLower, toUpper, fromContext
 - Move the config version parsing to a VersionLoader implementation
 - Prevent the use of unsafe statements in var queries (e.g. insert/delete)
 - Add a PHP tokenizer abstraction layer
 - Add support for version numbers that contain capitalized letters
-- Move contents of magento1_* and magento2_* templates to magento1 and magento2 templates
 
 ## [1.0.0-beta13] - 2019-10-31
 [1.0.0-beta13]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta12...1.0.0-beta13
