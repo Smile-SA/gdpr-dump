@@ -22,7 +22,7 @@ class SetPrefix implements ConverterInterface
             throw new InvalidArgumentException('The setPrefix converter requires a "prefix" parameter.');
         }
 
-        $this->prefix = $parameters['prefix'];
+        $this->prefix = (string) $parameters['prefix'];
     }
 
     /**

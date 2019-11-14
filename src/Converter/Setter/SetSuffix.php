@@ -22,7 +22,7 @@ class SetSuffix implements ConverterInterface
             throw new InvalidArgumentException('The setSuffix converter requires a "suffix" parameter.');
         }
 
-        $this->suffix = $parameters['suffix'];
+        $this->suffix = (string) $parameters['suffix'];
     }
 
     /**
