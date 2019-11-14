@@ -3,17 +3,17 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Setter;
 
-use Smile\GdprDump\Converter\Setter\SetSuffix;
+use Smile\GdprDump\Converter\Setter\AddSuffix;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class SetSuffixTest extends TestCase
+class AddSuffixTest extends TestCase
 {
     /**
      * Test the converter.
      */
     public function testConverter()
     {
-        $converter = new SetSuffix(['suffix' => '_test']);
+        $converter = new AddSuffix(['suffix' => '_test']);
 
         $value = $converter->convert('value');
         $this->assertSame('value_test', $value);
@@ -26,6 +26,6 @@ class SetSuffixTest extends TestCase
      */
     public function testSuffixNotSet()
     {
-        new SetSuffix();
+        new AddSuffix();
     }
 }

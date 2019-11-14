@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Converter\Setter;
 use InvalidArgumentException;
 use Smile\GdprDump\Converter\ConverterInterface;
 
-class SetPrefix implements ConverterInterface
+class AddPrefix implements ConverterInterface
 {
     /**
      * @var string

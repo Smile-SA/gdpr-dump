@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
+- Rename setPrefix/setSuffix converters to addPrefix/addSuffix
 - Move the config version parsing to a VersionLoader implementation
 - Prevent the use of unsafe statements in var queries (e.g. insert/delete)
 - Add a PHP tokenizer abstraction layer

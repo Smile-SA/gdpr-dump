@@ -15,8 +15,8 @@
 - [randomizeDateTime](#user-content-randomizedatetime)
 - [setNull](#user-content-setnull)
 - [setValue](#user-content-setvalue)
-- [setPrefix](#user-content-setprefix)
-- [setSuffix](#user-content-setsuffix)
+- [addPrefix](#user-content-addprefix)
+- [addSuffix](#user-content-addsuffix)
 - [jsonData](#user-content-jsondata)
 - [serializedData](#user-content-serializeddata)
 - [chain](#user-content-chain)
@@ -309,7 +309,7 @@ tables:
                     value: 0
 ```
 
-## [setPrefix](src/Converter/Setter/SetPrefix.php)
+## [addPrefix](src/Converter/Setter/AddPrefix.php)
 
 This converter adds a prefix to every value.
 
@@ -328,12 +328,12 @@ tables:
     my_table:
         converters:
             my_column:
-                converter: 'setPrefix'
+                converter: 'addPrefix'
                 parameters:
                     prefix: 'test_'
 ```
 
-## [setSuffix](src/Converter/Setter/SetSuffix.php)
+## [addSuffix](src/Converter/Setter/AddSuffix.php)
 
 This converter adds a suffix to every value.
 
@@ -352,7 +352,7 @@ tables:
     my_table:
         converters:
             my_column:
-                converter: 'setSuffix'
+                converter: 'addSuffix'
                 parameters:
                     suffix: '_test'
 ```
