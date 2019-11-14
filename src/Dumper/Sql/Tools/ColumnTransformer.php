@@ -55,13 +55,13 @@ class ColumnTransformer
         // Set the context data
         if ($this->currentRow !== $row) {
             $this->context['row_data'] = $row;
-            $this->context['processed'] = [];
+            $this->context['processed_data'] = [];
             $this->currentRow = $row;
         }
 
         // Transform the value
         $value = $this->converters[$table][$column]->convert($value, $this->context);
-        $this->context['processed'][$column] = $value;
+        $this->context['processed_data'][$column] = $value;
 
         return $value;
     }

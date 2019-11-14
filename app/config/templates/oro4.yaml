@@ -161,7 +161,7 @@ tables:
                     converters:
                         - converter: 'fromContext'
                           parameters:
-                              key: 'processed.email'
+                              key: 'processed_data.email'
                         - converter: 'toLower'
             name_prefix:
                 converter: 'anonymizeText'
@@ -372,7 +372,7 @@ tables:
                     converters:
                         - converter: 'fromContext'
                           parameters:
-                              key: 'processed.username'
+                              key: 'processed_data.username'
                         - converter: 'toLower'
             email:
                 converter: 'randomizeEmail'
@@ -383,7 +383,7 @@ tables:
                     converters:
                         - converter: 'fromContext'
                           parameters:
-                              key: 'processed.email'
+                              key: 'processed_data.email'
                         - converter: 'toLower'
             phone:
                 converter: 'randomizeNumber'

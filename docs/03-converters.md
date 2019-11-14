@@ -496,7 +496,7 @@ This converter returns a value from the `$context` array passed to converters.
 The context array contains the following data:
 
 - `row_data`: an array containing the value of each column of the table row
-- `processed`: an array containing the values of the row that were transformed by a converter
+- `processed_data`: an array containing the values of the row that were transformed by a converter
 
 Parameters:
 
@@ -518,6 +518,6 @@ tables:
                     converters:
                         - converter: 'fromContext'
                           parameters:
-                              key: 'processed.email'
+                              key: 'processed_data.email'
                         - converter: 'toLower'
 ```
