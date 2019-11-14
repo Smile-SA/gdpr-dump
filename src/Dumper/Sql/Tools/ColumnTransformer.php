@@ -18,6 +18,11 @@ class ColumnTransformer
     private $context = [];
 
     /**
+     * @var array|null
+     */
+    private $currentRow;
+
+    /**
      * @param ConverterInterface[] $converters
      * @param array $context
      */
@@ -35,6 +40,7 @@ class ColumnTransformer
      * @param mixed $value
      * @param array $row
      * @return mixed
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function transform(string $table, string $column, $value, array $row)
     {
@@ -42,14 +48,20 @@ class ColumnTransformer
         // Every micro-optimization counts, this method can be executed millions of times
         // In this part of the code, abstraction layers should be avoided at all costs
 
-        if ($value === null) {
+        if (!isset($this->converters[$table][$column]) || $value === null) {
             return $value;
         }
 
-        if (isset($this->converters[$table][$column])) {
+        // Set the context data
+        if ($this->currentRow !== $row) {
             $this->context['row_data'] = $row;
-            $value = $this->converters[$table][$column]->convert($value, $this->context);
+            $this->context['processed'] = [];
+            $this->currentRow = $row;
         }
+
+        // Transform the value
+        $value = $this->converters[$table][$column]->convert($value, $this->context);
+        $this->context['processed'][$column] = $value;
 
         return $value;
     }

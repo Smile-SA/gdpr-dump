@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Converter\Setter;
+namespace Smile\GdprDump\Tests\Unit\Converter\Base;
 
-use Smile\GdprDump\Converter\Setter\AddPrefix;
+use Smile\GdprDump\Converter\Base\AddPrefix;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class AddPrefixTest extends TestCase

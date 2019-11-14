@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
 use Smile\GdprDump\Converter\Proxy\Unique;
-use Smile\GdprDump\Converter\Setter\SetNull;
+use Smile\GdprDump\Converter\Base\SetNull;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\TestCase;
 

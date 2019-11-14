@@ -13,6 +13,9 @@
 - [randomizeEmail](#user-content-randomizeemail)
 - [randomizeDate](#user-content-randomizedate)
 - [randomizeDateTime](#user-content-randomizedatetime)
+- [numberBetween](#user-content-numberbetween)
+- [toLower](#user-content-tolower)
+- [toUpper](#user-content-toupper)
 - [setNull](#user-content-setnull)
 - [setValue](#user-content-setvalue)
 - [addPrefix](#user-content-addprefix)
@@ -20,6 +23,7 @@
 - [jsonData](#user-content-jsondata)
 - [serializedData](#user-content-serializeddata)
 - [chain](#user-content-chain)
+- [fromContext](#user-content-fromcontext)
 
 ## [faker](src/Converter/Faker.php)
 
@@ -273,7 +277,59 @@ tables:
                 converter: 'randomizeDateTime'
 ```
 
-## [setNull](src/Converter/Setter/SetNull.php)
+## [numberBetween](src/Converter/Base/NumberBetween.php)
+
+Generates a number between a min and a max value.
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **min** | Y | | The min value. |
+| **max** | Y | | The max value. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'numberBetween'
+                parameters:
+                    min: 0
+                    max: 100
+```
+
+## [toLower](src/Converter/Base/ToLower.php)
+
+Converts all characters to lower case.
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'toLower'
+```
+
+## [toUpper](src/Converter/Base/ToUpper.php)
+
+Converts all characters to upper case.
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'toUpper'
+```
+
+## [setNull](src/Converter/Base/SetNull.php)
 
 Converts all values to `null`.
 
@@ -287,7 +343,7 @@ tables:
                 converter: 'setNull'
 ```
 
-## [setValue](src/Converter/Setter/SetValue.php)
+## [setValue](src/Converter/Base/SetValue.php)
 
 This converter always returns the same value.
 
@@ -309,7 +365,7 @@ tables:
                     value: 0
 ```
 
-## [addPrefix](src/Converter/Setter/AddPrefix.php)
+## [addPrefix](src/Converter/Base/AddPrefix.php)
 
 This converter adds a prefix to every value.
 
@@ -333,7 +389,7 @@ tables:
                     prefix: 'test_'
 ```
 
-## [addSuffix](src/Converter/Setter/AddSuffix.php)
+## [addSuffix](src/Converter/Base/AddSuffix.php)
 
 This converter adds a suffix to every value.
 
@@ -431,4 +487,37 @@ tables:
                     converters:
                         1:
                             disabled: true
+```
+
+## [fromContext](src/Converter/Proxy/FromContext.php)
+
+This converter returns a value from the `$context` array passed to converters.
+
+The context array contains the following data:
+
+- `row_data`: an array containing the value of each column of the table row
+- `generated`: an array containing the values of the row that were transformed by a converter
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **key** | Y | | The key associated to the value to retrieve in the context array. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+            email_lowercase:
+                converter: 'chain'
+                parameters:
+                    converters:
+                        - converter: 'fromContext'
+                          parameters:
+                              key: 'generated.email'
+                        - converter: 'toLower'
 ```

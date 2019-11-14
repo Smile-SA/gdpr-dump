@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Converter\Setter;
+namespace Smile\GdprDump\Tests\Unit\Converter\Base;
 
-use Smile\GdprDump\Converter\Setter\SetNull;
+use Smile\GdprDump\Converter\Base\SetNull;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class SetNullTest extends TestCase
