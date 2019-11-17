@@ -25,15 +25,15 @@ class NumberBetween implements ConverterInterface
     public function __construct(array $parameters = [])
     {
         if (!array_key_exists('min', $parameters)) {
-            throw new InvalidArgumentException('The NumberBetween converter requires a "min" parameter.');
+            throw new InvalidArgumentException('The parameter "min" is required.');
         }
 
         if (!array_key_exists('max', $parameters)) {
-            throw new InvalidArgumentException('The NumberBetween converter requires a "max" parameter.');
+            throw new InvalidArgumentException('The parameter "max" is required.');
         }
 
         if ($parameters['min'] > $parameters['max']) {
-            throw new UnexpectedValueException('The "min" parameter must be lower than the "max" parameter.');
+            throw new UnexpectedValueException('The parameter "min" must be lower than the parameter "max".');
         }
 
         $this->min = (int) $parameters['min'];

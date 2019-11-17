@@ -31,7 +31,7 @@ class Unique implements ConverterInterface
     public function __construct(array $parameters)
     {
         if (!isset($parameters['converter'])) {
-            throw new InvalidArgumentException('The unique converter requires a "converter" parameter.');
+            throw new InvalidArgumentException('The parameter "converter" is required.');
         }
 
         $this->converter = $parameters['converter'];

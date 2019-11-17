@@ -57,7 +57,7 @@ class Conditional implements ConverterInterface
     public function __construct(array $parameters)
     {
         if (!isset($parameters['condition']) || $parameters['condition'] === '') {
-            throw new InvalidArgumentException('The conditional converter requires a "condition" parameter.');
+            throw new InvalidArgumentException('The parameter "condition" is required.');
         }
 
         if (!isset($parameters['if_true_converter']) && !isset($parameters['if_false_converter'])) {
@@ -150,12 +150,12 @@ class Conditional implements ConverterInterface
     {
         // Prevent usage of "=" operator
         if (preg_match('/[^=!]=[^=]/', $condition)) {
-            throw new RuntimeException('The "=" operator is not allowed in converter conditions.');
+            throw new RuntimeException('The operator "=" is not allowed in converter conditions.');
         }
 
         // Prevent usage of "$" character
         if (preg_match('/\$/', $condition)) {
-            throw new RuntimeException('The "$" character is not allowed in converter conditions.');
+            throw new RuntimeException('The character "$" is not allowed in converter conditions.');
         }
 
         // Prevent the use of some statements

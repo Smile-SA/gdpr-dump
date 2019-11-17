@@ -19,7 +19,7 @@ class AddSuffix implements ConverterInterface
     public function __construct(array $parameters = [])
     {
         if (!array_key_exists('suffix', $parameters)) {
-            throw new InvalidArgumentException('The setSuffix converter requires a "suffix" parameter.');
+            throw new InvalidArgumentException('The parameter "suffix" is required.');
         }
 
         $this->suffix = (string) $parameters['suffix'];

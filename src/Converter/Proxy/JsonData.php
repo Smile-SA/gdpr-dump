@@ -20,7 +20,7 @@ class JsonData implements ConverterInterface
     public function __construct(array $parameters)
     {
         if (empty($parameters['converters'])) {
-            throw new InvalidArgumentException('The json data converter requires a "converters" parameter.');
+            throw new InvalidArgumentException('The parameter "converters" is required.');
         }
 
         $this->converters = (array) $parameters['converters'];

@@ -20,7 +20,7 @@ class SetValue implements ConverterInterface
     public function __construct(array $parameters)
     {
         if (!array_key_exists('value', $parameters)) {
-            throw new InvalidArgumentException('The setValue converter requires a "value" parameter.');
+            throw new InvalidArgumentException('The parameter "value" is required.');
         }
 
         $this->value = $parameters['value'];

@@ -19,7 +19,7 @@ class AddPrefix implements ConverterInterface
     public function __construct(array $parameters = [])
     {
         if (!array_key_exists('prefix', $parameters)) {
-            throw new InvalidArgumentException('The setPrefix converter requires a "prefix" parameter.');
+            throw new InvalidArgumentException('The parameter "prefix" is required.');
         }
 
         $this->prefix = (string) $parameters['prefix'];

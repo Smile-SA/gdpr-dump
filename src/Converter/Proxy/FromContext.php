@@ -20,12 +20,11 @@ class FromContext implements ConverterInterface
     public function __construct(array $parameters = [])
     {
         if (!array_key_exists('key', $parameters)) {
-            throw new InvalidArgumentException('The FromContext converter requires a "key" parameter.');
+            throw new InvalidArgumentException('The parameter "key" is required.');
         }
 
         $this->key = (string) $parameters['key'];
     }
-
 
     /**
      * @inheritdoc
