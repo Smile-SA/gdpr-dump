@@ -14,8 +14,8 @@ class CacheTest extends TestCase
      */
     public function testConverter()
     {
-        $converter1 = new Cache(['converter' => new RandomizeText()]);
-        $converter2 = new Cache(['cache_key' => 'cache2', 'converter' => new RandomizeText()]);
+        $converter1 = new Cache(['converter' => new RandomizeText(), 'cache_key' => 'key1']);
+        $converter2 = new Cache(['converter' => new RandomizeText(), 'cache_key' => 'key2']);
 
         $value = 'textToAnonymize';
         $value1 = $converter1->convert($value);
@@ -27,12 +27,22 @@ class CacheTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when the converter cache is not set.
+     * Assert that an exception is thrown when the converter is not set.
      *
      * @expectedException \InvalidArgumentException
      */
     public function testConverterNotSet()
     {
-        new Cache([]);
+        new Cache(['converter' => new RandomizeText()]);
+    }
+
+    /**
+     * Assert that an exception is thrown when the cache key is not set.
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testCacheKeyNotSet()
+    {
+        new Cache(['cache_key' => 'username']);
     }
 }

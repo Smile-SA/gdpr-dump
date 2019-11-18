@@ -32,8 +32,12 @@ class Cache implements ConverterInterface
             throw new InvalidArgumentException('The parameter "converter" is required.');
         }
 
+        if (!isset($parameters['cache_key'])) {
+            throw new InvalidArgumentException('The parameter "cache_key" is required.');
+        }
+
         $this->converter = $parameters['converter'];
-        $this->cacheKey = $parameters['cache_key'] ?? '*';
+        $this->cacheKey = (string) $parameters['cache_key'];
     }
 
     /**
