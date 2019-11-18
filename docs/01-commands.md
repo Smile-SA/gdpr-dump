@@ -33,7 +33,7 @@ The following configuration templates are available:
 - [magento1](app/config/templates/magento1.yaml)
 - [magento2](app/config/templates/magento2.yaml)
 
-Each template provides anonymization rules for a specific framework (e.g. "magento1" is for Magento 1 Community Edition).
+Each template provides anonymization rules for a specific framework.
 
 If you use a configuration template, you **must** specify the application version (e.g. "2.3.2").
 
@@ -43,7 +43,7 @@ If you use a configuration template, you **must** specify the application versio
 
     ```yaml
     extends: 'magento2'
-    version: '2.3.2'
+    version: '2.3.3'
   
     database:
         name: 'mydatabase'

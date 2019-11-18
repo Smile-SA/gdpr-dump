@@ -34,7 +34,7 @@ If you override a [configuration template](02-configuration.md#user-content-conf
 
 ```yaml
 extends: magento2
-version: '2.3.2'
+version: '2.3.3'
 ```
 
 **Extending Multiple Files**
