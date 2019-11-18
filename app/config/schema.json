@@ -37,13 +37,15 @@
         "tables_whitelist": {
             "type": "array",
             "items": {
-                "type": "string"
+                "type": "string",
+                "minLength": 1
             }
         },
         "tables_blacklist": {
             "type": "array",
             "items": {
-                "type": "string"
+                "type": "string",
+                "minLength": 1
             }
         }
     },
