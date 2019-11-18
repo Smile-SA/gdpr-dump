@@ -5,6 +5,7 @@ namespace Smile\GdprDump\Converter\Proxy;
 
 use InvalidArgumentException;
 use Smile\GdprDump\Converter\ConverterInterface;
+use UnexpectedValueException;
 
 class Chain implements ConverterInterface
 {
@@ -15,14 +16,24 @@ class Chain implements ConverterInterface
 
     /**
      * @param array $parameters
+     * @throws InvalidArgumentException
+     * @throws UnexpectedValueException
      */
     public function __construct(array $parameters)
     {
-        if (empty($parameters['converters'])) {
+        if (!array_key_exists('converters', $parameters)) {
             throw new InvalidArgumentException('The parameter "converters" is required.');
         }
 
-        $this->converters = (array) $parameters['converters'];
+        if (!is_array($parameters['converters'])) {
+            throw new UnexpectedValueException('The parameter "converters" must be an array.');
+        }
+
+        if (empty($parameters['converters'])) {
+            throw new UnexpectedValueException('The parameter "converters" must not be empty.');
+        }
+
+        $this->converters = $parameters['converters'];
     }
 
     /**

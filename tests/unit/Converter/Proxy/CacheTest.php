@@ -27,22 +27,32 @@ class CacheTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when the converter is not set.
+     * Assert that an exception is thrown when the parameter "converter" is not set.
      *
      * @expectedException \InvalidArgumentException
      */
     public function testConverterNotSet()
     {
-        new Cache(['converter' => new RandomizeText()]);
+        new Cache(['cache_key' => 'username']);
     }
 
     /**
-     * Assert that an exception is thrown when the cache key is not set.
+     * Assert that an exception is thrown when the parameter "cache_key" is not set.
      *
      * @expectedException \InvalidArgumentException
      */
     public function testCacheKeyNotSet()
     {
-        new Cache(['cache_key' => 'username']);
+        new Cache(['converter' => new RandomizeText()]);
+    }
+
+    /**
+     * Assert that an exception is thrown when the parameter "cache_key" is empty.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testEmptyCacheKey()
+    {
+        new Cache(['converter' => new RandomizeText(), 'cache_key' => '']);
     }
 }

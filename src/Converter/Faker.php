@@ -5,6 +5,7 @@ namespace Smile\GdprDump\Converter;
 
 use Faker\Generator;
 use InvalidArgumentException;
+use UnexpectedValueException;
 
 class Faker implements ConverterInterface
 {
@@ -31,24 +32,29 @@ class Faker implements ConverterInterface
     /**
      * @param array $parameters
      * @throws InvalidArgumentException
+     * @throws UnexpectedValueException
      */
     public function __construct(array $parameters)
     {
-        if (empty($parameters['faker'])) {
-            throw new InvalidArgumentException('The Faker converter requires the "faker" parameter.');
+        if (!isset($parameters['faker'])) {
+            throw new InvalidArgumentException('The parameter "faker" is required.');
         }
 
-        if (empty($parameters['formatter'])) {
-            throw new InvalidArgumentException('The Faker converter requires the "formatter" parameter.');
+        if (!array_key_exists('formatter', $parameters)) {
+            throw new InvalidArgumentException('The parameter "formatter" is required.');
         }
 
-        $parameters += [
-            'arguments' => [],
-        ];
+        if (array_key_exists('arguments', $parameters) && !is_array($parameters['arguments'])) {
+            throw new UnexpectedValueException('The parameter "arguments" must be an array.');
+        }
 
         $this->faker = $parameters['faker'];
-        $this->formatter = $parameters['formatter'];
-        $this->arguments = $parameters['arguments'];
+        $this->formatter = (string) $parameters['formatter'];
+        $this->arguments = $parameters['arguments'] ?? [];
+
+        if ($this->formatter === '') {
+            throw new UnexpectedValueException('The parameter "formatter" must not be empty.');
+        }
 
         foreach ($this->arguments as $name => $value) {
             if ($value === '{{value}}') {

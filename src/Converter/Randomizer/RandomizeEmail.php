@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Randomizer;
 
+use UnexpectedValueException;
+
 class RandomizeEmail extends RandomizeText
 {
     /**
@@ -21,13 +23,22 @@ class RandomizeEmail extends RandomizeText
 
     /**
      * @param array $parameters
+     * @throws UnexpectedValueException
      */
     public function __construct(array $parameters = [])
     {
         parent::__construct($parameters);
 
-        if (!empty($parameters['domains'])) {
-            $this->domains = (array) $parameters['domains'];
+        if (array_key_exists('domains', $parameters)) {
+            if (!is_array($parameters['domains'])) {
+                throw new UnexpectedValueException('The parameter "domains" must be an array.');
+            }
+
+            if (empty($parameters['domains'])) {
+                throw new UnexpectedValueException('The parameter "domains" must not be empty.');
+            }
+
+            $this->domains = $parameters['domains'];
         }
 
         $this->domainsCount = count($this->domains);

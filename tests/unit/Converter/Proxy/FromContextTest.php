@@ -21,12 +21,22 @@ class NumberBetweenTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when the context key is not set.
+     * Assert that an exception is thrown when the parameter "key" is not set.
      *
      * @expectedException \InvalidArgumentException
      */
     public function testKeyNotSet()
     {
         new FromContext([]);
+    }
+
+    /**
+     * Assert that an exception is thrown when the parameter "key" is empty.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testEmptyKey()
+    {
+        new FromContext(['key' => '']);
     }
 }

@@ -8,6 +8,7 @@ use RuntimeException;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Tokenizer\PhpTokenizer;
 use Smile\GdprDump\Tokenizer\Token;
+use UnexpectedValueException;
 
 class Conditional implements ConverterInterface
 {
@@ -53,11 +54,16 @@ class Conditional implements ConverterInterface
      * @param array $parameters
      * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws UnexpectedValueException
      */
     public function __construct(array $parameters)
     {
-        if (!isset($parameters['condition'])) {
+        if (!array_key_exists('condition', $parameters)) {
             throw new InvalidArgumentException('The parameter "condition" is required.');
+        }
+
+        if ((string) $parameters['condition'] === '') {
+            throw new UnexpectedValueException('The parameter "condition" must not be empty.');
         }
 
         if (!isset($parameters['if_true_converter']) && !isset($parameters['if_false_converter'])) {

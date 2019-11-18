@@ -34,7 +34,21 @@ class ConditionalTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when the condition is not set.
+     * Assert that an exception is thrown when the converters are not set.
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testConvertersNotSet()
+    {
+        $parameters = [
+            'condition' => '{{id}} === 1',
+        ];
+
+        new Conditional($parameters);
+    }
+
+    /**
+     * Assert that an exception is thrown when the parameter "condition" is not set.
      *
      * @expectedException \InvalidArgumentException
      */
@@ -48,14 +62,15 @@ class ConditionalTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when the converters are not set.
+     * Assert that an exception is thrown when the parameter "condition" is empty.
      *
-     * @expectedException \InvalidArgumentException
+     * @expectedException \UnexpectedValueException
      */
-    public function testConvertersNotSet()
+    public function testEmptyCondition()
     {
         $parameters = [
-            'condition' => '{{id}} === 1',
+            'if_true_converter' => $this->createIfTrueConverter(),
+            'condition' => '',
         ];
 
         new Conditional($parameters);

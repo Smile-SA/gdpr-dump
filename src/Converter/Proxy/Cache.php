@@ -5,6 +5,7 @@ namespace Smile\GdprDump\Converter\Proxy;
 
 use InvalidArgumentException;
 use Smile\GdprDump\Converter\ConverterInterface;
+use UnexpectedValueException;
 
 class Cache implements ConverterInterface
 {
@@ -25,6 +26,8 @@ class Cache implements ConverterInterface
 
     /**
      * @param array $parameters
+     * @throws InvalidArgumentException
+     * @throws UnexpectedValueException
      */
     public function __construct(array $parameters)
     {
@@ -32,12 +35,16 @@ class Cache implements ConverterInterface
             throw new InvalidArgumentException('The parameter "converter" is required.');
         }
 
-        if (!isset($parameters['cache_key'])) {
+        if (!array_key_exists('cache_key', $parameters)) {
             throw new InvalidArgumentException('The parameter "cache_key" is required.');
         }
 
         $this->converter = $parameters['converter'];
         $this->cacheKey = (string) $parameters['cache_key'];
+
+        if ($this->cacheKey === '') {
+            throw new UnexpectedValueException('The parameter "cache_key" must not be empty.');
+        }
     }
 
     /**

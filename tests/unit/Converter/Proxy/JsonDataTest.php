@@ -56,6 +56,26 @@ class JsonDataTest extends TestCase
     }
 
     /**
+     * Assert that an exception is thrown when the parameter "converters" is empty.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testEmptyConverters()
+    {
+        new JsonData(['converters' => []]);
+    }
+
+    /**
+     * Assert that an exception is thrown when the parameter "converters" is not an array.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testInvalidConverters()
+    {
+        new JsonData(['converters' => 'notAnArray']);
+    }
+
+    /**
      * Get the JSON data to anonymize.
      *
      * @return string

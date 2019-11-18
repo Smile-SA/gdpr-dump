@@ -37,8 +37,12 @@ class RandomizeDate implements ConverterInterface
     {
         $this->date = new DateTime();
 
-        if (isset($parameters['format'])) {
+        if (array_key_exists('format', $parameters)) {
             $this->format = (string) $parameters['format'];
+
+            if ($this->format === '') {
+                throw new UnexpectedValueException('The parameter "replacement" must not be empty.');
+            }
         }
 
         // Min year is the current year if the parameter is set to null, 1900 if the parameter is not defined

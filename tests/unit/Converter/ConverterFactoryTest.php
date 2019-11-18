@@ -141,7 +141,7 @@ class ConverterFactoryTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when the "parameters" parameter is not an array.
+     * Assert that an exception is thrown when the parameter "parameters" is not an array.
      *
      * @expectedException \UnexpectedValueException
      */
@@ -152,7 +152,7 @@ class ConverterFactoryTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when a "converter" parameter is used,
+     * Assert that an exception is thrown when the parameter "converter" is used,
      * but the value is not a converter definition.
      *
      * @expectedException \UnexpectedValueException
@@ -164,7 +164,7 @@ class ConverterFactoryTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when a "converters" parameter is used,
+     * Assert that an exception is thrown when the parameter "converters" is used,
      * but the value is not an array.
      *
      * @expectedException \UnexpectedValueException
@@ -176,7 +176,7 @@ class ConverterFactoryTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when a "converters" parameter is used,
+     * Assert that an exception is thrown when the parameter "converters" is used,
      * but the value is not an array of converter definition.
      *
      * @expectedException \UnexpectedValueException

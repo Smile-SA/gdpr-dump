@@ -56,6 +56,26 @@ class SerializedDataTest extends TestCase
     }
 
     /**
+     * Assert that an exception is thrown when the parameter "converters" is empty.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testEmptyConverters()
+    {
+        new SerializedData(['converters' => []]);
+    }
+
+    /**
+     * Assert that an exception is thrown when the parameter "converters" is not an array.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testInvalidConverters()
+    {
+        new SerializedData(['converters' => 'notAnArray']);
+    }
+
+    /**
      * Get the serialized data to anonymize.
      *
      * @return string

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter\Randomizer;
 
 use Smile\GdprDump\Converter\ConverterInterface;
+use UnexpectedValueException;
 
 class RandomizeText implements ConverterInterface
 {
@@ -24,15 +25,20 @@ class RandomizeText implements ConverterInterface
 
     /**
      * @param array $parameters
+     * @throws UnexpectedValueException
      */
     public function __construct(array $parameters = [])
     {
-        if (isset($parameters['min_length'])) {
+        if (array_key_exists('min_length', $parameters)) {
             $this->minLength = (int) $parameters['min_length'];
         }
 
-        if (isset($parameters['replacements'])) {
+        if (array_key_exists('replacements', $parameters)) {
             $this->replacements = (string) $parameters['replacements'];
+
+            if ($this->replacements === '') {
+                throw new UnexpectedValueException('The parameter "replacements" must not be empty.');
+            }
         }
 
         $this->replacementsCount = strlen($this->replacements);

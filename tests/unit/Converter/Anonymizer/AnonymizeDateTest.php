@@ -35,6 +35,16 @@ class AnonymizeDateTest extends TestCase
     }
 
     /**
+     * Assert that an exception is thrown when the parameter "format" is empty.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testEmptyFormat()
+    {
+        new AnonymizeDate(['format' => '']);
+    }
+
+    /**
      * Assert that an exception is thrown when an invalid date is provided.
      *
      * @expectedException \UnexpectedValueException

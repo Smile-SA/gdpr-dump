@@ -21,4 +21,24 @@ class AnonymizeEmailTest extends TestCase
         $value = $converter->convert('john.doe@gmail.com');
         $this->assertSame('j***.d**@example.org', $value);
     }
+
+    /**
+     * Assert that an exception is thrown when the parameter "domains" is empty.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testEmptyDomains()
+    {
+        new AnonymizeEmail(['domains' => []]);
+    }
+
+    /**
+     * Assert that an exception is thrown when the parameter "domains" is not an array.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testInvalidDomains()
+    {
+        new AnonymizeEmail(['domains' => 'invalid']);
+    }
 }

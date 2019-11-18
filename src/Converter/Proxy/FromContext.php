@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Converter\Proxy;
 use InvalidArgumentException;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Helper\ArrayHelper;
+use UnexpectedValueException;
 
 class FromContext implements ConverterInterface
 {
@@ -16,6 +17,8 @@ class FromContext implements ConverterInterface
 
     /**
      * @param array $parameters
+     * @throws InvalidArgumentException
+     * @throws UnexpectedValueException
      */
     public function __construct(array $parameters = [])
     {
@@ -24,6 +27,10 @@ class FromContext implements ConverterInterface
         }
 
         $this->key = (string) $parameters['key'];
+
+        if ($this->key === '') {
+            throw new UnexpectedValueException('The parameter "key" must not be empty.');
+        }
     }
 
     /**

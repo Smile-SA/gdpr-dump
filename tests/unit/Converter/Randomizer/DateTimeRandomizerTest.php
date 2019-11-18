@@ -61,6 +61,16 @@ class DateTimeRandomizerTest extends DateRandomizerTest
     }
 
     /**
+     * Assert that an exception is thrown when the parameter "format" is empty.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testEmptyFormat()
+    {
+        new RandomizeDateTime(['format' => '']);
+    }
+
+    /**
      * Assert that an exception is thrown when the min year is higher than the max year.
      *
      * @expectedException \Exception

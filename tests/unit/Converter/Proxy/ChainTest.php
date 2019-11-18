@@ -28,12 +28,22 @@ class ChainTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when the converter chain is not set.
+     * Assert that an exception is thrown when the parameter "converters" is not set.
      *
      * @expectedException \InvalidArgumentException
      */
     public function testConvertersNotSet()
     {
         new Chain([]);
+    }
+
+    /**
+     * Assert that an exception is thrown when the parameter "converters" is not an array.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testInvalidConverters()
+    {
+        new Chain(['converters' => 'notAnArray']);
     }
 }

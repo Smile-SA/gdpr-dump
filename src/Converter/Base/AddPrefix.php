@@ -15,6 +15,7 @@ class AddPrefix implements ConverterInterface
 
     /**
      * @param array $parameters
+     * @throws InvalidArgumentException
      */
     public function __construct(array $parameters = [])
     {

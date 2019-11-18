@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter\Base;
 
 use InvalidArgumentException;
-use UnexpectedValueException;
 use Smile\GdprDump\Converter\ConverterInterface;
+use UnexpectedValueException;
 
 class NumberBetween implements ConverterInterface
 {
@@ -21,6 +21,8 @@ class NumberBetween implements ConverterInterface
 
     /**
      * @param array $parameters
+     * @throws InvalidArgumentException
+     * @throws UnexpectedValueException
      */
     public function __construct(array $parameters = [])
     {

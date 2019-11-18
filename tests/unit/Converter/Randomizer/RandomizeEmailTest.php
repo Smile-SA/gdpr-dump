@@ -31,4 +31,24 @@ class RandomizeEmailTest extends TestCase
         $value = $converter->convert('user1@example.org');
         $this->assertSame('aaaaa@example.org', $value);
     }
+
+    /**
+     * Assert that an exception is thrown when the parameter "domains" is empty.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testEmptyDomains()
+    {
+        new RandomizeEmail(['domains' => []]);
+    }
+
+    /**
+     * Assert that an exception is thrown when the parameter "domains" is not an array.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testInvalidDomains()
+    {
+        new RandomizeEmail(['domains' => 'invalid']);
+    }
 }

@@ -16,11 +16,16 @@ class AnonymizeDate implements ConverterInterface
 
     /**
      * @param array $parameters
+     * @throws UnexpectedValueException
      */
     public function __construct(array $parameters = [])
     {
-        if (isset($parameters['format'])) {
+        if (array_key_exists('format', $parameters)) {
             $this->format = (string) $parameters['format'];
+
+            if ($this->format === '') {
+                throw new UnexpectedValueException('The parameter "format" must not be empty.');
+            }
         }
     }
 

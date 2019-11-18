@@ -29,4 +29,14 @@ class RandomizeTextTest extends TestCase
         $value = $converter->convert('user1');
         $this->assertSame('aaaaa', $value);
     }
+
+    /**
+     * Assert that an exception is thrown when the parameter "replacements" is empty.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testEmptyReplacements()
+    {
+        new RandomizeText(['replacements' => '']);
+    }
 }
