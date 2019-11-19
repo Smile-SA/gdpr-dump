@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
+- Enable autowiring in services.yaml
 - Better data validation in converter constructors
 
 ## [1.0.0-beta14] - 2019-11-18

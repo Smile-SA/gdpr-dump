@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+use Smile\GdprDump\AppKernel;
 use Smile\GdprDump\Compiler;
 use Smile\GdprDump\Console\Application;
 
@@ -11,8 +12,12 @@ require $basePath . '/app/bootstrap.php';
 // Prepare the file name
 $fileName = $basePath . '/build/dist/gdpr-dump-' . Application::VERSION . '.phar';
 
-// Create the phar file
 try {
+    // Force the generation of the container cache
+    $application = new AppKernel();
+    $application->initialize();
+
+    // Create the phar file
     $compiler = new Compiler();
     $compiler->compile($fileName);
 } catch (RuntimeException $e) {
