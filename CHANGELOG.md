@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 - Enable autowiring in services.yaml
 - Better data validation in converter constructors
+- Remove group by clause in the mysql metadata class
 
 ## [1.0.0-beta14] - 2019-11-18
 [1.0.0-beta14]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta13...1.0.0-beta14
