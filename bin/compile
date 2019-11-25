@@ -15,7 +15,8 @@ $fileName = $basePath . '/build/dist/gdpr-dump-' . Application::VERSION . '.phar
 try {
     // Force the generation of the container cache
     $application = new AppKernel();
-    $application->initialize();
+    $application->setDebug(true);
+    $application->boot();
 
     // Create the phar file
     $compiler = new Compiler();

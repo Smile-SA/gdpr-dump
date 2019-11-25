@@ -28,14 +28,19 @@ class AppKernel
     /**
      * @var bool
      */
-    private $initialized = false;
+    private $booted = false;
 
     /**
-     * Initialize the application dependencies.
+     * @var bool
      */
-    public function initialize()
+    private $debug = false;
+
+    /**
+     * Initialize the application.
+     */
+    public function boot()
     {
-        if ($this->initialized) {
+        if ($this->booted) {
             return;
         }
 
@@ -43,18 +48,18 @@ class AppKernel
         $this->initErrorHandler();
 
         // Build the service container
-        $this->container = $this->buildServiceContainer();
+        $this->container = $this->buildContainer();
 
-        $this->initialized = true;
+        $this->booted = true;
     }
 
     /**
-     * Run the console application.
+     * Run the application.
      */
     public function run()
     {
         // Initialize the application dependencies
-        $this->initialize();
+        $this->boot();
 
         // Configure and run the application
         $application = new Application();
@@ -64,6 +69,26 @@ class AppKernel
         $application->add($command);
         $application->setDefaultCommand($command->getName(), true);
         $application->run();
+    }
+
+    /**
+     * Toggle the debug mode.
+     *
+     * @param bool $value
+     */
+    public function setDebug(bool $value)
+    {
+        $this->debug = $value;
+    }
+
+    /**
+     * Check whether debug mode is enabled.
+     *
+     * @return bool
+     */
+    public function isDebug(): bool
+    {
+        return $this->debug;
     }
 
     /**
@@ -86,13 +111,13 @@ class AppKernel
      *
      * @return ContainerInterface
      */
-    private function buildServiceContainer(): ContainerInterface
+    private function buildContainer(): ContainerInterface
     {
         $basePath = dirname(__DIR__);
 
         // Initialize the config cache
         $file = $basePath . '/app/container.php';
-        $configCache = new ConfigCache($file, false);
+        $configCache = new ConfigCache($file, $this->isDebug());
 
         // Load the container from the cache if it exists
         if ($configCache->isFresh()) {
@@ -100,18 +125,17 @@ class AppKernel
             return new CachedContainer();
         }
 
-        // Otherwise, create the container
-        $containerBuilder = new ContainerBuilder();
-        $loader = new YamlFileLoader($containerBuilder, new FileLocator($basePath . '/app/config'));
+        // Build the container
+        $container = new ContainerBuilder();
+        $loader = new YamlFileLoader($container, new FileLocator($basePath . '/app/config'));
         $loader->load('services.yaml');
+        $container->setParameter('app_root', $basePath);
+        $container->compile();
 
-        $containerBuilder->setParameter('app_root', $basePath);
-        $containerBuilder->compile();
-
-        // Save the container contents to the cache
-        $dumper = new PhpDumper($containerBuilder);
+        // Dump the container contents to the cache
+        $dumper = new PhpDumper($container);
         $configCache->write($dumper->dump(['class' => 'CachedContainer']));
 
-        return $containerBuilder;
+        return $container;
     }
 }
