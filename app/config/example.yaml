@@ -1,6 +1,6 @@
 ---
 extends: 'magento2'
-version: '2.3.2'
+version: '2.3.3'
 
 database:
     user: 'magento2'
@@ -12,6 +12,18 @@ dump:
     compress: 'bzip2'
 
 tables:
+    customer_entity:
+        filters:
+            - ['email', 'like', '@smile.fr']
+
+    quote:
+        filters:
+            - ['created_at', 'gt', 'expr: date_sub(now(), interval 60 day)']
+
+    sales_order:
+        filters:
+            - ['created_at', 'gt', 'expr: date_sub(now(), interval 60 day)']
+
     my_custom_table:
         converters:
             email:
