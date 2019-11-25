@@ -14,9 +14,6 @@ tables:
     cache_tag:
         truncate: true
 
-    customer_log:
-        truncate: true
-
     customer_visitor:
         truncate: true
 
@@ -32,10 +29,10 @@ tables:
     report_event:
         truncate: true
 
-    sendfriend_log:
+    session:
         truncate: true
 
-    session:
+    '*_log':
         truncate: true
 
     '*_tmp':

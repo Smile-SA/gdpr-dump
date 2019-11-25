@@ -42,16 +42,19 @@ tables:
     index_event:
         truncate: true
 
-    log_*:
-        truncate: true
-
     persistent_session:
         truncate: true
 
     report_event:
         truncate: true
 
-    sendfriend_log:
+    ui_bookmark:
+        truncate: true
+
+    log_*:
+        truncate: true
+
+    '*_log':
         truncate: true
 
     '*_tmp':
