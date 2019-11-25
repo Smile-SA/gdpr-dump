@@ -41,12 +41,12 @@ class Conditional implements ConverterInterface
      * @var string[]
      */
     private $functionWhitelist = [
-        'addslashes', 'chr', 'date', 'empty', 'implode', 'is_null', 'is_numeric', 'lcfirst', 'ltrim',
-        'md5', 'number_format', 'preg_match', 'rtrim', 'sha1', 'sprintf', 'str_pad', 'str_repeat',
-        'htmlentities', 'str_replace', 'str_word_count', 'strchr', 'strcmp', 'strcspn', 'stripcslashes',
-        'stripos', 'stripslashes', 'stristr', 'strnatcasecmp', 'strnatcmp', 'strncasecmp', 'strncmp',
-        'strpos', 'strrchr', 'strrev', 'htmlspecialchars', 'strripos', 'strrpos', 'strspn', 'strstr',
-        'strtolower', 'strtoupper', 'strtr', 'substr', 'substr_compare', 'substr_count', 'substr_replace',
+        'addslashes', 'array_*', 'chr', 'date', 'empty', 'explode', 'htmlentities', 'htmlspecialchars',
+        'implode', 'in_array', 'is_*', 'isset', 'lcfirst', 'ltrim', 'md5', 'number_format', 'preg_match',
+        'rtrim', 'sha1', 'sprintf', 'str_*', 'strchr', 'strcmp', 'strcoll', 'strcspn', 'stripcslashes',
+        'stripos', 'strip_tags', 'stripslashes', 'stristr', 'strlen', 'strnatcasecmp', 'strnatcmp',
+        'strncasecmp', 'strncmp', 'strpbrk', 'strpos', 'strrchr', 'strrev', 'strripos', 'strrpos',
+        'strspn', 'strstr', 'strtok', 'strtolower', 'strtoupper', 'strtr', 'substr', 'substr_*',
         'time', 'trim', 'ucfirst', 'ucwords', 'vsprintf', 'wordwrap',
     ];
 
@@ -180,7 +180,7 @@ class Conditional implements ConverterInterface
         // Allow only specific functions
         if (preg_match_all('/(\w+) *\(/', $condition, $matches)) {
             foreach ($matches[1] as $function) {
-                if (!in_array($function, $this->functionWhitelist)) {
+                if (!$this->isFunctionAllowed($function)) {
                     $message = sprintf('The function "%s" is not allowed in converter conditions.', $function);
                     throw new RuntimeException($message);
                 }
@@ -289,5 +289,25 @@ class Conditional implements ConverterInterface
         $value = $token->getValue();
 
         return $value === '{' || $value === '}' || $value === '@';
+    }
+
+    /**
+     * Check whether the specified PHP function is allowed.
+     *
+     * @param string $function
+     * @return bool
+     */
+    private function isFunctionAllowed(string $function): bool
+    {
+        $allowed = false;
+
+        foreach ($this->functionWhitelist as $pattern) {
+            if (fnmatch($pattern, $function)) {
+                $allowed = true;
+                break;
+            }
+        }
+
+        return $allowed;
     }
 }
