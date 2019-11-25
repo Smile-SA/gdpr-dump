@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [1.0.0-beta15] - 2019-11-25
+[1.0.0-beta15]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta14...1.0.0-beta15
 
 - Enable autowiring in services.yaml
 - Better data validation in converter constructors
