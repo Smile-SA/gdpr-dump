@@ -42,12 +42,12 @@ class Conditional implements ConverterInterface
      */
     private $functionWhitelist = [
         'addslashes', 'array_*', 'chr', 'date', 'empty', 'explode', 'htmlentities', 'htmlspecialchars',
-        'implode', 'in_array', 'is_*', 'isset', 'lcfirst', 'ltrim', 'md5', 'number_format', 'preg_match',
-        'rtrim', 'sha1', 'sprintf', 'str_*', 'strchr', 'strcmp', 'strcoll', 'strcspn', 'stripcslashes',
-        'stripos', 'strip_tags', 'stripslashes', 'stristr', 'strlen', 'strnatcasecmp', 'strnatcmp',
-        'strncasecmp', 'strncmp', 'strpbrk', 'strpos', 'strrchr', 'strrev', 'strripos', 'strrpos',
-        'strspn', 'strstr', 'strtok', 'strtolower', 'strtoupper', 'strtr', 'substr', 'substr_*',
-        'time', 'trim', 'ucfirst', 'ucwords', 'vsprintf', 'wordwrap',
+        'implode', 'in_array', 'is_*', 'isset', 'lcfirst', 'ltrim', 'mb_*', 'md5', 'number_format',
+        'preg_*', 'rtrim', 'sha1', 'sprintf', 'str_*', 'strchr', 'strcmp', 'strcoll', 'strcspn',
+        'stripcslashes', 'stripos', 'strip_tags', 'stripslashes', 'stristr', 'strlen', 'strnatcasecmp',
+        'strnatcmp', 'strncasecmp', 'strncmp', 'strpbrk', 'strpos', 'strrchr', 'strrev', 'strripos',
+        'strrpos', 'strspn', 'strstr', 'strtok', 'strtolower', 'strtoupper', 'strtr', 'substr',
+        'substr_*', 'time', 'trim', 'ucfirst', 'ucwords', 'vsprintf', 'wordwrap',
     ];
 
     /**

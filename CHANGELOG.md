@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Allow PCRE functions (preg_\*) and multibyte functions (mb_\*) in converter conditions
+
 ## [1.0.0-beta15] - 2019-11-25
 [1.0.0-beta15]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta14...1.0.0-beta15
 
