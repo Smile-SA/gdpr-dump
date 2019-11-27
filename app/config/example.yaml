@@ -14,7 +14,7 @@ dump:
 tables:
     customer_entity:
         filters:
-            - ['email', 'like', '@smile.fr']
+            - ['email', 'like', '%@smile.fr']
 
     quote:
         filters:
