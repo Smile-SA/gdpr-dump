@@ -59,9 +59,11 @@ class Unique implements ConverterInterface
                     sprintf('Maximum retries of %d reached without finding a unique value', $this->maxRetries)
                 );
             }
-        } while (array_key_exists(serialize($result), $this->generated));
 
-        $this->generated[serialize($result)] = null;
+            $key = serialize($result);
+        } while (array_key_exists($key, $this->generated));
+
+        $this->generated[$key] = null;
 
         return $result;
     }
