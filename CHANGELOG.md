@@ -2,8 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [1.0.0-beta16] - 2019-12-17
+[1.0.0-beta16]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta15...1.0.0-beta16
 
+- Hopefully the last beta version before release :)
 - Remove service autowiring (not phar friendly)
 - Minor improvements in the services.yaml file
 - Allow PCRE functions (preg_\*), multibyte functions (mb_\*) and "ord" function in converter conditions
