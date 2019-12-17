@@ -6,30 +6,52 @@ parameters:
 
 services:
     _defaults:
-        autowire: true
-        autoconfigure: true
+        autowire: false # not phar friendly
+        autoconfigure: false # not useful in this app
         public: false
 
-    # Discover services
-    Smile\GdprDump\:
-        resource: '../../src/'
-        exclude: '../../src/{AppKernel.php,Compiler.php}'
-
-    # Console commands have public visibility, they are fetched from the container in the AppKernel class
-    Smile\GdprDump\Console\Command\:
-        resource: '../../src/Console/Command'
+    # --- Dump Command ---
+    Smile\GdprDump\Console\Command\DumpCommand:
         public: true
+        arguments:
+            - '@Smile\GdprDump\Dumper\SqlDumper'
+            - '@Smile\GdprDump\Config\Config'
+            - '@Smile\GdprDump\Config\ConfigLoader'
+            - '@Smile\GdprDump\Config\Version\VersionLoader'
+            - '@Smile\GdprDump\Config\Validator\JsonSchemaValidator'
 
-    # Services with data binding
-    Smile\GdprDump\Config\Validator\JsonSchemaValidator:
-        bind:
-            $schemaFile: '%config.schema_file%'
+    # --- Config ---
+    Smile\GdprDump\Config\Config: ~
+
+    Smile\GdprDump\Config\ConfigLoader:
+        arguments:
+            - '@Smile\GdprDump\Config\Config'
+            - '@Smile\GdprDump\Config\Parser\YamlParser'
+            - '@Smile\GdprDump\Config\Resolver\PathResolver'
+
+    Smile\GdprDump\Config\Parser\YamlParser: ~
 
     Smile\GdprDump\Config\Resolver\PathResolver:
-        bind:
-            $templatesDirectory: '%config.templates_dir%'
+        arguments:
+            - '%config.templates_dir%'
 
+    Smile\GdprDump\Config\Validator\JsonSchemaValidator:
+        arguments:
+            - '%config.schema_file%'
+
+    Smile\GdprDump\Config\Version\VersionLoader: ~
+
+    # --- Dumper ---
+    Smile\GdprDump\Dumper\SqlDumper:
+        arguments:
+            - '@Smile\GdprDump\Converter\ConverterFactory'
+
+    # --- Converter ---
+    Smile\GdprDump\Converter\ConverterFactory:
+        arguments:
+            - '@Smile\GdprDump\Faker\FakerService'
+
+    # --- Faker ---
     Smile\GdprDump\Faker\FakerService:
-        bind:
-            $options:
-                locale: '%faker.locale%'
+        arguments:
+            - {locale: '%faker.locale%'}

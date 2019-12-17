@@ -1,5 +1,4 @@
 /.idea
 /build
 /vendor
-/app/container.php
 /composer.lock
