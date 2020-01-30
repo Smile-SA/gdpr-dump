@@ -56,7 +56,7 @@ class Unique implements ConverterInterface
             $count++;
             if ($count > $this->maxRetries) {
                 throw new OverflowException(
-                    sprintf('Maximum retries of %d reached without finding a unique value', $this->maxRetries)
+                    sprintf('Maximum retries of %d reached without finding a unique value.', $this->maxRetries)
                 );
             }
 
