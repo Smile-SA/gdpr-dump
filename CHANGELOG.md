@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## WIP
 
 - Prompt the user for a password if the database password is not set
+- Generate only lowercase values in RandomizeText and RandomizeEmail converters
 
 ## [1.0.0-beta16] - 2019-12-17
 [1.0.0-beta16]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta15...1.0.0-beta16

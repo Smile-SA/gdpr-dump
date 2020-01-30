@@ -16,7 +16,7 @@ class RandomizeText implements ConverterInterface
     /**
      * @var string
      */
-    private $replacements = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    private $replacements = '0123456789abcdefghijklmnopqrstuvwxyz';
 
     /**
      * @var int
