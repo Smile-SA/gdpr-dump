@@ -14,6 +14,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * @codeCoverageIgnore
@@ -88,9 +89,16 @@ class DumpCommand extends Command
             // Load the config
             $this->loadConfig($input);
 
+            // Prompt the password if required
+            $database = $this->config->get('database');
+            if (!isset($database['password'])) {
+                $password = $this->promptPassword($input, $output);
+                $database['password'] = $password;
+                $this->config->set('database', $database);
+            }
+
             // Validate the config data
             $result = $this->validator->validate($this->config->toArray());
-
             if (!$result->isValid()) {
                 $this->outputValidationResult($result, $output);
                 return 1;
@@ -127,6 +135,25 @@ class DumpCommand extends Command
 
         // Load version-specific data
         $this->configVersionLoader->load($this->config);
+    }
+
+    /**
+     * Display a password prompt, and return the user input.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return string
+     */
+    private function promptPassword(InputInterface $input, OutputInterface $output)
+    {
+        $helper = $this->getHelper('question');
+        $question = new Question('Enter password: ', '');
+        $question->setHidden(true);
+        $question->setHiddenFallback(false);
+
+        $password = trim($helper->ask($input, $output, $question));
+
+        return $password;
     }
 
     /**

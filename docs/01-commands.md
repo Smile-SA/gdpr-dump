@@ -32,6 +32,7 @@ The following configuration templates are available:
 - [drupal8](app/config/templates/drupal8.yaml)
 - [magento1](app/config/templates/magento1.yaml)
 - [magento2](app/config/templates/magento2.yaml)
+- [oro4](app/config/templates/oro4.yaml)
 
 Each template provides anonymization rules for a specific framework.
 
@@ -43,7 +44,7 @@ If you use a configuration template, you **must** specify the application versio
 
     ```yaml
     extends: 'magento2'
-    version: '2.3.3'
+    version: '2.3.4'
   
     database:
         name: 'mydatabase'
@@ -56,3 +57,5 @@ If you use a configuration template, you **must** specify the application versio
     ```
     bin/gdpr-dump my_project.yaml
     ```
+
+If the password parameter is missing from the database configuration, you will be prompted for a password.
