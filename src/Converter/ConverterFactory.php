@@ -205,7 +205,6 @@ class ConverterFactory
             }
         }
 
-        // If no class was found, check if a Faker formatter has this name
         if (!class_exists($className)) {
             throw new RuntimeException(sprintf('The converter class "%s" was not found.', $className));
         }
