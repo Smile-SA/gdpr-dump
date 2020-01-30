@@ -144,16 +144,14 @@ class DumpCommand extends Command
      * @param OutputInterface $output
      * @return string
      */
-    private function promptPassword(InputInterface $input, OutputInterface $output)
+    private function promptPassword(InputInterface $input, OutputInterface $output): string
     {
         $helper = $this->getHelper('question');
         $question = new Question('Enter password: ', '');
         $question->setHidden(true);
         $question->setHiddenFallback(false);
 
-        $password = trim($helper->ask($input, $output, $question));
-
-        return $password;
+        return trim($helper->ask($input, $output, $question));
     }
 
     /**
