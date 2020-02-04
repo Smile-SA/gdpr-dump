@@ -83,6 +83,7 @@ class DatabaseConfig
      *
      * @param array $params
      * @throws UnexpectedValueException
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private function prepareConfig(array $params)
     {
@@ -110,7 +111,7 @@ class DatabaseConfig
         }
 
         foreach ($params as $param => $value) {
-            $this->connectionParams[$param] = $value;
+            $this->connectionParams[$param] = (string) $value;
         }
     }
 }

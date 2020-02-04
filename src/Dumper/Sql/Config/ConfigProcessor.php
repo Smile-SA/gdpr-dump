@@ -86,7 +86,7 @@ class ConfigProcessor
         $resolved = [];
 
         foreach ($tableNames as $tableName) {
-            $matches = $this->findTablesByName($tableName);
+            $matches = $this->findTablesByName((string) $tableName);
             if (empty($matches)) {
                 continue;
             }
@@ -106,6 +106,8 @@ class ConfigProcessor
     private function resolveTablesData(array $tablesData): array
     {
         foreach ($tablesData as $tableName => $tableData) {
+            $tableName = (string) $tableName;
+
             // Find all tables matching the pattern
             $matches = $this->findTablesByName($tableName);
 

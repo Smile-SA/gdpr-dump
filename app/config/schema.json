@@ -8,7 +8,7 @@
             "type": "boolean"
         },
         "version": {
-            "type": "string"
+            "type":  ["string", "number"]
         },
         "if_version": {
             "type": "object",
@@ -37,14 +37,14 @@
         "tables_whitelist": {
             "type": "array",
             "items": {
-                "type": "string",
+                "type": ["string", "number"],
                 "minLength": 1
             }
         },
         "tables_blacklist": {
             "type": "array",
             "items": {
-                "type": "string",
+                "type": ["string", "number"],
                 "minLength": 1
             }
         }
@@ -77,30 +77,30 @@
                     }
                 },
                 "host": {
-                    "type": "string",
+                    "type": ["string", "number"],
                     "minLength": 1
                 },
                 "port": {
-                    "type": "string",
+                    "type": ["string", "integer"],
                     "minLength": 1
                 },
                 "user": {
-                    "type": "string",
+                    "type": ["string", "number"],
                     "minLength": 1
                 },
                 "password": {
-                    "type": "string"
+                    "type": ["string", "number"]
                 },
                 "name": {
-                    "type": "string",
+                    "type": ["string", "number"],
                     "minLength": 1
                 },
                 "charset": {
-                    "type": "string",
+                    "type": ["string", "number"],
                     "minLength": 1
                 },
                 "unix_socket": {
-                    "type": "string",
+                    "type": ["string", "number"],
                     "minLength": 1
                 }
             },
@@ -110,7 +110,7 @@
             "type": "object",
             "properties": {
                 "output": {
-                    "type": "string",
+                    "type": ["string", "number"],
                     "minLength": 1
                 },
                 "compress": {
@@ -218,7 +218,7 @@
                     }
                 },
                 "orderBy": {
-                    "type": "string"
+                    "type": ["string", "number"]
                 },
                 "limit": {
                     "type": "integer"
@@ -263,13 +263,13 @@
                     }
                 },
                 "condition": {
-                    "type": "string"
+                    "type": ["string", "number"]
                 },
                 "unique": {
                     "type": "boolean"
                 },
                 "cache_key": {
-                    "type": "string"
+                    "type": ["string", "number"]
                 },
                 "disabled": {
                     "type": "boolean"

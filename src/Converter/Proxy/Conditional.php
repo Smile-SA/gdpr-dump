@@ -62,7 +62,8 @@ class Conditional implements ConverterInterface
             throw new InvalidArgumentException('The parameter "condition" is required.');
         }
 
-        if ((string) $parameters['condition'] === '') {
+        $condition = (string) $parameters['condition'];
+        if ($condition === '') {
             throw new UnexpectedValueException('The parameter "condition" must not be empty.');
         }
 
@@ -73,7 +74,7 @@ class Conditional implements ConverterInterface
         }
 
         $this->tokenizer = new PhpTokenizer();
-        $this->condition = $this->prepareCondition((string) $parameters['condition']);
+        $this->condition = $this->prepareCondition($condition);
 
         if (isset($parameters['if_true_converter'])) {
             $this->ifTrueConverter = $parameters['if_true_converter'];

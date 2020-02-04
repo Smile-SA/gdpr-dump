@@ -207,10 +207,10 @@ class DumperConfig
         $this->prepareVarQueries($config);
 
         // Tables whitelist
-        $this->tablesWhitelist = $config->get('tables_whitelist', []);
+        $this->prepareTablesWhitelist($config);
 
         // Tables blacklist
-        $this->tablesBlacklist = $config->get('tables_blacklist', []);
+        $this->prepareTablesBlacklist($config);
     }
 
     /**
@@ -250,6 +250,8 @@ class DumperConfig
         $tablesData = $config->get('tables', []);
 
         foreach ($tablesData as $tableName => $tableData) {
+            $tableName = (string) $tableName;
+
             $tableConfig = new TableConfig($tableName, $tableData);
             $this->tablesConfig[$tableName] = $tableConfig;
 
@@ -278,9 +280,37 @@ class DumperConfig
         $queryValidator = new QueryValidator();
 
         foreach ($queries as $query) {
-            $queryValidator->validate($query);
+            $queryValidator->validate((string) $query);
         }
 
         $this->varQueries = $queries;
+    }
+
+    /**
+     * Prepare the tables whitelist.
+     *
+     * @param ConfigInterface $config
+     */
+    private function prepareTablesWhitelist(ConfigInterface $config)
+    {
+        $this->tablesWhitelist = $config->get('tables_whitelist', []);
+
+        foreach ($this->tablesWhitelist as $key => $value) {
+            $this->tablesWhitelist[$key] = (string) $value;
+        }
+    }
+
+    /**
+     * Prepare the tables blacklist.
+     *
+     * @param ConfigInterface $config
+     */
+    private function prepareTablesBlacklist(ConfigInterface $config)
+    {
+        $this->tablesBlacklist = $config->get('tables_blacklist', []);
+
+        foreach ($this->tablesBlacklist as $key => $value) {
+            $this->tablesBlacklist[$key] = (string) $value;
+        }
     }
 }

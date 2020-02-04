@@ -147,7 +147,7 @@ class TableConfig
     {
         if (isset($tableData['filters'])) {
             foreach ($tableData['filters'] as $filter) {
-                $this->filters[] = new Filter($filter[0], $filter[1], $filter[2] ?? null);
+                $this->filters[] = new Filter((string) $filter[0], (string) $filter[1], $filter[2] ?? null);
             }
         }
     }
