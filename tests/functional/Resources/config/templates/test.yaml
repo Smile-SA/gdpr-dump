@@ -1,9 +1,9 @@
 ---
 database:
-    host: 'mysql'
+    host: 'localhost'
     name: 'test'
-    user: 'test'
-    password: 'test'
+    user: 'root'
+    password: ''
 
 dump:
     output: 'php://stdout'

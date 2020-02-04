@@ -1,0 +1,38 @@
+dist: 'xenial'
+language: 'php'
+php:
+    - '7.0'
+    - '7.1'
+    - '7.2'
+    - '7.3'
+
+services:
+    - 'mysql'
+
+cache:
+    directories:
+        - '$HOME/.composer/cache'
+
+install:
+    - 'composer install --prefer-dist'
+
+before_install:
+    - 'mysql -uroot -e "CREATE DATABASE test;"'
+
+script:
+    - 'composer phpcs'
+    - 'composer phpmd'
+    - 'composer phpunit'
+
+before_deploy:
+    - 'bin/compile'
+
+deploy:
+    provider: 'releases'
+    api_key: '485576c46e2f7f51d12e6e2b52c2c9a5aff1f23e'
+    file: 'build/dist/*.phar'
+    file_glob: true
+    skip_cleanup: true
+    on:
+        tags: true
+        php: '7.0'
