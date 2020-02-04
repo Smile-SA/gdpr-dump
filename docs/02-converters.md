@@ -25,7 +25,7 @@
 - [chain](#user-content-chain)
 - [fromContext](#user-content-fromcontext)
 
-## [faker](src/Converter/Faker.php)
+## [faker](../src/Converter/Faker.php)
 
 Allows to use any formatter defined in the [Faker](https://github.com/fzaninotto/Faker) library.
 
@@ -62,7 +62,7 @@ tables:
                     arguments: ['{{value}}']
 ```
 
-## [anonymizeText](src/Converter/Anonymizer/AnonymizeText.php)
+## [anonymizeText](../src/Converter/Anonymizer/AnonymizeText.php)
 
 Anonymizes string values by replacing all characters by the `*` character.
 The first letter of each word is preserved.
@@ -80,7 +80,7 @@ tables:
                 converter: 'anonymizeText'
 ```
 
-## [anonymizeNumber](src/Converter/Anonymizer/AnonymizeNumber.php)
+## [anonymizeNumber](../src/Converter/Anonymizer/AnonymizeNumber.php)
 
 Anonymizes numeric values by replacing all numbers by the `*` character.
 The first digit of each number is preserved.
@@ -97,7 +97,7 @@ tables:
                 converter: 'anonymizeNumber'
 ```
 
-## [anonymizeEmail](src/Converter/Anonymizer/AnonymizeEmail.php)
+## [anonymizeEmail](../src/Converter/Anonymizer/AnonymizeEmail.php)
 
 Same as `anonymizeText`, but it doesn't obfuscate the email domain.
 The email domain is replaced by a safe domain.
@@ -120,7 +120,7 @@ tables:
                 converter: 'anonymizeEmail'
 ```
 
-## [anonymizeDate](src/Converter/Anonymizer/AnonymizeDate.php)
+## [anonymizeDate](../src/Converter/Anonymizer/AnonymizeDate.php)
 
 Anonymizes date values.
 It can be used to anonymize a date of birth.
@@ -145,7 +145,7 @@ tables:
                 converter: 'anonymizeDate'
 ```
 
-## [anonymizeDateTime](src/Converter/Anonymizer/AnonymizeDateTime.php)
+## [anonymizeDateTime](../src/Converter/Anonymizer/AnonymizeDateTime.php)
 
 This is exactly the same as the `anonymizeDate` converter, but the default value of the format parameter is `Y-m-d H:i:s` instead of `Y-m-d`.
 
@@ -165,7 +165,7 @@ tables:
                 converter: 'anonymizeDateTime'
 ```
 
-## [randomizeText](src/Converter/Randomizer/RandomizeText.php)
+## [randomizeText](../src/Converter/Randomizer/RandomizeText.php)
 
 Converts all alphanumeric characters to random alphanumeric characters.
 
@@ -176,7 +176,7 @@ Parameters:
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
 | **min_length** | N | 3 | The minimum length of the generated value. |
-| **replacements** | N | [Check here](src/Converter/Randomizer/RandomizeText.php) | A string that contains the replacement characters. |
+| **replacements** | N | [Check here](../src/Converter/Randomizer/RandomizeText.php) | A string that contains the replacement characters. |
 
 Example:
 
@@ -188,7 +188,7 @@ tables:
                 converter: 'randomizeText'
 ```
 
-## [randomizeNumber](src/Converter/Randomizer/RandomizeNumber.php)
+## [randomizeNumber](../src/Converter/Randomizer/RandomizeNumber.php)
 
 Converts all numeric characters to random numbers.
 
@@ -204,7 +204,7 @@ tables:
                 converter: 'randomizeNumber'
 ```
 
-## [randomizeEmail](src/Converter/Randomizer/RandomizeEmail.php)
+## [randomizeEmail](../src/Converter/Randomizer/RandomizeEmail.php)
 
 Same as `randomizeText`, but it doesn't randomize the email domain.
 The email domain is replaced by a safe domain.
@@ -217,7 +217,7 @@ Parameters:
 | --- | --- | --- | --- |
 | **domains** | N | `['example.com', 'example.net', 'example.org']` | A list of email domains. |
 | **min_length** | N | 3 | The minimum length of the generated username. |
-| **replacements** | N | [Check here](src/Converter/Randomizer/RandomizeText.php) | A string that contains the replacement characters. |
+| **replacements** | N | [Check here](../src/Converter/Randomizer/RandomizeText.php) | A string that contains the replacement characters. |
 
 Example:
 
@@ -229,7 +229,7 @@ tables:
                 converter: 'randomizeEmail'
 ```
 
-## [randomizeDate](src/Converter/Randomizer/RandomizeDate.php)
+## [randomizeDate](../src/Converter/Randomizer/RandomizeDate.php)
 
 Generates a random date.
 
@@ -253,7 +253,7 @@ tables:
                 converter: 'randomizeDate'
 ```
 
-## [randomizeDateTime](src/Converter/Randomizer/RandomizeDateTime.php)
+## [randomizeDateTime](../src/Converter/Randomizer/RandomizeDateTime.php)
 
 Generates a random date time.
 
@@ -277,7 +277,7 @@ tables:
                 converter: 'randomizeDateTime'
 ```
 
-## [numberBetween](src/Converter/Base/NumberBetween.php)
+## [numberBetween](../src/Converter/Base/NumberBetween.php)
 
 Generates a number between a min and a max value.
 
@@ -301,7 +301,7 @@ tables:
                     max: 100
 ```
 
-## [toLower](src/Converter/Base/ToLower.php)
+## [toLower](../src/Converter/Base/ToLower.php)
 
 Converts all characters to lower case.
 
@@ -315,7 +315,7 @@ tables:
                 converter: 'toLower'
 ```
 
-## [toUpper](src/Converter/Base/ToUpper.php)
+## [toUpper](../src/Converter/Base/ToUpper.php)
 
 Converts all characters to upper case.
 
@@ -329,7 +329,7 @@ tables:
                 converter: 'toUpper'
 ```
 
-## [setNull](src/Converter/Base/SetNull.php)
+## [setNull](../src/Converter/Base/SetNull.php)
 
 Converts all values to `null`.
 
@@ -343,7 +343,7 @@ tables:
                 converter: 'setNull'
 ```
 
-## [setValue](src/Converter/Base/SetValue.php)
+## [setValue](../src/Converter/Base/SetValue.php)
 
 This converter always returns the same value.
 
@@ -365,7 +365,7 @@ tables:
                     value: 0
 ```
 
-## [addPrefix](src/Converter/Base/AddPrefix.php)
+## [addPrefix](../src/Converter/Base/AddPrefix.php)
 
 This converter adds a prefix to every value.
 
@@ -389,7 +389,7 @@ tables:
                     prefix: 'test_'
 ```
 
-## [addSuffix](src/Converter/Base/AddSuffix.php)
+## [addSuffix](../src/Converter/Base/AddSuffix.php)
 
 This converter adds a suffix to every value.
 
@@ -413,7 +413,7 @@ tables:
                     suffix: '_test'
 ```
 
-## [jsonData](src/Converter/Proxy/JsonData.php)
+## [jsonData](../src/Converter/Proxy/JsonData.php)
 
 This converter can be used to anonymize data that are stored in a JSON object.
 
@@ -443,13 +443,13 @@ tables:
                             converter: 'anonymizeText'
 ```
 
-## [serializedData](src/Converter/Proxy/SerializedData.php)
+## [serializedData](../src/Converter/Proxy/SerializedData.php)
 
 Same as `jsonData` converter, but works with serialized data instead.
 
 The serialized data must be an array.
 
-## [chain](src/Converter/Proxy/Chain.php)
+## [chain](../src/Converter/Proxy/Chain.php)
 
 This converter executes a list of converters.
 
@@ -489,7 +489,7 @@ tables:
                             disabled: true
 ```
 
-## [fromContext](src/Converter/Proxy/FromContext.php)
+## [fromContext](../src/Converter/Proxy/FromContext.php)
 
 This converter returns a value from the `$context` array passed to converters.
 

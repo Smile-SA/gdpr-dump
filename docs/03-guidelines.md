@@ -12,7 +12,7 @@
 
 Since this tool is a pure PHP implementation of a MySQL dumper, it is way slower than mysqldump.
 
-If the database to dump has very large tables, it is strongly recommended to use the [table filter](docs/01-configuration.md#user-content-filtering-values) mechanism.
+If the database to dump has very large tables, it is strongly recommended to use the [table filter](01-configuration.md#user-content-filtering-values) mechanism.
 
 ## Security
 
@@ -51,7 +51,7 @@ Example of sensible data:
 If you use the default templates (e.g. `magento2`), the anonymized data is not consistent.
 For example, the anonymized customer email won't have the same value between the customer table and the quote table.
 
-You can add data consistency by specifying a [cache key](docs/01-configuration.md#user-content-sharing-converter-results).
+You can add data consistency by specifying a [cache key](01-configuration.md#user-content-sharing-converter-results).
 For example, in Magento 2:
 
 ```yaml
