@@ -47,16 +47,30 @@ Important: your composer configuration must include [Smile repositories](https:/
 
 Alternatively, you can download a PHAR file [here](http://packages.vitry.intranet/products/smile/gdpr-dump/).
 
+## Getting Started
+
+Command:
+
+```
+bin/gdpr-dump <config_file>...
+```
+
+Arguments:
+
+- config_file: path(s) to a [configuration file](docs/01-configuration.md).
+
+The complete list of options can be displayed with the `--help` option.
+
+Configuration file examples:
+
+- You can find a config file example in [app/config/example.yaml](app/config/example.yaml).
+- The YAML syntax is also used in the [configuration templates](app/config/templates).
+
 ## Documentation
 
-Table of contents:
-
-1. [Basic Usage](docs/01-commands.md)
-2. [Configuration](docs/02-configuration.md)
-3. [Data Converters](docs/03-converters.md)
-4. [Guidelines](docs/04-guidelines.md) (read this before deploying the tool to a production server!)
-
-Also, there are multiple examples of config files in the config/templates directory.
+1. [Configuration](docs/01-configuration.md)
+2. [Data Converters](docs/02-converters.md)
+3. [Guidelines](docs/03-guidelines.md) (read this before deploying the tool to a production server!)
 
 ## FAQ
 
@@ -98,4 +112,4 @@ All notable changes are recorded in this [changelog](CHANGELOG.md).
 
 ## Contact
 
-Guillaume Vrac <dirtech@smile.fr>
+Smile Technical Direction <dirtech@smile.fr>

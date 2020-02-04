@@ -268,7 +268,7 @@ List of available properties:
 
 | Property | Required | Default | Description |
 | --- | --- | --- | --- |
-| **converter** | Y | | Converter name. A list of all converters [is available here](03-converters.md). |
+| **converter** | Y | | Converter name. A list of all converters [is available here](02-converters.md). |
 | **condition** | N | `''` | A PHP expression that must evaluate to `true` or `false`. The value is converted if the expression returns `true`. |
 | **parameters** | N | `{}` | e.g. `min` and `max` for `numberBetween`. Most converters don't accept any parameter. |
 | **unique** | N | `false` | Whether to generate only unique values. May result in a fatal error with converters that can't generate enough unique values. |
