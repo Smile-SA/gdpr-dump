@@ -3,13 +3,13 @@
 ## Table of Contents
 
 - [Overriding Configuration](#user-content-overriding-configuration)
+- [Templates](#user-content-templates)
 - [Application Version](#user-content-application-version)
 - [Database Settings](#user-content-database-settings)
 - [Dump Settings](#user-content-dump-settings)
 - [Table Whitelist](#user-content-table-whitelist)
 - [Table Blacklist](#user-content-table-blacklist)
 - [Tables Configuration](#user-content-tables-configuration)
-    - [Tables to Truncate](#user-content-tables-to-truncate)
     - [Filtering Values](#user-content-filtering-values)
     - [Data Converters](#user-content-data-converters)
     - [Sharing Converter Results](#user-content-sharing-converter-results)
@@ -23,19 +23,10 @@ You can create a custom config file that inherits the properties of another conf
 **Syntax**
 
 ```yaml
-extends: path/to/config/file.yaml
+extends: path/to/config.yaml
 ```
 
 It can be an absolute path, or relative to the configuration file.
-
-**Configuration Templates**
-
-If you override a [configuration template](02-configuration.md#user-content-configuration-templates), the application version must be defined:
-
-```yaml
-extends: magento2
-version: '2.3.3'
-```
 
 **Extending Multiple Files**
 
@@ -43,15 +34,30 @@ It is possible to override multiple config files:
 
 ```yaml
 extends:
-  - magento2
-  - path/to/config/file.yaml
+  - path/to/config1.yaml
+  - path/to/config2.yaml
 ```
 
-In the above example, the files will be loaded in this order:
+## Templates
 
-1. "magento2" template
-2. path/to/config/file.yaml
-3. your config file
+The tool is bundled with predefined configuration templates.
+Each template provides anonymization rules for a specific framework.
+
+Available templates:
+
+- [drupal7](app/config/templates/drupal7.yaml)
+- [drupal8](app/config/templates/drupal8.yaml)
+- [magento1](app/config/templates/magento1.yaml)
+- [magento2](app/config/templates/magento2.yaml)
+- [oro4](app/config/templates/oro4.yaml)
+
+To extend a configuration template, you must specify its name, and the version of your application.
+For example:
+
+```yaml
+extends: magento2
+version: '2.3.3'
+```
 
 ## Database Settings
 
@@ -167,9 +173,20 @@ tables:
 
 The wildcard character `*` can be used in table names (e.g. `cache_*`).
 
-### Tables to Truncate
+### Filtering Values
 
-You can specify tables to include without any data (no insert query).
+It is possible to limit the data dumped for each table:
+
+The data is automatically filtered for all tables that depend on the target table (foreign keys).
+
+Available properties:
+
+- `truncate`: to dump a table without any data.
+- `limit`: to limit the number of rows to dump.
+- `orderBy`: same as SQL (e.g. `name asc, id desc`).
+- `filters`: a list of filters to apply.
+
+How to define a truncate:
 
 ```yaml
 tables:
@@ -177,11 +194,7 @@ tables:
         truncate: true
 ```
 
-If there are tables with foreign keys to this table, they will also be automatically filtered.
-
-### Filtering Values
-
-It is possible to limit the data dumped for each table.
+How to define a limit:
 
 ```yaml
 tables:
@@ -189,16 +202,7 @@ tables:
         limit: 10000
 ```
 
-The data is automatically filtered for all tables that depend on the target table (foreign keys).
-
-Available properties:
-
-- `limit`: to limit the number of rows to dump
-- `orderBy`: same as SQL (e.g. `name asc, id desc`)
-- `filters`: a list of filters to apply
-
 The limit must be greater or equal than zero. If set to 0, it will be ignored.
-Use the `truncate` property if you need to empty a table.
 
 How to define a sort order:
 
@@ -206,7 +210,6 @@ How to define a sort order:
 tables:
     my_table:
         orderBy: 'sku, entity_id desc'
-
 ```
 
 How to define a filter:

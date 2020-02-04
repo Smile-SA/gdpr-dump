@@ -18,44 +18,8 @@ The complete list of options can be displayed with the following command:
 bin/gdpr-dump --help
 ```
 
-Example:
+## Examples
 
-```
-bin/gdpr-dump path/to/my/config.yaml > dump.sql
-```
+You can find a config file example in [app/config/example.yaml](app/config/example.yaml).
 
-## Configuration Templates
-
-The following configuration templates are available:
-
-- [drupal7](app/config/templates/drupal7.yaml)
-- [drupal8](app/config/templates/drupal8.yaml)
-- [magento1](app/config/templates/magento1.yaml)
-- [magento2](app/config/templates/magento2.yaml)
-- [oro4](app/config/templates/oro4.yaml)
-
-Each template provides anonymization rules for a specific framework.
-
-If you use a configuration template, you **must** specify the application version (e.g. "2.3.2").
-
-**How to use a configuration template:**
-
-1. Create your configuration file:
-
-    ```yaml
-    extends: 'magento2'
-    version: '2.3.4'
-  
-    database:
-        name: 'mydatabase'
-        user: 'myuser'
-        password: 'mypassword'
-    ```
-
-2. Execute the gdpr-dump command:
-
-    ```
-    bin/gdpr-dump my_project.yaml
-    ```
-
-If the password parameter is missing from the database configuration, you will be prompted for a password.
+The YAML syntax is also shown in the [configuration templates](02-configuration.md#user-content-templates).

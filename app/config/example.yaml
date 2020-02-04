@@ -1,6 +1,6 @@
 ---
 extends: 'magento2'
-version: '2.3.3'
+version: '2.3.4'
 
 database:
     user: 'magento2'
@@ -12,18 +12,25 @@ dump:
     compress: 'bzip2'
 
 tables:
-    customer_entity:
-        filters:
-            - ['email', 'like', '%@smile.fr']
+    # Don't anonymize emails/passwords belonging to the "Acme" company
+    admin_user:
+        converters:
+            email:
+                condition: 'strpos({{email}}, "@acme.fr") === false'
+            password:
+                condition: 'strpos({{email}}, "@acme.fr") === false'
 
+    # Dump only recent quotes
     quote:
         filters:
             - ['created_at', 'gt', 'expr: date_sub(now(), interval 60 day)']
 
+    # Dump only recent orders
     sales_order:
         filters:
             - ['created_at', 'gt', 'expr: date_sub(now(), interval 60 day)']
 
+    # Anonymize a table named "my_custom_table"
     my_custom_table:
         converters:
             email:
