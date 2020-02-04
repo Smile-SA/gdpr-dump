@@ -6,14 +6,14 @@ When reporting issues, please try to be as descriptive as possible, and include 
 
 A step by step guide on how to reproduce the issue will greatly increase the chances of your issue being resolved in a timely manner.
 
-## Merge Requests
+## Pull Requests
 
 ### Guidelines
 
 If you want to add a feature, please first create an issue.
 We'll then discuss whether it should be added to the core.
 
-Before submitting a merge request, please ensure that your code meet these requirements:
+Before submitting a pull request, please ensure that your code meet these requirements:
 
 - The code must be PSR-2 compliant.
 - GdprDump has a minimum PHP version requirement of PHP 7.0.
@@ -22,7 +22,7 @@ Before submitting a merge request, please ensure that your code meet these requi
 - Use exactly the same formatting as the core classes (PHPDoc, spacing...).
 - Use the `@inheritdoc` annotation in functions that extend a parent function.
 
-### How to Submit a Merge Request
+### How to Submit a Pull Request
 
 Follow these steps:
 
@@ -32,7 +32,7 @@ Follow these steps:
    Don't forget to update the functional and unit tests accordingly.
 4. Run the tests (phpcs, phpmd, phpunit).
    All tests must succeed.
-5. Create the merge request:
+5. Create the pull request:
     - Source branch: the branch of your fork
     - Target branch: the master branch of the core repository
     - Title/description: as detailed as possible
