@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Smile\GdprDump;
@@ -177,6 +178,7 @@ class Compiler
         return <<<EOF
 #!/usr/bin/env php
 <?php
+
 Phar::interceptFileFuncs();
 Phar::mapPhar('gdpr-dump.phar');
 require 'phar://gdpr-dump.phar/bin/gdpr-dump';

@@ -1,4 +1,5 @@
 <?php
+
 $basePath = dirname(__DIR__);
 
 $autoload = null;

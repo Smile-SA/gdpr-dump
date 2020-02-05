@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
@@ -115,6 +116,7 @@ class ConditionalTest extends TestCase
     {
         $parameters = [
             'condition' => '<?php {{id}} === 1 ?>',
+
             'if_true_converter' => $this->createIfTrueConverter(),
         ];
 
