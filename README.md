@@ -41,11 +41,9 @@ It can be installed with the following command:
 composer create-project --no-dev --stability=beta --prefer-dist smile/gdpr-dump
 ```
 
-Important: your composer configuration must include [Smile repositories](https://wiki.smile.fr/view/PHP/HowToConfigComposer).
-
 **Phar File**
 
-Alternatively, you can download a PHAR file [here](http://packages.vitry.intranet/products/smile/gdpr-dump/).
+Alternatively, you can download a PHAR file in the releases section.
 
 ## Getting Started
 
