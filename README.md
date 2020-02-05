@@ -7,8 +7,6 @@ This tool provides a command that dumps the contents of a database to the specif
 It is the equivalent of mysqldump, with additional features, at the cost of performance (PHP implementation).
 The main purpose of this tool is to create anonymized dumps, in order to comply with GDPR regulations.
 
-**It is still under development (beta). There is no stable version yet.**
-
 You can use a config file to specify how the database should be dumped.
 In the config file, you can:
 
@@ -38,12 +36,12 @@ This tool is designed to be used as a standalone application.
 It can be installed with the following command:
 
 ```php
-composer create-project --no-dev --stability=beta --prefer-dist smile/gdpr-dump
+composer create-project --no-dev --prefer-dist smile/gdpr-dump
 ```
 
 **Phar File**
 
-Alternatively, you can download a PHAR file in the releases section.
+Alternatively, you can download a PHAR file in the [releases](https://github.com/Smile-SA/gdpr-dump/releases) section.
 
 ## Getting Started
 
