@@ -44,6 +44,7 @@ class Database implements DatabaseInterface
     /**
      * @param DatabaseConfig $config
      * @throws DBALException
+     * @throws UnexpectedValueException
      */
     public function __construct(DatabaseConfig $config)
     {
