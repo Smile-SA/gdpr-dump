@@ -15,10 +15,11 @@ class PathResolverTest extends TestCase
     public function testResolveRelativePath()
     {
         $relativePath = 'tests/unit/Resources/config/templates/test.yaml';
+        $relativePath = str_replace('/', DIRECTORY_SEPARATOR, $relativePath);
 
         $resolver = $this->createPathResolver();
         $resolvedPath = $resolver->resolve($relativePath);
-        $this->assertSame($this->getBasePath() . '/' . $relativePath, $resolvedPath);
+        $this->assertSame($this->getBasePath() . DIRECTORY_SEPARATOR . $relativePath, $resolvedPath);
     }
 
     /**
@@ -27,6 +28,7 @@ class PathResolverTest extends TestCase
     public function testResolveAbsolutePath()
     {
         $absolutePath = $this->getResource('config/templates/test.yaml');
+        $absolutePath = str_replace('/', DIRECTORY_SEPARATOR, $absolutePath);
 
         $resolver = $this->createPathResolver();
         $resolvedPath = $resolver->resolve($absolutePath);
