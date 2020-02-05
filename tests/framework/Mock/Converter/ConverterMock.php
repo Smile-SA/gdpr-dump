@@ -11,14 +11,16 @@ class ConverterMock implements ConverterInterface
     /**
      * @var string
      */
-    private $prefix;
+    private $prefix = 'test_';
 
     /**
      * @param array $parameters
      */
     public function __construct(array $parameters = [])
     {
-        $this->prefix = $parameters['prefix'] ?? 'test_';
+        if (array_key_exists('prefix', $parameters)) {
+            $this->prefix = (string) $parameters['prefix'];
+        }
     }
 
     /**
