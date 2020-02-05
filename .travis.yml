@@ -13,11 +13,11 @@ cache:
     directories:
         - '$HOME/.composer/cache'
 
-install:
-    - 'composer install --prefer-dist'
-
 before_install:
     - 'mysql -uroot -e "CREATE DATABASE test;"'
+
+before_script:
+    - 'composer install --prefer-dist'
 
 script:
     - 'composer phpcs'
@@ -25,6 +25,8 @@ script:
     - 'composer phpunit'
 
 before_deploy:
+    - 'rm -rf vendor'
+    - 'composer install --no-dev --optimize-autoloader --prefer-dist'
     - 'bin/compile'
 
 deploy:
