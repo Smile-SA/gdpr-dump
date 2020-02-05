@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Functional;
 
-use Smile\GdprDump\Dumper\Sql\Config\DatabaseConfig;
-use Smile\GdprDump\Dumper\Sql\Database;
+use Smile\GdprDump\Database\Database;
+use Smile\GdprDump\Dumper\Config\DatabaseConfig;
 use Symfony\Component\Yaml\Yaml;
 
 abstract class DatabaseTestCase extends TestCase

@@ -6,12 +6,12 @@ namespace Smile\GdprDump\Dumper;
 use Ifsnop\Mysqldump\Mysqldump;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Converter\ConverterFactory;
-use Smile\GdprDump\Dumper\Sql\Config\ConfigProcessor;
-use Smile\GdprDump\Dumper\Sql\Config\DatabaseConfig;
-use Smile\GdprDump\Dumper\Sql\Config\DumperConfig;
-use Smile\GdprDump\Dumper\Sql\Database;
-use Smile\GdprDump\Dumper\Sql\Tools\ColumnTransformer;
-use Smile\GdprDump\Dumper\Sql\Tools\TableWheresBuilder;
+use Smile\GdprDump\Database\Database;
+use Smile\GdprDump\Dumper\Config\ConfigProcessor;
+use Smile\GdprDump\Dumper\Config\DatabaseConfig;
+use Smile\GdprDump\Dumper\Config\DumperConfig;
+use Smile\GdprDump\Dumper\Tools\ColumnTransformer;
+use Smile\GdprDump\Dumper\Tools\TableWheresBuilder;
 
 class SqlDumper implements DumperInterface
 {
