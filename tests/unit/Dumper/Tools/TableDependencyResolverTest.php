@@ -94,6 +94,7 @@ class TableDependencyResolverTest extends TestCase
         $metadataMock->method('getForeignKeys')
             ->willReturnMap($valueMap);
 
+        /** @var MysqlMetadata $metadataMock */
         return new TableDependencyResolver($metadataMock);
     }
 }

@@ -75,6 +75,7 @@ class ConfigProcessorTest extends TestCase
         $metadataMock->method('getTableNames')
             ->willReturn(['table1', 'table2', 'table3']);
 
+        /** @var MysqlMetadata $metadataMock */
         return new ConfigProcessor($metadataMock);
     }
 }

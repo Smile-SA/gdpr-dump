@@ -63,8 +63,6 @@ class SerializedData implements ConverterInterface
             ArrayHelper::setPath($decoded, $path, $nestedValue);
         }
 
-        $encoded = serialize($decoded);
-
-        return $encoded;
+        return serialize($decoded);
     }
 }

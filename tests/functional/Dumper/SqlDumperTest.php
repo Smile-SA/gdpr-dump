@@ -73,8 +73,6 @@ class SqlDumperTest extends DatabaseTestCase
             ->willReturn(new ConverterMock());
 
         /** @var ConverterFactory $converterFactoryMock */
-        $sqlDumper = new SqlDumper($converterFactoryMock);
-
-        return $sqlDumper;
+        return new SqlDumper($converterFactoryMock);
     }
 }

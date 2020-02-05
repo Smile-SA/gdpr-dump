@@ -63,8 +63,6 @@ class JsonData implements ConverterInterface
             ArrayHelper::setPath($decoded, $path, $nestedValue);
         }
 
-        $encoded = json_encode($decoded);
-
-        return $encoded;
+        return json_encode($decoded);
     }
 }
