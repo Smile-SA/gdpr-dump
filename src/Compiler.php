@@ -162,7 +162,7 @@ class Compiler
             'bin', // composer, doctrine/*
             'demo', // justinrainbow/json-schema
             'unit-tests', // ifsnop/mysqldump-php
-            'tests', // doctrine/*
+            'tests', // doctrine/*, theseer/tokenizer
             'test', // fzaninotto/faker,
             'Tests', // symfony/*
         ];

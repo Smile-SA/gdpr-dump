@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Config\Validation;
 
-use Smile\GdprDump\Tokenizer\PhpTokenizer;
+use TheSeer\Tokenizer\Tokenizer;
 
 class QueryValidator
 {
     /**
-     * @var PhpTokenizer
+     * @var Tokenizer
      */
     private $tokenizer;
 
@@ -27,7 +27,7 @@ class QueryValidator
      */
     public function __construct()
     {
-        $this->tokenizer = new PhpTokenizer();
+        $this->tokenizer = new Tokenizer();
     }
 
     /**
@@ -39,11 +39,11 @@ class QueryValidator
     public function validate(string $query)
     {
         // Use a PHP tokenizer to split the query into tokens
-        $tokens = $this->tokenizer->tokenize('<?php ' . strtolower($query) . '?>');
+        $tokens = $this->tokenizer->parse('<?php ' . strtolower($query) . '?>');
 
         foreach ($tokens as $token) {
             // If the token is a word, check if it contains a forbidden statement
-            if ($token->getType() === T_STRING && in_array($token->getValue(), $this->statementBlacklist, true)) {
+            if ($token->getName() === 'T_STRING' && in_array($token->getValue(), $this->statementBlacklist, true)) {
                 throw new ValidationException(sprintf('This query contains forbidden keywords: "%s".', $query));
             }
         }

@@ -7,14 +7,14 @@ namespace Smile\GdprDump\Converter\Proxy;
 use InvalidArgumentException;
 use RuntimeException;
 use Smile\GdprDump\Converter\ConverterInterface;
-use Smile\GdprDump\Tokenizer\PhpTokenizer;
-use Smile\GdprDump\Tokenizer\Token;
+use TheSeer\Tokenizer\Tokenizer;
+use TheSeer\Tokenizer\Token;
 use UnexpectedValueException;
 
 class Conditional implements ConverterInterface
 {
     /**
-     * @var PhpTokenizer
+     * @var Tokenizer
      */
     private $tokenizer;
 
@@ -74,7 +74,7 @@ class Conditional implements ConverterInterface
             );
         }
 
-        $this->tokenizer = new PhpTokenizer();
+        $this->tokenizer = new Tokenizer();
         $this->condition = $this->prepareCondition($condition);
 
         if (isset($parameters['if_true_converter'])) {
@@ -200,7 +200,7 @@ class Conditional implements ConverterInterface
     private function parseCondition(string $condition): string
     {
         // Split the condition into PHP tokens
-        $tokens = $this->tokenizer->tokenize('<?php ' . $condition . ' ?>');
+        $tokens = $this->tokenizer->parse('<?php ' . $condition . ' ?>');
         $tokenCount = count($tokens);
         $result = '';
         $index = -1;
@@ -214,17 +214,20 @@ class Conditional implements ConverterInterface
             }
 
             // Replace SQL column names by their values in the condition
-            if ($token->getType() === T_STRING
-                && $index >= 2 && $index <= $tokenCount - 3
-                && $tokens[$index - 1]->getValue() === '{' && $tokens[$index - 2]->getValue() === '{'
-                && $tokens[$index + 1]->getValue() === '}' && $tokens[$index + 2]->getValue() === '}'
+            if ($token->getName() === 'T_STRING'
+                && $index >= 2
+                && $index <= $tokenCount - 3
+                && $tokens[$index - 1]->getName() === 'T_OPEN_CURLY'
+                && $tokens[$index - 2]->getName() === 'T_OPEN_CURLY'
+                && $tokens[$index + 1]->getName() === 'T_CLOSE_CURLY'
+                && $tokens[$index + 2]->getName() === 'T_CLOSE_CURLY'
             ) {
                 $result .= "\$context['row_data']['{$token->getValue()}']";
                 continue;
             }
 
             // Replace SQL variable names by their values in the condition
-            if ($token->getType() === T_STRING && $index >= 1 && $tokens[$index - 1]->getValue() === '@') {
+            if ($token->getName() === 'T_STRING' && $index >= 1 && $tokens[$index - 1]->getName() === 'T_AT') {
                 $result .= "\$context['vars']['{$token->getValue()}']";
                 continue;
             }
@@ -248,12 +251,12 @@ class Conditional implements ConverterInterface
     private function removeQuotedValues(string $input): string
     {
         // Split the condition into PHP tokens
-        $tokens = $this->tokenizer->tokenize('<?php ' . $input . ' ?>');
+        $tokens = $this->tokenizer->parse('<?php ' . $input . ' ?>');
         $result = '';
 
         foreach ($tokens as $token) {
             // Remove quoted values
-            $result .= $token->getType() === T_CONSTANT_ENCAPSED_STRING ? "''" : $token->getValue();
+            $result .= $token->getName() === 'T_CONSTANT_ENCAPSED_STRING' ? "''" : $token->getValue();
         }
 
         // Remove the opening and closing tag that were added to generate the tokens
@@ -284,13 +287,9 @@ class Conditional implements ConverterInterface
      */
     private function isVariableToken(Token $token): bool
     {
-        if ($token->getType() !== Token::T_UNKNOWN) {
-            return false;
-        }
+        $name = $token->getName();
 
-        $value = $token->getValue();
-
-        return $value === '{' || $value === '}' || $value === '@';
+        return $name === 'T_OPEN_CURLY' || $name === 'T_CLOSE_CURLY' || $name === 'T_AT';
     }
 
     /**

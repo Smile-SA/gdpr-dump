@@ -7,10 +7,11 @@ All notable changes to this project will be documented in this file.
 - Prompt the user for a password if the database password is not set
 - Generate only lowercase values in RandomizeText and RandomizeEmail converters
 - YAML validation: allow number values when a string is expected
+- Replace custom tokenizer implementation by [theseer/tokenizer](https://packagist.org/packages/theseer/tokenizer) package
 - Refactored the Dumper\Sql namespace:
     - Smile\GdprDump\Dumper\Sql\Config moved to Smile\GdprDump\Dumper\Config
     - Smile\GdprDump\Dumper\Sql\Tools moved to Smile\GdprDump\Dumper\Tools
-    - Smile\GdprDump\Dumper\Sql moved to Smile\GdprDump\Db
+    - Smile\GdprDump\Dumper\Sql moved to Smile\GdprDump\Database
 
 ## [1.0.0-beta16] - 2019-12-17
 [1.0.0-beta16]: https://git.smile.fr/dirtech/gdpr-dump/compare/1.0.0-beta15...1.0.0-beta16

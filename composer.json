@@ -20,7 +20,8 @@
         "symfony/console": "^3.4",
         "symfony/dependency-injection": "^3.4",
         "symfony/finder": "^3.4",
-        "symfony/yaml": "^3.4"
+        "symfony/yaml": "^3.4",
+        "theseer/tokenizer": "^1.1"
     },
     "require-dev": {
         "phpmd/phpmd": "^2.7",
