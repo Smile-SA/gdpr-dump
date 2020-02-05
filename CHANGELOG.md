@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## 1.0.0 - 2020-02-05
 
 - Prompt the user for a password if the database password is not set
 - Generate only lowercase values in RandomizeText and RandomizeEmail converters
