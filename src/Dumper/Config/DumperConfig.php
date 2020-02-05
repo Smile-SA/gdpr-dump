@@ -277,14 +277,13 @@ class DumperConfig
      */
     private function prepareVarQueries(ConfigInterface $config)
     {
-        $queries = $config->get('variables', []);
         $queryValidator = new QueryValidator();
+        $this->varQueries = $config->get('variables', []);
 
-        foreach ($queries as $query) {
-            $queryValidator->validate((string) $query);
+        foreach ($this->varQueries as $index => $query) {
+            $queryValidator->validate($query);
+            $this->varQueries[$index] = (string) $query;
         }
-
-        $this->varQueries = $queries;
     }
 
     /**
@@ -296,8 +295,8 @@ class DumperConfig
     {
         $this->tablesWhitelist = $config->get('tables_whitelist', []);
 
-        foreach ($this->tablesWhitelist as $key => $value) {
-            $this->tablesWhitelist[$key] = (string) $value;
+        foreach ($this->tablesWhitelist as $index => $tableName) {
+            $this->tablesWhitelist[$index] = (string) $tableName;
         }
     }
 
@@ -310,8 +309,8 @@ class DumperConfig
     {
         $this->tablesBlacklist = $config->get('tables_blacklist', []);
 
-        foreach ($this->tablesBlacklist as $key => $value) {
-            $this->tablesBlacklist[$key] = (string) $value;
+        foreach ($this->tablesBlacklist as $index => $tableName) {
+            $this->tablesBlacklist[$index] = (string) $tableName;
         }
     }
 }
