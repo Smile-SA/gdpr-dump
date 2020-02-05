@@ -2,6 +2,7 @@
     "name": "smile/gdpr-dump",
     "description": "A utility to create anonymized database dumps",
     "type": "library",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Smile Technical Direction",
