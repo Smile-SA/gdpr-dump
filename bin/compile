@@ -10,7 +10,7 @@ $basePath = dirname(__DIR__);
 require $basePath . '/app/bootstrap.php';
 
 // Prepare the file name
-$fileName = $basePath . '/build/dist/gdpr-dump-' . Application::VERSION . '.phar';
+$fileName = $basePath . '/build/dist/gdpr-dump.phar';
 
 try {
     // Create the phar file
