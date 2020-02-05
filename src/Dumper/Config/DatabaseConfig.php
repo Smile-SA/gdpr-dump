@@ -96,7 +96,7 @@ class DatabaseConfig
 
         // Set the driver
         if (isset($params['driver'])) {
-            $this->driver = $params['driver'];
+            $this->driver = (string) $params['driver'];
             unset($params['driver']);
         }
 
