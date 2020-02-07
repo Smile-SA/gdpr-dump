@@ -1,29 +1,28 @@
 # GdprDump
 
-## Description
+[![Latest Stable Version](https://poser.pugx.org/smile/gdpr-dump/v/stable)](https://packagist.org/packages/smile/gdpr-dump)
+[![Build Status](https://travis-ci.org/Smile-SA/gdpr-dump.svg?branch=master)](https://travis-ci.org/Smile-SA/gdpr-dump)
 
-This tool provides a command that dumps the contents of a database to the specified output (e.g. dump file).
+This tool provides a command that dumps the contents of a MySQL database.
 
 It is the equivalent of mysqldump, with additional features, at the cost of performance (PHP implementation).
 The main purpose of this tool is to create anonymized dumps, in order to comply with GDPR regulations.
 
-You can use a config file to specify how the database should be dumped.
-In the config file, you can:
+Features:
 
-- specify data converters that allow you to transform the data before it is dumped to the file.
-  It can be used to create an anonymized dump file.
-- specify table filters.
-- specify a list of tables to whitelist (only these tables will be included in the dump).
-- specify a list of tables to blacklist (not included in the dump).
-- specify the database connection info (host, user, password...).
-- specify dump options (compression, output type...).
+- Data converters (transform the data before it is dumped to the file).
+- Recursive table filtering.
+- Tables whitelist (only these tables will be included in the dump).
+- Tables blacklist (not included in the dump).
+- Dump options (compression, output type...).
+- Predefined configuration templates (Magento, Drupal, OroCommerce).
 
 ## Prerequisites
 
 Requirements:
 
 - PHP >= 7.0
-- MySQL, or one of its variants (MariaDB, Percona)
+- MySQL or equivalent (MariaDB, Percona)
 
 If you use a PHP version < 7.0, you need to upgrade to a [supported version of PHP](http://php.net/supported-versions.php).
 Each release branch of PHP is supported for 3 years (2 years of full support, then 1 year of security support).
