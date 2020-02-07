@@ -197,9 +197,6 @@
         "table": {
             "type": "object",
             "properties": {
-                "ignore": {
-                    "type": "boolean"
-                },
                 "truncate": {
                     "type": "boolean"
                 },
