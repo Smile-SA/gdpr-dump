@@ -45,11 +45,11 @@ Each template provides anonymization rules for a specific framework.
 
 Available templates:
 
-- [drupal7](app/config/templates/drupal7.yaml)
-- [drupal8](app/config/templates/drupal8.yaml)
-- [magento1](app/config/templates/magento1.yaml)
-- [magento2](app/config/templates/magento2.yaml)
-- [oro4](app/config/templates/oro4.yaml)
+- [drupal7](../app/config/templates/drupal7.yaml)
+- [drupal8](../app/config/templates/drupal8.yaml)
+- [magento1](../app/config/templates/magento1.yaml)
+- [magento2](../app/config/templates/magento2.yaml)
+- [oro4](../app/config/templates/oro4.yaml)
 
 To extend a configuration template, you must specify its name, and the version of your application.
 For example:
@@ -383,7 +383,7 @@ if_version:
 The application version can be defined with the `version` parameter, as explained earlier in this documentation.
 
 The `version` parameter becomes mandatory if the `requiresVersion` parameter is defined and set to `true`.
-The [magento2 template](config/templates/magento2.yaml) uses that feature.
+The [magento2 template](../app/config/templates/magento2.yaml) uses that feature.
 
 There is little point to use this feature in your custom configuration file(s).
 It is mainly used to provide default config templates that are compatible with all versions of a framework.
