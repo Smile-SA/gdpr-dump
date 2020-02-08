@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Validate the config file before prompting for a password
+- Remove unused parameter `ignore` from schema.json
+
 ## 1.0.0 - 2020-02-05
 
 - Prompt the user for a password if the database password is not set

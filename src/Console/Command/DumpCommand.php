@@ -90,19 +90,19 @@ class DumpCommand extends Command
             // Load the config
             $this->loadConfig($input);
 
+            // Validate the config data
+            $result = $this->validator->validate($this->config->toArray());
+            if (!$result->isValid()) {
+                $this->outputValidationResult($result, $output);
+                return 1;
+            }
+
             // Prompt the password if required
             $database = $this->config->get('database');
             if (!isset($database['password'])) {
                 $password = $this->promptPassword($input, $output);
                 $database['password'] = $password;
                 $this->config->set('database', $database);
-            }
-
-            // Validate the config data
-            $result = $this->validator->validate($this->config->toArray());
-            if (!$result->isValid()) {
-                $this->outputValidationResult($result, $output);
-                return 1;
             }
 
             $this->dumper->dump($this->config);
@@ -148,7 +148,7 @@ class DumpCommand extends Command
     private function promptPassword(InputInterface $input, OutputInterface $output): string
     {
         $helper = $this->getHelper('question');
-        $question = new Question('Enter password: ', '');
+        $question = new Question('Enter database password: ', '');
         $question->setHidden(true);
         $question->setHiddenFallback(false);
 
