@@ -20,7 +20,6 @@ class VersionLoader implements VersionLoaderInterface
         if ($version === '') {
             // Check if version is mandatory
             if ($requiresVersion) {
-                // phpcs:ignore Generic.Files.LineLength.TooLong
                 throw new MissingVersionException('The application version must be specified in the configuration.');
             }
             return;

@@ -84,7 +84,6 @@ class DatabaseConfig
      *
      * @param array $params
      * @throws UnexpectedValueException
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private function prepareConfig(array $params)
     {

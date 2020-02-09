@@ -41,7 +41,6 @@ class ColumnTransformer
      * @param mixed $value
      * @param array $row
      * @return mixed
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function transform(string $table, string $column, $value, array $row)
     {
