@@ -13,7 +13,7 @@ class VersionConditionTest extends TestCase
     /**
      * Test if the condition is properly parsed.
      */
-    public function testConditionData()
+    public function testConditionData(): void
     {
         // Test without space
         $condition = new VersionCondition('<=2.3.0');
@@ -24,7 +24,7 @@ class VersionConditionTest extends TestCase
     /**
      * Assert that an exception is thrown when the condition syntax is invalid.
      */
-    public function testInvalidConditionSyntax()
+    public function testInvalidConditionSyntax(): void
     {
         $this->expectException(InvalidVersionException::class);
         new VersionCondition('not_valid');
@@ -33,7 +33,7 @@ class VersionConditionTest extends TestCase
     /**
      * Assert that an exception is thrown when the condition does not contain at least 3 characters.
      */
-    public function testErrorWithLessThanThreeCharacters()
+    public function testErrorWithLessThanThreeCharacters(): void
     {
         $this->expectException(InvalidVersionException::class);
         new VersionCondition('<1');

@@ -21,7 +21,7 @@ class AppKernel
     /**
      * Run the application.
      */
-    public function run()
+    public function run(): void
     {
         // Convert notices/warnings into exceptions
         $this->initErrorHandler();
@@ -42,7 +42,7 @@ class AppKernel
     /**
      * Set the error handler.
      */
-    private function initErrorHandler()
+    private function initErrorHandler(): void
     {
         set_error_handler(function (int $severity, string $message, string $file, int $line): bool {
             // Error was suppressed with the "@" operator

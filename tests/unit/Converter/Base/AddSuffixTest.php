@@ -13,7 +13,7 @@ class AddSuffixTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $converter = new AddSuffix(['suffix' => '_test']);
 
@@ -24,7 +24,7 @@ class AddSuffixTest extends TestCase
     /**
      * Assert that an exception is thrown when the suffix is not set.
      */
-    public function testSuffixNotSet()
+    public function testSuffixNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new AddSuffix();

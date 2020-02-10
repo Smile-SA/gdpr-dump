@@ -13,7 +13,7 @@ class AddPrefixTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $converter = new AddPrefix(['prefix' => 'test_']);
 
@@ -24,7 +24,7 @@ class AddPrefixTest extends TestCase
     /**
      * Assert that an exception is thrown when the prefix is not set.
      */
-    public function testPrefixNotSet()
+    public function testPrefixNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new AddPrefix();

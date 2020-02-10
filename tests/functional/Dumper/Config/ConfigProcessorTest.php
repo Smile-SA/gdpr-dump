@@ -13,7 +13,7 @@ class ConfigProcessorTest extends DatabaseTestCase
     /**
      * Test the table name resolution.
      */
-    public function testTableNameResolution()
+    public function testTableNameResolution(): void
     {
         $data = [
             'tables_whitelist' => ['cust*', 'notExist*'],
@@ -39,7 +39,7 @@ class ConfigProcessorTest extends DatabaseTestCase
     /**
      * Test the config processor behavior with an empty configuration.
      */
-    public function testWithEmptyConfig()
+    public function testWithEmptyConfig(): void
     {
         // Create the config processor
         $processor = $this->createConfigProcessor();

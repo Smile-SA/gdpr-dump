@@ -14,7 +14,7 @@ class NumberBetweenTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $converter = new NumberBetween(['min' => 0, 'max' => 100]);
 
@@ -26,7 +26,7 @@ class NumberBetweenTest extends TestCase
     /**
      * Assert that an exception is thrown when the min value is not set.
      */
-    public function testMinNotSet()
+    public function testMinNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new NumberBetween(['max' => 0]);
@@ -35,7 +35,7 @@ class NumberBetweenTest extends TestCase
     /**
      * Assert that an exception is thrown when the max value is not set.
      */
-    public function testMaxNotSet()
+    public function testMaxNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new NumberBetween(['min' => 0]);
@@ -44,7 +44,7 @@ class NumberBetweenTest extends TestCase
     /**
      * Assert that an exception is thrown when the min value is greater than the max value.
      */
-    public function testMinGreaterThanMax()
+    public function testMinGreaterThanMax(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new NumberBetween(['min' => 100, 'max' => 0]);

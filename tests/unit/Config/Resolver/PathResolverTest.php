@@ -13,7 +13,7 @@ class PathResolverTest extends TestCase
     /**
      * Check if the resolver can resolve relative paths.
      */
-    public function testResolveRelativePath()
+    public function testResolveRelativePath(): void
     {
         $relativePath = 'tests/unit/Resources/config/templates/test.yaml';
         $relativePath = str_replace('/', DIRECTORY_SEPARATOR, $relativePath);
@@ -26,7 +26,7 @@ class PathResolverTest extends TestCase
     /**
      * Check if the resolver can resolve absolute paths.
      */
-    public function testResolveAbsolutePath()
+    public function testResolveAbsolutePath(): void
     {
         $absolutePath = $this->getResource('config/templates/test.yaml');
         $absolutePath = str_replace('/', DIRECTORY_SEPARATOR, $absolutePath);
@@ -39,19 +39,19 @@ class PathResolverTest extends TestCase
     /**
      * Check if the resolver can resolve template aliases.
      */
-    public function testResolveTemplate()
+    public function testResolveTemplate(): void
     {
         $resolver = $this->createPathResolver();
 
         // 'test' should be resolved into the "test.yaml" template
         $resolvedPath = $resolver->resolve('test');
-        $this->assertContains('test.yaml', $resolvedPath);
+        $this->assertStringContainsString('test.yaml', $resolvedPath);
     }
 
     /**
      * Assert that an exception is thrown when a file with a relative path is not found.
      */
-    public function testFileWithRelativePathNotFound()
+    public function testFileWithRelativePathNotFound(): void
     {
         $resolver = $this->createPathResolver();
         $this->expectException(FileNotFoundException::class);
@@ -61,7 +61,7 @@ class PathResolverTest extends TestCase
     /**
      * Assert that an exception is thrown when a file with an absolute path is not found.
      */
-    public function testFileWithAbsolutePathNotFound()
+    public function testFileWithAbsolutePathNotFound(): void
     {
         $resolver = $this->createPathResolver();
         $this->expectException(FileNotFoundException::class);

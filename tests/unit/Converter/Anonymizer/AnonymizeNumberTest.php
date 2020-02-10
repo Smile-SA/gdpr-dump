@@ -12,7 +12,7 @@ class AnonymizeNumberTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $converter = new AnonymizeNumber();
 

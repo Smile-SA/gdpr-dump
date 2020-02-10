@@ -37,7 +37,7 @@ class ArrayHelper
      * @param string $path
      * @param mixed $value
      */
-    public static function setPath(array &$array, string $path, $value)
+    public static function setPath(array &$array, string $path, $value): void
     {
         $keys = explode('.', $path);
         $lastKey = array_pop($keys);

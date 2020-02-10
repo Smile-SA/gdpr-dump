@@ -13,7 +13,7 @@ class ConditionBuilderTest extends TestCase
     /**
      * Test the condition builder.
      */
-    public function testConditionBuilder()
+    public function testConditionBuilder(): void
     {
         $builder = new ConditionBuilder();
 
@@ -29,7 +29,7 @@ class ConditionBuilderTest extends TestCase
     /**
      * Assert that an exception is thrown when an empty condition is specified.
      */
-    public function testErrorOnEmptyCondition()
+    public function testErrorOnEmptyCondition(): void
     {
         $builder = new ConditionBuilder();
         $this->expectException(RuntimeException::class);
@@ -39,7 +39,7 @@ class ConditionBuilderTest extends TestCase
     /**
      * Assert that an exception is thrown when the condition contains a dollar symbol.
      */
-    public function testErrorOnDollarSymbol()
+    public function testErrorOnDollarSymbol(): void
     {
         $builder = new ConditionBuilder();
         $this->expectException(RuntimeException::class);
@@ -49,7 +49,7 @@ class ConditionBuilderTest extends TestCase
     /**
      * Assert that an exception is thrown when the condition contains a variable assignment.
      */
-    public function testErrorOnAssignmentOperator()
+    public function testErrorOnAssignmentOperator(): void
     {
         $builder = new ConditionBuilder();
         $this->expectException(RuntimeException::class);
@@ -59,7 +59,7 @@ class ConditionBuilderTest extends TestCase
     /**
      * Assert that an exception is thrown when the condition contains a PHP tag.
      */
-    public function testErrorOnPhpTag()
+    public function testErrorOnPhpTag(): void
     {
         $builder = new ConditionBuilder();
         $this->expectException(RuntimeException::class);
@@ -69,7 +69,7 @@ class ConditionBuilderTest extends TestCase
     /**
      * Assert that an exception is thrown when the condition contains a static function call.
      */
-    public function testErrorOnStaticFunction()
+    public function testErrorOnStaticFunction(): void
     {
         $builder = new ConditionBuilder();
         $this->expectException(RuntimeException::class);
@@ -79,7 +79,7 @@ class ConditionBuilderTest extends TestCase
     /**
      * Assert that an exception is thrown when the condition contains a forbidden function.
      */
-    public function testErrorOnBlacklistedFunction()
+    public function testErrorOnBlacklistedFunction(): void
     {
         $builder = new ConditionBuilder();
         $this->expectException(RuntimeException::class);

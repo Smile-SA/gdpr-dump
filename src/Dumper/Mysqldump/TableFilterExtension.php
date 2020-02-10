@@ -47,7 +47,7 @@ class TableFilterExtension implements ExtensionInterface
     /**
      * @inheritdoc
      */
-    public function register(Mysqldump $dumper)
+    public function register(Mysqldump $dumper): void
     {
         $dumper->setTableWheres($this->buildTablesWhere());
     }
@@ -110,7 +110,7 @@ class TableFilterExtension implements ExtensionInterface
         QueryBuilder $queryBuilder,
         &$dependencies,
         &$subQueryCount = 0
-    ) {
+    ): void {
         /** @var ForeignKey $dependency */
         foreach ($dependencies[$tableName] as $dependency) {
             $tableName = $dependency->getForeignTableName();
@@ -176,7 +176,7 @@ class TableFilterExtension implements ExtensionInterface
      * @param QueryBuilder $queryBuilder
      * @param TableConfig $tableConfig
      */
-    private function applyTableConfigToQueryBuilder(QueryBuilder $queryBuilder, TableConfig $tableConfig)
+    private function applyTableConfigToQueryBuilder(QueryBuilder $queryBuilder, TableConfig $tableConfig): void
     {
         // Apply filters
         foreach ($tableConfig->getFilters() as $filter) {

@@ -51,7 +51,7 @@ class DataConverterExtension implements ExtensionInterface
     /**
      * @inheritdoc
      */
-    public function register(Mysqldump $dumper)
+    public function register(Mysqldump $dumper): void
     {
         if ($this->converters === null) {
             $this->prepareConverters();
@@ -104,7 +104,7 @@ class DataConverterExtension implements ExtensionInterface
     /**
      * Create the converters, grouped by table.
      */
-    private function prepareConverters()
+    private function prepareConverters(): void
     {
         $this->converters = [];
         $this->skipConditions = [];

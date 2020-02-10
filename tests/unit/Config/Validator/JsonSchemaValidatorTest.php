@@ -18,7 +18,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->schemaFile = $this->getResource('config/schema.json');
     }
@@ -26,7 +26,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * Test validaton success.
      */
-    public function testValidationSuccess()
+    public function testValidationSuccess(): void
     {
         $data = ['key' => 'value'];
 
@@ -40,7 +40,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * Test validation error.
      */
-    public function testValidationError()
+    public function testValidationError(): void
     {
         // The property "key" must be a string
         $data = ['key' => 1];
@@ -55,7 +55,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * Assert that an exception is thrown when the schema file is not found.
      */
-    public function testFileNotFound()
+    public function testFileNotFound(): void
     {
         $schemaFile = 'not_exists.json';
         $validator = new JsonSchemaValidator($schemaFile);

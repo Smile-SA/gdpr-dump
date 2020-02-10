@@ -15,7 +15,7 @@ class TableConfigTest extends TestCase
     /**
      * Test the creation of a table filter with empty data.
      */
-    public function testEmptyData()
+    public function testEmptyData(): void
     {
         $config = new TableConfig('table1', []);
 
@@ -34,7 +34,7 @@ class TableConfigTest extends TestCase
     /**
      * Test the "truncate" parameter.
      */
-    public function testTruncateData()
+    public function testTruncateData(): void
     {
         $config = new TableConfig('table1', ['truncate' => true]);
 
@@ -45,7 +45,7 @@ class TableConfigTest extends TestCase
     /**
      * Test the "converters" parameter.
      */
-    public function testConverters()
+    public function testConverters(): void
     {
         $config = new TableConfig('table1', [
             'converters' => [
@@ -66,20 +66,20 @@ class TableConfigTest extends TestCase
     /**
      * Test the condition for skipping data conversion.
      */
-    public function testConversionSkipCondition()
+    public function testConversionSkipCondition(): void
     {
         $condition = '{{column1}} === null';
         $config = new TableConfig('table1', [
             'skip_conversion_if' => $condition,
         ]);
 
-        $this->assertContains('$context[\'row_data\'][\'column1\']', $config->getSkipCondition());
+        $this->assertStringContainsString('$context[\'row_data\'][\'column1\']', $config->getSkipCondition());
     }
 
     /**
      * Test the "filter" parameter.
      */
-    public function testFilter()
+    public function testFilter(): void
     {
         $config = new TableConfig('table1', [
             'filters' => [
@@ -95,7 +95,7 @@ class TableConfigTest extends TestCase
     /**
      * Test the "limit" parameter.
      */
-    public function testLimit()
+    public function testLimit(): void
     {
         $config = new TableConfig('table1', ['limit' => 100]);
 
@@ -110,7 +110,7 @@ class TableConfigTest extends TestCase
     /**
      * Test the "orderBy" parameter.
      */
-    public function testSortOrder()
+    public function testSortOrder(): void
     {
         $config = new TableConfig('table1', ['orderBy' => 'name, id desc']);
 
@@ -121,7 +121,7 @@ class TableConfigTest extends TestCase
     /**
      * Assert that an exception is thrown when the sort order is invalid.
      */
-    public function testInvalidSortOrder()
+    public function testInvalidSortOrder(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new TableConfig('table1', ['orderBy' => 'this is not a valid sort order']);
@@ -130,7 +130,7 @@ class TableConfigTest extends TestCase
     /**
      * Assert that an exception is thrown when condition for skipping data conversion is invalid.
      */
-    public function testInvalidCondition()
+    public function testInvalidCondition(): void
     {
         $this->expectException(RuntimeException::class);
         new TableConfig('table1', ['skip_conversion_if' => 'sleep(100)']);

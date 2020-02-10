@@ -16,7 +16,7 @@ class ConditionalTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testCondition()
+    public function testCondition(): void
     {
         $parameters = [
             'condition' => '{{id}} === @my_var',
@@ -39,7 +39,7 @@ class ConditionalTest extends TestCase
     /**
      * Assert that an exception is thrown when the converters are not set.
      */
-    public function testConvertersNotSet()
+    public function testConvertersNotSet(): void
     {
         $parameters = [
             'condition' => '{{id}} === 1',
@@ -52,7 +52,7 @@ class ConditionalTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "condition" is not set.
      */
-    public function testConditionNotSet()
+    public function testConditionNotSet(): void
     {
         $parameters = [
             'if_true_converter' => $this->createIfTrueConverter(),
@@ -65,7 +65,7 @@ class ConditionalTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "condition" is empty.
      */
-    public function testEmptyCondition()
+    public function testEmptyCondition(): void
     {
         $parameters = [
             'if_true_converter' => $this->createIfTrueConverter(),

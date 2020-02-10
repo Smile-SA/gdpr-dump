@@ -13,19 +13,16 @@ class MysqlMetadataTest extends DatabaseTestCase
     /**
      * Test the "getTableNames" method.
      */
-    public function testTableNames()
+    public function testTableNames(): void
     {
         $metadata = $this->getMetadata();
-
-        // TODO: use assertEqualsCanonicalizing when upgrading to a newer version of PHPUnit
-        // Currently we need to set $canonicalize argument to true to ignore the order of elements in the array
-        $this->assertEquals(['stores', 'customers', 'addresses'], $metadata->getTableNames(), '', 0.0, 10, true);
+        $this->assertEqualsCanonicalizing(['stores', 'customers', 'addresses'], $metadata->getTableNames());
     }
 
     /**
      * Test the "getForeignKeys" method.
      */
-    public function testForeignKeys()
+    public function testForeignKeys(): void
     {
         $metadata = $this->getMetadata();
 
@@ -39,7 +36,7 @@ class MysqlMetadataTest extends DatabaseTestCase
      *
      * @param MetadataInterface $metadata
      */
-    private function validateStoresForeignKeys(MetadataInterface $metadata)
+    private function validateStoresForeignKeys(MetadataInterface $metadata): void
     {
         $foreignKeys = $metadata->getForeignKeys('stores');
         $this->assertEquals([], $foreignKeys);
@@ -50,7 +47,7 @@ class MysqlMetadataTest extends DatabaseTestCase
      *
      * @param MetadataInterface $metadata
      */
-    private function validateCustomersForeignKeys(MetadataInterface $metadata)
+    private function validateCustomersForeignKeys(MetadataInterface $metadata): void
     {
         $foreignKeys = $metadata->getForeignKeys('customers');
         $this->assertCount(1, $foreignKeys);
@@ -68,7 +65,7 @@ class MysqlMetadataTest extends DatabaseTestCase
      *
      * @param MetadataInterface $metadata
      */
-    private function validateAddressesForeignKeys(MetadataInterface $metadata)
+    private function validateAddressesForeignKeys(MetadataInterface $metadata): void
     {
         $foreignKeys = $metadata->getForeignKeys('addresses');
         $this->assertCount(1, $foreignKeys);

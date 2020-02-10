@@ -13,5 +13,5 @@ interface ExtensionInterface
      *
      * @param Mysqldump $dumper
      */
-    public function register(Mysqldump $dumper);
+    public function register(Mysqldump $dumper): void;
 }

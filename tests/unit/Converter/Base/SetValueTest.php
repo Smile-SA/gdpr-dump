@@ -13,7 +13,7 @@ class SetValueTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $parameters = [
             'value' => 1,
@@ -28,7 +28,7 @@ class SetValueTest extends TestCase
     /**
      * Assert that an exception is thrown when the value is not set.
      */
-    public function testValueNotSet()
+    public function testValueNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new SetValue([]);

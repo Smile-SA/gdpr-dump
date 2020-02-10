@@ -104,7 +104,7 @@ class TableDependencyResolver
     /**
      * Build the tables dependencies (parent -> children).
      */
-    private function buildDependencyTree()
+    private function buildDependencyTree(): void
     {
         if ($this->foreignKeys !== null) {
             return;

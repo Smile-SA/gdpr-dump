@@ -14,7 +14,7 @@ class AnonymizeDateTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $converter = new AnonymizeDate();
 
@@ -26,7 +26,7 @@ class AnonymizeDateTest extends TestCase
     /**
      * Test the converter with a custom date format.
      */
-    public function testFormatParameter()
+    public function testFormatParameter(): void
     {
         $format = 'd/m/Y';
         $converter = new AnonymizeDate(['format' => $format]);
@@ -39,7 +39,7 @@ class AnonymizeDateTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "format" is empty.
      */
-    public function testEmptyFormat()
+    public function testEmptyFormat(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new AnonymizeDate(['format' => '']);
@@ -48,7 +48,7 @@ class AnonymizeDateTest extends TestCase
     /**
      * Assert that an exception is thrown when an invalid date is provided.
      */
-    public function testInvalidDateFormat()
+    public function testInvalidDateFormat(): void
     {
         $converter = new AnonymizeDate();
         $this->expectException(UnexpectedValueException::class);
@@ -62,7 +62,7 @@ class AnonymizeDateTest extends TestCase
      * @param string $actual
      * @param string $format
      */
-    protected function assertDateIsAnonymized(string $anonymized, string $actual, string $format)
+    protected function assertDateIsAnonymized(string $anonymized, string $actual, string $format): void
     {
         $anonymizedDate = DateTime::createFromFormat($format, $anonymized);
         $actualDate = DateTime::createFromFormat($format, $actual);

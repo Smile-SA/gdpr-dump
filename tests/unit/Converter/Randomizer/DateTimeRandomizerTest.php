@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
 
 use DateTime;
+use Exception;
 use Smile\GdprDump\Converter\Randomizer\RandomizeDateTime;
 use UnexpectedValueException;
 
@@ -13,7 +14,7 @@ class DateTimeRandomizerTest extends DateRandomizerTest
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $converter = new RandomizeDateTime();
 
@@ -25,7 +26,7 @@ class DateTimeRandomizerTest extends DateRandomizerTest
     /**
      * Test using a custom date format.
      */
-    public function testFormatParameter()
+    public function testFormatParameter(): void
     {
         $format = 'd/m/Y H:i:s';
         $converter = new RandomizeDateTime(['format' => $format]);
@@ -38,7 +39,7 @@ class DateTimeRandomizerTest extends DateRandomizerTest
     /**
      * Test the converter with a custom min/max year.
      */
-    public function testYearParameters()
+    public function testYearParameters(): void
     {
         $converter = new RandomizeDateTime(['min_year' => 1970, 'max_year' => 2020]);
 
@@ -50,7 +51,7 @@ class DateTimeRandomizerTest extends DateRandomizerTest
     /**
      * Test if the current year is used if the min/max years are set to null.
      */
-    public function testNullYears()
+    public function testNullYears(): void
     {
         $converter = new RandomizeDateTime(['min_year' => null, 'max_year' => null]);
 
@@ -65,7 +66,7 @@ class DateTimeRandomizerTest extends DateRandomizerTest
     /**
      * Assert that an exception is thrown when the parameter "format" is empty.
      */
-    public function testEmptyFormat()
+    public function testEmptyFormat(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new RandomizeDateTime(['format' => '']);
@@ -74,7 +75,7 @@ class DateTimeRandomizerTest extends DateRandomizerTest
     /**
      * Assert that an exception is thrown when the min year is higher than the max year.
      */
-    public function testYearConflict()
+    public function testYearConflict(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new RandomizeDateTime(['min_year' => 2020, 'max_year' => 2019]);
