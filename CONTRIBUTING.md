@@ -16,8 +16,8 @@ We'll then discuss whether it should be added to the core.
 Before submitting a pull request, please ensure that your code meet these requirements:
 
 - The code must be PSR-2 compliant.
-- GdprDump has a minimum PHP version requirement of PHP 7.0.
-  Don't use features that were introduced later than PHP 7.0.
+- GdprDump has a minimum PHP version requirement of PHP 7.3.
+  Don't use features that were introduced later than PHP 7.3.
 - Use type hinting and strict typing.
 - Use exactly the same formatting as the core classes (PHPDoc, spacing...).
 - Use the `@inheritdoc` annotation in functions that extend a parent function.
@@ -44,7 +44,7 @@ Run the following commands:
 ```
 vendor/bin/phpcs
 vendor/bin/phpmd bin,src,tests xml phpmd.xml.dist
-vendor/bin/phpstan analyse bin src tests -c phpstan.neon --level 5
+vendor/bin/phpstan analyse
 vendor/bin/phpunit
 ```
 

@@ -15,7 +15,7 @@ class ChainTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $parameters = [
             'converters' => [
@@ -33,7 +33,7 @@ class ChainTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "converters" is not set.
      */
-    public function testConvertersNotSet()
+    public function testConvertersNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new Chain([]);
@@ -42,7 +42,7 @@ class ChainTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "converters" is not an array.
      */
-    public function testInvalidConverters()
+    public function testInvalidConverters(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new Chain(['converters' => 'notAnArray']);

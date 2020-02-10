@@ -14,7 +14,7 @@ class ConfigProcessorTest extends TestCase
     /**
      * Test the config processor.
      */
-    public function testProcessor()
+    public function testProcessor(): void
     {
         $data = [
             'tables_blacklist' => ['table1', 'not_exists'],
@@ -34,7 +34,7 @@ class ConfigProcessorTest extends TestCase
     /**
      * Test the config processor with wildcards.
      */
-    public function testProcessorWithWildCard()
+    public function testProcessorWithWildCard(): void
     {
         $data = [
             'tables_blacklist' => ['table*'],
@@ -54,7 +54,7 @@ class ConfigProcessorTest extends TestCase
     /**
      * Test the config processor with empty data.
      */
-    public function testProcessorWithEmptyConfig()
+    public function testProcessorWithEmptyConfig(): void
     {
         $config = new Config();
         $processor = $this->createConfigProcessor();

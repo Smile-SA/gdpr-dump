@@ -14,7 +14,7 @@ class FromContextTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $converter = new FromContext(['key' => 'row_data.email']);
         $context = ['row_data' => ['email' => 'test@example.org']];
@@ -26,7 +26,7 @@ class FromContextTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "key" is not set.
      */
-    public function testKeyNotSet()
+    public function testKeyNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new FromContext([]);
@@ -35,7 +35,7 @@ class FromContextTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "key" is empty.
      */
-    public function testEmptyKey()
+    public function testEmptyKey(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new FromContext(['key' => '']);

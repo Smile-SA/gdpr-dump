@@ -14,7 +14,7 @@ class EnvVarProcessorTest extends TestCase
      * @inheritdoc
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($_SERVER['TEST_ENV_VAR']);
     }
@@ -22,7 +22,7 @@ class EnvVarProcessorTest extends TestCase
     /**
      * Assert that normal values are not processed.
      */
-    public function testNormalValuesNotProcessed()
+    public function testNormalValuesNotProcessed(): void
     {
         $processor = new EnvVarProcessor();
 
@@ -38,7 +38,7 @@ class EnvVarProcessorTest extends TestCase
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function testScalarEnvVar()
+    public function testScalarEnvVar(): void
     {
         $processor = new EnvVarProcessor();
         $_SERVER['TEST_ENV_VAR'] = '12345';
@@ -64,7 +64,7 @@ class EnvVarProcessorTest extends TestCase
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function testJsonEnvVar()
+    public function testJsonEnvVar(): void
     {
         $processor = new EnvVarProcessor();
         $_SERVER['TEST_ENV_VAR'] = '{"key": "value"}';
@@ -78,7 +78,7 @@ class EnvVarProcessorTest extends TestCase
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function testInvalidJson()
+    public function testInvalidJson(): void
     {
         $processor = new EnvVarProcessor();
         $_SERVER['TEST_ENV_VAR'] = 'invalidData';
@@ -90,7 +90,7 @@ class EnvVarProcessorTest extends TestCase
     /**
      * Assert that an exception is thrown when the environment variable is not defined.
      */
-    public function testUndefinedEnvVar()
+    public function testUndefinedEnvVar(): void
     {
         $processor = new EnvVarProcessor();
 
@@ -101,7 +101,7 @@ class EnvVarProcessorTest extends TestCase
     /**
      * Assert that an exception is thrown when the environment variable name is not specified.
      */
-    public function testEmptyVariableName()
+    public function testEmptyVariableName(): void
     {
         $processor = new EnvVarProcessor();
 
@@ -112,7 +112,7 @@ class EnvVarProcessorTest extends TestCase
     /**
      * Assert that an exception is thrown when the environment variable name and type are not specified.
      */
-    public function testEmptyVariableNameAndType()
+    public function testEmptyVariableNameAndType(): void
     {
         $processor = new EnvVarProcessor();
 
@@ -123,7 +123,7 @@ class EnvVarProcessorTest extends TestCase
     /**
      * Assert that an exception is thrown when the environment variable type is not specified.
      */
-    public function testEmptyVariableType()
+    public function testEmptyVariableType(): void
     {
         $processor = new EnvVarProcessor();
 
@@ -134,7 +134,7 @@ class EnvVarProcessorTest extends TestCase
     /**
      * Assert that an exception is thrown when the environment variable name is invalid.
      */
-    public function testInvalidVariableName()
+    public function testInvalidVariableName(): void
     {
         $processor = new EnvVarProcessor();
 
@@ -145,7 +145,7 @@ class EnvVarProcessorTest extends TestCase
     /**
      * Assert that an exception is thrown when the environment variable type is invalid.
      */
-    public function testInvalidVariableType()
+    public function testInvalidVariableType(): void
     {
         $processor = new EnvVarProcessor();
 

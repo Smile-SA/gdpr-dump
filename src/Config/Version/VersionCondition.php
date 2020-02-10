@@ -57,7 +57,7 @@ class VersionCondition
      * @throws InvalidVersionException
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    private function parseCondition(string $condition)
+    private function parseCondition(string $condition): void
     {
         if (strlen($condition) < 3) {
             throw new InvalidVersionException(sprintf('Invalid condition "%s".', $condition));

@@ -101,7 +101,7 @@ class ConfigLoader implements ConfigLoaderInterface
      * @throws ParseException
      * @throws ProcessException
      */
-    private function loadData(array $data)
+    private function loadData(array $data): void
     {
         // Recursively load parent config files
         if (isset($data['extends'])) {

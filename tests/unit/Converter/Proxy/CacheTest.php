@@ -15,7 +15,7 @@ class CacheTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $converter1 = new Cache(['converter' => new RandomizeText(), 'cache_key' => 'key1']);
         $converter2 = new Cache(['converter' => new RandomizeText(), 'cache_key' => 'key2']);
@@ -32,7 +32,7 @@ class CacheTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "converter" is not set.
      */
-    public function testConverterNotSet()
+    public function testConverterNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new Cache(['cache_key' => 'username']);
@@ -41,7 +41,7 @@ class CacheTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "cache_key" is not set.
      */
-    public function testCacheKeyNotSet()
+    public function testCacheKeyNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new Cache(['converter' => new RandomizeText()]);
@@ -50,7 +50,7 @@ class CacheTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "cache_key" is empty.
      */
-    public function testEmptyCacheKey()
+    public function testEmptyCacheKey(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new Cache(['converter' => new RandomizeText(), 'cache_key' => '']);

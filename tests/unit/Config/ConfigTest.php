@@ -23,7 +23,7 @@ class ConfigTest extends TestCase
     /**
      * Test the constructor.
      */
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $config = new Config($this->data);
         $this->assertSame($this->data, $config->toArray());
@@ -32,7 +32,7 @@ class ConfigTest extends TestCase
     /**
      * Test the "set", "get" and "has" methods.
      */
-    public function testSetValue()
+    public function testSetValue(): void
     {
         $config = new Config();
         $config->set('key', 'value');
@@ -45,7 +45,7 @@ class ConfigTest extends TestCase
     /**
      * Test the "merge" method.
      */
-    public function testMerge()
+    public function testMerge(): void
     {
         $config = new Config();
         $config->merge($this->data);
@@ -62,7 +62,7 @@ class ConfigTest extends TestCase
     /**
      * Test the behavior of the "get" method when the specified key is not defined.
      */
-    public function testValueNotFound()
+    public function testValueNotFound(): void
     {
         $config = new Config($this->data);
 

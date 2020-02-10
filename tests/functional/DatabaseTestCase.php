@@ -18,7 +18,7 @@ abstract class DatabaseTestCase extends TestCase
     /**
      * @inheritdoc
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (static::skipDatabaseTests()) {
             static::markTestSkipped('Skip database tests.');

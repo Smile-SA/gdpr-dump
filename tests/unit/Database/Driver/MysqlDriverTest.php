@@ -13,7 +13,7 @@ class MysqlDriverTest extends TestCase
     /**
      * Test if the DSN is generated successfully.
      */
-    public function testDsn()
+    public function testDsn(): void
     {
         $driver = $this->getMysqlDriver();
         $this->assertSame('mysql:host=localhost;dbname=mydatabase;charset=utf8mb4', $driver->getDsn());

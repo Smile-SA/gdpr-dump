@@ -12,7 +12,7 @@ class ValidationResultTest extends TestCase
     /**
      * Test the "valid" property.
      */
-    public function testValidProperty()
+    public function testValidProperty(): void
     {
         $result = new ValidationResult();
 
@@ -27,7 +27,7 @@ class ValidationResultTest extends TestCase
     /**
      * Test the "messages" property.
      */
-    public function testMessagesProperty()
+    public function testMessagesProperty(): void
     {
         $result = new ValidationResult();
 

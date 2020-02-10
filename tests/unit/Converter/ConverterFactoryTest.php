@@ -25,7 +25,7 @@ class ConverterFactoryTest extends TestCase
     /**
      * Test the converter creation from an array definition.
      */
-    public function testConverterCreation()
+    public function testConverterCreation(): void
     {
         $factory = $this->createFactory();
 
@@ -36,7 +36,7 @@ class ConverterFactoryTest extends TestCase
     /**
      * Test the creation of a Faker converter.
      */
-    public function testFakerConverter()
+    public function testFakerConverter(): void
     {
         $factory = $this->createFactory();
 
@@ -47,7 +47,7 @@ class ConverterFactoryTest extends TestCase
     /**
      * Test the creation of a disabled converter.
      */
-    public function testDisabledConverter()
+    public function testDisabledConverter(): void
     {
         $factory = $this->createFactory();
 
@@ -58,7 +58,7 @@ class ConverterFactoryTest extends TestCase
     /**
      * Test the creation of a unique converter.
      */
-    public function testUniqueConverter()
+    public function testUniqueConverter(): void
     {
         $factory = $this->createFactory();
 
@@ -72,7 +72,7 @@ class ConverterFactoryTest extends TestCase
     /**
      * Test the creation of a conditional converter.
      */
-    public function testConditionConverter()
+    public function testConditionConverter(): void
     {
         $factory = $this->createFactory();
 
@@ -83,7 +83,7 @@ class ConverterFactoryTest extends TestCase
     /**
      * Test the creation of a cache converter.
      */
-    public function testCacheConverter()
+    public function testCacheConverter(): void
     {
         $factory = $this->createFactory();
 
@@ -94,7 +94,7 @@ class ConverterFactoryTest extends TestCase
     /**
      * Test the creation of nested converters.
      */
-    public function testNestedConverters()
+    public function testNestedConverters(): void
     {
         $factory = $this->createFactory();
 
@@ -113,7 +113,7 @@ class ConverterFactoryTest extends TestCase
     /**
      * Assert that an exception is thrown when the converter is set but empty.
      */
-    public function testEmptyConverter()
+    public function testEmptyConverter(): void
     {
         $factory = $this->createFactory();
         $this->expectException(UnexpectedValueException::class);
@@ -123,7 +123,7 @@ class ConverterFactoryTest extends TestCase
     /**
      * Assert that an exception is thrown when the converter is not set.
      */
-    public function testConverterNotSet()
+    public function testConverterNotSet(): void
     {
         $factory = $this->createFactory();
         $this->expectException(UnexpectedValueException::class);
@@ -133,7 +133,7 @@ class ConverterFactoryTest extends TestCase
     /**
      * Assert that an exception is thrown when the converter is not defined.
      */
-    public function testConverterNotDefined()
+    public function testConverterNotDefined(): void
     {
         $factory = $this->createFactory();
         $this->expectException(RuntimeException::class);
@@ -143,7 +143,7 @@ class ConverterFactoryTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "parameters" is not an array.
      */
-    public function testParametersNotAnArray()
+    public function testParametersNotAnArray(): void
     {
         $factory = $this->createFactory();
         $this->expectException(UnexpectedValueException::class);
@@ -154,7 +154,7 @@ class ConverterFactoryTest extends TestCase
      * Assert that an exception is thrown when the parameter "converter" is used,
      * but the value is not a converter definition.
      */
-    public function testConverterParameterMalformed()
+    public function testConverterParameterMalformed(): void
     {
         $factory = $this->createFactory();
         $this->expectException(UnexpectedValueException::class);
@@ -165,7 +165,7 @@ class ConverterFactoryTest extends TestCase
      * Assert that an exception is thrown when the parameter "converters" is used,
      * but the value is not an array.
      */
-    public function testConvertersParameterNotAnArray()
+    public function testConvertersParameterNotAnArray(): void
     {
         $factory = $this->createFactory();
         $this->expectException(UnexpectedValueException::class);
@@ -176,7 +176,7 @@ class ConverterFactoryTest extends TestCase
      * Assert that an exception is thrown when the parameter "converters" is used,
      * but the value is not an array of converter definition.
      */
-    public function testConvertersParameterMalformed()
+    public function testConvertersParameterMalformed(): void
     {
         $factory = $this->createFactory();
         $this->expectException(UnexpectedValueException::class);

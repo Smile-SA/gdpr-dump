@@ -36,7 +36,7 @@ class QueryValidator
      * @param string $query
      * @throws ValidationException
      */
-    public function validate(string $query)
+    public function validate(string $query): void
     {
         // Use a PHP tokenizer to split the query into tokens
         $tokens = $this->tokenizer->parse('<?php ' . strtolower($query) . '?>');

@@ -16,7 +16,7 @@ class DumperConfigTest extends TestCase
     /**
      * Test the "tables_whitelist" parameter.
      */
-    public function testTablesWhitelist()
+    public function testTablesWhitelist(): void
     {
         $whitelist = ['table1', 'table2'];
         $config = $this->createConfig(['tables_whitelist' => $whitelist]);
@@ -26,7 +26,7 @@ class DumperConfigTest extends TestCase
     /**
      * Test the "tables_blacklist" parameter.
      */
-    public function testTablesBlacklist()
+    public function testTablesBlacklist(): void
     {
         $blacklist = ['table1', 'table2'];
         $config = $this->createConfig(['tables_blacklist' => $blacklist]);
@@ -36,7 +36,7 @@ class DumperConfigTest extends TestCase
     /**
      * Test if a dump file is created.
      */
-    public function testTablesData()
+    public function testTablesData(): void
     {
         $configData = [
             'tables' => [
@@ -59,7 +59,7 @@ class DumperConfigTest extends TestCase
     /**
      * Test the dump settings.
      */
-    public function testDumpSettings()
+    public function testDumpSettings(): void
     {
         $config = $this->createConfig(['dump' => ['output' => 'dump.sql', 'hex_blob' => true]]);
 
@@ -75,7 +75,7 @@ class DumperConfigTest extends TestCase
     /**
      * Test the variables to initialize with SQL queries.
      */
-    public function testVarQueries()
+    public function testVarQueries(): void
     {
         $queries = [
             'my_var' => 'select my_col from my_table where other_col = "something"',
@@ -88,7 +88,7 @@ class DumperConfigTest extends TestCase
     /**
      * Test the default config values.
      */
-    public function testDefaultValues()
+    public function testDefaultValues(): void
     {
         $config = $this->createConfig([]);
 
@@ -110,7 +110,7 @@ class DumperConfigTest extends TestCase
     /**
      * Assert that an exception is thrown when an invalid parameter is used.
      */
-    public function testInvalidDumpParameter()
+    public function testInvalidDumpParameter(): void
     {
         $this->expectException(UnexpectedValueException::class);
         $this->createConfig(['dump' => ['not_exists' => true]]);
@@ -119,7 +119,7 @@ class DumperConfigTest extends TestCase
     /**
      * Assert that an exception is thrown when a var query contains a forbidden statement.
      */
-    public function testInvalidStatementInQuery()
+    public function testInvalidStatementInQuery(): void
     {
         $this->expectException(ValidationException::class);
         $this->createConfig(['variables' => ['my_var' => 'select my_col from my_table; delete from my_table']]);

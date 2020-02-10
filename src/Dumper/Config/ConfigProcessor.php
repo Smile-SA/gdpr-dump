@@ -46,7 +46,7 @@ class ConfigProcessor
      *
      * @param ConfigInterface $config
      */
-    private function processTableLists(ConfigInterface $config)
+    private function processTableLists(ConfigInterface $config): void
     {
         $configKeys = ['tables_whitelist', 'tables_blacklist'];
 
@@ -65,7 +65,7 @@ class ConfigProcessor
      *
      * @param ConfigInterface $config
      */
-    private function processTablesData(ConfigInterface $config)
+    private function processTablesData(ConfigInterface $config): void
     {
         $tablesData = $config->get('tables', []);
         if (empty($tablesData)) {

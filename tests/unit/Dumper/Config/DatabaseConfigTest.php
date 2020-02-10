@@ -14,7 +14,7 @@ class DatabaseConfigTest extends TestCase
     /**
      * Test the getter methods.
      */
-    public function testGetters()
+    public function testGetters(): void
     {
         $params = [
             'host' => 'mydb',
@@ -40,7 +40,7 @@ class DatabaseConfigTest extends TestCase
     /**
      * Test the default values of the database config.
      */
-    public function testDefaultValues()
+    public function testDefaultValues(): void
     {
         $config = new DatabaseConfig(['name' => 'test']);
 
@@ -55,7 +55,7 @@ class DatabaseConfigTest extends TestCase
     /**
      * Assert that an exception is thrown when the database name is missing.
      */
-    public function testMissingDatabaseName()
+    public function testMissingDatabaseName(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new DatabaseConfig([]);

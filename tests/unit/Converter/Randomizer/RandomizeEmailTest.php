@@ -13,20 +13,20 @@ class RandomizeEmailTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $converter = new RandomizeEmail(['domains' => ['example.org']]);
 
         $value = $converter->convert('user1@gmail.com');
-        $this->assertNotContains('user1', $value);
-        $this->assertNotContains('@gmail.com', $value);
+        $this->assertStringNotContainsString('user1', $value);
+        $this->assertStringNotContainsString('@gmail.com', $value);
         $this->assertStringEndsWith('@example.org', $value);
     }
 
     /**
      * Test the converter with a custom character replacement string.
      */
-    public function testCustomReplacements()
+    public function testCustomReplacements(): void
     {
         $converter = new RandomizeEmail(['replacements' => 'a', 'domains' => ['example.org']]);
 
@@ -37,7 +37,7 @@ class RandomizeEmailTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "domains" is empty.
      */
-    public function testEmptyDomains()
+    public function testEmptyDomains(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new RandomizeEmail(['domains' => []]);
@@ -46,7 +46,7 @@ class RandomizeEmailTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "domains" is not an array.
      */
-    public function testInvalidDomains()
+    public function testInvalidDomains(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new RandomizeEmail(['domains' => 'invalid']);

@@ -14,7 +14,7 @@ class FakerTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $parameters = [
             'faker' => FakerFactory::create(),
@@ -31,7 +31,7 @@ class FakerTest extends TestCase
     /**
      * Test the use of placeholder values.
      */
-    public function testValuePlaceholder()
+    public function testValuePlaceholder(): void
     {
         $parameters = [
             'faker' => FakerFactory::create(),
@@ -48,7 +48,7 @@ class FakerTest extends TestCase
     /**
      * Assert that an exception is thrown when the Faker provider is not set.
      */
-    public function testProviderNotSet()
+    public function testProviderNotSet(): void
     {
         $parameters = ['formatter' => 'safeEmail'];
         $this->expectException(InvalidArgumentException::class);
@@ -58,7 +58,7 @@ class FakerTest extends TestCase
     /**
      * Assert that an exception is thrown when the Faker formatter is not set.
      */
-    public function testFormatterNotSet()
+    public function testFormatterNotSet(): void
     {
         $parameters = ['faker' => FakerFactory::create()];
         $this->expectException(InvalidArgumentException::class);

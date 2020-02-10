@@ -94,7 +94,7 @@ class ConditionBuilder
      * @param string $condition
      * @throws RuntimeException
      */
-    private function validateCondition(string $condition)
+    private function validateCondition(string $condition): void
     {
         // Prevent usage of "=" operator
         if (preg_match('/[^=!]=[^=]/', $condition)) {

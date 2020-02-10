@@ -13,7 +13,7 @@ class YamlParserTest extends TestCase
     /**
      * Test the parsing of YAML input.
      */
-    public function testYamlInput()
+    public function testYamlInput(): void
     {
         $input = '{"object": {"key": "value"}}';
         $parser = new YamlParser();
@@ -25,7 +25,7 @@ class YamlParserTest extends TestCase
     /**
      * Assert that an exception is thrown when the file is not found.
      */
-    public function testInvalidInput()
+    public function testInvalidInput(): void
     {
         $parser = new YamlParser();
         $this->expectException(ParseException::class);

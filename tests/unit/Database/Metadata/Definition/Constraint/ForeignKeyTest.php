@@ -12,7 +12,7 @@ class ForeignKeyTest extends TestCase
     /**
      * Test the getters methods.
      */
-    public function testGetters()
+    public function testGetters(): void
     {
         list($constraintName, $localTable, $localColumns, $foreignTable, $foreignColumns) = $this->getForeignKeyData();
 

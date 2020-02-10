@@ -13,18 +13,18 @@ class RandomizeTextTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $converter = new RandomizeText();
 
         $value = $converter->convert('user1');
-        $this->assertNotContains('user1', $value);
+        $this->assertStringNotContainsString('user1', $value);
     }
 
     /**
      * Test the converter with a custom character replacement string.
      */
-    public function testCustomReplacements()
+    public function testCustomReplacements(): void
     {
         $converter = new RandomizeText(['replacements' => 'a']);
 
@@ -35,7 +35,7 @@ class RandomizeTextTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "replacements" is empty.
      */
-    public function testEmptyReplacements()
+    public function testEmptyReplacements(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new RandomizeText(['replacements' => '']);
