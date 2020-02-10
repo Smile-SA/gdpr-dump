@@ -12,7 +12,7 @@ class AnonymizeDateTimeTest extends AnonymizeDateTest
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $converter = new AnonymizeDateTime();
 
@@ -24,7 +24,7 @@ class AnonymizeDateTimeTest extends AnonymizeDateTest
     /**
      * Test using a custom date format.
      */
-    public function testFormatParameter()
+    public function testFormatParameter(): void
     {
         $format = 'd/m/Y H:i:s';
         $converter = new AnonymizeDateTime(['format' => $format]);
@@ -37,7 +37,7 @@ class AnonymizeDateTimeTest extends AnonymizeDateTest
     /**
      * Assert that an exception is thrown when the parameter "format" is empty.
      */
-    public function testEmptyFormat()
+    public function testEmptyFormat(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new AnonymizeDateTime(['format' => '']);
@@ -46,7 +46,7 @@ class AnonymizeDateTimeTest extends AnonymizeDateTest
     /**
      * Assert that an exception is thrown when an invalid date is provided.
      */
-    public function testInvalidDateFormat()
+    public function testInvalidDateFormat(): void
     {
         $converter = new AnonymizeDateTime();
         $this->expectException(UnexpectedValueException::class);

@@ -85,7 +85,7 @@ class DatabaseConfig
      * @param array $params
      * @throws UnexpectedValueException
      */
-    private function prepareConfig(array $params)
+    private function prepareConfig(array $params): void
     {
         // The database name is mandatory, no matter what driver is used
         // (this will require some refactoring if SQLite compatibility is added)

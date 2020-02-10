@@ -123,7 +123,7 @@ class DumperConfig
      * @param string $tableName
      * @return TableConfig|null
      */
-    public function getTableConfig(string $tableName)
+    public function getTableConfig(string $tableName): ?TableConfig
     {
         return $this->tablesConfig[$tableName] ?? null;
     }
@@ -196,7 +196,7 @@ class DumperConfig
      *
      * @param ConfigInterface $config
      */
-    private function prepareConfig(ConfigInterface $config)
+    private function prepareConfig(ConfigInterface $config): void
     {
         // Dump settings
         $this->prepareDumpSettings($config);
@@ -219,7 +219,7 @@ class DumperConfig
      *
      * @param ConfigInterface $config
      */
-    private function prepareDumpSettings(ConfigInterface $config)
+    private function prepareDumpSettings(ConfigInterface $config): void
     {
         $settings = $config->get('dump', []);
 
@@ -246,7 +246,7 @@ class DumperConfig
      *
      * @param ConfigInterface $config
      */
-    private function prepareTablesConfig(ConfigInterface $config)
+    private function prepareTablesConfig(ConfigInterface $config): void
     {
         $tablesData = $config->get('tables', []);
 
@@ -275,7 +275,7 @@ class DumperConfig
      *
      * @param ConfigInterface $config
      */
-    private function prepareVarQueries(ConfigInterface $config)
+    private function prepareVarQueries(ConfigInterface $config): void
     {
         $queryValidator = new QueryValidator();
         $this->varQueries = $config->get('variables', []);
@@ -291,7 +291,7 @@ class DumperConfig
      *
      * @param ConfigInterface $config
      */
-    private function prepareTablesWhitelist(ConfigInterface $config)
+    private function prepareTablesWhitelist(ConfigInterface $config): void
     {
         $this->tablesWhitelist = $config->get('tables_whitelist', []);
 
@@ -305,7 +305,7 @@ class DumperConfig
      *
      * @param ConfigInterface $config
      */
-    private function prepareTablesBlacklist(ConfigInterface $config)
+    private function prepareTablesBlacklist(ConfigInterface $config): void
     {
         $this->tablesBlacklist = $config->get('tables_blacklist', []);
 

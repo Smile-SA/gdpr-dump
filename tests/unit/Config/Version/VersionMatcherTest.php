@@ -12,7 +12,7 @@ class VersionMatcherTest extends TestCase
     /**
      * Test the "match" method with a single condition.
      */
-    public function testMatchCondition()
+    public function testMatchCondition(): void
     {
         $versionMatcher = new VersionMatcher();
 
@@ -32,7 +32,7 @@ class VersionMatcherTest extends TestCase
     /**
      * Test the "match" method with a condition range.
      */
-    public function testMatchConditionRange()
+    public function testMatchConditionRange(): void
     {
         $versionMatcher = new VersionMatcher();
 

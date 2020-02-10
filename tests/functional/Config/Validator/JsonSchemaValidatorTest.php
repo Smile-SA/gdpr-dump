@@ -19,7 +19,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $schemaFile = $this->getBasePath() . '/app/config/schema.json';
         $this->validator = new JsonSchemaValidator($schemaFile);
@@ -28,7 +28,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * Test the database settings.
      */
-    public function testDatabaseSettings()
+    public function testDatabaseSettings(): void
     {
         $data = [
             'database' => [
@@ -63,7 +63,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * Test the dump settings.
      */
-    public function testDumpSettings()
+    public function testDumpSettings(): void
     {
         $data = [
             'dump' => [
@@ -113,7 +113,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * Test the tables whitelist.
      */
-    public function testTablesWhitelist()
+    public function testTablesWhitelist(): void
     {
         $data = [
             'tables_whitelist' => ['table1', 'table2'],
@@ -125,7 +125,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * Test the tables blacklist.
      */
-    public function testTablesBlacklist()
+    public function testTablesBlacklist(): void
     {
         $data = [
             'tables_blacklist' => ['table1', 'table2'],
@@ -137,7 +137,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * Test the data converters.
      */
-    public function testDataConverters()
+    public function testDataConverters(): void
     {
         $data = [
             'tables' => [
@@ -171,7 +171,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * Test the data filters.
      */
-    public function testDataFilters()
+    public function testDataFilters(): void
     {
         $data = [
             'tables' => [
@@ -189,7 +189,7 @@ class JsonSchemaValidatorTest extends TestCase
         $this->assertDataIsValid($data);
     }
 
-    public function testInvalidSection()
+    public function testInvalidSection(): void
     {
         $data = [
             'not_exists' => ['table1'],
@@ -201,7 +201,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * Test if it is possible to use empty objects/arrays.
      */
-    public function testEmptyData()
+    public function testEmptyData(): void
     {
         $data = new stdClass();
         $this->assertDataIsValid($data);
@@ -221,7 +221,7 @@ class JsonSchemaValidatorTest extends TestCase
      *
      * @param mixed $data
      */
-    private function assertDataIsValid($data)
+    private function assertDataIsValid($data): void
     {
         $result = $this->validator->validate($data);
         $this->assertTrue($result->isValid());
@@ -232,7 +232,7 @@ class JsonSchemaValidatorTest extends TestCase
      *
      * @param mixed $data
      */
-    private function assertDataIsNotValid($data)
+    private function assertDataIsNotValid($data): void
     {
         $result = $this->validator->validate($data);
         $this->assertFalse($result->isValid());

@@ -13,7 +13,7 @@ class SortOrderTest extends TestCase
     /**
      * Test the creation of a sort order.
      */
-    public function testSortOrder()
+    public function testSortOrder(): void
     {
         $sortOrder = new SortOrder('column1');
         $this->assertSame('column1', $sortOrder->getColumn());
@@ -26,7 +26,7 @@ class SortOrderTest extends TestCase
     /**
      * Assert that an exception is thrown when the direction is invalid.
      */
-    public function testInvalidDirection()
+    public function testInvalidDirection(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new SortOrder('column1', 'not_exists');

@@ -86,7 +86,7 @@ class TableConfig
      *
      * @return int|null
      */
-    public function getLimit()
+    public function getLimit(): ?int
     {
         return $this->limit;
     }
@@ -147,7 +147,7 @@ class TableConfig
      *
      * @param array $tableData
      */
-    private function prepareConfig(array $tableData)
+    private function prepareConfig(array $tableData): void
     {
         $this->prepareFilters($tableData);
         $this->prepareSortOrder($tableData);
@@ -160,7 +160,7 @@ class TableConfig
      *
      * @param array $tableData
      */
-    private function prepareFilters(array $tableData)
+    private function prepareFilters(array $tableData): void
     {
         if (isset($tableData['filters'])) {
             foreach ($tableData['filters'] as $filter) {
@@ -174,7 +174,7 @@ class TableConfig
      *
      * @param array $tableData
      */
-    private function prepareSortOrder(array $tableData)
+    private function prepareSortOrder(array $tableData): void
     {
         $orderBy = (string) ($tableData['orderBy'] ?? '');
         if ($orderBy === '') {
@@ -203,7 +203,7 @@ class TableConfig
      *
      * @param array $tableData
      */
-    private function prepareLimit(array $tableData)
+    private function prepareLimit(array $tableData): void
     {
         if (isset($tableData['limit']) && $tableData['limit'] > 0) {
             $this->limit = (int) $tableData['limit'];
@@ -219,7 +219,7 @@ class TableConfig
      *
      * @param array $tableData
      */
-    private function prepareConverters(array $tableData)
+    private function prepareConverters(array $tableData): void
     {
         if (isset($tableData['converters'])) {
             foreach ($tableData['converters'] as $column => $converterData) {

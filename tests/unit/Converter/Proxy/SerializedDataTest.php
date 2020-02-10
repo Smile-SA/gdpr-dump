@@ -15,7 +15,7 @@ class SerializedDataTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $parameters = [
             'converters' => [
@@ -34,7 +34,7 @@ class SerializedDataTest extends TestCase
     /**
      * Check if the converter ignores the value when it is not a JSON-encoded array.
      */
-    public function testInvalidJsonData()
+    public function testInvalidJsonData(): void
     {
         $serializedData = serialize('stringValue');
 
@@ -51,7 +51,7 @@ class SerializedDataTest extends TestCase
     /**
      * Assert that an exception is thrown when the converters are not set.
      */
-    public function testConvertersNotSet()
+    public function testConvertersNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new SerializedData([]);
@@ -60,7 +60,7 @@ class SerializedDataTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "converters" is empty.
      */
-    public function testEmptyConverters()
+    public function testEmptyConverters(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new SerializedData(['converters' => []]);
@@ -69,7 +69,7 @@ class SerializedDataTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "converters" is not an array.
      */
-    public function testInvalidConverters()
+    public function testInvalidConverters(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new SerializedData(['converters' => 'notAnArray']);

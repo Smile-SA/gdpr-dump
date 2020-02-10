@@ -50,7 +50,7 @@ class AnonymizeDate implements ConverterInterface
      *
      * @param DateTime $date
      */
-    protected function anonymizeDate(DateTime $date)
+    protected function anonymizeDate(DateTime $date): void
     {
         // Get the year, month and day
         $year = (int) $date->format('Y');

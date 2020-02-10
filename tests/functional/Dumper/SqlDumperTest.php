@@ -21,7 +21,7 @@ class SqlDumperTest extends DatabaseTestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dumpFile = $this->getResource('db/dump.sql');
     }
@@ -29,7 +29,7 @@ class SqlDumperTest extends DatabaseTestCase
     /**
      * Test if a dump file is created.
      */
-    public function testDumper()
+    public function testDumper(): void
     {
         $config = $this->createConfig();
         $dumper = $this->createDumper();
@@ -45,7 +45,7 @@ class SqlDumperTest extends DatabaseTestCase
     /**
      * Assert that the dump file contents match the dump configuration file.
      */
-    private function assertDumpIsValid()
+    private function assertDumpIsValid(): void
     {
         // Check if the file was created
         $this->assertFileExists($this->dumpFile);
@@ -56,27 +56,27 @@ class SqlDumperTest extends DatabaseTestCase
         $this->assertNotEmpty($output);
 
         // Assert that only whitelisted tables are included in the dump
-        $this->assertContains('CREATE TABLE `customers`', $output);
-        $this->assertContains('CREATE TABLE `stores`', $output);
-        $this->assertNotContains('CREATE TABLE `addresses`', $output);
+        $this->assertStringContainsString('CREATE TABLE `customers`', $output);
+        $this->assertStringContainsString('CREATE TABLE `stores`', $output);
+        $this->assertStringNotContainsString('CREATE TABLE `addresses`', $output);
 
         // User 1 must not be dumped (does not match the date filter)
-        $this->assertNotContains('user1@test.org', $output);
+        $this->assertStringNotContainsString('user1@test.org', $output);
 
         // User 2 must be dumped, but not anonymized (skip_conversion_if parameter)
-        $this->assertContains('user2@test.org', $output);
-        $this->assertNotContains('test_user2@test.org', $output);
-        $this->assertContains('firstname2', $output);
-        $this->assertNotContains('test_firstname2', $output);
+        $this->assertStringContainsString('user2@test.org', $output);
+        $this->assertStringNotContainsString('test_user2@test.org', $output);
+        $this->assertStringContainsString('firstname2', $output);
+        $this->assertStringNotContainsString('test_firstname2', $output);
 
         // Users 3 and 4 should be anonymized and dumped
-        $this->assertContains('test_user3@test.org', $output);
-        $this->assertContains('test_firstname3', $output);
-        $this->assertContains('test_user4@test.org', $output);
-        $this->assertContains('test_firstname4', $output);
+        $this->assertStringContainsString('test_user3@test.org', $output);
+        $this->assertStringContainsString('test_firstname3', $output);
+        $this->assertStringContainsString('test_user4@test.org', $output);
+        $this->assertStringContainsString('test_firstname4', $output);
 
         // User 5 must not be dumped (store id condition not matched)
-        $this->assertNotContains('user5@test.org', $output);
+        $this->assertStringNotContainsString('user5@test.org', $output);
     }
 
     /**

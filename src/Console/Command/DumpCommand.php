@@ -71,6 +71,7 @@ class DumpCommand extends Command
 
     /**
      * @inheritdoc
+     * @phpstan-ignore-next-line
      */
     public function configure()
     {
@@ -79,6 +80,8 @@ class DumpCommand extends Command
             ->setDescription('Create an anonymized dump')
             ->addArgument('config_file', InputArgument::IS_ARRAY | InputArgument::REQUIRED, 'Dump configuration file(s)');
         // phpcs:enable
+
+        return 1;
     }
 
     /**
@@ -122,7 +125,7 @@ class DumpCommand extends Command
      *
      * @param InputInterface $input
      */
-    private function loadConfig(InputInterface $input)
+    private function loadConfig(InputInterface $input): void
     {
         // Load the config file(s)
         $configFiles = $input->getArgument('config_file');
@@ -160,7 +163,7 @@ class DumpCommand extends Command
      * @param ValidationResultInterface $result
      * @param OutputInterface $output
      */
-    private function outputValidationResult(ValidationResultInterface $result, OutputInterface $output)
+    private function outputValidationResult(ValidationResultInterface $result, OutputInterface $output): void
     {
         $output->writeln("<error>The following errors were detected:</error>");
         foreach ($result->getMessages() as $message) {

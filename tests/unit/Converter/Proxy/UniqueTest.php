@@ -16,7 +16,7 @@ class UniqueTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $parameters = [
             'converter' => new ConverterMock(),
@@ -30,7 +30,7 @@ class UniqueTest extends TestCase
     /**
      * Test if NULL values are ignored by the converter.
      */
-    public function testNullValuesIgnored()
+    public function testNullValuesIgnored(): void
     {
         $parameters = [
             'converter' => new SetNull(),
@@ -49,7 +49,7 @@ class UniqueTest extends TestCase
     /**
      * Assert that an exception is thrown when the converter fails to generate a unique value.
      */
-    public function testFailedUniqueValue()
+    public function testFailedUniqueValue(): void
     {
         $parameters = [
             'converter' => new ConverterMock(),
@@ -64,7 +64,7 @@ class UniqueTest extends TestCase
     /**
      * Assert that an exception is thrown when the converter is not set.
      */
-    public function testConverterNotSet()
+    public function testConverterNotSet(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new Unique([]);

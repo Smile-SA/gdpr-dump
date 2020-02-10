@@ -21,26 +21,31 @@ Features:
 
 Requirements:
 
-- PHP >= 7.0
+- PHP >= 7.3
 - MySQL or equivalent (MariaDB, Percona)
-
-If you use a PHP version < 7.0, you need to upgrade to a [supported version of PHP](http://php.net/supported-versions.php).
-Each release branch of PHP is supported for 3 years (2 years of full support, then 1 year of security support).
 
 ## Installation
 
+**Phar File**
+
+This is the recommended way to install this application.
+
+The following table lists the requirements of each major version:
+
+**GdprDump Version** | **PHP Requirement** | **Link**
+---|---|---
+2.x (latest) | PHP >= 7.3 | [Download](https://github.com/Smile-SA/gdpr-dump/releases/latest/download/gdpr-dump.phar)
+1.x | PHP >= 7.1 | [Download](https://github.com/Smile-SA/gdpr-dump/releases/download/1.2.0/gdpr-dump.phar)
+
+The list of all releases is available [here](https://github.com/Smile-SA/gdpr-dump/releases).
+
 **With Composer**
 
-This tool is designed to be used as a standalone application.
 It can be installed with the following command:
 
 ```
 composer create-project --no-dev --prefer-dist smile/gdpr-dump
 ```
-
-**Phar File**
-
-Alternatively, you can download a PHAR file in the [releases](https://github.com/Smile-SA/gdpr-dump/releases) section.
 
 ## Getting Started
 

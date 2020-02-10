@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Set minimum PHP version to PHP 7.3
+
 ## [1.2.0] - 2020-07-03
 [1.2.0]: https://github.com/Smile-SA/gdpr-dump/compare/1.1.1...1.2.0
 

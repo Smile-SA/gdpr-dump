@@ -12,7 +12,7 @@ class FakerServiceTest extends TestCase
     /**
      * Test the "getGenerator" method.
      */
-    public function testGenerator()
+    public function testGenerator(): void
     {
         $fakerService = new FakerService();
 

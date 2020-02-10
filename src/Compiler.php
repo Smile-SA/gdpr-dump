@@ -32,7 +32,7 @@ class Compiler
      *
      * @param string $fileName
      */
-    public function compile(string $fileName)
+    public function compile(string $fileName): void
     {
         if (file_exists($fileName)) {
             unlink($fileName);
@@ -71,7 +71,7 @@ class Compiler
      * @param string[] $patterns
      * @param string[] $exclude
      */
-    private function addFiles(Phar $phar, string $directory, array $patterns = [], array $exclude = [])
+    private function addFiles(Phar $phar, string $directory, array $patterns = [], array $exclude = []): void
     {
         $finder = new Finder();
         $finder->files()
@@ -97,7 +97,7 @@ class Compiler
      * @param Phar $phar
      * @param SplFileInfo $file
      */
-    private function addFile(Phar $phar, SplFileInfo $file)
+    private function addFile(Phar $phar, SplFileInfo $file): void
     {
         // Path must be relative
         $path = $this->getRelativeFilePath($file);
@@ -113,7 +113,7 @@ class Compiler
      *
      * @param Phar $phar
      */
-    private function addConsoleBin(Phar $phar)
+    private function addConsoleBin(Phar $phar): void
     {
         $content = php_strip_whitespace($this->basePath . '/bin/gdpr-dump');
         $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $content);
@@ -144,7 +144,7 @@ class Compiler
      * @param string $path
      * @throws RuntimeException
      */
-    private function createDirectory(string $path)
+    private function createDirectory(string $path): void
     {
         if (!mkdir($path, 0775, true)) {
             throw new RuntimeException(sprintf('Failed to create the directory "%s".', $path));

@@ -221,7 +221,7 @@ class ConverterFactory
     /**
      * Initialize the converter name <-> class name array.
      */
-    private function initClassNames()
+    private function initClassNames(): void
     {
         if ($this->classNames === null) {
             $this->classNames = $this->findClassNames(__DIR__);

@@ -14,7 +14,7 @@ class VersionLoaderTest extends TestCase
     /**
      * Test the config version loader.
      */
-    public function testConfigLoader()
+    public function testConfigLoader(): void
     {
         $configLoader = new VersionLoader();
         $data = [
@@ -48,7 +48,7 @@ class VersionLoaderTest extends TestCase
     /**
      * Assert that an exception is thrown when the version was not specified.
      */
-    public function testVersionNotSpecifiedException()
+    public function testVersionNotSpecifiedException(): void
     {
         $config = new Config(['requires_version' => true]);
         $configLoader = new VersionLoader();

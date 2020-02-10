@@ -12,7 +12,7 @@ class ArrayHelperTest extends TestCase
     /**
      * Test the "getPath" method.
      */
-    public function testGetPath()
+    public function testGetPath(): void
     {
         $data = [
             'customer' => [
@@ -28,7 +28,7 @@ class ArrayHelperTest extends TestCase
     /**
      * Test the "setPath" method.
      */
-    public function testSetPath()
+    public function testSetPath(): void
     {
         $data = [];
 

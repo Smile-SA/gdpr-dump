@@ -15,7 +15,7 @@ class TableDependencyResolverTest extends TestCase
     /**
      * Test the "getTableDependencies" method.
      */
-    public function testTableDependencies()
+    public function testTableDependencies(): void
     {
         $dependencyResolver = $this->createTableDependencyResolver();
 
@@ -38,7 +38,7 @@ class TableDependencyResolverTest extends TestCase
     /**
      * Test the "getTablesDependencies" method.
      */
-    public function testTablesDependencies()
+    public function testTablesDependencies(): void
     {
         $dependencyResolver = $this->createTableDependencyResolver();
 
@@ -55,8 +55,11 @@ class TableDependencyResolverTest extends TestCase
      * @param string $foreignTableName
      * @param array $dependencies
      */
-    private function assertHasTableDependency(string $localTableName, string $foreignTableName, array $dependencies)
-    {
+    private function assertHasTableDependency(
+        string $localTableName,
+        string $foreignTableName,
+        array $dependencies
+    ): void {
         $this->assertArrayHasKey($localTableName, $dependencies);
         $this->assertCount(1, $dependencies[$localTableName]);
         $this->assertArrayHasKey($foreignTableName, $dependencies[$localTableName]);

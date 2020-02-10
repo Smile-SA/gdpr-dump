@@ -2,12 +2,6 @@ language: 'php'
 
 jobs:
     include:
-        - php: '7.0'
-          dist: 'xenial'
-        - php: '7.1'
-          dist: 'bionic'
-        - php: '7.2'
-          dist: 'bionic'
         - php: '7.3'
           dist: 'bionic'
         - php: '7.4'
@@ -29,7 +23,7 @@ before_script:
 script:
     - 'vendor/bin/phpcs'
     - 'vendor/bin/phpmd bin,src,tests xml phpmd.xml.dist'
-    - 'vendor/bin/phpstan analyse bin src tests -c phpstan.neon --level 5'
+    - 'vendor/bin/phpstan analyse'
     - 'vendor/bin/phpunit'
 
 before_deploy:
@@ -46,4 +40,4 @@ deploy:
     skip_cleanup: true
     on:
         tags: true
-        php: '7.0'
+        php: '7.3'

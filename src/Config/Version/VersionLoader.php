@@ -11,7 +11,7 @@ class VersionLoader implements VersionLoaderInterface
     /**
      * @inheritdoc
      */
-    public function load(ConfigInterface $config)
+    public function load(ConfigInterface $config): void
     {
         $requiresVersion = (bool) $config->get('requires_version');
         $version = (string) $config->get('version');

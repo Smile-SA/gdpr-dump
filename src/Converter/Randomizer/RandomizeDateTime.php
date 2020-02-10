@@ -14,7 +14,7 @@ class RandomizeDateTime extends RandomizeDate
     /**
      * @inheritdoc
      */
-    protected function randomizeDate()
+    protected function randomizeDate(): void
     {
         // Randomize the year, month and day
         parent::randomizeDate();

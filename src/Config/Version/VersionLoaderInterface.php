@@ -15,5 +15,5 @@ interface VersionLoaderInterface
      * @throws InvalidVersionException
      * @throws MissingVersionException
      */
-    public function load(ConfigInterface $config);
+    public function load(ConfigInterface $config): void;
 }

@@ -12,7 +12,7 @@ class ApplicationTest extends TestCase
     /**
      * Test the console application.
      */
-    public function testConsoleApplication()
+    public function testConsoleApplication(): void
     {
         $application = new Application();
         $this->assertSame(Application::VERSION, $application->getVersion());

@@ -13,7 +13,7 @@ class AnonymizeEmailTest extends TestCase
     /**
      * Test the converter.
      */
-    public function testConverter()
+    public function testConverter(): void
     {
         $converter = new AnonymizeEmail(['domains' => ['example.org']]);
 
@@ -27,7 +27,7 @@ class AnonymizeEmailTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "domains" is empty.
      */
-    public function testEmptyDomains()
+    public function testEmptyDomains(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new AnonymizeEmail(['domains' => []]);
@@ -36,7 +36,7 @@ class AnonymizeEmailTest extends TestCase
     /**
      * Assert that an exception is thrown when the parameter "domains" is not an array.
      */
-    public function testInvalidDomains()
+    public function testInvalidDomains(): void
     {
         $this->expectException(UnexpectedValueException::class);
         new AnonymizeEmail(['domains' => 'invalid']);
