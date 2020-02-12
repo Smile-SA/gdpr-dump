@@ -37,11 +37,6 @@
     "config": {
         "sort-packages": true
     },
-    "scripts": {
-        "phpcs": "phpcs src tests -s --standard=PSR2",
-        "phpmd": "phpmd src,tests xml phpmd.xml",
-        "phpunit": "phpunit"
-    },
     "bin": [
         "bin/gdpr-dump"
     ]

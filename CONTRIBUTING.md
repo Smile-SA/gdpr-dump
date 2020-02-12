@@ -41,10 +41,10 @@ Follow these steps:
 
 Run the following commands:
 
-```php
-composer phpcs
-composer phpmd
-composer phpunit
+```
+vendor/bin/phpcs
+vendor/bin/phpmd src,tests xml phpmd.xml.dist
+vendor/bin/phpunit
 ```
 
 The functional tests require the following MySQL database:
