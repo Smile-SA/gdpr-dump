@@ -20,9 +20,9 @@ before_script:
     - 'composer install --prefer-dist'
 
 script:
-    - 'composer phpcs'
-    - 'composer phpmd'
-    - 'composer phpunit'
+    - 'vendor/bin/phpcs'
+    - 'vendor/bin/phpmd src,tests xml phpmd.xml.dist'
+    - 'vendor/bin/phpunit'
 
 before_deploy:
     - 'rm -rf vendor'
