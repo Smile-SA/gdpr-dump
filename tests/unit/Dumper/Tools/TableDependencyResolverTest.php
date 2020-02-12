@@ -63,7 +63,7 @@ class TableDependencyResolverTest extends TestCase
             $this->assertCount(1, $dependencies[$localTableName]);
             $this->assertArrayHasKey($foreignTableName, $dependencies[$localTableName]);
 
-            if (array_key_exists($foreignTableName, $dependencies[$localTableName][$foreignTableName])) {
+            if (array_key_exists($foreignTableName, $dependencies[$localTableName])) {
                 /** @var ForeignKeyConstraint $foreignKey */
                 $foreignKey = $dependencies[$localTableName][$foreignTableName];
                 $this->assertSame($foreignTableName, $foreignKey->getForeignTableName());
