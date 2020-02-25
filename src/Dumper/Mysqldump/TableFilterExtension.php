@@ -2,19 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Tools;
+namespace Smile\GdprDump\Dumper\Mysqldump;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Ifsnop\Mysqldump\Mysqldump;
 use Smile\GdprDump\Database\DatabaseInterface;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
+use Smile\GdprDump\Database\TableDependencyResolver;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Config\Table\Filter\Filter;
 use Smile\GdprDump\Dumper\Config\Table\TableConfig;
 use UnexpectedValueException;
 
-class TableWheresBuilder
+class TableFilterExtension implements ExtensionInterface
 {
     /**
      * @var Connection
@@ -43,11 +45,19 @@ class TableWheresBuilder
     }
 
     /**
+     * @inheritdoc
+     */
+    public function register(Mysqldump $dumper)
+    {
+        $dumper->setTableWheres($this->buildTablesWhere());
+    }
+
+    /**
      * Get the filters to apply on each table.
      *
      * @return array
      */
-    public function getTableWheres(): array
+    private function buildTablesWhere(): array
     {
         // Get the tables to sort/filter
         $tablesToFilter = $this->config->getTablesToFilter();

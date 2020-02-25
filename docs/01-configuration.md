@@ -12,6 +12,7 @@
 - [Tables Configuration](#user-content-tables-configuration)
     - [Filtering Values](#user-content-filtering-values)
     - [Data Converters](#user-content-data-converters)
+    - [Skipping Data Conversion](#user-content-skipping-data-conversion)
     - [Sharing Converter Results](#user-content-sharing-converter-results)
 - [User-Defined Variables](#user-content-user-defined-variables)
 - [Version-specific Configuration](#user-content-version-specific-configuration)
@@ -269,10 +270,10 @@ List of available properties:
 | Property | Required | Default | Description |
 | --- | --- | --- | --- |
 | **converter** | Y | | Converter name. A list of all converters [is available here](02-converters.md). |
-| **condition** | N | `''` | A PHP expression that must evaluate to `true` or `false`. The value is converted if the expression returns `true`. |
+| **condition** | N | `''` | A PHP expression that must evaluate to `true` or `false`. When a condition is set, the value is converted only if the expression evaluates to `true`. |
 | **parameters** | N | `{}` | e.g. `min` and `max` for `numberBetween`. Most converters don't accept any parameter. |
 | **unique** | N | `false` | Whether to generate only unique values. May result in a fatal error with converters that can't generate enough unique values. |
-| **cache_key** | N | `''` | The generated value will be used by all converters that use this cache key. |
+| **cache_key** | N | `''` | The generated value will be used by all converters that use the same cache key. |
 | **disabled** | N | `false` | Can be used to disable a converter declared in a parent config file. |
 
 How to use parameters:
@@ -298,12 +299,25 @@ tables:
                 condition: '{{another_column}} !== null'
 ```
 
+The converter is disabled when the condition is evaluated to false.
 The filter is a PHP expression.
 Variables must be encapsed by double brackets.
 
-
 The available variables are the columns of the table.
 For example, if the table has a `id` column, the `{{id}}` variable will be available.
+
+### Skipping Data Conversion
+
+It is possible to skip data conversion for an entire table row:
+
+```yaml
+tables:
+    my_table:
+        skip_conversion_if: 'strpos("{{email}}", "@acme.fr") !== false'
+```
+
+The syntax is the same as the converter conditions.
+If the condition evaluates to true, the table row will be dumped as-is, without any data conversion.
 
 ### Sharing Converter Results
 

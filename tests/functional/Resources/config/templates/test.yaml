@@ -11,6 +11,10 @@ dump:
 variables:
     main_store_id: 'select store_id from stores where code = "store1"'
 
+tables_whitelist:
+    - 'customers'
+    - 'stores'
+
 tables:
     stores:
         orderBy: 'code'
@@ -18,10 +22,9 @@ tables:
             - ['store_id', 'in', [1, 2]]
 
     customers:
-        limit: 3
         filters:
             - ['email', 'like', '%@test.org']
-            - ['created_at', 'gt', 'expr: date_sub(now(), interval 60 day)']
+            - ['created_at', 'gt', 'expr: date_sub(now(), interval 55 day)']
         converters:
             email:
                 converter: 'randomizeEmail'
@@ -30,14 +33,4 @@ tables:
                 converter: 'anonymizeText'
             lastname:
                 converter: 'anonymizeText'
-
-    addresses:
-        filters:
-            - ['country_id', 'eq', 'FR']
-        converters:
-            street:
-                converter: 'anonymizeText'
-            postcode:
-                converter: 'randomizeNumber'
-            city:
-                converter: 'anonymizeText'
+        skip_conversion_if: '{{customer_id}} == 2'

@@ -102,20 +102,14 @@ tables:
 
 The `magento1` and `magento2` templates anonymize all admin accounts.
 
-If you want to keep the email/password for some accounts, you can set a condition on the `email`, `username` and `password` columns of the `admin_user` table.
+If you want to keep the email/password for some accounts, you can set a condition on the `admin_user` table.
 
 Example:
 
 ```yaml
 tables:
     admin_user:
-        converters:
-            email:
-                condition: '{{username}} != "admin123"'
-            username:
-                condition: '{{username}} != "admin123"'
-            password:
-                condition: '{{username}} != "admin123"'
+        skip_conversion_if: '{{username}} === "admin123"'
 ```
 
 **Payment Data**
