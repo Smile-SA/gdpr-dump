@@ -206,6 +206,9 @@
                         "$ref": "#/definitions/converter"
                     }
                 },
+                "skip_conversion_if": {
+                    "type": ["string", "number"]
+                },
                 "filters": {
                     "type": "array",
                     "items": {

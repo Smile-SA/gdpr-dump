@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Config\Table;
 
+use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Dumper\Config\Table\Filter\Filter;
 use Smile\GdprDump\Dumper\Config\Table\Filter\SortOrder;
 use UnexpectedValueException;
@@ -34,6 +35,11 @@ class TableConfig
      * @var array
      */
     private $converters = [];
+
+    /**
+     * @var string
+     */
+    private $skipCondition = '';
 
     /**
      * @param string $tableName
@@ -126,6 +132,17 @@ class TableConfig
     }
 
     /**
+     * Get the conversion skip condition.
+     * Data conversion is disabled when the condition evaluates to true.
+     *
+     * @return string
+     */
+    public function getSkipCondition(): string
+    {
+        return $this->skipCondition;
+    }
+
+    /**
      * Prepare the table config.
      *
      * @param array $tableData
@@ -142,7 +159,6 @@ class TableConfig
      * Prepare the table filters.
      *
      * @param array $tableData
-     * @throws UnexpectedValueException
      */
     private function prepareFilters(array $tableData)
     {
@@ -160,22 +176,25 @@ class TableConfig
      */
     private function prepareSortOrder(array $tableData)
     {
-        if (isset($tableData['orderBy']) && $tableData['orderBy']) {
-            $orders = explode(',', (string) $tableData['orderBy']);
-            $orders = array_map('trim', $orders);
+        $orderBy = (string) ($tableData['orderBy'] ?? '');
+        if ($orderBy === '') {
+            return;
+        }
 
-            foreach ($orders as $order) {
-                $parts = explode(' ', $order);
+        $orders = explode(',', $orderBy);
+        $orders = array_map('trim', $orders);
 
-                if (count($parts) > 2) {
-                    throw new UnexpectedValueException(sprintf('The sort order "%s" is not valid.', $order));
-                }
+        foreach ($orders as $order) {
+            $parts = explode(' ', $order);
 
-                $column = $parts[0];
-                $direction = $parts[1] ?? SortOrder::DIRECTION_ASC;
-
-                $this->sortOrders[] = new SortOrder($column, $direction);
+            if (count($parts) > 2) {
+                throw new UnexpectedValueException(sprintf('The sort order "%s" is not valid.', $order));
             }
+
+            $column = $parts[0];
+            $direction = $parts[1] ?? SortOrder::DIRECTION_ASC;
+
+            $this->sortOrders[] = new SortOrder($column, $direction);
         }
     }
 
@@ -202,13 +221,17 @@ class TableConfig
      */
     private function prepareConverters(array $tableData)
     {
-        if (!isset($tableData['converters'])) {
-            return;
+        if (isset($tableData['converters'])) {
+            foreach ($tableData['converters'] as $column => $converterData) {
+                // Converter data will be validated by the factory during the object creation
+                $this->converters[$column] = $converterData;
+            }
         }
 
-        foreach ($tableData['converters'] as $column => $converterData) {
-            // Converter data will be validated by the factory during the object creation
-            $this->converters[$column] = $converterData;
+        $skipCondition = (string) ($tableData['skip_conversion_if'] ?? '');
+        if ($skipCondition !== '') {
+            $conditionBuilder = new ConditionBuilder('$this->context');
+            $this->skipCondition = $conditionBuilder->build($skipCondition);
         }
     }
 }

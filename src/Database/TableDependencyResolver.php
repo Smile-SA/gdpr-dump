@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Tools;
+namespace Smile\GdprDump\Database;
 
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 use Smile\GdprDump\Database\Metadata\MetadataInterface;

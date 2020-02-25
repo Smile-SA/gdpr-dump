@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Dumper\Tools;
+namespace Smile\GdprDump\Tests\Unit\Database;
 
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 use Smile\GdprDump\Database\Metadata\MysqlMetadata;
-use Smile\GdprDump\Dumper\Tools\TableDependencyResolver;
+use Smile\GdprDump\Database\TableDependencyResolver;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class TableDependencyResolverTest extends TestCase

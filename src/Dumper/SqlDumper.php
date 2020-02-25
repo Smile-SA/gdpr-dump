@@ -11,8 +11,8 @@ use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
 use Smile\GdprDump\Dumper\Config\DatabaseConfig;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
-use Smile\GdprDump\Dumper\Tools\ColumnTransformer;
-use Smile\GdprDump\Dumper\Tools\TableWheresBuilder;
+use Smile\GdprDump\Dumper\Mysqldump\DataConverterExtension;
+use Smile\GdprDump\Dumper\Mysqldump\TableFilterExtension;
 
 class SqlDumper implements DumperInterface
 {
@@ -64,15 +64,13 @@ class SqlDumper implements DumperInterface
             $databaseConfig->getDriverOptions()
         );
 
-        // Set the column transformer
-        $converters = $this->getTableConverters($config);
-        $columnTransformer = new ColumnTransformer($converters, $context);
-        $dumper->setTransformColumnValueHook([$columnTransformer, 'transform']);
+        // Register a data conversion extension
+        $dataConverterExtension = new DataConverterExtension($config, $this->converterFactory, $context);
+        $dataConverterExtension->register($dumper);
 
-        // Set the table filters
-        $tableWheresBuilder = new TableWheresBuilder($database, $config);
-        $tableWheres = $tableWheresBuilder->getTableWheres();
-        $dumper->setTableWheres($tableWheres);
+        // Register a table filter extension
+        $tableFilterExtension = new TableFilterExtension($database, $config);
+        $tableFilterExtension->register($dumper);
 
         // Unset the database object to close the database connection
         unset($database);
@@ -115,24 +113,5 @@ class SqlDumper implements DumperInterface
         $settings['no-data'] = $config->getTablesToTruncate();
 
         return $settings;
-    }
-
-    /**
-     * Create the converters, grouped by table.
-     *
-     * @param DumperConfig $config
-     * @return array
-     */
-    private function getTableConverters(DumperConfig $config): array
-    {
-        $converters = [];
-
-        foreach ($config->getTablesConfig() as $tableName => $tableConfig) {
-            foreach ($tableConfig->getConverters() as $columnName => $definition) {
-                $converters[$tableName][$columnName] = $this->converterFactory->create($definition);
-            }
-        }
-
-        return $converters;
     }
 }

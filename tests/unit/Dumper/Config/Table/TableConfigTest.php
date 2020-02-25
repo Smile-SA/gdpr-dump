@@ -62,6 +62,19 @@ class TableConfigTest extends TestCase
     }
 
     /**
+     * Test the condition for skipping data conversion.
+     */
+    public function testConversionSkipCondition()
+    {
+        $condition = '{{column1}} === null';
+        $config = new TableConfig('table1', [
+            'skip_conversion_if' => $condition,
+        ]);
+
+        $this->assertContains('$this->context[\'row_data\'][\'column1\']', $config->getSkipCondition());
+    }
+
+    /**
      * Test the "filter" parameter.
      */
     public function testFilter()
@@ -111,5 +124,15 @@ class TableConfigTest extends TestCase
     public function testInvalidSortOrder()
     {
         new TableConfig('table1', ['orderBy' => 'this is not a valid sort order']);
+    }
+
+    /**
+     * Assert that an exception is thrown when condition for skipping data conversion is invalid.
+     *
+     * @expectedException \RuntimeException
+     */
+    public function testInvalidCondition()
+    {
+        new TableConfig('table1', ['skip_conversion_if' => 'sleep(100)']);
     }
 }

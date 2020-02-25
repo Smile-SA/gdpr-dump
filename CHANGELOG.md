@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 ## WIP
 
 - Validate the config file before prompting for a password
+- Add parameter `skip_conversion_if` (table row is not converted if the condition evaluates to true) 
 - Remove unused parameter `ignore` from schema.json
+- Move TableDependencyResolver to the Database namespace
+- Add Mysqldump extension logic:
+    - ColumnTransformer class converted to DataConverterExtension
+    - TableWheresBuilder class converted to TableFilterExtension
 
 ## 1.0.0 - 2020-02-05
 
