@@ -58,18 +58,13 @@ class TableDependencyResolverTest extends TestCase
     private function assertHasTableDependency(string $localTableName, string $foreignTableName, array $dependencies)
     {
         $this->assertArrayHasKey($localTableName, $dependencies);
+        $this->assertCount(1, $dependencies[$localTableName]);
+        $this->assertArrayHasKey($foreignTableName, $dependencies[$localTableName]);
 
-        if (array_key_exists($localTableName, $dependencies)) {
-            $this->assertCount(1, $dependencies[$localTableName]);
-            $this->assertArrayHasKey($foreignTableName, $dependencies[$localTableName]);
-
-            if (array_key_exists($foreignTableName, $dependencies[$localTableName])) {
-                /** @var ForeignKeyConstraint $foreignKey */
-                $foreignKey = $dependencies[$localTableName][$foreignTableName];
-                $this->assertSame($foreignTableName, $foreignKey->getForeignTableName());
-                $this->assertSame($localTableName, $foreignKey->getLocalTableName());
-            }
-        }
+        /** @var ForeignKeyConstraint $foreignKey */
+        $foreignKey = $dependencies[$localTableName][$foreignTableName];
+        $this->assertSame($foreignTableName, $foreignKey->getForeignTableName());
+        $this->assertSame($localTableName, $foreignKey->getLocalTableName());
     }
 
     /**

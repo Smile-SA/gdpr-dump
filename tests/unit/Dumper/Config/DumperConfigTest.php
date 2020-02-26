@@ -67,10 +67,7 @@ class DumperConfigTest extends TestCase
         // Dump settings
         $settings = $config->getDumpSettings();
         $this->assertArrayHasKey('hex_blob', $settings);
-
-        if (array_key_exists('hex_blob', $settings)) {
-            $this->assertTrue($settings['hex_blob']);
-        }
+        $this->assertTrue($settings['hex_blob']);
     }
 
     /**

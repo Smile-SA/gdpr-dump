@@ -57,14 +57,12 @@ class MysqlMetadataTest extends DatabaseTestCase
         $foreignKeys = $metadata->getForeignKeys('customers');
         $this->assertCount(1, $foreignKeys);
 
-        if (!empty($foreignKeys)) {
-            $foreignKey = reset($foreignKeys);
-            $this->assertNotEmpty($foreignKey->getConstraintName());
-            $this->assertSame('customers', $foreignKey->getLocalTableName());
-            $this->assertSame(['store_id'], $foreignKey->getLocalColumns());
-            $this->assertSame('stores', $foreignKey->getForeignTableName());
-            $this->assertSame(['store_id'], $foreignKey->getForeignColumns());
-        }
+        $foreignKey = reset($foreignKeys);
+        $this->assertNotEmpty($foreignKey->getConstraintName());
+        $this->assertSame('customers', $foreignKey->getLocalTableName());
+        $this->assertSame(['store_id'], $foreignKey->getLocalColumns());
+        $this->assertSame('stores', $foreignKey->getForeignTableName());
+        $this->assertSame(['store_id'], $foreignKey->getForeignColumns());
     }
 
     /**
@@ -77,14 +75,12 @@ class MysqlMetadataTest extends DatabaseTestCase
         $foreignKeys = $metadata->getForeignKeys('addresses');
         $this->assertCount(1, $foreignKeys);
 
-        if (!empty($foreignKeys)) {
-            $foreignKey = reset($foreignKeys);
-            $this->assertNotEmpty($foreignKey->getConstraintName());
-            $this->assertSame('addresses', $foreignKey->getLocalTableName());
-            $this->assertSame(['customer_id'], $foreignKey->getLocalColumns());
-            $this->assertSame('customers', $foreignKey->getForeignTableName());
-            $this->assertSame(['customer_id'], $foreignKey->getForeignColumns());
-        }
+        $foreignKey = reset($foreignKeys);
+        $this->assertNotEmpty($foreignKey->getConstraintName());
+        $this->assertSame('addresses', $foreignKey->getLocalTableName());
+        $this->assertSame(['customer_id'], $foreignKey->getLocalColumns());
+        $this->assertSame('customers', $foreignKey->getForeignTableName());
+        $this->assertSame(['customer_id'], $foreignKey->getForeignColumns());
     }
 
     /**
