@@ -147,7 +147,7 @@ class Compiler
     private function createDirectory(string $path)
     {
         if (!mkdir($path, 0775, true)) {
-            throw new RuntimeException('Failed to create the directory "%s".', $path);
+            throw new RuntimeException(sprintf('Failed to create the directory "%s".', $path));
         }
     }
 
