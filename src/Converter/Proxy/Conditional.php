@@ -66,7 +66,7 @@ class Conditional implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        $result = eval($this->condition);
+        $result = (bool) eval($this->condition);
 
         if ($result) {
             if ($this->ifTrueConverter) {

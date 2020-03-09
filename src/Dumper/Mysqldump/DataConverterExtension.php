@@ -95,7 +95,7 @@ class DataConverterExtension implements ExtensionInterface
 
                 // Evaluate the skip condition
                 if (isset($this->skipConditions[$table])) {
-                    $this->skipRowConversion = eval($this->skipConditions[$table]);
+                    $this->skipRowConversion = (bool) eval($this->skipConditions[$table]);
                 }
             }
 
