@@ -90,7 +90,7 @@ class DatabaseConfig
         // The database name is mandatory, no matter what driver is used
         // (this will require some refactoring if SQLite compatibility is added)
         if (!isset($params['name'])) {
-            throw new UnexpectedValueException(sprintf('Missing database name.'));
+            throw new UnexpectedValueException('Missing database name.');
         }
 
         // Set the driver
