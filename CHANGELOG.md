@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [1.1.0] - 2020-03-09
+[1.1.0]: https://github.com/Smile-SA/gdpr-dump/compare/1.0.0...1.1.0
 
 - Validate the config file before prompting for a password
 - Add parameter `skip_conversion_if` (table row is not converted if the condition evaluates to true) 
