@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 - Optimize the data converter hook (huge performance gain)
 - Add a unit test of the condition builder
+- Fix typos in documentation
 
 ## [1.1.0] - 2020-03-09
 [1.1.0]: https://github.com/Smile-SA/gdpr-dump/compare/1.0.0...1.1.0

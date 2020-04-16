@@ -313,7 +313,7 @@ It is possible to skip data conversion for an entire table row:
 ```yaml
 tables:
     my_table:
-        skip_conversion_if: 'strpos("{{email}}", "@acme.fr") !== false'
+        skip_conversion_if: 'strpos({{email}}, "@acme.fr") !== false'
 ```
 
 The syntax is the same as the converter conditions.
