@@ -12,13 +12,9 @@ dump:
     compress: 'bzip2'
 
 tables:
-    # Don't anonymize emails/passwords belonging to the "Acme" company
+    # Don't anonymize accounts belonging to the "Acme" company
     admin_user:
-        converters:
-            email:
-                condition: 'strpos({{email}}, "@acme.fr") === false'
-            password:
-                condition: 'strpos({{email}}, "@acme.fr") === false'
+        skip_conversion_if: 'strpos({{email}}, "@acme.fr") !== false'
 
     # Dump only recent quotes
     quote:
