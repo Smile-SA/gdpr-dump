@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Dumper\Mysqldump;
 
 use Ifsnop\Mysqldump\Mysqldump;
 use Smile\GdprDump\Converter\ConverterFactory;
+use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 
 class DataConverterExtension implements ExtensionInterface
@@ -36,16 +37,6 @@ class DataConverterExtension implements ExtensionInterface
     private $skipConditions;
 
     /**
-     * @var array
-     */
-    private $currentRow = [];
-
-    /**
-     * @var bool
-     */
-    private $skipRowConversion = false;
-
-    /**
      * @param ConverterFactory $converterFactory
      * @param DumperConfig $config
      * @param array $context
@@ -66,7 +57,7 @@ class DataConverterExtension implements ExtensionInterface
             $this->prepareConverters();
         }
 
-        $dumper->setTransformColumnValueHook($this->getHook());
+        $dumper->setTransformTableRowHook($this->getHook());
     }
 
     /**
@@ -77,37 +68,36 @@ class DataConverterExtension implements ExtensionInterface
      */
     private function getHook(): callable
     {
-        return function (string $table, string $column, $value, array $row) {
+        return function (string $table, array $row) {
             // Please keep in mind that this method must be as fast as possible
             // Every micro-optimization counts, this method can be executed billions of times
             // In this part of the code, abstraction layers should be avoided at all costs
-
-            if (!isset($this->converters[$table][$column]) || $value === null) {
-                return $value;
+            if (!isset($this->converters[$table])) {
+                return $row;
             }
 
-            if ($this->currentRow !== $row) {
-                $this->currentRow = $row;
+            // Initialize the context data
+            $context = $this->context;
+            $context['row_data'] = $row;
+            $context['processed_data'] = [];
 
-                // Set the context data
-                $this->context['row_data'] = $row;
-                $this->context['processed_data'] = [];
+            // Evaluate the skip condition (done after context initialization as it may depend on it)
+            if (isset($this->skipConditions[$table]) && eval($this->skipConditions[$table])) {
+                return $row;
+            }
 
-                // Evaluate the skip condition
-                if (isset($this->skipConditions[$table])) {
-                    $this->skipRowConversion = (bool) eval($this->skipConditions[$table]);
+            // Apply the data converters
+            /** @var ConverterInterface $converter */
+            foreach ($this->converters[$table] as $column => $converter) {
+                if (!isset($row[$column]) || $row[$column] === null) {
+                    continue;
                 }
+
+                $row[$column] = $converter->convert($row[$column], $context);
+                $context['processed_data'][$column] = $row[$column];
             }
 
-            if ($this->skipRowConversion) {
-                return $value;
-            }
-
-            // Transform the value
-            $value = $this->converters[$table][$column]->convert($value, $this->context);
-            $this->context['processed_data'][$column] = $value;
-
-            return $value;
+            return $row;
         };
     }
 

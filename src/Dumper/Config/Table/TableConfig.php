@@ -230,7 +230,7 @@ class TableConfig
 
         $skipCondition = (string) ($tableData['skip_conversion_if'] ?? '');
         if ($skipCondition !== '') {
-            $conditionBuilder = new ConditionBuilder('$this->context');
+            $conditionBuilder = new ConditionBuilder();
             $this->skipCondition = $conditionBuilder->build($skipCondition);
         }
     }
