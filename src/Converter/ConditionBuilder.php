@@ -50,6 +50,10 @@ class ConditionBuilder
      */
     public function build(string $condition): string
     {
+        if ($condition === '') {
+            throw new RuntimeException('The condition must not be empty.');
+        }
+
         // Sanitize the condition
         $condition = $this->sanitizeCondition($condition);
 
