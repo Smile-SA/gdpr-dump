@@ -24,7 +24,7 @@ You can create a custom config file that inherits the properties of another conf
 **Syntax**
 
 ```yaml
-extends: path/to/config.yaml
+extends: 'path/to/config.yaml'
 ```
 
 It can be an absolute path, or relative to the configuration file.
@@ -35,8 +35,8 @@ It is possible to override multiple config files:
 
 ```yaml
 extends:
-  - path/to/config1.yaml
-  - path/to/config2.yaml
+  - 'path/to/config1.yaml'
+  - 'path/to/config2.yaml'
 ```
 
 ## Templates
@@ -56,7 +56,7 @@ To extend a configuration template, you must specify its name, and the version o
 For example:
 
 ```yaml
-extends: magento2
+extends: 'magento2'
 version: '2.3.3'
 ```
 

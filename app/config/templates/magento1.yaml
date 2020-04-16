@@ -93,7 +93,7 @@ tables:
     customer_entity_varchar:
         converters:
             value:
-                converter: chain
+                converter: 'chain'
                 parameters:
                     converters:
                         - converter: 'anonymizeText'
