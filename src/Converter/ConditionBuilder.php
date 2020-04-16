@@ -16,11 +16,6 @@ class ConditionBuilder
     private $tokenizer;
 
     /**
-     * @var string
-     */
-    private $contextVar = '$context';
-
-    /**
      * @var string[]
      */
     private $statementBlacklist = ['<?php', '<?', '?>'];
@@ -39,12 +34,11 @@ class ConditionBuilder
     ];
 
     /**
-     * @param string $contextVar
+     * Constructor.
      */
-    public function __construct(string $contextVar = '$context')
+    public function __construct()
     {
         $this->tokenizer = new Tokenizer();
-        $this->contextVar = $contextVar;
     }
 
     /**
@@ -164,13 +158,13 @@ class ConditionBuilder
                 && $tokens[$index + 1]->getName() === 'T_CLOSE_CURLY'
                 && $tokens[$index + 2]->getName() === 'T_CLOSE_CURLY'
             ) {
-                $result .= "{$this->contextVar}['row_data']['{$token->getValue()}']";
+                $result .= "\$context['row_data']['{$token->getValue()}']";
                 continue;
             }
 
             // Replace SQL variable names by their values in the condition
             if ($token->getName() === 'T_STRING' && $index >= 1 && $tokens[$index - 1]->getName() === 'T_AT') {
-                $result .= "{$this->contextVar}['vars']['{$token->getValue()}']";
+                $result .= "\$context['vars']['{$token->getValue()}']";
                 continue;
             }
 

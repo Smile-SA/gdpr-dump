@@ -71,7 +71,7 @@ class TableConfigTest extends TestCase
             'skip_conversion_if' => $condition,
         ]);
 
-        $this->assertContains('$this->context[\'row_data\'][\'column1\']', $config->getSkipCondition());
+        $this->assertContains('$context[\'row_data\'][\'column1\']', $config->getSkipCondition());
     }
 
     /**
