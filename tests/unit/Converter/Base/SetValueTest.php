@@ -26,7 +26,7 @@ class SetValueTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when the value is not set.=
+     * Assert that an exception is thrown when the value is not set.
      */
     public function testValueNotSet()
     {
