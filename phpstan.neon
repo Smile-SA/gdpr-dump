@@ -1,0 +1,16 @@
+# Due to the php 7.0 compatibility, this project uses an old version of PHPStan, with the following restrictions:
+# - PHPStan does not automatically use this config file, it must be specified with the -c option
+# - the config file cannot be named phpstan.neon.dist
+# - the paths must be specified manually in the command line
+# - the level must be specified manually in the command line with the --level option
+# - we can't use the level 6 rule because PHP 7.0 provides limited type hint support
+# - the phpunit extension must be used to avoid some errors, this extension is not necessary with more recent versions
+
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+
+parameters:
+    level: 5
+    paths:
+        - src
+        - tests

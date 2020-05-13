@@ -78,7 +78,7 @@ class Compiler
             ->ignoreVCS(true)
             ->exclude($exclude)
             ->in($directory)
-            ->sort(function (SplFileInfo $a, SplFileInfo $b) {
+            ->sort(function (SplFileInfo $a, SplFileInfo $b): int {
                 return strcmp(strtr($a->getRealPath(), '\\', '/'), strtr($b->getRealPath(), '\\', '/'));
             });
 

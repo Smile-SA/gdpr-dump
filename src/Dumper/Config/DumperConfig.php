@@ -121,7 +121,7 @@ class DumperConfig
      * Get the configuration of a table.
      *
      * @param string $tableName
-     * @return TableConfig
+     * @return TableConfig|null
      */
     public function getTableConfig(string $tableName)
     {
@@ -234,7 +234,7 @@ class DumperConfig
         // Replace {...} by the current date in dump output
         $this->dumpSettings['output'] = preg_replace_callback(
             '/{([^}]+)}/',
-            function ($matches) {
+            function (array $matches): string {
                 return date($matches[1]);
             },
             $this->dumpSettings['output']

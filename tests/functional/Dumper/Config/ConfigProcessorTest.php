@@ -25,12 +25,9 @@ class ConfigProcessorTest extends DatabaseTestCase
             ],
         ];
 
-        // Create the config processor
-        $processor = $this->createConfigProcessor();
-
         // Process the configuration
+        $processor = $this->createConfigProcessor();
         $config = $processor->process(new Config($data));
-        $this->assertInstanceOf(DumperConfig::class, $config);
 
         // Check if the table names were resolved
         $this->assertSame(['customers'], $config->getTablesWhitelist());

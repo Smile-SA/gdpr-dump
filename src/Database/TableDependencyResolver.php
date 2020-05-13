@@ -15,7 +15,7 @@ class TableDependencyResolver
     private $metadata;
 
     /**
-     * @var ForeignKey[]
+     * @var ForeignKey[][]
      */
     private $foreignKeys;
 
@@ -86,7 +86,6 @@ class TableDependencyResolver
 
         $foreignKeys = $this->foreignKeys[$tableName];
 
-        /** @var ForeignKey $foreignKey */
         foreach ($foreignKeys as $foreignKey) {
             $dependencyTable = $foreignKey->getLocalTableName();
 

@@ -61,11 +61,11 @@ class Filter
      */
     public function __construct(string $column, string $operator, $value = null)
     {
-        if (!in_array($operator, self::$operators)) {
+        if (!in_array($operator, self::$operators, true)) {
             throw new UnexpectedValueException(sprintf('Invalid filter operator "%s".', $operator));
         }
 
-        if (is_array($value) && !in_array($operator, [self::OPERATOR_IN, self::OPERATOR_NOT_IN])) {
+        if (is_array($value) && !in_array($operator, [self::OPERATOR_IN, self::OPERATOR_NOT_IN], true)) {
             throw new UnexpectedValueException(
                 sprintf('The "%s" operator is not compatible with array values.', $operator)
             );

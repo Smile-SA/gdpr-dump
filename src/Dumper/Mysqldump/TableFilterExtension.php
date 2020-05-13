@@ -163,7 +163,7 @@ class TableFilterExtension implements ExtensionInterface
 
         // Get the table configuration
         $tableConfig = $this->config->getTableConfig($tableName);
-        if ($tableConfig) {
+        if ($tableConfig !== null) {
             $this->applyTableConfigToQueryBuilder($queryBuilder, $tableConfig);
         }
 

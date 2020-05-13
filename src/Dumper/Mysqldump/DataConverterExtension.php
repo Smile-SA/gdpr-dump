@@ -27,12 +27,12 @@ class DataConverterExtension implements ExtensionInterface
     private $context = [];
 
     /**
-     * @var array
+     * @var ConverterInterface[][]
      */
     private $converters;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $skipConditions;
 
@@ -68,7 +68,7 @@ class DataConverterExtension implements ExtensionInterface
      */
     private function getHook(): callable
     {
-        return function (string $table, array $row) {
+        return function (string $table, array $row): array {
             // Please keep in mind that this method must be as fast as possible
             // Every micro-optimization counts, this method can be executed billions of times
             // In this part of the code, abstraction layers should be avoided at all costs
@@ -86,13 +86,13 @@ class DataConverterExtension implements ExtensionInterface
                 return $row;
             }
 
-            // Apply the data converters
-            /** @var ConverterInterface $converter */
             foreach ($this->converters[$table] as $column => $converter) {
-                if (!isset($row[$column]) || $row[$column] === null) {
+                // Skip conversion if the column does not exist or the value is null
+                if (!isset($row[$column])) {
                     continue;
                 }
 
+                // Convert the value
                 $row[$column] = $converter->convert($row[$column], $context);
                 $context['processed_data'][$column] = $row[$column];
             }

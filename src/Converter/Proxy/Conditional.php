@@ -17,12 +17,12 @@ class Conditional implements ConverterInterface
     private $condition;
 
     /**
-     * @var ConverterInterface
+     * @var ConverterInterface|null
      */
     private $ifTrueConverter;
 
     /**
-     * @var ConverterInterface
+     * @var ConverterInterface|null
      */
     private $ifFalseConverter;
 
@@ -69,10 +69,10 @@ class Conditional implements ConverterInterface
         $result = (bool) eval($this->condition);
 
         if ($result) {
-            if ($this->ifTrueConverter) {
+            if ($this->ifTrueConverter !== null) {
                 $value = $this->ifTrueConverter->convert($value, $context);
             }
-        } elseif ($this->ifFalseConverter) {
+        } elseif ($this->ifFalseConverter !== null) {
             $value = $this->ifFalseConverter->convert($value, $context);
         }
 

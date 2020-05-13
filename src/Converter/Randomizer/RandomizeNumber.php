@@ -19,7 +19,7 @@ class RandomizeNumber implements ConverterInterface
      */
     public function __construct()
     {
-        $this->replaceCallback = function () {
+        $this->replaceCallback = function (): int {
             return mt_rand(0, 9);
         };
     }

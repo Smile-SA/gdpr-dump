@@ -111,7 +111,7 @@ class Database implements DatabaseInterface
         unset($params['name']);
 
         // Remove empty elements
-        $params = array_filter($params, function ($value) {
+        $params = array_filter($params, function ($value): bool {
             return $value !== null && $value !== '' && $value !== false;
         });
 
