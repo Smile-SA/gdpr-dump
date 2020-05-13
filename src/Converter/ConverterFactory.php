@@ -253,7 +253,7 @@ class ConverterFactory
 
             if (is_dir($path)) {
                 // Recursively find files in this directory
-                $newBaseDirectory = $baseDirectory ? $baseDirectory . '/' . $fileName : $fileName;
+                $newBaseDirectory = ($baseDirectory !== '') ? $baseDirectory . '/' . $fileName : $fileName;
                 $result = array_merge($result, $this->findClassNames($path, $newBaseDirectory));
             } else {
                 // Remove the extension
@@ -261,7 +261,9 @@ class ConverterFactory
 
                 // Get the class name
                 $className = 'Smile\GdprDump\Converter\\';
-                $className .= $baseDirectory ? str_replace('/', '\\', $baseDirectory) . '\\' . $fileName : $fileName;
+                $className .= ($baseDirectory !== '')
+                    ? str_replace('/', '\\', $baseDirectory) . '\\' . $fileName
+                    : $fileName;
 
                 // Include only classes that implement the converter interface
                 $reflection = new ReflectionClass($className);

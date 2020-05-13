@@ -26,12 +26,21 @@
     },
     "require-dev": {
         "phpmd/phpmd": "^2.7",
+        "phpstan/phpstan": "^0.9.3 || ^0.12.25",
+        "phpstan/phpstan-phpunit": "^0.9.4 || ^0.12.8",
         "phpunit/phpunit": "^6.5 || ^7.0",
         "squizlabs/php_codesniffer": "^3.4"
     },
     "autoload": {
         "psr-4": {
             "Smile\\GdprDump\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Smile\\GdprDump\\Tests\\Framework\\": "tests/framework",
+            "Smile\\GdprDump\\Tests\\Functional\\": "tests/functional",
+            "Smile\\GdprDump\\Tests\\Unit\\": "tests/unit"
         }
     },
     "config": {

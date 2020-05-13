@@ -28,7 +28,6 @@ class MysqlMetadataTest extends DatabaseTestCase
      */
     public function testForeignKeys()
     {
-        /** @var ForeignKey[] $foreignKeys */
         $metadata = $this->getMetadata();
 
         $this->validateStoresForeignKeys($metadata);

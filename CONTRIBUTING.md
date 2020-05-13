@@ -44,6 +44,7 @@ Run the following commands:
 ```
 vendor/bin/phpcs
 vendor/bin/phpmd src,tests xml phpmd.xml.dist
+vendor/bin/phpstan analyse src tests -c phpstan.neon --level 5
 vendor/bin/phpunit
 ```
 

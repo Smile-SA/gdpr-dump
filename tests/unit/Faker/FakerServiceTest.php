@@ -18,6 +18,6 @@ class FakerServiceTest extends TestCase
         $fakerService = new FakerService();
 
         $generator = $fakerService->getGenerator();
-        $this->assertInstanceOf(Generator::class, $generator);
+        $this->assertNotEmpty($generator->getProviders());
     }
 }

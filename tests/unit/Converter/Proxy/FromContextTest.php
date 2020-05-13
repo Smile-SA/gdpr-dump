@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 use Smile\GdprDump\Converter\Proxy\FromContext;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class NumberBetweenTest extends TestCase
+class FromContextTest extends TestCase
 {
     /**
      * Test the converter.
