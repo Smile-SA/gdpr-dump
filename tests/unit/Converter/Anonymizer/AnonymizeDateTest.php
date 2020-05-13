@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Anonymizer;
 use DateTime;
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeDate;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class AnonymizeDateTest extends TestCase
 {
@@ -37,22 +38,20 @@ class AnonymizeDateTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the parameter "format" is empty.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testEmptyFormat()
     {
+        $this->expectException(UnexpectedValueException::class);
         new AnonymizeDate(['format' => '']);
     }
 
     /**
      * Assert that an exception is thrown when an invalid date is provided.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testInvalidDateFormat()
     {
         $converter = new AnonymizeDate();
+        $this->expectException(UnexpectedValueException::class);
         $converter->convert('invalidFormat');
     }
 

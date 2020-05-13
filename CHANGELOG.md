@@ -5,7 +5,9 @@ All notable changes to this project will be documented in this file.
 ## WIP
 
 - Optimize the data converter hook (huge performance gain)
+- Add PHPStan static code analysis
 - Add a unit test of the condition builder
+- Replace `@expectedException` annotation by `$this->expectException()` method
 - Fix typos in documentation
 
 ## [1.1.0] - 2020-03-09

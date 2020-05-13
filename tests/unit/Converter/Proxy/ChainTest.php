@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\Proxy\Chain;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class ChainTest extends TestCase
 {
@@ -30,21 +32,19 @@ class ChainTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the parameter "converters" is not set.
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testConvertersNotSet()
     {
+        $this->expectException(InvalidArgumentException::class);
         new Chain([]);
     }
 
     /**
      * Assert that an exception is thrown when the parameter "converters" is not an array.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testInvalidConverters()
     {
+        $this->expectException(UnexpectedValueException::class);
         new Chain(['converters' => 'notAnArray']);
     }
 }

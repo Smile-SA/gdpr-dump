@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Config\Resolver;
 
+use Smile\GdprDump\Config\Resolver\FileNotFoundException;
 use Smile\GdprDump\Config\Resolver\PathResolver;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
@@ -49,23 +50,21 @@ class PathResolverTest extends TestCase
 
     /**
      * Assert that an exception is thrown when a file with a relative path is not found.
-     *
-     * @expectedException \Smile\GdprDump\Config\Resolver\FileNotFoundException
      */
     public function testFileWithRelativePathNotFound()
     {
         $resolver = $this->createPathResolver();
+        $this->expectException(FileNotFoundException::class);
         $resolver->resolve('not_exists');
     }
 
     /**
      * Assert that an exception is thrown when a file with an absolute path is not found.
-     *
-     * @expectedException \Smile\GdprDump\Config\Resolver\FileNotFoundException
      */
     public function testFileWithAbsolutePathNotFound()
     {
         $resolver = $this->createPathResolver();
+        $this->expectException(FileNotFoundException::class);
         $resolver->resolve('/not/exists');
     }
 

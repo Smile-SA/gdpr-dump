@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Base;
 
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\Base\SetValue;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
@@ -25,12 +26,11 @@ class SetValueTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when the value is not set.
-     *
-     * @expectedException \InvalidArgumentException
+     * Assert that an exception is thrown when the value is not set.=
      */
     public function testValueNotSet()
     {
+        $this->expectException(InvalidArgumentException::class);
         new SetValue([]);
     }
 }

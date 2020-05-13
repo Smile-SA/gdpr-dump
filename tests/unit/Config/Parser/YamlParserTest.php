@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Config\Parser;
 
+use Smile\GdprDump\Config\Parser\ParseException;
 use Smile\GdprDump\Config\Parser\YamlParser;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
@@ -23,12 +24,11 @@ class YamlParserTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the file is not found.
-     *
-     * @expectedException \Smile\GdprDump\Config\Parser\ParseException
      */
     public function testInvalidInput()
     {
         $parser = new YamlParser();
+        $this->expectException(ParseException::class);
         $parser->parse('[invalid]Yaml');
     }
 }

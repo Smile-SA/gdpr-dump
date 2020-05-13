@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
 
 use Smile\GdprDump\Converter\Randomizer\RandomizeText;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class RandomizeTextTest extends TestCase
 {
@@ -33,11 +34,10 @@ class RandomizeTextTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the parameter "replacements" is empty.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testEmptyReplacements()
     {
+        $this->expectException(UnexpectedValueException::class);
         new RandomizeText(['replacements' => '']);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Base;
 
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\Base\AddPrefix;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
@@ -22,11 +23,10 @@ class AddPrefixTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the prefix is not set.
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testPrefixNotSet()
     {
+        $this->expectException(InvalidArgumentException::class);
         new AddPrefix();
     }
 }

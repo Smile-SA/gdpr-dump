@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Dumper\Config\Table\Filter;
 
 use Smile\GdprDump\Dumper\Config\Table\Filter\SortOrder;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class SortOrderTest extends TestCase
 {
@@ -24,11 +25,10 @@ class SortOrderTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the direction is invalid.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testInvalidDirection()
     {
+        $this->expectException(UnexpectedValueException::class);
         new SortOrder('column1', 'not_exists');
     }
 }

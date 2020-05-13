@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Config\Version;
 
 use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Config\Version\MissingVersionException;
 use Smile\GdprDump\Config\Version\VersionLoader;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
@@ -46,13 +47,13 @@ class VersionLoaderTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the version was not specified.
-     *
-     * @expectedException \Smile\GdprDump\Config\Version\MissingVersionException
      */
     public function testVersionNotSpecifiedException()
     {
         $config = new Config(['requires_version' => true]);
         $configLoader = new VersionLoader();
+
+        $this->expectException(MissingVersionException::class);
         $configLoader->load($config);
     }
 }

@@ -6,7 +6,9 @@ namespace Smile\GdprDump\Tests\Unit\Config;
 
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigLoader;
+use Smile\GdprDump\Config\Parser\ParseException;
 use Smile\GdprDump\Config\Parser\YamlParser;
+use Smile\GdprDump\Config\Resolver\FileNotFoundException;
 use Smile\GdprDump\Config\Resolver\PathResolver;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
@@ -39,25 +41,25 @@ class ConfigLoaderTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the config file is not found.
-     *
-     * @expectedException \Smile\GdprDump\Config\Resolver\FileNotFoundException
      */
     public function testFileNotFoundException()
     {
         $config = new Config();
         $configLoader = $this->createConfigLoader($config);
+
+        $this->expectException(FileNotFoundException::class);
         $configLoader->loadFile('not_exists.yaml');
     }
 
     /**
      * Assert that an exception is thrown when the parsed data is not an array.
-     *
-     * @expectedException \Smile\GdprDump\Config\Parser\ParseException
      */
     public function testDataIsNotAnArray()
     {
         $config = new Config();
         $configLoader = $this->createConfigLoader($config);
+
+        $this->expectException(ParseException::class);
         $configLoader->loadFile(static::getResource('config/templates/invalid_data.yaml'));
     }
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
+use InvalidArgumentException;
+use OverflowException;
 use Smile\GdprDump\Converter\Proxy\Unique;
 use Smile\GdprDump\Converter\Base\SetNull;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
@@ -46,8 +48,6 @@ class UniqueTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the converter fails to generate a unique value.
-     *
-     * @expectedException \OverflowException
      */
     public function testFailedUniqueValue()
     {
@@ -57,16 +57,16 @@ class UniqueTest extends TestCase
 
         $converter = new Unique($parameters);
         $converter->convert('1');
+        $this->expectException(OverflowException::class);
         $converter->convert('1');
     }
 
     /**
      * Assert that an exception is thrown when the converter is not set.
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testConverterNotSet()
     {
+        $this->expectException(InvalidArgumentException::class);
         new Unique([]);
     }
 }

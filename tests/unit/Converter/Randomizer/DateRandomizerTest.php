@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
 use DateTime;
 use Smile\GdprDump\Converter\Randomizer\RandomizeDate;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class DateRandomizerTest extends TestCase
 {
@@ -64,23 +65,20 @@ class DateRandomizerTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the parameter "format" is empty.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testEmptyFormat()
     {
+        $this->expectException(UnexpectedValueException::class);
         new RandomizeDate(['format' => '']);
     }
 
     /**
      * Assert that an exception is thrown when the min year is higher than the max year.
-     *
-     * @expectedException \Exception
      */
     public function testYearConflict()
     {
-        $converter = new RandomizeDate(['min_year' => 2020, 'max_year' => 2019]);
-        $converter->convert('1990-12-31');
+        $this->expectException(UnexpectedValueException::class);
+        new RandomizeDate(['min_year' => 2020, 'max_year' => 2019]);
     }
 
     /**

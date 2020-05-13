@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\Proxy\FromContext;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class FromContextTest extends TestCase
 {
@@ -23,21 +25,19 @@ class FromContextTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the parameter "key" is not set.
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testKeyNotSet()
     {
+        $this->expectException(InvalidArgumentException::class);
         new FromContext([]);
     }
 
     /**
      * Assert that an exception is thrown when the parameter "key" is empty.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testEmptyKey()
     {
+        $this->expectException(UnexpectedValueException::class);
         new FromContext(['key' => '']);
     }
 }

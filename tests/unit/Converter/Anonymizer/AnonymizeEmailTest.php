@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeEmail;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class AnonymizeEmailTest extends TestCase
 {
@@ -25,21 +26,19 @@ class AnonymizeEmailTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the parameter "domains" is empty.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testEmptyDomains()
     {
+        $this->expectException(UnexpectedValueException::class);
         new AnonymizeEmail(['domains' => []]);
     }
 
     /**
      * Assert that an exception is thrown when the parameter "domains" is not an array.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testInvalidDomains()
     {
+        $this->expectException(UnexpectedValueException::class);
         new AnonymizeEmail(['domains' => 'invalid']);
     }
 }
