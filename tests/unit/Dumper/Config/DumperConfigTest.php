@@ -7,7 +7,9 @@ namespace Smile\GdprDump\Tests\Unit\Dumper\Config;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Config\Table\TableConfig;
+use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class DumperConfigTest extends TestCase
 {
@@ -107,21 +109,19 @@ class DumperConfigTest extends TestCase
 
     /**
      * Assert that an exception is thrown when an invalid parameter is used.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testInvalidDumpParameter()
     {
+        $this->expectException(UnexpectedValueException::class);
         $this->createConfig(['dump' => ['not_exists' => true]]);
     }
 
     /**
      * Assert that an exception is thrown when a var query contains a forbidden statement.
-     *
-     * @expectedException \Smile\GdprDump\Dumper\Config\Validation\ValidationException
      */
     public function testInvalidStatementInQuery()
     {
+        $this->expectException(ValidationException::class);
         $this->createConfig(['variables' => ['my_var' => 'select my_col from my_table; delete from my_table']]);
     }
 

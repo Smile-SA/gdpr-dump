@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Proxy\Conditional;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class ConditionalTest extends TestCase
 {
@@ -36,8 +38,6 @@ class ConditionalTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the converters are not set.
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testConvertersNotSet()
     {
@@ -45,13 +45,12 @@ class ConditionalTest extends TestCase
             'condition' => '{{id}} === 1',
         ];
 
+        $this->expectException(InvalidArgumentException::class);
         new Conditional($parameters);
     }
 
     /**
      * Assert that an exception is thrown when the parameter "condition" is not set.
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testConditionNotSet()
     {
@@ -59,13 +58,12 @@ class ConditionalTest extends TestCase
             'if_true_converter' => $this->createIfTrueConverter(),
         ];
 
+        $this->expectException(InvalidArgumentException::class);
         new Conditional($parameters);
     }
 
     /**
      * Assert that an exception is thrown when the parameter "condition" is empty.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testEmptyCondition()
     {
@@ -74,6 +72,7 @@ class ConditionalTest extends TestCase
             'condition' => '',
         ];
 
+        $this->expectException(UnexpectedValueException::class);
         new Conditional($parameters);
     }
 

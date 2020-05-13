@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Base;
 
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\Base\NumberBetween;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class NumberBetweenTest extends TestCase
 {
@@ -23,31 +25,28 @@ class NumberBetweenTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the min value is not set.
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testMinNotSet()
     {
+        $this->expectException(InvalidArgumentException::class);
         new NumberBetween(['max' => 0]);
     }
 
     /**
      * Assert that an exception is thrown when the max value is not set.
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testMaxNotSet()
     {
+        $this->expectException(InvalidArgumentException::class);
         new NumberBetween(['min' => 0]);
     }
 
     /**
      * Assert that an exception is thrown when the min value is greater than the max value.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testMinGreaterThanMax()
     {
+        $this->expectException(UnexpectedValueException::class);
         new NumberBetween(['min' => 100, 'max' => 0]);
     }
 }

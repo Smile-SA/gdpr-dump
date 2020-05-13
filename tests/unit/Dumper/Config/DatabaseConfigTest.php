@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Dumper\Config;
 use PDO;
 use Smile\GdprDump\Dumper\Config\DatabaseConfig;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class DatabaseConfigTest extends TestCase
 {
@@ -53,11 +54,10 @@ class DatabaseConfigTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the database name is missing.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testMissingDatabaseName()
     {
+        $this->expectException(UnexpectedValueException::class);
         new DatabaseConfig([]);
     }
 }

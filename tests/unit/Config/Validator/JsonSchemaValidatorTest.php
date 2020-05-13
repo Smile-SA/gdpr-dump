@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Config\Validator;
 
 use Smile\GdprDump\Config\Validator\JsonSchemaValidator;
+use Smile\GdprDump\Config\Validator\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class JsonSchemaValidatorTest extends TestCase
@@ -53,14 +54,13 @@ class JsonSchemaValidatorTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the schema file is not found.
-     *
-     * @expectedException \Smile\GdprDump\Config\Validator\ValidationException
      */
     public function testFileNotFound()
     {
         $schemaFile = 'not_exists.json';
-
         $validator = new JsonSchemaValidator($schemaFile);
+
+        $this->expectException(ValidationException::class);
         $validator->validate(['key' => 'value']);
     }
 }

@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Dumper\Config\Table\Filter;
 
 use Smile\GdprDump\Dumper\Config\Table\Filter\Filter;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class FilterTest extends TestCase
 {
@@ -35,21 +36,19 @@ class FilterTest extends TestCase
 
     /**
      * Assert that an exception is thrown when an invalid operator is used.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testInvalidOperator()
     {
+        $this->expectException(UnexpectedValueException::class);
         new Filter('column', 'invalidOperator');
     }
 
     /**
      * Assert that an exception is thrown when the value is an array and the operator is neither "in" or "notIn".
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testArrayValueWithIncompatibleOperator()
     {
+        $this->expectException(UnexpectedValueException::class);
         new Filter('column', Filter::OPERATOR_EQ, [1]);
     }
 }

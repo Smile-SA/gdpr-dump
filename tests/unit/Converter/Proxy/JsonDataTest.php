@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\Proxy\JsonData;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class JsonDataTest extends TestCase
 {
@@ -48,31 +50,28 @@ class JsonDataTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the converters are not set.
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testConvertersNotSet()
     {
+        $this->expectException(InvalidArgumentException::class);
         new JsonData([]);
     }
 
     /**
      * Assert that an exception is thrown when the parameter "converters" is empty.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testEmptyConverters()
     {
+        $this->expectException(UnexpectedValueException::class);
         new JsonData(['converters' => []]);
     }
 
     /**
      * Assert that an exception is thrown when the parameter "converters" is not an array.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testInvalidConverters()
     {
+        $this->expectException(UnexpectedValueException::class);
         new JsonData(['converters' => 'notAnArray']);
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter;
 
 use Faker\Factory as FakerFactory;
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\Faker;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
@@ -46,23 +47,21 @@ class FakerTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the Faker provider is not set.
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testProviderNotSet()
     {
         $parameters = ['formatter' => 'safeEmail'];
+        $this->expectException(InvalidArgumentException::class);
         new Faker($parameters);
     }
 
     /**
      * Assert that an exception is thrown when the Faker formatter is not set.
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testFormatterNotSet()
     {
         $parameters = ['faker' => FakerFactory::create()];
+        $this->expectException(InvalidArgumentException::class);
         new Faker($parameters);
     }
 }

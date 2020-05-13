@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\Proxy\Cache;
 use Smile\GdprDump\Converter\Randomizer\RandomizeText;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class CacheTest extends TestCase
 {
@@ -29,31 +31,28 @@ class CacheTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the parameter "converter" is not set.
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testConverterNotSet()
     {
+        $this->expectException(InvalidArgumentException::class);
         new Cache(['cache_key' => 'username']);
     }
 
     /**
      * Assert that an exception is thrown when the parameter "cache_key" is not set.
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testCacheKeyNotSet()
     {
+        $this->expectException(InvalidArgumentException::class);
         new Cache(['converter' => new RandomizeText()]);
     }
 
     /**
      * Assert that an exception is thrown when the parameter "cache_key" is empty.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testEmptyCacheKey()
     {
+        $this->expectException(UnexpectedValueException::class);
         new Cache(['converter' => new RandomizeText(), 'cache_key' => '']);
     }
 }

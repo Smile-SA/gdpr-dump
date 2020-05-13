@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
 
 use Smile\GdprDump\Converter\Randomizer\RandomizeEmail;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class RandomizeEmailTest extends TestCase
 {
@@ -35,21 +36,19 @@ class RandomizeEmailTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the parameter "domains" is empty.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testEmptyDomains()
     {
+        $this->expectException(UnexpectedValueException::class);
         new RandomizeEmail(['domains' => []]);
     }
 
     /**
      * Assert that an exception is thrown when the parameter "domains" is not an array.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testInvalidDomains()
     {
+        $this->expectException(UnexpectedValueException::class);
         new RandomizeEmail(['domains' => 'invalid']);
     }
 }

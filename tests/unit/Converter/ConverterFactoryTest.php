@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter;
 
+use RuntimeException;
 use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\Converter\Dummy;
 use Smile\GdprDump\Converter\Faker;
@@ -14,6 +15,7 @@ use Smile\GdprDump\Converter\Proxy\Unique;
 use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -110,81 +112,74 @@ class ConverterFactoryTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the converter is set but empty.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testEmptyConverter()
     {
         $factory = $this->createFactory();
+        $this->expectException(UnexpectedValueException::class);
         $factory->create(['converter' => null]);
     }
 
     /**
      * Assert that an exception is thrown when the converter is not set.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testConverterNotSet()
     {
         $factory = $this->createFactory();
+        $this->expectException(UnexpectedValueException::class);
         $factory->create([]);
     }
 
     /**
      * Assert that an exception is thrown when the converter is not defined.
-     *
-     * @expectedException \RuntimeException
      */
     public function testConverterNotDefined()
     {
         $factory = $this->createFactory();
+        $this->expectException(RuntimeException::class);
         $factory->create(['converter' => 'notExists']);
     }
 
     /**
      * Assert that an exception is thrown when the parameter "parameters" is not an array.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testParametersNotAnArray()
     {
         $factory = $this->createFactory();
+        $this->expectException(UnexpectedValueException::class);
         $factory->create(['converter' => ConverterMock::class, 'parameters' => '']);
     }
 
     /**
      * Assert that an exception is thrown when the parameter "converter" is used,
      * but the value is not a converter definition.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testConverterParameterMalformed()
     {
         $factory = $this->createFactory();
+        $this->expectException(UnexpectedValueException::class);
         $factory->create(['converter' => ConverterMock::class, 'parameters' => ['converter' => null]]);
     }
 
     /**
      * Assert that an exception is thrown when the parameter "converters" is used,
      * but the value is not an array.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testConvertersParameterNotAnArray()
     {
         $factory = $this->createFactory();
+        $this->expectException(UnexpectedValueException::class);
         $factory->create(['converter' => ConverterMock::class, 'parameters' => ['converters' => null]]);
     }
 
     /**
      * Assert that an exception is thrown when the parameter "converters" is used,
      * but the value is not an array of converter definition.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testConvertersParameterMalformed()
     {
         $factory = $this->createFactory();
+        $this->expectException(UnexpectedValueException::class);
         $factory->create(['converter' => ConverterMock::class, 'parameters' => ['converters' => [null]]]);
     }
 

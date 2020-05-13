@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Config\Version;
 
+use Smile\GdprDump\Config\Version\InvalidVersionException;
 use Smile\GdprDump\Config\Version\VersionCondition;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
@@ -22,21 +23,19 @@ class VersionConditionTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the condition syntax is invalid.
-     *
-     * @expectedException \Smile\GdprDump\Config\Version\InvalidVersionException
      */
     public function testInvalidConditionSyntax()
     {
+        $this->expectException(InvalidVersionException::class);
         new VersionCondition('not_valid');
     }
 
     /**
      * Assert that an exception is thrown when the condition does not contain at least 3 characters.
-     *
-     * @expectedException \Smile\GdprDump\Config\Version\InvalidVersionException
      */
     public function testErrorWithLessThanThreeCharacters()
     {
+        $this->expectException(InvalidVersionException::class);
         new VersionCondition('<1');
     }
 }

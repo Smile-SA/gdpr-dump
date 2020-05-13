@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Dumper\Config\Table;
 
+use RuntimeException;
 use Smile\GdprDump\Dumper\Config\Table\Filter\Filter;
 use Smile\GdprDump\Dumper\Config\Table\TableConfig;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 class TableConfigTest extends TestCase
 {
@@ -118,21 +120,19 @@ class TableConfigTest extends TestCase
 
     /**
      * Assert that an exception is thrown when the sort order is invalid.
-     *
-     * @expectedException \UnexpectedValueException
      */
     public function testInvalidSortOrder()
     {
+        $this->expectException(UnexpectedValueException::class);
         new TableConfig('table1', ['orderBy' => 'this is not a valid sort order']);
     }
 
     /**
      * Assert that an exception is thrown when condition for skipping data conversion is invalid.
-     *
-     * @expectedException \RuntimeException
      */
     public function testInvalidCondition()
     {
+        $this->expectException(RuntimeException::class);
         new TableConfig('table1', ['skip_conversion_if' => 'sleep(100)']);
     }
 }
