@@ -59,9 +59,9 @@ class AnonymizeDate implements ConverterInterface
 
         // Randomize the month and day
         do {
-            $randomDay = mt_rand(1, 31);
             $randomMonth = mt_rand(1, 12);
-        } while ($randomDay === $day && $randomMonth === $month);
+            $randomDay = mt_rand(1, 31);
+        } while ($randomMonth === $month && $randomDay === $day);
 
         // Replace the values
         $date->setDate($year, $randomMonth, $randomDay);

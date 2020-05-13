@@ -77,9 +77,9 @@ class RandomizeDate implements ConverterInterface
     protected function randomizeDate()
     {
         // Randomize the year, month and day
-        $day = mt_rand(1, 31);
-        $month = mt_rand(1, 12);
         $year = mt_rand($this->minYear, $this->maxYear);
+        $month = mt_rand(1, 12);
+        $day = mt_rand(1, 31);
 
         // Replace the values
         $this->date->setDate($year, $month, $day);

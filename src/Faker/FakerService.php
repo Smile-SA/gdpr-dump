@@ -17,7 +17,7 @@ class FakerService
     /**
      * @var array
      */
-    private $options = [];
+    private $options;
 
     /**
      * @param array $options

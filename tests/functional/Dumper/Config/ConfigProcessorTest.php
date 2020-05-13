@@ -6,7 +6,6 @@ namespace Smile\GdprDump\Tests\Functional\Dumper\Config;
 
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
-use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Tests\Functional\DatabaseTestCase;
 
 class ConfigProcessorTest extends DatabaseTestCase

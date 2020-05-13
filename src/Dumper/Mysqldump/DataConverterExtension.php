@@ -24,7 +24,7 @@ class DataConverterExtension implements ExtensionInterface
     /**
      * @var array
      */
-    private $context = [];
+    private $context;
 
     /**
      * @var ConverterInterface[][]

@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Config;
 
 use Smile\GdprDump\Config\Parser\ParseException;
 use Smile\GdprDump\Config\Parser\ParserInterface;
+use Smile\GdprDump\Config\Resolver\FileNotFoundException;
 use Smile\GdprDump\Config\Resolver\PathResolverInterface;
 
 class ConfigLoader implements ConfigLoaderInterface
@@ -83,9 +84,13 @@ class ConfigLoader implements ConfigLoaderInterface
     }
 
     /**
-     * @inheritdoc
+     * Load configuration data.
+     *
+     * @param array $data
+     * @throws FileNotFoundException
+     * @throws ParseException
      */
-    private function loadData(array $data): ConfigLoaderInterface
+    private function loadData(array $data)
     {
         // Recursively load parent config files
         if (isset($data['extends'])) {
@@ -101,7 +106,5 @@ class ConfigLoader implements ConfigLoaderInterface
         }
 
         $this->config->merge($data);
-
-        return $this;
     }
 }

@@ -9,7 +9,7 @@ class Config implements ConfigInterface
     /**
      * @var array
      */
-    private $items = [];
+    private $items;
 
     /**
      * @param array $data
