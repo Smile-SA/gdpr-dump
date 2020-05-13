@@ -7,8 +7,9 @@ All notable changes to this project will be documented in this file.
 
 - Optimize the data converter hook (huge performance gain)
 - Add PHPStan static code analysis
-- Add a unit test of the condition builder
+- Raise minimum required version of `ifsnop/mysqldump-php` to `^2.9`
 - Replace `@expectedException` annotation by `$this->expectException()` method
+- Add a unit test of the condition builder
 - Fix typos in documentation
 
 ## [1.1.0] - 2020-03-09
