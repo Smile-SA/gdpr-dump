@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [1.1.1] - 2020-05-13
+[1.1.1]: https://github.com/Smile-SA/gdpr-dump/compare/1.1.0...1.1.1
 
 - Optimize the data converter hook (huge performance gain)
 - Add PHPStan static code analysis
