@@ -12,5 +12,6 @@ includes:
 parameters:
     level: 5
     paths:
+        - bin
         - src
         - tests
