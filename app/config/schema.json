@@ -66,6 +66,10 @@
         "database": {
             "type": "object",
             "properties": {
+                "dsn": {
+                    "type": ["string"],
+                    "minLength": 1
+                },
                 "driver": {
                     "type": "string",
                     "enum": ["pdo_mysql"]

@@ -106,6 +106,11 @@ class Database implements DatabaseInterface
         // Get the connection parameters from the config
         $params = $config->getConnectionParams();
 
+        // A DSN holds all config parameters that we need to build the connection
+        if (isset($params['dsn'])) {
+            return DriverManager::getConnection(['url' => $params]);
+        }
+
         // Rename parameters that do not match Doctrine naming conventions (name -> dbname)
         $params['dbname'] = $params['name'];
         unset($params['name']);

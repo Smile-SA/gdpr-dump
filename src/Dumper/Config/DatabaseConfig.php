@@ -87,6 +87,13 @@ class DatabaseConfig
      */
     private function prepareConfig(array $params)
     {
+        // A DSN holds all config and is valid standalone
+        if (isset($params['dsn'])) {
+            $this->connectionParams['dsn'] = (string) $params['dsn'];
+
+            return;
+        }
+
         // The database name is mandatory, no matter what driver is used
         // (this will require some refactoring if SQLite compatibility is added)
         if (!isset($params['name'])) {
