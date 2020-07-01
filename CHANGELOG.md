@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Allow referencing environment variables in the configuration
+
 ## [1.1.1] - 2020-05-13
 [1.1.1]: https://github.com/Smile-SA/gdpr-dump/compare/1.1.0...1.1.1
 
