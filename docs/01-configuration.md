@@ -15,6 +15,7 @@
     - [Skipping Data Conversion](#user-content-skipping-data-conversion)
     - [Sharing Converter Results](#user-content-sharing-converter-results)
 - [User-Defined Variables](#user-content-user-defined-variables)
+- [Environments Variables](#user-content-environment-variables)
 - [Version-specific Configuration](#user-content-version-specific-configuration)
 
 ## Overriding Configuration
@@ -88,8 +89,6 @@ Available parameters:
 | **unix_socket** | N | | Name of the socket to use. |
 | **driver** | N | `'pdo_mysql'` | Database driver. Only `pdo_mysql` is supported as of now. |
 | **driver_options** | N | `[]` | An array of [PDO settings](https://www.php.net/manual/en/ref.pdo-mysql.php#pdo-mysql.constants). |
-
-If command-line options are specified (e.g. `--user`), they will have priority over the parameter in the configuration file.
 
 ## Dump Settings
 
@@ -351,7 +350,7 @@ Notes:
   If the parameter is missing somewhere, it can result in a infinite loop situation.
 - This feature is not used in the default templates (`magento2`, ...), because it may require a lot of memory, depending on the size of the tables.
 
-### User-Defined Variables
+## User-Defined Variables
 
 It is possible to store SQL query results in user-defined variables:
 
@@ -382,7 +381,37 @@ tables:
             condition: '{{attribute_id}} == @firstname_attribute_id'
 ```
 
-### Version-specific Configuration
+## Environment Variables
+
+You can use environment variables with the following syntax:
+
+```yaml
+database:
+    host: '%env(DATABASE_HOST)%'
+    user: '%env(DATABASE_USER)%'
+    password: '%env(DATABASE_PASSWORD)%'
+    name: '%env(DATABASE_NAME)%'
+```
+
+You can also set the variable type with the following syntax:
+
+```yaml
+tables:
+    cache:
+        truncate: '%env(bool:TRUNCATE_CACHE_TABLE)%'
+```
+
+Available types: string (default), bool, int, float, json.
+
+The JSON type can be used to define array values. For example:
+
+```yaml
+tables_blacklist: '%env(json:TABLES_BLACKLIST)%'
+```
+
+Example value of the environment variable: `["table1", "table2", "table3"]`.
+
+## Version-specific Configuration
 
 The `if_version` property allows to define configuration that will be read only if the version of your application matches a requirement.
 

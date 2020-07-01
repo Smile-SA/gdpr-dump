@@ -1,6 +1,8 @@
 ---
 extends: 'test_parent.yaml'
-version: '1.0.0'
+
+dump:
+    output: '%env(DUMP_OUTPUT)%'
 
 tables:
     table1:

@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Config;
 
 use Smile\GdprDump\Config\Parser\ParseException;
 use Smile\GdprDump\Config\Parser\ParserInterface;
+use Smile\GdprDump\Config\Processor\ProcessorInterface;
 use Smile\GdprDump\Config\Resolver\FileNotFoundException;
 use Smile\GdprDump\Config\Resolver\PathResolverInterface;
 
@@ -20,6 +21,11 @@ class ConfigLoader implements ConfigLoaderInterface
      * @var ParserInterface
      */
     private $parser;
+
+    /**
+     * @var ProcessorInterface[]
+     */
+    private $processors;
 
     /**
      * @var PathResolverInterface
@@ -39,15 +45,18 @@ class ConfigLoader implements ConfigLoaderInterface
     /**
      * @param ConfigInterface $config
      * @param ParserInterface $parser
+     * @param ProcessorInterface[] $processors
      * @param PathResolverInterface $pathResolver
      */
     public function __construct(
         ConfigInterface $config,
         ParserInterface $parser,
+        array $processors,
         PathResolverInterface $pathResolver
     ) {
         $this->config = $config;
         $this->parser = $parser;
+        $this->processors = $processors;
         $this->pathResolver = $pathResolver;
     }
 
@@ -105,6 +114,31 @@ class ConfigLoader implements ConfigLoaderInterface
             unset($data['extends']);
         }
 
+        // Run the processors on the config values
+        $data = $this->process($data);
+
         $this->config->merge($data);
+    }
+
+    /**
+     * Process the config data.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function process(array $data)
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = $this->process($value);
+                continue;
+            }
+
+            foreach ($this->processors as $processor) {
+                $data[$key] = $processor->process($value);
+            }
+        }
+
+        return $data;
     }
 }

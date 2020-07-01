@@ -27,9 +27,12 @@ services:
         arguments:
             - '@Smile\GdprDump\Config\Config'
             - '@Smile\GdprDump\Config\Parser\YamlParser'
+            - ['@Smile\GdprDump\Config\Processor\EnvVarProcessor']
             - '@Smile\GdprDump\Config\Resolver\PathResolver'
 
     Smile\GdprDump\Config\Parser\YamlParser: ~
+
+    Smile\GdprDump\Config\Processor\EnvVarProcessor: ~
 
     Smile\GdprDump\Config\Resolver\PathResolver:
         arguments:

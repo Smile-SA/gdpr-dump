@@ -8,6 +8,7 @@ use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigLoader;
 use Smile\GdprDump\Config\Parser\ParseException;
 use Smile\GdprDump\Config\Parser\YamlParser;
+use Smile\GdprDump\Config\Processor\EnvVarProcessor;
 use Smile\GdprDump\Config\Resolver\FileNotFoundException;
 use Smile\GdprDump\Config\Resolver\PathResolver;
 use Smile\GdprDump\Tests\Unit\TestCase;
@@ -22,6 +23,9 @@ class ConfigLoaderTest extends TestCase
         $config = new Config();
         $configLoader = $this->createConfigLoader($config);
         $configLoader->loadFile($this->getTestConfigFile());
+
+        $expectedSubset = ['output' => 'dump.sql'];
+        $this->assertArraySubset($expectedSubset, $config->get('dump'));
 
         $expectedSubset = ['table1' => ['converters' => ['field1' => ['converter' => 'randomizeEmail']]]];
         $this->assertArraySubset($expectedSubset, $config->get('tables'));
@@ -73,7 +77,13 @@ class ConfigLoaderTest extends TestCase
     {
         $templatesDirectory = $this->getResource('config/templates');
 
-        return new ConfigLoader($config, new YamlParser(), new PathResolver($templatesDirectory));
+        $processorMock = $this->createMock(EnvVarProcessor::class);
+        $processorMock->method('process')
+            ->willReturnCallback(function ($value) {
+                return $value === '%env(DUMP_OUTPUT)%' ? 'dump.sql' : $value;
+            });
+
+        return new ConfigLoader($config, new YamlParser(), [$processorMock], new PathResolver($templatesDirectory));
     }
 
     /**
