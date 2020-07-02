@@ -126,7 +126,7 @@ class ConfigLoader implements ConfigLoaderInterface
      * @param array $data
      * @return array
      */
-    private function process(array $data)
+    private function process(array $data): array
     {
         foreach ($data as $key => $value) {
             if (is_array($value)) {
