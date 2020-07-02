@@ -10,6 +10,8 @@ interface ProcessorInterface
      * Process a config value.
      *
      * @param mixed $value
+     * @return mixed
+     * @throws ProcessException
      */
     public function process($value);
 }

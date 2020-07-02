@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Config\Processor;
 
-use RuntimeException;
 use Smile\GdprDump\Config\Processor\EnvVarProcessor;
+use Smile\GdprDump\Config\Processor\ProcessException;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use UnexpectedValueException;
 
 class EnvVarProcessorTest extends TestCase
 {
@@ -84,7 +83,7 @@ class EnvVarProcessorTest extends TestCase
         $processor = new EnvVarProcessor();
         $_SERVER['TEST_ENV_VAR'] = 'invalidData';
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(ProcessException::class);
         $processor->process('%env(json:TEST_ENV_VAR)%');
     }
 
@@ -95,7 +94,7 @@ class EnvVarProcessorTest extends TestCase
     {
         $processor = new EnvVarProcessor();
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(ProcessException::class);
         $processor->process('%env(NOT_DEFINED)%');
     }
 
@@ -106,7 +105,7 @@ class EnvVarProcessorTest extends TestCase
     {
         $processor = new EnvVarProcessor();
 
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ProcessException::class);
         $processor->process('%env()%');
     }
 
@@ -117,7 +116,7 @@ class EnvVarProcessorTest extends TestCase
     {
         $processor = new EnvVarProcessor();
 
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ProcessException::class);
         $processor->process('%env(:)%');
     }
 
@@ -128,7 +127,7 @@ class EnvVarProcessorTest extends TestCase
     {
         $processor = new EnvVarProcessor();
 
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ProcessException::class);
         $processor->process('%env(:ENV_VAR)%');
     }
 
@@ -139,7 +138,7 @@ class EnvVarProcessorTest extends TestCase
     {
         $processor = new EnvVarProcessor();
 
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ProcessException::class);
         $processor->process('%env(invalidName)%');
     }
 
@@ -150,7 +149,7 @@ class EnvVarProcessorTest extends TestCase
     {
         $processor = new EnvVarProcessor();
 
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ProcessException::class);
         $processor->process('%env(invalidType:ENV_VAR)%');
     }
 }

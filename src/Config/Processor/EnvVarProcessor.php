@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Processor;
 
-use RuntimeException;
-use UnexpectedValueException;
-
 class EnvVarProcessor implements ProcessorInterface
 {
     /**
@@ -27,8 +24,6 @@ class EnvVarProcessor implements ProcessorInterface
 
     /**
      * @inheritdoc
-     * @throws RuntimeException
-     * @throws UnexpectedValueException
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function process($value)
@@ -41,7 +36,7 @@ class EnvVarProcessor implements ProcessorInterface
         list($type, $name) = $this->parse($name);
 
         if (!array_key_exists($name, $_SERVER)) {
-            throw new RuntimeException(sprintf('The environment variable "%s" is not defined.', $name));
+            throw new ProcessException(sprintf('The environment variable "%s" is not defined.', $name));
         }
 
         $value = $_SERVER[$name];
@@ -60,7 +55,7 @@ class EnvVarProcessor implements ProcessorInterface
      *
      * @param string $name
      * @return array
-     * @throws UnexpectedValueException
+     * @throws ProcessException
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private function parse(string $name): array
@@ -75,17 +70,17 @@ class EnvVarProcessor implements ProcessorInterface
         }
 
         if (!in_array($type, $this->types, true)) {
-            throw new UnexpectedValueException(
+            throw new ProcessException(
                 sprintf('Invalid type "%s". Expected: %s.', $type, implode(', ', $this->types))
             );
         }
 
         if ($name === '') {
-            throw new UnexpectedValueException('Environment variable name must not be empty.');
+            throw new ProcessException('Environment variable name must not be empty.');
         }
 
         if (!preg_match('/^' . self::VAR_NAME_REGEX . '$/', $name)) {
-            throw new UnexpectedValueException(
+            throw new ProcessException(
                 sprintf('"%s" is not a valid environment variable name. Expected format: "[A-Z][A-Z0-9_]*".', $name)
             );
         }
@@ -99,14 +94,14 @@ class EnvVarProcessor implements ProcessorInterface
      * @param string $value
      * @param string $name
      * @return mixed
-     * @throws RuntimeException
+     * @throws ProcessException
      */
     private function decodeJson(string $value, string $name)
     {
         $value = json_decode($value, true);
 
         if ($value === null) {
-            throw new RuntimeException(
+            throw new ProcessException(
                 sprintf('Failed to parse the JSON value of the environment variable "%s".', $name)
             );
         }
