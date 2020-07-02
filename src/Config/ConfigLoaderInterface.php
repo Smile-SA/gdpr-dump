@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Config;
 
 use Smile\GdprDump\Config\Parser\ParseException;
+use Smile\GdprDump\Config\Processor\ProcessException;
 use Smile\GdprDump\Config\Resolver\FileNotFoundException;
 
 interface ConfigLoaderInterface
@@ -16,6 +17,7 @@ interface ConfigLoaderInterface
      * @return $this
      * @throws FileNotFoundException
      * @throws ParseException
+     * @throws ProcessException
      */
     public function loadFile(string $fileName): ConfigLoaderInterface;
 }

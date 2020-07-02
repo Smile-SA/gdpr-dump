@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Config;
 
 use Smile\GdprDump\Config\Parser\ParseException;
 use Smile\GdprDump\Config\Parser\ParserInterface;
+use Smile\GdprDump\Config\Processor\ProcessException;
 use Smile\GdprDump\Config\Processor\ProcessorInterface;
 use Smile\GdprDump\Config\Resolver\FileNotFoundException;
 use Smile\GdprDump\Config\Resolver\PathResolverInterface;
@@ -98,6 +99,7 @@ class ConfigLoader implements ConfigLoaderInterface
      * @param array $data
      * @throws FileNotFoundException
      * @throws ParseException
+     * @throws ProcessException
      */
     private function loadData(array $data)
     {
@@ -125,6 +127,7 @@ class ConfigLoader implements ConfigLoaderInterface
      *
      * @param array $data
      * @return array
+     * @throws ProcessException
      */
     private function process(array $data): array
     {
