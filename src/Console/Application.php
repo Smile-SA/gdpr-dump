@@ -11,7 +11,7 @@ class Application extends BaseApplication
     /**
      * Application version.
      */
-    const VERSION = '1.1.1';
+    const VERSION = '1.2.0';
 
     /**
      * Constructor.

@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [1.2.0] - 2020-07-03
 
 - Allow referencing environment variables in the configuration
 
