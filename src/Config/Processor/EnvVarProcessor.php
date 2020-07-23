@@ -24,7 +24,6 @@ class EnvVarProcessor implements ProcessorInterface
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function process($value)
     {
@@ -35,11 +34,10 @@ class EnvVarProcessor implements ProcessorInterface
         $name = substr($value, 5, -2);
         list($type, $name) = $this->parse($name);
 
-        if (!array_key_exists($name, $_SERVER)) {
+        $value = getenv($name);
+        if ($value === false) {
             throw new ProcessException(sprintf('The environment variable "%s" is not defined.', $name));
         }
-
-        $value = $_SERVER[$name];
 
         if ($type === 'json') {
             return $this->decodeJson($value, $name);
