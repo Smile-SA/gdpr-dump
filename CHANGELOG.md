@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Use `getenv` instead of `$_SERVER` to fetch env vars
+
 ## [2.0.0] - 2020-07-16
 [2.0.0]: https://github.com/Smile-SA/gdpr-dump/compare/1.2.0...2.0.0
 
