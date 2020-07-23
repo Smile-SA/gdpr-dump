@@ -8,15 +8,22 @@ use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\Dumper\SqlDumper;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
-use Smile\GdprDump\Tests\Functional\DatabaseTestCase;
-use Symfony\Component\Yaml\Yaml;
+use Smile\GdprDump\Tests\Functional\TestCase;
 
-class SqlDumperTest extends DatabaseTestCase
+class SqlDumperTest extends TestCase
 {
     /**
      * @var string
      */
     private $dumpFile;
+
+    /**
+     * @inheritdoc
+     */
+    public static function setUpBeforeClass(): void
+    {
+        static::bootDatabase();
+    }
 
     /**
      * @inheritdoc
@@ -86,10 +93,14 @@ class SqlDumperTest extends DatabaseTestCase
      */
     private function createConfig(): Config
     {
-        $data = Yaml::parseFile($this->getTestConfigFile());
-        $data['dump']['output'] = $this->dumpFile;
+        /** @var Config $config */
+        $config = $this->getContainer()->get(Config::class);
 
-        return new Config($data);
+        $dumpParams = $config->get('dump');
+        $dumpParams['output'] = $this->dumpFile;
+        $config->set('dump', $dumpParams);
+
+        return $config;
     }
 
     /**

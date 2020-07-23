@@ -5,9 +5,77 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Functional;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
+use RuntimeException;
+use Smile\GdprDump\AppKernel;
+use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Config\ConfigLoader;
+use Smile\GdprDump\Database\Database;
+use Smile\GdprDump\Dumper\Config\DatabaseConfig;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class TestCase extends BaseTestCase
 {
+    /**
+     * @var AppKernel
+     */
+    protected static $kernel;
+
+    /**
+     * @var Database
+     */
+    protected static $database;
+
+    /**
+     * Boot the kernel.
+     */
+    protected static function bootKernel(): void
+    {
+        if (static::$kernel !== null) {
+            return;
+        }
+
+        static::$kernel = new AppKernel();
+        static::$kernel->boot();
+    }
+
+    /**
+     * Boot the database.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    protected static function bootDatabase(): void
+    {
+        // Check if the database tests should be skipped
+        if ($GLOBALS['skip_database_tests']) {
+            static::markTestSkipped('Skip database tests.');
+        }
+
+        // Use a shared connection to speed up the tests
+        if (static::$database !== null) {
+            return;
+        }
+
+        // Boot the kernel
+        static::bootKernel();
+
+        // Parse the config file
+        /** @var ConfigLoader $loader */
+        $loader = static::$kernel->getContainer()->get(ConfigLoader::class);
+        $loader->loadFile(static::getResource('config/templates/test.yaml'));
+        /** @var Config $config */
+        $config = static::$kernel->getContainer()->get(Config::class);
+
+        // Initialize the shared connection
+        $dbParams = $config->get('database');
+        static::$database = new Database(new DatabaseConfig($dbParams));
+
+        // Create the tables
+        $connection = static::$database->getConnection();
+        $queries = file_get_contents(static::getResource('db/test.sql'));
+        $statement = $connection->prepare($queries);
+        $statement->execute();
+    }
+
     /**
      * Get the absolute path of the application.
      *
@@ -30,12 +98,32 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * Get the config file used for the tests.
+     * Get the database wrapper.
      *
-     * @return string
+     * @return Database
+     * @throws RuntimeException
      */
-    protected static function getTestConfigFile(): string
+    protected static function getDatabase(): Database
     {
-        return static::getResource('config/templates/test.yaml');
+        if (static::$database === null) {
+            throw new RuntimeException('The database is not initialized.');
+        }
+
+        return static::$database;
+    }
+
+    /**
+     * Get the DI container.
+     *
+     * @return ContainerInterface
+     * @throws RuntimeException
+     */
+    protected static function getContainer(): ContainerInterface
+    {
+        if (static::$kernel === null) {
+            throw new RuntimeException('The kernel is not initialized.');
+        }
+
+        return static::$kernel->getContainer();
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
 
 use DateTime;
-use Exception;
 use Smile\GdprDump\Converter\Randomizer\RandomizeDate;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use UnexpectedValueException;

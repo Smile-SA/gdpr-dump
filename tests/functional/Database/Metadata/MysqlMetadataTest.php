@@ -6,10 +6,18 @@ namespace Smile\GdprDump\Tests\Functional\Database\Metadata;
 
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Database\Metadata\MysqlMetadata;
-use Smile\GdprDump\Tests\Functional\DatabaseTestCase;
+use Smile\GdprDump\Tests\Functional\TestCase;
 
-class MysqlMetadataTest extends DatabaseTestCase
+class MysqlMetadataTest extends TestCase
 {
+    /**
+     * @inheritdoc
+     */
+    public static function setUpBeforeClass(): void
+    {
+        static::bootDatabase();
+    }
+
     /**
      * Test the "getTableNames" method.
      */

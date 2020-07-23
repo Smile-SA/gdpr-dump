@@ -21,9 +21,11 @@ services:
             - '@Smile\GdprDump\Config\Validator\JsonSchemaValidator'
 
     # --- Config ---
-    Smile\GdprDump\Config\Config: ~
+    Smile\GdprDump\Config\Config:
+        public: true # used by functional tests
 
     Smile\GdprDump\Config\ConfigLoader:
+        public: true # used by functional tests
         arguments:
             - '@Smile\GdprDump\Config\Config'
             - '@Smile\GdprDump\Config\Parser\YamlParser'
