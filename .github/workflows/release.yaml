@@ -1,11 +1,9 @@
 name: 'Create Release'
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Application Version'
-        required: true
+  create:
+    tags:
+      - '*'
 
 jobs:
   release:
@@ -38,14 +36,21 @@ jobs:
       - name: 'Install dependencies'
         run: 'composer install --no-dev --optimize-autoloader --prefer-dist'
 
+      - name: 'Get tag name'
+        id: 'get-version'
+        run: 'echo ::set-output name=version::${GITHUB_REF#refs/tags/}'
+
+      # Cannot use ${{ github.ref }}, it isn't the tag name, but "/refs/tags/tag_name"
       - name: 'Replace application version'
-        run: sed -i 's/%VERSION%/${{ github.event.inputs.version }}/g' src/Console/Application.php
+        run: sed -i "s/VERSION = 'dev'/VERSION = '${{ steps.get-version.outputs.version }}'/" src/Console/Application.php
 
       - name: 'Create phar'
         run: 'bin/compile'
 
       - name: 'Test the phar file'
-        run: './gdpr-dump.phar --version'
+        run: |
+          chmod +x ./build/dist/gdpr-dump.phar
+          ./build/dist/gdpr-dump.phar --version
 
       - name: 'Create release'
         id: 'create_release'
