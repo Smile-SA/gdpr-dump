@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Config;
 
-use ArrayAccess;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigLoader;
 use Smile\GdprDump\Config\Parser\ParseException;

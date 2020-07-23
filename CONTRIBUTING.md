@@ -48,14 +48,13 @@ vendor/bin/phpstan analyse
 vendor/bin/phpunit
 ```
 
-The functional tests require the following MySQL database:
+The functional tests require the following environments variables:
 
-- Host: `'localhost'`
-- Name: `'test'`
-- User: `'root'`
-- Password: `''`
-
-These parameters can be modified in the [test.yaml](tests/functional/Resources/config/templates/test.yaml) template file.
+- DB_HOST
+- DB_PORT
+- DB_USER
+- DB_PASSWORD
+- DB_NAME
 
 ## Database Driver Compatibility
 

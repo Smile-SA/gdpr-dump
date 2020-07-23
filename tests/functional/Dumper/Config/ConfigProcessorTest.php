@@ -6,10 +6,18 @@ namespace Smile\GdprDump\Tests\Functional\Dumper\Config;
 
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
-use Smile\GdprDump\Tests\Functional\DatabaseTestCase;
+use Smile\GdprDump\Tests\Functional\TestCase;
 
-class ConfigProcessorTest extends DatabaseTestCase
+class ConfigProcessorTest extends TestCase
 {
+    /**
+     * @inheritdoc
+     */
+    public static function setUpBeforeClass(): void
+    {
+        static::bootDatabase();
+    }
+
     /**
      * Test the table name resolution.
      */

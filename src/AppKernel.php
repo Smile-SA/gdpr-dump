@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump;
 
 use ErrorException;
+use RuntimeException;
 use Smile\GdprDump\Console\Application;
 use Smile\GdprDump\Console\Command\DumpCommand;
 use Symfony\Component\Config\FileLocator;
@@ -19,24 +20,59 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 class AppKernel
 {
     /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @var bool
+     */
+    private $booted = false;
+
+    /**
      * Run the application.
      */
     public function run(): void
     {
+        $this->boot();
+        $application = new Application();
+
+        /** @var Command $command */
+        $command = $this->container->get(DumpCommand::class);
+        $application->add($command);
+        $application->setDefaultCommand($command->getName(), true);
+        $application->run();
+    }
+
+    /**
+     * Boot the kernel.
+     */
+    public function boot(): void
+    {
+        if ($this->booted) {
+            return;
+        }
+
         // Convert notices/warnings into exceptions
         $this->initErrorHandler();
 
         // Build the service container
-        $container = $this->buildContainer();
+        $this->container = $this->buildContainer();
+    }
 
-        // Configure and run the application
-        $application = new Application();
+    /**
+     * Get the container.
+     *
+     * @return ContainerInterface
+     * @throws RuntimeException
+     */
+    public function getContainer(): ContainerInterface
+    {
+        if ($this->container === null) {
+            throw new RuntimeException('The kernel is not initialized.');
+        }
 
-        /** @var Command $command */
-        $command = $container->get(DumpCommand::class);
-        $application->add($command);
-        $application->setDefaultCommand($command->getName(), true);
-        $application->run();
+        return $this->container;
     }
 
     /**
