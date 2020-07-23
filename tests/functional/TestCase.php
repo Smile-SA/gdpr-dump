@@ -40,16 +40,9 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Boot the database.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected static function bootDatabase(): void
     {
-        // Check if the database tests should be skipped
-        if ($GLOBALS['skip_database_tests']) {
-            static::markTestSkipped('Skip database tests.');
-        }
-
         // Use a shared connection to speed up the tests
         if (static::$database !== null) {
             return;
