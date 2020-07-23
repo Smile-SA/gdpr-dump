@@ -48,13 +48,21 @@ vendor/bin/phpstan analyse
 vendor/bin/phpunit
 ```
 
-The functional tests require the following environments variables:
+The functional tests require the following MySQL database:
 
-- DB_HOST
-- DB_PORT
-- DB_USER
-- DB_PASSWORD
-- DB_NAME
+- Host: `127.0.0.1`
+- Port: `3306`
+- User: `root`
+- Password: `password`
+- Name: `test`
+
+These values can be changed by setting the following environment variables:
+
+- `DB_HOST`
+- `DB_PORT`
+- `DB_USER`
+- `DB_PASSWORD`
+- `DB_NAME`
 
 ## Database Driver Compatibility
 
