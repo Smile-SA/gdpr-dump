@@ -1,7 +1,7 @@
 # GdprDump
 
 [![Latest Stable Version](https://poser.pugx.org/smile/gdpr-dump/v/stable)](https://packagist.org/packages/smile/gdpr-dump)
-[![Build Status](https://travis-ci.org/Smile-SA/gdpr-dump.svg?branch=master)](https://travis-ci.org/Smile-SA/gdpr-dump)
+![Build Status](https://github.com/Smile-SA/gdpr-dump/workflows/CI/badge.svg)
 
 This tool provides a command that dumps the contents of a MySQL database.
 

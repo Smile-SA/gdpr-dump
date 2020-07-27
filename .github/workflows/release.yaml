@@ -1,0 +1,75 @@
+name: 'Create Release'
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  release:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: 'Checkout'
+        uses: 'actions/checkout@v2'
+
+      - name: 'Install PHP'
+        uses: 'shivammathur/setup-php@v2'
+        with:
+          php-version: '7.0'
+          coverage: 'none'
+          extensions: 'mbstring'
+          tools: 'composer:v2'
+          ini-values: 'phar.readonly=0'
+
+      - name: 'Get composer cache directory'
+        id: 'composercache'
+        run: 'echo "::set-output name=dir::$(composer config cache-files-dir)"'
+
+      - name: 'Cache dependencies'
+        uses: 'actions/cache@v2'
+        with:
+          path: '${{ steps.composercache.outputs.dir }}'
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: '${{ runner.os }}-composer-'
+
+      - name: 'Install dependencies'
+        run: 'composer install --no-dev --optimize-autoloader --prefer-dist'
+
+      - name: 'Get tag name'
+        id: 'get-version'
+        run: 'echo ::set-output name=version::${GITHUB_REF#refs/tags/}'
+
+      # Cannot use ${{ github.ref }}, it isn't the tag name, but "/refs/tags/tag_name"
+      - name: 'Replace application version'
+        run: sed -i "s/VERSION = 'dev'/VERSION = '${{ steps.get-version.outputs.version }}'/" src/Console/Application.php
+
+      - name: 'Create phar'
+        run: 'bin/compile'
+
+      - name: 'Test the phar file'
+        run: |
+          chmod +x ./build/dist/gdpr-dump.phar
+          ./build/dist/gdpr-dump.phar --version
+
+      - name: 'Create release'
+        id: 'create_release'
+        uses: 'actions/create-release@v1'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+        with:
+          tag_name: '${{ github.ref }}'
+          release_name: '${{ github.ref }}'
+          draft: false
+          prerelease: false
+
+      - name: 'Upload Release Asset'
+        id: 'upload-release-asset'
+        uses: 'actions/upload-release-asset@v1'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+        with:
+          upload_url: '${{ steps.create_release.outputs.upload_url }}'
+          asset_path: 'build/dist/gdpr-dump.phar'
+          asset_name: 'gdpr-dump.phar'
+          asset_content_type: 'application/x-php'

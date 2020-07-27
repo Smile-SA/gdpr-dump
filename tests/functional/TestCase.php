@@ -40,8 +40,6 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Boot the database.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected static function bootDatabase()
     {
