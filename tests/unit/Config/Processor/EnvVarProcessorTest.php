@@ -11,15 +11,6 @@ use Smile\GdprDump\Tests\Unit\TestCase;
 class EnvVarProcessorTest extends TestCase
 {
     /**
-     * @inheritdoc
-     * @SuppressWarnings(PHPMD.Superglobals)
-     */
-    protected function tearDown()
-    {
-        unset($_SERVER['TEST_ENV_VAR']);
-    }
-
-    /**
      * Assert that normal values are not processed.
      */
     public function testNormalValuesNotProcessed()
@@ -41,13 +32,13 @@ class EnvVarProcessorTest extends TestCase
     public function testScalarEnvVar()
     {
         $processor = new EnvVarProcessor();
-        $_SERVER['TEST_ENV_VAR'] = '12345';
+        putenv('TEST_ENV_VAR=12345');
 
         $value = $processor->process('%env(TEST_ENV_VAR)%');
-        $this->assertSame($_SERVER['TEST_ENV_VAR'], $value);
+        $this->assertSame(getenv('TEST_ENV_VAR'), $value);
 
         $value = $processor->process('%env(string:TEST_ENV_VAR)%');
-        $this->assertSame($_SERVER['TEST_ENV_VAR'], $value);
+        $this->assertSame(getenv('TEST_ENV_VAR'), $value);
 
         $value = $processor->process('%env(bool:TEST_ENV_VAR)%');
         $this->assertSame(true, $value);
@@ -57,6 +48,8 @@ class EnvVarProcessorTest extends TestCase
 
         $value = $processor->process('%env(float:TEST_ENV_VAR)%');
         $this->assertSame(12345.0, $value);
+
+        putenv('TEST_ENV_VAR');
     }
 
     /**
@@ -67,10 +60,12 @@ class EnvVarProcessorTest extends TestCase
     public function testJsonEnvVar()
     {
         $processor = new EnvVarProcessor();
-        $_SERVER['TEST_ENV_VAR'] = '{"key": "value"}';
+        putenv('TEST_ENV_VAR={"key": "value"}');
 
         $value = $processor->process('%env(json:TEST_ENV_VAR)%');
         $this->assertSame(['key' => 'value'], $value);
+
+        putenv('TEST_ENV_VAR');
     }
 
     /**
@@ -81,10 +76,12 @@ class EnvVarProcessorTest extends TestCase
     public function testInvalidJson()
     {
         $processor = new EnvVarProcessor();
-        $_SERVER['TEST_ENV_VAR'] = 'invalidData';
+        putenv('TEST_ENV_VAR=invalidData');
 
         $this->expectException(ProcessException::class);
         $processor->process('%env(json:TEST_ENV_VAR)%');
+
+        putenv('TEST_ENV_VAR');
     }
 
     /**
