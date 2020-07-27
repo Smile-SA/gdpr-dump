@@ -34,8 +34,8 @@ The following table lists the requirements of each major version:
 
 **GdprDump Version** | **PHP Requirement** | **Link**
 ---|---|---
-2.x (latest) | PHP >= 7.3 | [Download](https://github.com/Smile-SA/gdpr-dump/releases/latest/download/gdpr-dump.phar)
-1.x | PHP >= 7.1 | [Download](https://github.com/Smile-SA/gdpr-dump/releases/download/1.2.0/gdpr-dump.phar)
+2.x (latest) | PHP >= 7.3 | [Download](https://github.com/Smile-SA/gdpr-dump/releases/download/2.0.1/gdpr-dump.phar)
+1.x | PHP >= 7.1 | [Download](https://github.com/Smile-SA/gdpr-dump/releases/download/1.2.1/gdpr-dump.phar)
 
 The list of all releases is available [here](https://github.com/Smile-SA/gdpr-dump/releases).
 
