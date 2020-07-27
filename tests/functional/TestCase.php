@@ -45,11 +45,6 @@ abstract class TestCase extends BaseTestCase
      */
     protected static function bootDatabase()
     {
-        // Check if the database tests should be skipped
-        if ($GLOBALS['skip_database_tests']) {
-            static::markTestSkipped('Skip database tests.');
-        }
-
         // Use a shared connection to speed up the tests
         if (static::$database !== null) {
             return;
