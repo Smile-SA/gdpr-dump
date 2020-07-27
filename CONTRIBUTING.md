@@ -50,12 +50,19 @@ vendor/bin/phpunit
 
 The functional tests require the following MySQL database:
 
-- Host: `'localhost'`
-- Name: `'test'`
-- User: `'root'`
-- Password: `''`
+- Host: `127.0.0.1`
+- Port: `3306`
+- User: `root`
+- Password: `password`
+- Name: `test`
 
-These parameters can be modified in the [test.yaml](tests/functional/Resources/config/templates/test.yaml) template file.
+These values can be changed by setting the following environment variables:
+
+- `DB_HOST`
+- `DB_PORT`
+- `DB_USER`
+- `DB_PASSWORD`
+- `DB_NAME`
 
 ## Database Driver Compatibility
 

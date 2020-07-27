@@ -1,9 +1,10 @@
 ---
 database:
-    host: 'localhost'
-    name: 'test'
-    user: 'root'
-    password: ''
+    host: '%env(DB_HOST)%'
+    port: '%env(DB_PORT)%'
+    user: '%env(DB_USER)%'
+    password: '%env(DB_PASSWORD)%'
+    name: '%env(DB_NAME)%'
 
 dump:
     output: 'php://stdout'
