@@ -36,7 +36,7 @@ The following table lists the requirements of each major version:
 **GdprDump Version** | **PHP Requirement**
 ---|---
 2.x (latest) | PHP >= 7.3
-1.x | PHP >= 7.1
+1.x | PHP >= 7.0
 
 **With Composer**
 
