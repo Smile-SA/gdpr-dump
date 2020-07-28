@@ -14,7 +14,7 @@ class SqlDumperTest extends TestCase
     /**
      * @var string
      */
-    private $dumpFile;
+    private string $dumpFile;
 
     /**
      * @inheritdoc

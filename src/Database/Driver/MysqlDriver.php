@@ -11,12 +11,12 @@ class MysqlDriver implements DriverInterface
     /**
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * @var string[]
      */
-    private $params = [
+    private array $params = [
         'host',
         'port',
         'dbname',

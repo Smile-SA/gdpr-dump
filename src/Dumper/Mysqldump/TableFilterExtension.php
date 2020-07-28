@@ -19,17 +19,17 @@ class TableFilterExtension implements ExtensionInterface
     /**
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * @var MetadataInterface
      */
-    private $metadata;
+    private MetadataInterface $metadata;
 
     /**
      * @var DumperConfig
      */
-    private $config;
+    private DumperConfig $config;
 
     /**
      * @inheritdoc

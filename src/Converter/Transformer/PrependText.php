@@ -14,7 +14,7 @@ class PrependText implements ConverterInterface
     /**
      * @var string
      */
-    private $prefix;
+    private string $prefix;
 
     /**
      * @param array $parameters

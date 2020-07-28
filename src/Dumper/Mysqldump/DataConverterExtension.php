@@ -14,27 +14,27 @@ class DataConverterExtension implements ExtensionInterface
     /**
      * @var ConverterFactory
      */
-    private $converterFactory;
+    private ConverterFactory $converterFactory;
 
     /**
      * @var FakerService
      */
-    private $faker;
+    private FakerService $faker;
 
     /**
      * @var array
      */
-    private $context = [];
+    private array $context = [];
 
     /**
      * @var ConverterInterface[][]
      */
-    private $converters = [];
+    private array $converters = [];
 
     /**
      * @var string[]
      */
-    private $skipConditions = [];
+    private array $skipConditions = [];
 
     /**
      * @param ConverterFactory $converterFactory

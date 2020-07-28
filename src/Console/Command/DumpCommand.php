@@ -26,22 +26,22 @@ class DumpCommand extends Command
     /**
      * @var DumperInterface
      */
-    private $dumper;
+    private DumperInterface $dumper;
 
     /**
      * @var ConfigInterface
      */
-    private $config;
+    private ConfigInterface $config;
 
     /**
      * @var ConfigLoaderInterface
      */
-    private $configLoader;
+    private ConfigLoaderInterface $configLoader;
 
     /**
      * @var ValidatorInterface
      */
-    private $validator;
+    private ValidatorInterface $validator;
 
     /**
      * @param DumperInterface $dumper

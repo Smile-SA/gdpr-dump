@@ -16,12 +16,12 @@ class AnonymizeDate implements ConverterInterface
     /**
      * @var string
      */
-    protected $defaultFormat = 'Y-m-d';
+    protected string $defaultFormat = 'Y-m-d';
 
     /**
      * @var string
      */
-    private $format;
+    private string $format;
 
     /**
      * @param array $parameters

@@ -14,12 +14,12 @@ class Replace implements ConverterInterface
     /**
      * @var string
      */
-    private $search;
+    private string $search;
 
     /**
      * @var string
      */
-    private $replacement;
+    private string $replacement;
 
     /**
      * @param array $parameters

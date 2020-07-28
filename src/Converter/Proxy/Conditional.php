@@ -15,17 +15,17 @@ class Conditional implements ConverterInterface
     /**
      * @var string
      */
-    private $condition;
+    private string $condition;
 
     /**
      * @var ConverterInterface|null
      */
-    private $ifTrueConverter;
+    private ?ConverterInterface $ifTrueConverter = null;
 
     /**
      * @var ConverterInterface|null
      */
-    private $ifFalseConverter;
+    private ?ConverterInterface $ifFalseConverter = null;
 
     /**
      * @param array $parameters

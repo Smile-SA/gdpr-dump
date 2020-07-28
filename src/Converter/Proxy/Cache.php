@@ -14,17 +14,17 @@ class Cache implements ConverterInterface
     /**
      * @var array
      */
-    private static $values;
-
-    /**
-     * @var string
-     */
-    private $cacheKey;
+    private static array $values = [];
 
     /**
      * @var ConverterInterface
      */
-    private $converter;
+    private ConverterInterface $converter;
+
+    /**
+     * @var string
+     */
+    private string $cacheKey;
 
     /**
      * @param array $parameters

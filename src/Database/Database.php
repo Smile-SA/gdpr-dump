@@ -28,22 +28,22 @@ class Database implements DatabaseInterface
     /**
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * @var DriverInterface
      */
-    private $driver;
+    private DriverInterface $driver;
 
     /**
      * @var MetadataInterface
      */
-    private $metadata;
+    private MetadataInterface $metadata;
 
     /**
      * @var ConfigInterface
      */
-    private $config;
+    private ConfigInterface $config;
 
     /**
      * @param ConfigInterface $config
@@ -124,9 +124,10 @@ class Database implements DatabaseInterface
         unset($params['name']);
 
         // Remove empty elements
-        $params = array_filter($params, function ($value): bool {
-            return $value !== null && $value !== '' && $value !== false;
-        });
+        $params = array_filter(
+            $params,
+            fn ($value) => $value !== null && $value !== '' && $value !== false
+        );
 
         // Set the driver
         $params['driver'] = $config->getDriver();

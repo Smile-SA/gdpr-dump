@@ -13,7 +13,7 @@ class Config implements ConfigInterface
     /**
      * @var array
      */
-    private $items;
+    private array $items;
 
     /**
      * @param array $data
@@ -34,7 +34,7 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function set(string $key, $value): ConfigInterface
+    public function set(string $key, $value): self
     {
         $this->items[$key] = $value;
 
@@ -70,7 +70,7 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function merge(array $data): ConfigInterface
+    public function merge(array $data): self
     {
         $this->items = $this->mergeArray($this->items, $data);
 

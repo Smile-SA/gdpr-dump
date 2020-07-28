@@ -15,7 +15,7 @@ class FromContext implements ConverterInterface
     /**
      * @var string
      */
-    private $key;
+    private string $key;
 
     /**
      * @param array $parameters

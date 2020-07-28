@@ -17,12 +17,12 @@ class Compiler
     /**
      * @var string
      */
-    private $basePath;
+    private string $basePath;
 
     /**
      * @var string[]
      */
-    private $locales;
+    private array $locales;
 
     /**
      * @param string[] $locales

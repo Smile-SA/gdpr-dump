@@ -24,7 +24,7 @@ class Filter
     /**
      * @var string[]
      */
-    private static $operators = [
+    private static array $operators = [
         self::OPERATOR_EQ,
         self::OPERATOR_NEQ,
         self::OPERATOR_LT,
@@ -42,12 +42,12 @@ class Filter
     /**
      * @var string
      */
-    private $column;
+    private string $column;
 
     /**
      * @var string
      */
-    private $operator;
+    private string $operator;
 
     /**
      * @var mixed

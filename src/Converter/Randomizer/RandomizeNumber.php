@@ -12,16 +12,14 @@ class RandomizeNumber implements ConverterInterface
     /**
      * @var Closure
      */
-    private $replaceCallback;
+    private Closure $replaceCallback;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->replaceCallback = function (): int {
-            return mt_rand(0, 9);
-        };
+        $this->replaceCallback = fn () => mt_rand(0, 9);
     }
 
     /**

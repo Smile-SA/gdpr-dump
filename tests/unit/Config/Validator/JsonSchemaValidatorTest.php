@@ -13,7 +13,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * @var string
      */
-    private $schemaFile;
+    private string $schemaFile;
 
     /**
      * @inheritdoc

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Set minimum PHP version to 7.4
+
 ## [2.3.2] - 2022-02-21
 [2.3.2]: https://github.com/Smile-SA/gdpr-dump/compare/2.3.1...2.3.2
 

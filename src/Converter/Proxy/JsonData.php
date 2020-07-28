@@ -15,7 +15,7 @@ class JsonData implements ConverterInterface
     /**
      * @var ConverterInterface[]
      */
-    private $converters;
+    private array $converters;
 
     /**
      * @param array $parameters

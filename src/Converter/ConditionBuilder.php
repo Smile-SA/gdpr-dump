@@ -13,17 +13,17 @@ class ConditionBuilder
     /**
      * @var Tokenizer
      */
-    private $tokenizer;
+    private Tokenizer $tokenizer;
 
     /**
      * @var string[]
      */
-    private $statementBlacklist = ['<?php', '<?', '?>'];
+    private array $statementBlacklist = ['<?php', '<?', '?>'];
 
     /**
      * @var string[]
      */
-    private $functionWhitelist = [
+    private array $functionWhitelist = [
         'addslashes', 'array_*', 'chr', 'date', 'empty', 'explode', 'htmlentities', 'htmlspecialchars',
         'implode', 'in_array', 'is_*', 'isset', 'lcfirst', 'ltrim', 'mb_*', 'number_format', 'ord',
         'preg_*', 'rtrim', 'sprintf', 'str_*', 'strchr', 'strcmp', 'strcoll', 'strcspn', 'stripcslashes',

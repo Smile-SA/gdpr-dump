@@ -12,7 +12,7 @@ class Compiler
     /**
      * @var ProcessorInterface[]
      */
-    private $processors;
+    private array $processors;
 
     /**
      * @param ProcessorInterface[] $processors

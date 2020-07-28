@@ -12,12 +12,12 @@ class ConfigProcessor
     /**
      * @var MetadataInterface
      */
-    private $metadata;
+    private MetadataInterface $metadata;
 
     /**
-     * @var string[]
+     * @var string[]|null
      */
-    private $tableNames;
+    private ?array $tableNames = null;
 
     /**
      * @param MetadataInterface $metadata

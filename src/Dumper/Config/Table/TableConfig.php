@@ -14,32 +14,32 @@ class TableConfig
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var Filter[]
      */
-    private $filters = [];
+    private array $filters = [];
 
     /**
      * @var SortOrder[]
      */
-    private $sortOrders = [];
+    private array $sortOrders = [];
 
     /**
      * @var int|null
      */
-    private $limit;
+    private ?int $limit = null;
 
     /**
      * @var array
      */
-    private $converters = [];
+    private array $converters = [];
 
     /**
      * @var string
      */
-    private $skipCondition = '';
+    private string $skipCondition = '';
 
     /**
      * @param string $tableName

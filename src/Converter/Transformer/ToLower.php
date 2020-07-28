@@ -11,7 +11,7 @@ class ToLower implements ConverterInterface
     /**
      * @var bool
      */
-    private $multiByteEnabled;
+    private bool $multiByteEnabled;
 
     /**
      * Constructor.

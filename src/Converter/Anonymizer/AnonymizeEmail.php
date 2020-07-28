@@ -13,12 +13,12 @@ class AnonymizeEmail extends AnonymizeText
     /**
      * @var string[]
      */
-    private $domains;
+    private array $domains;
 
     /**
      * @var int
      */
-    private $domainsCount;
+    private int $domainsCount;
 
     /**
      * @param array $parameters

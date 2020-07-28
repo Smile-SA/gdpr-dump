@@ -15,27 +15,27 @@ class RandomDate implements ConverterInterface
     /**
      * @var string
      */
-    protected $defaultFormat = 'Y-m-d';
+    protected string $defaultFormat = 'Y-m-d';
 
     /**
      * @var DateTime
      */
-    protected $date;
+    protected DateTime $date;
 
     /**
      * @var string
      */
-    private $format;
+    private string $format;
 
     /**
      * @var int
      */
-    private $minYear;
+    private int $minYear;
 
     /**
      * @var int
      */
-    private $maxYear;
+    private int $maxYear;
 
     /**
      * @param array $parameters

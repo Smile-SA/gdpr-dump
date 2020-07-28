@@ -14,17 +14,17 @@ class AnonymizeNumber implements ConverterInterface
     /**
      * @var string
      */
-    private $replacement;
+    private string $replacement;
 
     /**
      * @var int
      */
-    private $minNumberLength;
+    private int $minNumberLength;
 
     /**
      * @var bool
      */
-    private $multiByteEnabled;
+    private bool $multiByteEnabled;
 
     /**
      * @param array $parameters

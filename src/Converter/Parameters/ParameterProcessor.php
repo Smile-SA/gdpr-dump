@@ -9,7 +9,7 @@ class ParameterProcessor
     /**
      * @var Parameter[]
      */
-    private $parameters = [];
+    private array $parameters = [];
 
     /**
      * Add a parameter.

@@ -12,12 +12,12 @@ class JsonSchemaValidator implements ValidatorInterface
     /**
      * @var Validator|null
      */
-    private $schemaValidator;
+    private ?Validator $schemaValidator = null;
 
     /**
      * @var string
      */
-    private $schemaFile;
+    private string $schemaFile;
 
     /**
      * @param string $schemaFile

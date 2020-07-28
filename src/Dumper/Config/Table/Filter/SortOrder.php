@@ -21,12 +21,12 @@ class SortOrder
     /**
      * @var string
      */
-    private $column;
+    private string $column;
 
     /**
      * @var string
      */
-    private $direction;
+    private string $direction;
 
     /**
      * @param string $column

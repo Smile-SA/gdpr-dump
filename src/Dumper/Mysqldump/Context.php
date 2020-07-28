@@ -13,22 +13,22 @@ class Context
     /**
      * @var Mysqldump
      */
-    private $dumper;
+    private Mysqldump $dumper;
 
     /**
      * @var Database
      */
-    private $database;
+    private Database $database;
 
     /**
      * @var DumperConfig
      */
-    private $config;
+    private DumperConfig $config;
 
     /**
      * @var array
      */
-    private $dumperContext;
+    private array $dumperContext;
 
     /**
      * @param Mysqldump $dumper

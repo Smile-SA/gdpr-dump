@@ -11,22 +11,22 @@ class Config implements ConfigInterface
     /**
      * @var string
      */
-    private $driver = 'pdo_mysql';
+    private string $driver = 'pdo_mysql';
 
     /**
      * @var array
      */
-    private $driverOptions = [];
+    private array $driverOptions = [];
 
     /**
      * @var array
      */
-    private $connectionParams = [];
+    private array $connectionParams = [];
 
     /**
      * @var array
      */
-    private $defaults = [
+    private array $defaults = [
         'pdo_mysql' => ['host' => 'localhost', 'user' => 'root'],
     ];
 

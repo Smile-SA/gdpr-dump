@@ -9,7 +9,7 @@ class RandomDateTime extends RandomDate
     /**
      * @inheritdoc
      */
-    protected $defaultFormat = 'Y-m-d H:i:s';
+    protected string $defaultFormat = 'Y-m-d H:i:s';
 
     /**
      * @inheritdoc

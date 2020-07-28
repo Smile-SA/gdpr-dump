@@ -11,7 +11,7 @@ class ConverterMock implements ConverterInterface
     /**
      * @var string
      */
-    private $prefix = 'test_';
+    private string $prefix = 'test_';
 
     /**
      * @param array $parameters

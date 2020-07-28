@@ -17,7 +17,7 @@ class EnvVarProcessor implements ProcessorInterface
     /**
      * @var string[]
      */
-    private $types = [
+    private array $types = [
         'string',
         'bool',
         'int',
@@ -69,7 +69,7 @@ class EnvVarProcessor implements ProcessorInterface
         }
 
         $name = substr($value, 5, -2);
-        list($type, $name) = $this->parse($name);
+        [$type, $name] = $this->parse($name);
 
         $value = getenv($name);
         if ($value === false) {
