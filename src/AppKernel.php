@@ -58,6 +58,7 @@ class AppKernel
 
         // Build the service container
         $this->container = $this->buildContainer();
+        $this->booted = true;
     }
 
     /**
