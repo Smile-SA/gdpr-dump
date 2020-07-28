@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [1.2.2] - 2020-07-28
+[1.2.2]: https://github.com/Smile-SA/gdpr-dump/compare/1.2.1...1.2.2
 
 - Add booted state in AppKernel
 
