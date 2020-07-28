@@ -12,12 +12,12 @@ class FakerService
     /**
      * @var Generator|null
      */
-    private $generator;
+    private ?Generator $generator = null;
 
     /**
      * @var string
      */
-    private $locale;
+    private string $locale;
 
     /**
      * @param string $locale

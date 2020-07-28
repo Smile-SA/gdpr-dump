@@ -12,7 +12,7 @@ class ConfigTest extends TestCase
     /**
      * @var array
      */
-    private $data = [
+    private array $data = [
         'string' => 'value',
         'array' => [1, 2],
         'object' => [

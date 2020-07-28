@@ -14,12 +14,12 @@ class NumberBetween implements ConverterInterface
     /**
      * @var int
      */
-    private $min;
+    private int $min;
 
     /**
      * @var int
      */
-    private $max;
+    private int $max;
 
     /**
      * @param array $parameters

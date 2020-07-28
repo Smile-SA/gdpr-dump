@@ -15,42 +15,42 @@ class DumperConfig
     /**
      * @var TableConfig[]
      */
-    private $tablesConfig = [];
+    private array $tablesConfig = [];
 
     /**
      * @var string[]
      */
-    private $varQueries = [];
+    private array $varQueries = [];
 
     /**
      * @var string[]
      */
-    private $tablesWhitelist = [];
+    private array $tablesWhitelist = [];
 
     /**
      * @var string[]
      */
-    private $tablesBlacklist = [];
+    private array $tablesBlacklist = [];
 
     /**
      * @var string[]
      */
-    private $tablesToTruncate = [];
+    private array $tablesToTruncate = [];
 
     /**
      * @var string[]
      */
-    private $tablesToFilter = [];
+    private array $tablesToFilter = [];
 
     /**
      * @var string[]
      */
-    private $tablesToSort = [];
+    private array $tablesToSort = [];
 
     /**
      * @var array
      */
-    private $dumpSettings = [
+    private array $dumpSettings = [
         'output' => 'php://stdout',
         'compress' => Mysqldump::NONE,
         'init_commands' => [],
@@ -82,7 +82,7 @@ class DumperConfig
     /**
      * @var array
      */
-    private $filterPropagationSettings = [
+    private array $filterPropagationSettings = [
         'enabled' => true,
         'ignored_foreign_keys' => [],
     ];
@@ -90,7 +90,7 @@ class DumperConfig
     /**
      * @var array
      */
-    private $fakerSettings = [
+    private array $fakerSettings = [
         'locale' => null,
     ];
 
@@ -288,9 +288,7 @@ class DumperConfig
         // Replace {...} by the current date in dump output
         $this->dumpSettings['output'] = preg_replace_callback(
             '/{([^}]+)}/',
-            function (array $matches): string {
-                return date($matches[1]);
-            },
+            fn (array $matches) => date($matches[1]),
             $this->dumpSettings['output']
         );
     }

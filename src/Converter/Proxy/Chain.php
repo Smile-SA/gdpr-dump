@@ -14,7 +14,7 @@ class Chain implements ConverterInterface
     /**
      * @var ConverterInterface[]
      */
-    private $converters;
+    private array $converters;
 
     /**
      * @param array $parameters

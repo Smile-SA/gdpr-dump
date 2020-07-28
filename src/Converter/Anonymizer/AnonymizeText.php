@@ -14,22 +14,22 @@ class AnonymizeText implements ConverterInterface
     /**
      * @var string[]
      */
-    private $delimiters;
+    private array $delimiters;
 
     /**
      * @var string
      */
-    private $replacement;
+    private string $replacement;
 
     /**
      * @var int
      */
-    private $minWordLength;
+    private int $minWordLength;
 
     /**
      * @var bool
      */
-    private $multiByteEnabled;
+    private bool $multiByteEnabled;
 
     /**
      * @param array $parameters

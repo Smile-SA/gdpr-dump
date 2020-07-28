@@ -14,22 +14,22 @@ class RandomText implements ConverterInterface
     /**
      * @var string
      */
-    protected $characters;
+    protected string $characters;
 
     /**
      * @var int
      */
-    private $minLength;
+    private int $minLength;
 
     /**
      * @var int
      */
-    private $maxLength;
+    private int $maxLength;
 
     /**
      * @var int
      */
-    private $charactersCount;
+    private int $charactersCount;
 
     /**
      * @param array $parameters

@@ -21,7 +21,7 @@ Features:
 
 Requirements:
 
-- PHP >= 7.3
+- PHP >= 7.4
 - MySQL or equivalent (MariaDB, Percona)
 
 ## Installation

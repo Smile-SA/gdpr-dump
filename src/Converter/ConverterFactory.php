@@ -18,12 +18,12 @@ class ConverterFactory
     /**
      * @var ConverterResolver
      */
-    private $converterResolver;
+    private ConverterResolver $converterResolver;
 
     /**
      * @var FakerService
      */
-    private $faker;
+    private FakerService $faker;
 
     /**
      * @param ConverterResolver $converterResolver

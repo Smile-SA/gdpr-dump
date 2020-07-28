@@ -19,7 +19,7 @@ class SqlDumper implements DumperInterface
     /**
      * @var ExtensionInterface[]
      */
-    private $extensions;
+    private array $extensions;
 
     /**
      * @param ExtensionInterface[] $extensions
@@ -32,7 +32,7 @@ class SqlDumper implements DumperInterface
     /**
      * @@inheritdoc
      */
-    public function dump(ConfigInterface $config): DumperInterface
+    public function dump(ConfigInterface $config): void
     {
         // Process the configuration
         $database = $this->getDatabase($config);
@@ -73,8 +73,6 @@ class SqlDumper implements DumperInterface
         // Create the dump
         $output = $config->getDumpOutput();
         $dumper->start($output);
-
-        return $this;
     }
 
     /**

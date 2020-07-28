@@ -19,7 +19,7 @@ interface ValidationResultInterface
      * @param bool $valid
      * @return ValidationResultInterface
      */
-    public function setValid(bool $valid): ValidationResultInterface;
+    public function setValid(bool $valid): self;
 
     /**
      * Get the validation messages.
@@ -34,5 +34,5 @@ interface ValidationResultInterface
      * @param string[] $messages
      * @return ValidationResultInterface
      */
-    public function setMessages(array $messages): ValidationResultInterface;
+    public function setMessages(array $messages): self;
 }

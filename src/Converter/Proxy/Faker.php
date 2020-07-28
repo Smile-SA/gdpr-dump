@@ -15,22 +15,22 @@ class Faker implements ConverterInterface
     /**
      * @var Generator
      */
-    private $faker;
+    private Generator $faker;
 
     /**
      * @var string
      */
-    private $formatter;
+    private string $formatter;
 
     /**
      * @var array
      */
-    private $arguments;
+    private array $arguments;
 
     /**
      * @var int[]
      */
-    private $placeholders = [];
+    private array $placeholders = [];
 
     /**
      * @param array $parameters
@@ -62,7 +62,7 @@ class Faker implements ConverterInterface
     {
         // Faster than calling the "format" method of the Faker generator
         // (the "format" method uses call_user_func_array, which is very slow)
-        list($provider, $method) = $this->faker->getFormatter($this->formatter);
+        [$provider, $method] = $this->faker->getFormatter($this->formatter);
 
         $arguments = $this->arguments;
 

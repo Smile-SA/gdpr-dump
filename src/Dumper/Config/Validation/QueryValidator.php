@@ -11,12 +11,12 @@ class QueryValidator
     /**
      * @var Tokenizer
      */
-    private $tokenizer;
+    private Tokenizer $tokenizer;
 
     /**
      * @var string[]
      */
-    private $statementBlacklist = [
+    private array $statementBlacklist = [
         'grant', 'revoke', 'create', 'alter', 'drop', 'rename',
         'insert', 'update', 'delete', 'truncate', 'replace',
         'prepare', 'execute', 'lock', 'unlock', 'optimize', 'repair',

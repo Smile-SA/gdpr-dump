@@ -12,7 +12,6 @@ interface DumperInterface
      * Create a dump according to the configuration.
      *
      * @param ConfigInterface $config
-     * @return $this
      */
-    public function dump(ConfigInterface $config): DumperInterface;
+    public function dump(ConfigInterface $config): void;
 }

@@ -22,7 +22,7 @@ interface ConfigInterface
      * @param mixed $value
      * @return $this
      */
-    public function set(string $key, $value): ConfigInterface;
+    public function set(string $key, $value): self;
 
     /**
      * Check whether a key is defined in the config.
@@ -53,7 +53,7 @@ interface ConfigInterface
      * @param array $data
      * @return $this
      */
-    public function merge(array $data): ConfigInterface;
+    public function merge(array $data): self;
 
     /**
      * Compile the configuration.

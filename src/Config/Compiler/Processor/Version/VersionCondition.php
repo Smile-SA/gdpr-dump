@@ -9,17 +9,17 @@ class VersionCondition
     /**
      * @var string
      */
-    private $version;
+    private string $version;
 
     /**
      * @var string
      */
-    private $operator;
+    private string $operator;
 
     /**
      * @var string[]
      */
-    private static $versionOperators = ['<', '>', '<=', '>=', '<>'];
+    private static array $versionOperators = ['<', '>', '<=', '>=', '<>'];
 
     /**
      * @param string $condition

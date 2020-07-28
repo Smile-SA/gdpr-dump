@@ -15,17 +15,17 @@ class Unique implements ConverterInterface
     /**
      * @var ConverterInterface
      */
-    private $converter;
+    private ConverterInterface $converter;
 
     /**
      * @var int
      */
-    private $maxRetries;
+    private int $maxRetries;
 
     /**
      * @var array
      */
-    private $generated = [];
+    private array $generated = [];
 
     /**
      * @param array $parameters

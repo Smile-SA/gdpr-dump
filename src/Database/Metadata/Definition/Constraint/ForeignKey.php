@@ -9,27 +9,27 @@ class ForeignKey
     /**
      * @var string
      */
-    private $constraintName;
+    private string $constraintName;
 
     /**
      * @var string
      */
-    private $localTableName;
+    private string $localTableName;
 
     /**
      * @var string[]
      */
-    private $localColumns;
+    private array $localColumns;
 
     /**
      * @var string
      */
-    private $foreignTableName;
+    private string $foreignTableName;
 
     /**
      * @var string[]
      */
-    private $foreignColumns;
+    private array $foreignColumns;
 
     /**
      * @param string $constraintName

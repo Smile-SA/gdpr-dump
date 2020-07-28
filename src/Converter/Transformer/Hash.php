@@ -14,7 +14,7 @@ class Hash implements ConverterInterface
     /**
      * @var string
      */
-    private $algorithm;
+    private string $algorithm;
 
     /**
      * @param array $parameters

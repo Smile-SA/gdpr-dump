@@ -14,22 +14,22 @@ class ConfigLoader implements ConfigLoaderInterface
     /**
      * @var ConfigInterface
      */
-    private $config;
+    private ConfigInterface $config;
 
     /**
      * @var ParserInterface
      */
-    private $parser;
+    private ParserInterface $parser;
 
     /**
      * @var FileLocatorInterface
      */
-    private $fileLocator;
+    private FileLocatorInterface $fileLocator;
 
     /**
      * @var string[]
      */
-    private $loadedTemplates = [];
+    private array $loadedTemplates = [];
 
     /**
      * @param ConfigInterface $config

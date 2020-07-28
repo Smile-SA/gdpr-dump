@@ -14,17 +14,17 @@ class RandomizeText implements ConverterInterface
     /**
      * @var int
      */
-    private $minLength;
+    private int $minLength;
 
     /**
      * @var string
      */
-    private $replacements;
+    private string $replacements;
 
     /**
      * @var int
      */
-    private $replacementsCount;
+    private int $replacementsCount;
 
     /**
      * @param array $parameters

@@ -15,17 +15,17 @@ class RegexReplace implements ConverterInterface
     /**
      * @var string
      */
-    private $pattern;
+    private string $pattern;
 
     /**
      * @var string
      */
-    private $replacement;
+    private string $replacement;
 
     /**
      * @var int
      */
-    private $limit;
+    private int $limit;
 
     /**
      * @param array $parameters

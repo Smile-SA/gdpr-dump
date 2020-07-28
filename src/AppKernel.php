@@ -22,12 +22,12 @@ class AppKernel
     /**
      * @var ContainerInterface
      */
-    private $container;
+    private ContainerInterface $container;
 
     /**
      * @var bool
      */
-    private $booted = false;
+    private bool $booted = false;
 
     /**
      * Run the application.

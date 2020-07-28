@@ -9,12 +9,12 @@ class ValidationResult implements ValidationResultInterface
     /**
      * @var bool
      */
-    private $valid = false;
+    private bool $valid = false;
 
     /**
      * @var array
      */
-    private $messages = [];
+    private array $messages = [];
 
     /**
      * @inheritdoc
@@ -27,7 +27,7 @@ class ValidationResult implements ValidationResultInterface
     /**
      * @inheritdoc
      */
-    public function setValid(bool $valid): ValidationResultInterface
+    public function setValid(bool $valid): self
     {
         $this->valid = $valid;
 
@@ -45,7 +45,7 @@ class ValidationResult implements ValidationResultInterface
     /**
      * @inheritdoc
      */
-    public function setMessages(array $messages): ValidationResultInterface
+    public function setMessages(array $messages): self
     {
         $this->messages = $messages;
 

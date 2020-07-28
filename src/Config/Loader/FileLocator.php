@@ -9,12 +9,12 @@ class FileLocator implements FileLocatorInterface
     /**
      * @var string
      */
-    private $templatesDirectory;
+    private string $templatesDirectory;
 
     /**
      * @var string[]
      */
-    private $templates;
+    private ?array $templates = null;
 
     /**
      * @param string $templatesDirectory

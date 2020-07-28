@@ -15,17 +15,17 @@ class Parameter
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var string|null
      */
-    private $type;
+    private ?string $type;
 
     /**
      * @var bool
      */
-    private $required;
+    private bool $required;
 
     /**
      * @var mixed

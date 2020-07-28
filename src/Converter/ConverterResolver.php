@@ -13,14 +13,14 @@ class ConverterResolver
     /**
      * @var array
      */
-    private $pathsByNamespace = [];
+    private array $pathsByNamespace = [];
 
     /**
      * e.g. ['unique' => 'Smile\GdprDump\Converter\Proxy\Unique', ...]
      *
      * @var array|null
      */
-    private $resolved;
+    private ?array $resolved = null;
 
     /**
      * Constructor. Default converters are automatically included.

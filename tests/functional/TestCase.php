@@ -18,12 +18,12 @@ abstract class TestCase extends BaseTestCase
     /**
      * @var AppKernel|null
      */
-    protected static $kernel;
+    protected static ?AppKernel $kernel = null;
 
     /**
      * @var Database|null
      */
-    protected static $database;
+    protected static ?Database $database = null;
 
     /**
      * Boot the kernel.

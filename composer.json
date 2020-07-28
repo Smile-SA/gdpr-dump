@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": "^7.3 || ^8.0",
+        "php": "^7.4 || ^8.0",
         "ext-json": "*",
         "ext-pdo": "*",
         "doctrine/dbal": "^2.10",
@@ -22,7 +22,7 @@
         "symfony/dependency-injection": "^5.0",
         "symfony/finder": "^5.0",
         "symfony/yaml": "^5.0",
-        "theseer/tokenizer": "^1.1"
+        "theseer/tokenizer": "^1.2"
     },
     "require-dev": {
         "phpstan/phpstan": "^1.3",

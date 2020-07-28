@@ -14,7 +14,7 @@ class AppendText implements ConverterInterface
     /**
      * @var string
      */
-    private $suffix;
+    private string $suffix;
 
     /**
      * @param array $parameters

@@ -13,12 +13,12 @@ class TableDependencyResolver
     /**
      * @var MetadataInterface
      */
-    private $metadata;
+    private MetadataInterface $metadata;
 
     /**
      * @var DumperConfig
      */
-    private $config;
+    private DumperConfig $config;
 
     /**
      * Foreign keys by referenced table name.
@@ -26,7 +26,12 @@ class TableDependencyResolver
      *
      * @var ForeignKey[][]
      */
-    private $foreignKeys;
+    private array $foreignKeys = [];
+
+    /**
+     * @var bool
+     */
+    private bool $resolved = false;
 
     /**
      * @param MetadataInterface $metadata
@@ -116,7 +121,7 @@ class TableDependencyResolver
      */
     private function buildDependencyTree(): void
     {
-        if ($this->foreignKeys !== null) {
+        if ($this->resolved) {
             return;
         }
 
@@ -132,6 +137,8 @@ class TableDependencyResolver
                 }
             }
         }
+
+        $this->resolved = true;
     }
 
     /**

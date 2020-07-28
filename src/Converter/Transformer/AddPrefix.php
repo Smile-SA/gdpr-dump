@@ -15,7 +15,7 @@ class AddPrefix implements ConverterInterface
     /**
      * @var ConverterInterface
      */
-    private $converter;
+    private ConverterInterface $converter;
 
     /**
      * @param array $parameters
