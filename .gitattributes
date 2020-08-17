@@ -6,6 +6,7 @@
 /CHANGELOG.md export-ignore
 /CONTRIBUTING.md export-ignore
 /README.md export-ignore
+/app/config/example.yaml export-ignore
 /phpcs.xml.dist export-ignore
 /phpmd.xml.dist export-ignore
 /phpstan.neon.dist export-ignore
