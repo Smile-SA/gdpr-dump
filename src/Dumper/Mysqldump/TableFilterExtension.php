@@ -108,8 +108,8 @@ class TableFilterExtension implements ExtensionInterface
     private function addDependentFilter(
         string $tableName,
         QueryBuilder $queryBuilder,
-        &$dependencies,
-        &$subQueryCount = 0
+        array &$dependencies,
+        int &$subQueryCount = 0
     ): void {
         /** @var ForeignKey $dependency */
         foreach ($dependencies[$tableName] as $dependency) {
