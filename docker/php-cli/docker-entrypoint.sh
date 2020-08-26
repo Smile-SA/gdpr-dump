@@ -12,7 +12,7 @@ if [[ "$UPDATE_UID_GID" -eq 1 ]]; then
     INCUMBENT_GROUP=`getent group $DOCKER_GID | cut -d: -f1`
 
     # Once we've established the ids and incumbent ids then we need to free them
-    # up (if necessary) and then make the change to $CLI_USER
+    # up (if necessary) and then make the change to cli user
 
     [ ! -z "$INCUMBENT_USER" ] && usermod -u 99$DOCKER_UID $INCUMBENT_USER
     usermod -u $DOCKER_UID cli
@@ -22,7 +22,6 @@ if [[ "$UPDATE_UID_GID" -eq 1 ]]; then
 fi
 
 # Configure composer
-[ ! -z "$COMPOSER_GITHUB_TOKEN" ] && \
-    composer config --global github-oauth.github.com $COMPOSER_GITHUB_TOKEN
+[ ! -z "$COMPOSER_GITHUB_TOKEN" ] && composer config --global github-oauth.github.com $COMPOSER_GITHUB_TOKEN
 
 exec "$@"
