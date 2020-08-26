@@ -39,30 +39,25 @@ Follow these steps:
 
 ### How to Run the Tests
 
-Run the following commands:
+First, install the project dependencies:
 
 ```
-vendor/bin/phpcs
-vendor/bin/phpmd bin,src,tests xml phpmd.xml.dist
-vendor/bin/phpstan analyse
-vendor/bin/phpunit
+mkdir -p ~/.composer/cache
+docker-compose run cli composer install
 ```
 
-The functional tests require the following MySQL database:
+To run the code validation tools (phpcs, phpmd, phpstan):
 
-- Host: `127.0.0.1`
-- Port: `3306`
-- User: `root`
-- Password: `password`
-- Name: `test`
+```
+docker-compose run cli run-sniffers
+```
 
-These values can be changed by setting the following environment variables:
+To run the unit/functional tests (phpunit):
 
-- `DB_HOST`
-- `DB_PORT`
-- `DB_USER`
-- `DB_PASSWORD`
-- `DB_NAME`
+```
+docker-compose up -d
+docker-compose run cli run-tests
+```
 
 ## Database Driver Compatibility
 

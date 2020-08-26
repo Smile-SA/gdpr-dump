@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e
+
+if [ ! -d "vendor/bin" ]; then
+    echo 'The "vendor/bin" directory was not found in the current directory.'
+    exit 1
+fi
+
+sudo -u cli --preserve-env vendor/bin/phpunit
