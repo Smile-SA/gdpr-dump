@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+
+if [ ! -d "vendor/bin" ]; then
+    echo 'The "vendor/bin" directory was not found in the current directory.'
+    exit 1
+fi
+
+sudo -u cli vendor/bin/phpcs
+sudo -u cli vendor/bin/phpmd bin,src,tests xml phpmd.xml.dist
+sudo -u cli vendor/bin/phpstan analyse
