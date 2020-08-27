@@ -39,25 +39,54 @@ Follow these steps:
 
 ### How to Run the Tests
 
-First, install the project dependencies:
+#### Running Tests with Docker
+
+**Prerequisites**
+
+If you are running on Linux:
+
+- Execute the commands `id -u` and `id -g`.
+- If the output isn't "1000", then copy the ".env.example" file as ".env", and change the value of the UID/GID variables.
+
+If you are running on Mac/Windows, docker should work out of the box (needs confirmation).
+
+**Steps**
+
+1. Install the project dependencies:
+
+    ```
+    docker-compose run --rm php composer install
+    ```
+
+2. Run the code validation tools (phpcs, phpmd, phpstan):
+
+    ```
+    docker-compose run --rm php run-sniffers
+    ```
+
+3. Run the unit/functional tests (phpunit):
+
+    ```
+    docker-compose run --rm php run-tests
+    ```
+
+#### Running Tests Manually
+
+Run the following commands:
 
 ```
-mkdir -p ~/.composer/cache
-docker-compose run cli composer install
+vendor/bin/phpcs
+vendor/bin/phpmd bin,src,tests xml phpmd.xml.dist
+vendor/bin/phpstan analyse
+vendor/bin/phpunit
 ```
 
-To run the code validation tools (phpcs, phpmd, phpstan):
+The PHPUnit tests require a database with the following credentials:
 
-```
-docker-compose run cli run-sniffers
-```
-
-To run the unit/functional tests (phpunit):
-
-```
-docker-compose up -d
-docker-compose run cli run-tests
-```
+- host: `127.0.0.1` (can be changed by setting the `$DB_HOST` environment variable)
+- database: `tests` (can be changed by setting the `$DB_NAME` environment variable)
+- user: `tests` (can be changed by setting the `$DB_USER` environment variable)
+- password: `tests` (can be changed by setting the `$DB_PASSWORD` environment variable)
 
 ## Database Driver Compatibility
 

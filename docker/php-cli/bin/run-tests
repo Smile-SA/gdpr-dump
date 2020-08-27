@@ -7,4 +7,4 @@ if [ ! -d "vendor/bin" ]; then
     exit 1
 fi
 
-sudo -u cli --preserve-env vendor/bin/phpunit
+vendor/bin/phpunit

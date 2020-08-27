@@ -1,15 +1,19 @@
-version: '2'
+version: '2.4'
 
 services:
-    cli:
-        build: 'docker/php-cli'
+    app:
+        build:
+            context: 'docker/php-cli'
+            args:
+                APP_UID: '${UID:-1000}'
+                APP_GID: '${GID:-1000}'
         environment:
             DB_HOST: 'db'
         depends_on:
             - 'db'
         volumes:
-            - './:/app'
-            - '$HOME/.composer/cache:/home/cli/.composer/cache'
+            - '.:/app'
+            - 'composer-cache:/composer/cache'
 
     db:
         image: 'mariadb:10.5'
@@ -21,4 +25,9 @@ services:
             MYSQL_USER: 'tests'
             MYSQL_PASSWORD: 'tests'
         volumes:
-            - '/var/lib/mysql'
+            - 'db-data:/var/lib/mysql'
+            - './docker/db-data:/docker-entrypoint-initdb.d'
+
+volumes:
+    composer-cache:
+    db-data:

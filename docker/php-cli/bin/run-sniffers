@@ -7,6 +7,6 @@ if [ ! -d "vendor/bin" ]; then
     exit 1
 fi
 
-sudo -u cli vendor/bin/phpcs
-sudo -u cli vendor/bin/phpmd bin,src,tests xml phpmd.xml.dist
-sudo -u cli vendor/bin/phpstan analyse
+vendor/bin/phpcs
+vendor/bin/phpmd bin,src,tests xml phpmd.xml.dist
+vendor/bin/phpstan analyse
