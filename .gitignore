@@ -1,6 +1,9 @@
 /.idea
 /build
+/docker/db-data
 /vendor
+/.env
+/.phpunit.result.cache
 /composer.lock
 /phpcs.xml
 /phpmd.xml
