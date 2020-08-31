@@ -11,19 +11,18 @@
         <env name="DB_NAME" value="tests"/>
     </php>
 
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+    </coverage>
+
     <testsuites>
         <testsuite name="functional">
             <directory>./tests/functional</directory>
         </testsuite>
-
         <testsuite name="unit">
             <directory>./tests/unit</directory>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
 </phpunit>
