@@ -16,6 +16,7 @@
     - [Sharing Converter Results](#user-content-sharing-converter-results)
 - [User-Defined Variables](#user-content-user-defined-variables)
 - [Environments Variables](#user-content-environment-variables)
+- [Unsetting Values Declared in Config Templates](#user-content-unsetting-values-declared-in-config-templates)
 - [Version-specific Configuration](#user-content-version-specific-configuration)
 
 ## Overriding Configuration
@@ -410,6 +411,50 @@ tables_blacklist: '%env(json:TABLES_BLACKLIST)%'
 ```
 
 Example value of the environment variable: `["table1", "table2", "table3"]`.
+
+## Unsetting Values Declared in Config Templates
+
+It is possible to unset values that were declared in a parent config file, by setting them to `null`.
+
+**Warning**: setting a value to `null` is only allowed if it is already defined in a parent config file.
+
+Example - removing the whole config of a table (converters, filters, limit...):
+
+```yaml
+extends: 'magento2'
+tables:
+    admin_user: ~
+```
+
+Example - removing all converters of a table:
+
+```yaml
+extends: 'magento2'
+tables:
+    admin_user:
+        converters: ~
+```
+
+Example - removing a specific converter:
+
+```yaml
+extends: 'magento2'
+tables:
+    admin_user:
+        converters:
+            email: ~
+```
+
+Alternatively, converters can be disabled with setting the `disabled` parameter to `true`:
+
+```yaml
+extends: 'magento2'
+tables:
+    admin_user:
+        converters:
+            email:
+                disabled: true
+```
 
 ## Version-specific Configuration
 

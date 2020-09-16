@@ -78,6 +78,15 @@ class Config implements ConfigInterface
                 if (is_array($value) && is_array($data[$key])) {
                     // Merge values
                     $data[$key] = $this->mergeArray($data[$key], $value);
+
+                    // If a key of the array was unset and the array is empty as a result, unset it
+                    // This is necessary because JSON schema validation does not allow empty array as object values
+                    if (!empty($value) && empty($data[$key])) {
+                        unset($data[$key]);
+                    }
+                } elseif ($value === null && is_array($data[$key])) {
+                    // Remove array key (allows to remove an existing config item by setting it to null)
+                    unset($data[$key]);
                 } else {
                     // Overwrite value
                     $data[$key] = $value;
