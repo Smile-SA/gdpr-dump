@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
+- Allow unsetting config declared in config templates
 - Add missing type hint in table filter extension
 
 ## [2.0.2] - 2020-07-28
