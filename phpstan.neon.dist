@@ -5,3 +5,7 @@ parameters:
         - src
         - tests
     checkMissingIterableValueType: false
+    ignoreErrors:
+        -
+            message: '#Unable to resolve the template type T in call to method static method#'
+            path: src/Database/Database.php

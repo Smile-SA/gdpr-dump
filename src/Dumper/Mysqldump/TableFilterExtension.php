@@ -115,12 +115,12 @@ class TableFilterExtension implements ExtensionInterface
         foreach ($dependencies[$tableName] as $dependency) {
             $tableName = $dependency->getForeignTableName();
 
-            $qb = $this->createQueryBuilder($tableName);
-            $qb->select($this->getColumnsSql($dependency->getForeignColumns()));
+            $subQuery = $this->createQueryBuilder($tableName);
+            $subQuery->select($this->getColumnsSql($dependency->getForeignColumns()));
 
             // Recursively add condition on parent tables
-            if ($qb->getMaxResults() !== 0 && array_key_exists($tableName, $dependencies)) {
-                $this->addDependentFilter($tableName, $qb, $dependencies, $subQueryCount);
+            if ($subQuery->getMaxResults() !== 0 && array_key_exists($tableName, $dependencies)) {
+                $this->addDependentFilter($tableName, $subQuery, $dependencies, $subQueryCount);
             }
 
             // Prepare the condition data
@@ -133,13 +133,13 @@ class TableFilterExtension implements ExtensionInterface
             // because otherwise a sub query cannot declare the LIMIT clause)
             $expr = $queryBuilder
                 ->expr()
-                ->comparison($columnsSql, 'IN', '(SELECT * FROM (' . $qb . ') ' . $subQueryName . ')');
+                ->comparison($columnsSql, 'IN', '(SELECT * FROM (' . $subQuery . ') ' . $subQueryName . ')');
 
             // Allow null values
             foreach ($dependency->getLocalColumns() as $column) {
                 $expr = $queryBuilder
                     ->expr()
-                    ->orX($expr, $qb->expr()->isNull($this->connection->quoteIdentifier($column)));
+                    ->orX($expr, $subQuery->expr()->isNull($this->connection->quoteIdentifier($column)));
             }
 
             $queryBuilder->andWhere($expr);

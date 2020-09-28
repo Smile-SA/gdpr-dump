@@ -5,9 +5,10 @@
          xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
 
     <rule ref="rulesets/cleancode.xml">
-        <!-- Temporarily remove the "UndefinedVariable" rule, it detects false positives -->
-        <exclude name="UndefinedVariable"/>
+        <exclude name="ErrorControlOperator"/>
         <exclude name="StaticAccess"/>
+        <!-- Temporarily remove the "UndefinedVariable" rule, it detects false positives with preg_match -->
+        <exclude name="UndefinedVariable"/>
     </rule>
 
     <rule ref="rulesets/cleancode.xml/StaticAccess">
