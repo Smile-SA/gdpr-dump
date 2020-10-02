@@ -445,7 +445,7 @@ tables:
             email: ~
 ```
 
-Alternatively, converters can be disabled with setting the `disabled` parameter to `true`:
+Alternatively, converters can be disabled by setting the `disabled` parameter to `true`:
 
 ```yaml
 extends: 'magento2'
