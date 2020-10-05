@@ -16,7 +16,10 @@ class ConfigTest extends TestCase
         'string' => 'value',
         'array' => [1, 2],
         'object' => [
-            'key' => 'value',
+            'sub_object' => [
+                'key1' => 'value1',
+                'key2' => 'value2',
+            ],
         ],
     ];
 
@@ -49,14 +52,25 @@ class ConfigTest extends TestCase
     {
         $config = new Config();
         $config->merge($this->data);
-        $config->merge(['array' => [2, 3]]);
-        $config->merge(['object' => ['key' => 'new value']]);
 
-        // Assert that string keys are properly merged
-        $this->assertSame(['key' => 'new value'], $config->get('object'));
+        // Assert that numeric arrays are replaced
+        $newArray = [2, 3];
+        $config->merge(['array' => $newArray]);
+        $this->assertSame($newArray, $config->get('array'));
 
-        // Assert that numeric keys are replaced
-        $this->assertSame([2, 3], $config->get('array'));
+        // Assert that associative arrays are properly merged
+        $newObject = ['sub_object' => ['key2' => 'new_value', 'key3' => 'value3']];
+        $expectedObject = ['sub_object' => array_merge($this->data['object']['sub_object'], $newObject['sub_object'])];
+        $config->merge(['object' => $newObject]);
+        $this->assertSame($expectedObject, $config->get('object'));
+
+        // Assert that objects set to null are removed from the config array if they are already defined
+        $config->merge(['object' => ['sub_object' => null]]);
+        $this->assertFalse($config->has('object'));
+
+        // Assert that objects set to null are added to the array if they are not already
+        $config->merge(['object2' => ['sub_object' => null]]);
+        $this->assertSame(['sub_object' => null], $config->get('object2'));
     }
 
     /**
@@ -66,7 +80,7 @@ class ConfigTest extends TestCase
     {
         $config = new Config($this->data);
 
-        $this->assertNull($config->get('not.exists'));
-        $this->assertSame('defaultValue', $config->get('not.exists', 'defaultValue'));
+        $this->assertFalse($config->has('not_exists'));
+        $this->assertSame('defaultValue', $config->get('not_exists', 'defaultValue'));
     }
 }

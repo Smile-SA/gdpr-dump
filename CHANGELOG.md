@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.3] - 2020-10-05
+[1.2.3]: https://github.com/Smile-SA/gdpr-dump/compare/1.2.2...1.2.3
+
+- Allow unsetting values declared in config templates
+
 ## [1.2.2] - 2020-07-28
 [1.2.2]: https://github.com/Smile-SA/gdpr-dump/compare/1.2.1...1.2.2
 
