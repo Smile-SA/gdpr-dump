@@ -2,15 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [2.0.3] - 2020-10-05
+[2.0.3]: https://github.com/Smile-SA/gdpr-dump/compare/2.0.2...2.0.3
 
 - Allow unsetting config declared in config templates
 - Add missing type hint in table filter extension
+
+## [1.2.3] - 2020-10-05
+[1.2.3]: https://github.com/Smile-SA/gdpr-dump/compare/1.2.2...1.2.3
+
+- Backport of version 2.0.3
 
 ## [2.0.2] - 2020-07-28
 [2.0.2]: https://github.com/Smile-SA/gdpr-dump/compare/2.0.1...2.0.2
 
 - Add booted state in AppKernel
+
+## [1.2.2] - 2020-07-28
+[1.2.2]: https://github.com/Smile-SA/gdpr-dump/compare/1.2.1...1.2.2
+
+- Backport of version 2.0.2
 
 ## [2.0.1] - 2020-07-27
 [2.0.1]: https://github.com/Smile-SA/gdpr-dump/compare/2.0.0...2.0.1
@@ -18,6 +29,11 @@ All notable changes to this project will be documented in this file.
 - Use `getenv` instead of `$_SERVER` to fetch env vars
 - Set default values for environment variables in functional tests
 - Remove the option to skip tests that depend on the database
+
+## [1.2.1] - 2020-07-27
+[1.2.1]: https://github.com/Smile-SA/gdpr-dump/compare/1.2.0...1.2.1
+
+- Backport of version 2.0.1
 
 ## [2.0.0] - 2020-07-16
 [2.0.0]: https://github.com/Smile-SA/gdpr-dump/compare/1.2.0...2.0.0
