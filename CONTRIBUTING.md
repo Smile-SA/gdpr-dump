@@ -39,6 +39,39 @@ Follow these steps:
 
 ### How to Run the Tests
 
+#### Running Tests with Docker
+
+**Prerequisites**
+
+If you are running on Linux:
+
+- Execute the commands `id -u` and `id -g`.
+- If the output isn't "1000", then copy the ".env.example" file as ".env", and change the value of the UID/GID variables.
+
+If you are running on Mac/Windows, docker should work out of the box (needs confirmation).
+
+**Steps**
+
+1. Install the project dependencies:
+
+    ```
+    docker-compose run --rm app composer install
+    ```
+
+2. Run the code validation tools (phpcs, phpmd, phpstan):
+
+    ```
+    docker-compose run --rm app run-sniffers
+    ```
+
+3. Run the unit/functional tests (phpunit):
+
+    ```
+    docker-compose run --rm app run-tests
+    ```
+
+#### Running Tests Manually
+
 Run the following commands:
 
 ```
@@ -48,21 +81,12 @@ vendor/bin/phpstan analyse bin src tests -c phpstan.neon --level 5
 vendor/bin/phpunit
 ```
 
-The functional tests require the following MySQL database:
+The PHPUnit tests require a database with the following credentials:
 
-- Host: `127.0.0.1`
-- Port: `3306`
-- User: `root`
-- Password: `password`
-- Name: `test`
-
-These values can be changed by setting the following environment variables:
-
-- `DB_HOST`
-- `DB_PORT`
-- `DB_USER`
-- `DB_PASSWORD`
-- `DB_NAME`
+- host: `127.0.0.1` (can be changed by setting the `$DB_HOST` environment variable)
+- database: `tests` (can be changed by setting the `$DB_NAME` environment variable)
+- user: `tests` (can be changed by setting the `$DB_USER` environment variable)
+- password: `tests` (can be changed by setting the `$DB_PASSWORD` environment variable)
 
 ## Database Driver Compatibility
 
