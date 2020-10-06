@@ -13,17 +13,17 @@ class Faker implements ConverterInterface
     /**
      * @var Generator
      */
-    protected $faker;
+    private $faker;
 
     /**
      * @var string
      */
-    protected $formatter;
+    private $formatter;
 
     /**
      * @var array
      */
-    protected $arguments;
+    private $arguments;
 
     /**
      * @var int[]
