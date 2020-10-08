@@ -71,17 +71,16 @@ class DumpCommand extends Command
 
     /**
      * @inheritdoc
-     * @phpstan-ignore-next-line
      */
     public function configure()
     {
-        // phpcs:disable Generic.Files.LineLength.TooLong
         $this->setName('gdpr-dump')
             ->setDescription('Create an anonymized dump')
-            ->addArgument('config_file', InputArgument::IS_ARRAY | InputArgument::REQUIRED, 'Dump configuration file(s)');
-        // phpcs:enable
-
-        return 1;
+            ->addArgument(
+                'config_file',
+                InputArgument::IS_ARRAY | InputArgument::REQUIRED,
+                'Dump configuration file(s)'
+            );
     }
 
     /**

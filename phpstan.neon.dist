@@ -7,5 +7,8 @@ parameters:
     checkMissingIterableValueType: false
     ignoreErrors:
         -
-            message: '#Unable to resolve the template type T in call to method static method#'
-            path: src/Database/Database.php
+            message: '#Unable to resolve the template type T in call to method static method Doctrine\\DBAL\\DriverManager::getConnection\(\)#'
+            path: src/Database
+        -
+            message: '#Method [a-zA-Z\\]+::configure\(\) has no return typehint specified#'
+            path: src/Console/Command
