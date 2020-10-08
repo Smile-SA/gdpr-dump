@@ -11,7 +11,7 @@ class InvalidVersionException extends Exception
 {
     /**
      * @param string $message
-     * @param Throwable $previous
+     * @param Throwable|null $previous
      */
     public function __construct(string $message, Throwable $previous = null)
     {
