@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Database\Metadata;
 
 use Doctrine\DBAL\Connection;
-use PDO;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 
 class MysqlMetadata implements MetadataInterface
