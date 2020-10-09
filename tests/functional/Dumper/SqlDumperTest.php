@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Functional\Dumper;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\Dumper\SqlDumper;
-use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
+use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
 class SqlDumperTest extends TestCase
@@ -72,15 +72,22 @@ class SqlDumperTest extends TestCase
 
         // User 2 must be dumped, but not anonymized (skip_conversion_if parameter)
         $this->assertStringContainsString('user2@test.org', $output);
-        $this->assertStringNotContainsString('test_user2@test.org', $output);
         $this->assertStringContainsString('firstname2', $output);
+        $this->assertStringContainsString('lastname2', $output);
+        $this->assertStringNotContainsString('test_user2@test.org', $output);
         $this->assertStringNotContainsString('test_firstname2', $output);
+        $this->assertStringNotContainsString('test_lastname2', $output);
 
-        // Users 3 and 4 should be anonymized and dumped
+        // User 3 must be dumped and anonymized
         $this->assertStringContainsString('test_user3@test.org', $output);
         $this->assertStringContainsString('test_firstname3', $output);
-        $this->assertStringContainsString('test_user4@test.org', $output);
+        $this->assertStringContainsString('test_lastname3', $output);
+
+        // User 4 must be dumped and anonymized, except email (condition parameter)
+        $this->assertStringContainsString('user4@test.org', $output);
         $this->assertStringContainsString('test_firstname4', $output);
+        $this->assertStringContainsString('test_lastname4', $output);
+        $this->assertStringNotContainsString('test_user4@test.org', $output);
 
         // User 5 must not be dumped (store id condition not matched)
         $this->assertStringNotContainsString('user5@test.org', $output);
@@ -110,11 +117,8 @@ class SqlDumperTest extends TestCase
      */
     private function createDumper(): SqlDumper
     {
-        $converterFactoryMock = $this->createMock(ConverterFactory::class);
-        $converterFactoryMock->method('create')
-            ->willReturn(new ConverterMock());
-
-        /** @var ConverterFactory $converterFactoryMock */
-        return new SqlDumper($converterFactoryMock);
+        return new SqlDumper(
+            new ConverterFactory(new FakerService())
+        );
     }
 }
