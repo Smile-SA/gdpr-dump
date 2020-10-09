@@ -139,7 +139,7 @@ class TableFilterExtension implements ExtensionInterface
             foreach ($dependency->getLocalColumns() as $column) {
                 $expr = $queryBuilder
                     ->expr()
-                    ->orX($expr, $subQuery->expr()->isNull($this->connection->quoteIdentifier($column)));
+                    ->or($expr, $subQuery->expr()->isNull($this->connection->quoteIdentifier($column)));
             }
 
             $queryBuilder->andWhere($expr);

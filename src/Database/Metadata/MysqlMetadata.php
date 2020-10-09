@@ -42,7 +42,7 @@ class MysqlMetadata implements MetadataInterface
         $statement = $this->connection->prepare($query);
         $statement->execute([$this->schema]);
 
-        return $statement->fetchAll(PDO::FETCH_COLUMN);
+        return $statement->fetchFirstColumn();
     }
 
     /**
@@ -57,13 +57,12 @@ class MysqlMetadata implements MetadataInterface
             . 'ORDER BY TABLE_NAME ASC';
 
         $statement = $this->connection->prepare($query);
-        $statement->setFetchMode(PDO::FETCH_ASSOC);
         $statement->execute([$tableName, $this->schema, $this->schema]);
 
         $fksData = [];
 
         // Prepare an array that groups foreign key data by constraint name
-        while ($row = $statement->fetch()) {
+        while ($row = $statement->fetchAssociative()) {
             $constraintName = $row['CONSTRAINT_NAME'];
 
             if (!isset($fksData[$constraintName])) {

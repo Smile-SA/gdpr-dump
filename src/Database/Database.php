@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Database;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Exception;
 use Smile\GdprDump\Database\Driver\DriverInterface;
 use Smile\GdprDump\Database\Driver\MysqlDriver;
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
@@ -43,7 +43,7 @@ class Database implements DatabaseInterface
 
     /**
      * @param DatabaseConfig $config
-     * @throws DBALException
+     * @throws Exception
      * @throws UnexpectedValueException
      */
     public function __construct(DatabaseConfig $config)
@@ -99,7 +99,7 @@ class Database implements DatabaseInterface
      *
      * @param DatabaseConfig $config
      * @return Connection
-     * @throws DBALException
+     * @throws Exception
      */
     private function createConnection(DatabaseConfig $config): Connection
     {

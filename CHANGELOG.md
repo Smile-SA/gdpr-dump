@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Replace deprecated Doctrine functions
+
 ## [2.0.3] - 2020-10-05
 [2.0.3]: https://github.com/Smile-SA/gdpr-dump/compare/2.0.2...2.0.3
 

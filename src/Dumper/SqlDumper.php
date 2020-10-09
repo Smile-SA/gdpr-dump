@@ -48,7 +48,7 @@ class SqlDumper implements DumperInterface
         $context = ['vars' => []];
 
         foreach ($config->getVarQueries() as $varName => $query) {
-            $value = $connection->fetchColumn($query);
+            $value = $connection->fetchOne($query);
             $context['vars'][$varName] = $value;
 
             // This is only compatible with MySQL and will require refactoring to add compatibility with other drivers
