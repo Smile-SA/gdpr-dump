@@ -41,7 +41,7 @@ Follow these steps:
 
 #### Running Tests with Docker
 
-**Prerequisites**
+*Prerequisites*
 
 If you are running on Linux:
 
@@ -50,7 +50,7 @@ If you are running on Linux:
 
 If you are running on Mac/Windows, docker should work out of the box (needs confirmation).
 
-**Steps**
+*Steps*
 
 1. Install the project dependencies:
 
