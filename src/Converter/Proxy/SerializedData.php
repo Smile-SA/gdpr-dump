@@ -49,7 +49,6 @@ class SerializedData implements ConverterInterface
             return $value;
         }
 
-        /** @var ConverterInterface $converter */
         foreach ($this->converters as $path => $converter) {
             // Get the value
             $nestedValue = ArrayHelper::getPath($decoded, $path);

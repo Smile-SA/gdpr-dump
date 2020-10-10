@@ -42,7 +42,6 @@ class Chain implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        /** @var ConverterInterface $converter */
         foreach ($this->converters as $converter) {
             $value = $converter->convert($value, $context);
         }
