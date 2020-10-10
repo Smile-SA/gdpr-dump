@@ -31,6 +31,7 @@ class Compiler
      * Generate a phar file.
      *
      * @param string $fileName
+     * @throws RuntimeException
      */
     public function compile(string $fileName): void
     {
@@ -46,19 +47,7 @@ class Compiler
         $phar = new Phar($fileName, 0, 'gdpr-dump.phar');
         $phar->setSignatureAlgorithm(Phar::SHA1);
         $phar->startBuffering();
-
-        // Add source files
-        $this->addFiles($phar, $this->basePath . '/src', ['*.php']);
-
-        // Add vendor files
-        $this->addFiles($phar, $this->basePath . '/vendor', ['*.php'], $this->getExcludedVendorDirs());
-
-        // Add application files
-        $this->addFiles($phar, $this->basePath . '/app');
-
-        // Add bin file
-        $this->addConsoleBin($phar);
-
+        $this->addFiles($phar);
         $phar->setStub($this->getStub());
         $phar->stopBuffering();
     }
@@ -67,57 +56,54 @@ class Compiler
      * Add files to the phar file.
      *
      * @param Phar $phar
-     * @param string $directory
-     * @param string[] $patterns
-     * @param string[] $exclude
      */
-    private function addFiles(Phar $phar, string $directory, array $patterns = [], array $exclude = []): void
+    private function addFiles(Phar $phar): void
+    {
+        /** @var Finder[] $finders */
+        $finders = [
+            $this->createFinder($this->basePath . '/src')->name(['*.php']),
+            $this->createFinder($this->basePath . '/vendor')->name(['*.php'])->notPath(['bin', 'demo']),
+            $this->createFinder($this->basePath . '/app')->notName(['example.yaml']),
+        ];
+
+        // Add app, src and vendor directories
+        foreach ($finders as $finder) {
+            foreach ($finder as $file) {
+                $path = $this->getRelativeFilePath($file);
+                $phar->addFromString($path, php_strip_whitespace($file->getRealPath()));
+            }
+        }
+
+        // Add binary file
+        $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $this->basePath . '/bin/gdpr-dump');
+        $phar->addFromString('bin/gdpr-dump', php_strip_whitespace($content));
+    }
+
+    /**
+     * Create a directory.
+     *
+     * @param string $path
+     * @throws RuntimeException
+     */
+    private function createDirectory(string $path): void
+    {
+        if (!mkdir($path, 0775, true)) {
+            throw new RuntimeException(sprintf('Failed to create the directory "%s".', $path));
+        }
+    }
+
+    /**
+     * Create a finder object.
+     *
+     * @param string $directory
+     * @return Finder
+     */
+    private function createFinder(string $directory): Finder
     {
         $finder = new Finder();
-        $finder->files()
-            ->ignoreVCS(true)
-            ->exclude($exclude)
-            ->in($directory)
-            ->sort(function (SplFileInfo $a, SplFileInfo $b): int {
-                return strcmp(strtr($a->getRealPath(), '\\', '/'), strtr($b->getRealPath(), '\\', '/'));
-            });
 
-        foreach ($patterns as $pattern) {
-            $finder->name($pattern);
-        }
-
-        foreach ($finder as $file) {
-            $this->addFile($phar, $file);
-        }
-    }
-
-    /**
-     * Add a file to the phar file.
-     *
-     * @param Phar $phar
-     * @param SplFileInfo $file
-     */
-    private function addFile(Phar $phar, SplFileInfo $file): void
-    {
-        // Path must be relative
-        $path = $this->getRelativeFilePath($file);
-
-        // Strip whitespace before adding the file
-        $content = php_strip_whitespace($file->getRealPath());
-
-        $phar->addFromString($path, $content);
-    }
-
-    /**
-     * Add console binary to the phar file.
-     *
-     * @param Phar $phar
-     */
-    private function addConsoleBin(Phar $phar): void
-    {
-        $content = php_strip_whitespace($this->basePath . '/bin/gdpr-dump');
-        $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $content);
-        $phar->addFromString('bin/gdpr-dump', $content);
+        return $finder->files()
+            ->in($directory);
     }
 
     /**
@@ -136,36 +122,6 @@ class Compiler
         $relativePath = ($pos !== false) ? substr_replace($realPath, '', $pos, strlen($pathPrefix)) : $realPath;
 
         return strtr($relativePath, '\\', '/');
-    }
-
-    /**
-     * Create a directory.
-     *
-     * @param string $path
-     * @throws RuntimeException
-     */
-    private function createDirectory(string $path): void
-    {
-        if (!mkdir($path, 0775, true)) {
-            throw new RuntimeException(sprintf('Failed to create the directory "%s".', $path));
-        }
-    }
-
-    /**
-     * Get the vendor directories to exclude.
-     *
-     * @return string[]
-     */
-    private function getExcludedVendorDirs(): array
-    {
-        return [
-            'bin', // composer, doctrine/*
-            'demo', // justinrainbow/json-schema
-            'unit-tests', // ifsnop/mysqldump-php
-            'tests', // doctrine/*, theseer/tokenizer
-            'test', // fzaninotto/faker,
-            'Tests', // symfony/*
-        ];
     }
 
     /**
