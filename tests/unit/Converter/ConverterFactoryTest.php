@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter;
 
 use RuntimeException;
 use Smile\GdprDump\Converter\ConverterFactory;
+use Smile\GdprDump\Converter\ConverterResolver;
 use Smile\GdprDump\Converter\Dummy;
 use Smile\GdprDump\Converter\Faker;
 use Smile\GdprDump\Converter\Proxy\Cache;
@@ -190,6 +191,12 @@ class ConverterFactoryTest extends TestCase
      */
     private function createFactory(): ConverterFactory
     {
-        return new ConverterFactory(new FakerService());
+        $resolver = new ConverterResolver();
+        $resolver->addPath('Smile\\GdprDump\\Converter\\', dirname(dirname(dirname(__DIR__))) . '/src/Converter');
+
+        return new ConverterFactory(
+            $resolver,
+            new FakerService()
+        );
     }
 }

@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 - Fix conditions not working properly in functional tests
 - Replace deprecated Doctrine functions
+- Move the converter name > classname resolution to a new class named `ConverterResolver`
 - Reduced phar file size by ~50%
 
 ## [2.0.3] - 2020-10-05
