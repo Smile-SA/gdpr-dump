@@ -59,11 +59,12 @@ class AppKernel
 
         // Build the service container
         $this->container = $this->buildContainer();
-        $this->booted = true;
 
         // Initialize the converter resolver
         $this->container->get(ConverterResolver::class)
             ->addPath('Smile\\GdprDump\\Converter\\', __DIR__ . '/Converter');
+
+        $this->booted = true;
     }
 
     /**
@@ -74,7 +75,7 @@ class AppKernel
      */
     public function getContainer(): ContainerInterface
     {
-        if ($this->container === null) {
+        if (!$this->booted) {
             throw new RuntimeException('The kernel is not initialized.');
         }
 
