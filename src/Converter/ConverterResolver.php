@@ -70,12 +70,14 @@ class ConverterResolver
      */
     private function resolveClassNames(): void
     {
-        if ($this->resolved === null) {
-            $this->resolved = [];
-            foreach ($this->pathsByNamespace as $namespace => $paths) {
-                foreach ($paths as $path) {
-                    $this->resolved = array_merge($this->resolved, $this->findClassNames($namespace, $path));
-                }
+        if ($this->resolved !== null) {
+            return;
+        }
+
+        $this->resolved = [];
+        foreach ($this->pathsByNamespace as $namespace => $paths) {
+            foreach ($paths as $path) {
+                $this->resolved = array_merge($this->resolved, $this->findClassNames($namespace, $path));
             }
         }
     }
