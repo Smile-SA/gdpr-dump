@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter;
 
-use ReflectionClass;
-use ReflectionException;
 use RuntimeException;
 use Smile\GdprDump\Converter\Proxy\Cache;
 use Smile\GdprDump\Converter\Proxy\Conditional;
