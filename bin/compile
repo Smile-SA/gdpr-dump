@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+use Smile\GdprDump\AppKernel;
 use Smile\GdprDump\Compiler;
 
 $basePath = dirname(__DIR__);
@@ -11,9 +12,14 @@ require $basePath . '/app/bootstrap.php';
 // Prepare the file name
 $fileName = $basePath . '/build/dist/gdpr-dump.phar';
 
+// Get the locale
+$application = new AppKernel();
+$application->boot();
+$locale = $application->getContainer()->getParameter('faker.locale');
+
 try {
     // Create the phar file
-    $compiler = new Compiler();
+    $compiler = new Compiler($locale);
     $compiler->compile($fileName);
 } catch (RuntimeException $e) {
     die('ERROR: ' . $e->getMessage() . "\n");
