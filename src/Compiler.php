@@ -20,11 +20,17 @@ class Compiler
     private $basePath;
 
     /**
-     * Constructor.
+     * @var string
      */
-    public function __construct()
+    private $locale;
+
+    /**
+     * @param string $locale
+     */
+    public function __construct(string $locale)
     {
         $this->basePath = dirname(__DIR__);
+        $this->locale = $locale;
     }
 
     /**
@@ -59,15 +65,8 @@ class Compiler
      */
     private function addFiles(Phar $phar): void
     {
-        /** @var Finder[] $finders */
-        $finders = [
-            $this->createFinder($this->basePath . '/src')->name(['*.php']),
-            $this->createFinder($this->basePath . '/vendor')->name(['*.php'])->notPath(['bin', 'demo']),
-            $this->createFinder($this->basePath . '/app')->notName(['example.yaml']),
-        ];
-
         // Add app, src and vendor directories
-        foreach ($finders as $finder) {
+        foreach ($this->getFinders() as $finder) {
             foreach ($finder as $file) {
                 $path = $this->getRelativeFilePath($file);
                 $phar->addFromString($path, php_strip_whitespace($file->getRealPath()));
@@ -75,8 +74,9 @@ class Compiler
         }
 
         // Add binary file
-        $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $this->basePath . '/bin/gdpr-dump');
-        $phar->addFromString('bin/gdpr-dump', php_strip_whitespace($content));
+        $content = php_strip_whitespace($this->basePath . '/bin/gdpr-dump');
+        $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $content);
+        $phar->addFromString('bin/gdpr-dump', $content);
     }
 
     /**
@@ -90,6 +90,30 @@ class Compiler
         if (!mkdir($path, 0775, true)) {
             throw new RuntimeException(sprintf('Failed to create the directory "%s".', $path));
         }
+    }
+
+    /**
+     * Get the file locators.
+     *
+     * @return Finder[]
+     */
+    private function getFinders(): array
+    {
+        return [
+            $this->createFinder($this->basePath . '/src')
+                ->name(['*.php']),
+            $this->createFinder($this->basePath . '/vendor')
+                ->name(['*.php'])
+                ->notPath(
+                    [
+                        'bin/',
+                        'justinrainbow/json-schema/demo/',
+                        '#fzaninotto/faker/src/Faker/Provider/(?!' . $this->locale . ')[a-zA-Z_]+/#',
+                    ]
+                ),
+            $this->createFinder($this->basePath . '/app')
+                ->notName(['example.yaml']),
+        ];
     }
 
     /**
