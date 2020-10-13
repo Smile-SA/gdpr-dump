@@ -53,8 +53,13 @@ services:
 
     # --- Converter ---
     Smile\GdprDump\Converter\ConverterFactory:
+        public: true # used by functional tests
         arguments:
+            - '@Smile\GdprDump\Converter\ConverterResolver'
             - '@Smile\GdprDump\Faker\FakerService'
+
+    Smile\GdprDump\Converter\ConverterResolver:
+        public: true # used by app kernel to init the paths
 
     # --- Faker ---
     Smile\GdprDump\Faker\FakerService:

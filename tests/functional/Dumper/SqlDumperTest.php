@@ -7,7 +7,6 @@ namespace Smile\GdprDump\Tests\Functional\Dumper;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\Dumper\SqlDumper;
-use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
 class SqlDumperTest extends TestCase
@@ -117,8 +116,9 @@ class SqlDumperTest extends TestCase
      */
     private function createDumper(): SqlDumper
     {
-        return new SqlDumper(
-            new ConverterFactory(new FakerService())
-        );
+        /** @var ConverterFactory $converterFactory */
+        $converterFactory = $this->getContainer()->get(ConverterFactory::class);
+
+        return new SqlDumper($converterFactory);
     }
 }

@@ -16,22 +16,22 @@ use UnexpectedValueException;
 class ConverterFactory
 {
     /**
+     * @var ConverterResolver
+     */
+    private $converterResolver;
+
+    /**
      * @var FakerService
      */
     private $faker;
 
     /**
-     * e.g. ['unique' => 'Smile\GdprDump\Converter\Proxy\Unique', ...]
-     *
-     * @var string[]
-     */
-    private $classNames;
-
-    /**
+     * @param ConverterResolver $converterResolver
      * @param FakerService $faker
      */
-    public function __construct(FakerService $faker)
+    public function __construct(ConverterResolver $converterResolver, FakerService $faker)
     {
+        $this->converterResolver = $converterResolver;
         $this->faker = $faker;
     }
 
@@ -194,21 +194,7 @@ class ConverterFactory
      */
     private function createConverter(string $name, array $parameters = []): ConverterInterface
     {
-        $className = $name;
-
-        if (strpos($name, '\\') === false) {
-            // Find class names of default converters
-            $this->initClassNames();
-
-            // Check if the converter is a class declared in this namespace
-            if (array_key_exists($name, $this->classNames)) {
-                $className = $this->classNames[$name];
-            }
-        }
-
-        if (!class_exists($className)) {
-            throw new RuntimeException(sprintf('The converter class "%s" was not found.', $className));
-        }
+        $className = $this->converterResolver->getClassName($name);
 
         // Faker parameter
         if (($className === Faker::class || is_subclass_of($className, Faker::class)) && !isset($parameters['faker'])) {
@@ -216,64 +202,5 @@ class ConverterFactory
         }
 
         return new $className($parameters);
-    }
-
-    /**
-     * Initialize the converter name <-> class name array.
-     */
-    private function initClassNames(): void
-    {
-        if ($this->classNames === null) {
-            $this->classNames = $this->findClassNames(__DIR__);
-        }
-    }
-
-    /**
-     * Get converter class names that reside in the specified directory.
-     * e.g. ['unique' => 'Smile\GdprDump\Data\Converter\Proxy\Unique', ...]
-     *
-     * @param string $directory
-     * @param string $baseDirectory
-     * @return array
-     * @throws ReflectionException
-     * @SuppressWarnings(PHPMD.ElseExpression)
-     */
-    private function findClassNames(string $directory, string $baseDirectory = ''): array
-    {
-        $result = [];
-        $files = scandir($directory);
-
-        foreach ($files as $fileName) {
-            if ($fileName === '.' || $fileName === '..') {
-                continue;
-            }
-
-            // Absolute path of the file
-            $path = $directory . '/' . $fileName;
-
-            if (is_dir($path)) {
-                // Recursively find files in this directory
-                $newBaseDirectory = ($baseDirectory !== '') ? $baseDirectory . '/' . $fileName : $fileName;
-                $result = array_merge($result, $this->findClassNames($path, $newBaseDirectory));
-            } else {
-                // Remove the extension
-                $fileName = pathinfo($fileName, PATHINFO_FILENAME);
-
-                // Get the class name
-                $className = 'Smile\GdprDump\Converter\\';
-                $className .= ($baseDirectory !== '')
-                    ? str_replace('/', '\\', $baseDirectory) . '\\' . $fileName
-                    : $fileName;
-
-                // Include only classes that implement the converter interface
-                $reflection = new ReflectionClass($className);
-
-                if ($reflection->isSubclassOf(ConverterInterface::class)) {
-                    $result[lcfirst($fileName)] = $className;
-                }
-            }
-        }
-
-        return $result;
     }
 }
