@@ -49,18 +49,17 @@ class TableConfigTest extends TestCase
     {
         $config = new TableConfig('table1', [
             'converters' => [
-                'column1' => 'converterName',
-                'column2' => ['converter' => 'converterName'],
-                'column3' => '',
-                'column4' => ['converter' => ''],
-                'column5' => ['converter' => '', 'disabled' => true],
+                'column1' => ['converter' => 'converterName'],
+                'column2' => ['converter' => ''],
+                'column3' => ['converter' => '', 'disabled' => true],
+                'column4' => [],
             ],
         ]);
 
         $converters = $config->getConverters();
 
-        // The config must have parsed empty/disabled converters (data is validated in the converter factory)
-        $this->assertCount(5, $converters);
+        // The config must have ignored empty/disabled converters
+        $this->assertCount(2, $converters);
     }
 
     /**

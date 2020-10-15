@@ -7,7 +7,6 @@ namespace Smile\GdprDump\Tests\Unit\Converter;
 use RuntimeException;
 use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\Converter\ConverterResolver;
-use Smile\GdprDump\Converter\Dummy;
 use Smile\GdprDump\Converter\Faker;
 use Smile\GdprDump\Converter\Proxy\Cache;
 use Smile\GdprDump\Converter\Proxy\Chain;
@@ -43,17 +42,6 @@ class ConverterFactoryTest extends TestCase
 
         $converter = $factory->create(['converter' => 'faker', 'parameters' => ['formatter' => 'safeEmail']]);
         $this->assertInstanceOf(Faker::class, $converter);
-    }
-
-    /**
-     * Test the creation of a disabled converter.
-     */
-    public function testDisabledConverter(): void
-    {
-        $factory = $this->createFactory();
-
-        $converter = $factory->create(['converter' => 'faker', 'disabled' => true]);
-        $this->assertInstanceOf(Dummy::class, $converter);
     }
 
     /**

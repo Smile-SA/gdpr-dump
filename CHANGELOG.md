@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
-- Fix conditions not working properly in functional tests
+- Reduce phar file size by ~50%
+- Remove disabled converters instead of replacing them by dummy converters
 - Replace deprecated Doctrine functions
-- Move the converter name > classname resolution to a new class named `ConverterResolver`
-- Reduced phar file size by ~50%
+- Fix conditions not working properly in functional tests
+- Move the converter name > classname resolution to a new class named "ConverterResolver"
 
 ## [2.0.3] - 2020-10-05
 [2.0.3]: https://github.com/Smile-SA/gdpr-dump/compare/2.0.2...2.0.3

@@ -43,11 +43,6 @@ class ConverterFactory
     {
         $definition = $this->getConverterData($definition);
 
-        // If converter is disabled, return a dummy converter
-        if ($definition['disabled']) {
-            return new Dummy();
-        }
-
         // Get the converter name and parameters
         $name = $definition['converter'];
         $parameters = $definition['parameters'];
@@ -102,7 +97,6 @@ class ConverterFactory
             'condition' => '',
             'cache_key' => '',
             'unique' => false,
-            'disabled' => false,
         ];
 
         // Parse the parameters
@@ -112,7 +106,6 @@ class ConverterFactory
         $definition['condition'] = (string) $definition['condition'];
         $definition['unique'] = (bool) $definition['unique'];
         $definition['cache_key'] = (string) $definition['cache_key'];
-        $definition['disabled'] = (bool) $definition['disabled'];
 
         return $definition;
     }
