@@ -34,9 +34,7 @@ class ConverterFactory
     }
 
     /**
-     * Create a converter from a definition.
-     * It can be either a string that represents the converter name,
-     * or an array that represents the converter data.
+     * Create a converter from a definition array.
      *
      * @param array $definition
      * @return ConverterInterface
