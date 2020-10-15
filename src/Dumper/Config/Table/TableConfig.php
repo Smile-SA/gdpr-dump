@@ -223,6 +223,11 @@ class TableConfig
     {
         if (isset($tableData['converters'])) {
             foreach ($tableData['converters'] as $column => $converterData) {
+                // Ignore disabled converters
+                if (array_key_exists('disabled', $converterData) && $converterData['disabled']) {
+                    break;
+                }
+
                 // Converter data will be validated by the factory during the object creation
                 $this->converters[$column] = $converterData;
             }
