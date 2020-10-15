@@ -64,11 +64,19 @@ tables:
 
 ## [anonymizeText](../src/Converter/Anonymizer/AnonymizeText.php)
 
-Anonymizes string values by replacing all characters by the `*` character.
+Anonymizes string values by replacing all characters with the `*` character.
 The first letter of each word is preserved.
-The word separators are ` ` (space), `_` (underscore) and `.` (dot).
+The default word separators are ` ` (space), `_` (underscore) and `.` (dot).
 
-For example, it converts "john.doe" to "j\*\*\*.d\*\*".
+For example, it converts "John Doe" to "J\*\*\* D\*\*".
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **replacement** | N | `'*'` | The replacement character. |
+| **delimiters** | N | `[' ', '_', '.']` | The word separator characters. |
+| **min_word_length** | N | `1` | The minimum length per anonymized word. Useful only if at least one word separator is defined. |
 
 Example:
 
@@ -82,10 +90,15 @@ tables:
 
 ## [anonymizeNumber](../src/Converter/Anonymizer/AnonymizeNumber.php)
 
-Anonymizes numeric values by replacing all numbers by the `*` character.
+Anonymizes numeric values by replacing all numbers with the `*` character.
 The first digit of each number is preserved.
 
 For example, it converts "user123" to "user1\*\*".
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **replacement** | N | `'*'` | The replacement character. |
+| **min_number_length** | N | `1` | The minimum length per anonymized number. |
 
 Example:
 
@@ -109,6 +122,9 @@ Parameters:
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
 | **domains** | N | `['example.com', 'example.net', 'example.org']` | A list of email domains. |
+| **replacement** | N | `'*'` | The replacement character. |
+| **delimiters** | N | `[' ', '_', '.']` | The word separator characters. |
+| **min_word_length** | N | `1` | The minimum length per anonymized word. Useful only if at least one word delimiter is defined. |
 
 Example:
 
@@ -175,7 +191,7 @@ Parameters:
 
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
-| **min_length** | N | 3 | The minimum length of the generated value. |
+| **min_length** | N | `3` | The minimum length of the generated value. |
 | **replacements** | N | [Check here](../src/Converter/Randomizer/RandomizeText.php) | A string that contains the replacement characters. |
 
 Example:
@@ -216,7 +232,7 @@ Parameters:
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
 | **domains** | N | `['example.com', 'example.net', 'example.org']` | A list of email domains. |
-| **min_length** | N | 3 | The minimum length of the generated username. |
+| **min_length** | N | `3` | The minimum length of the generated username. |
 | **replacements** | N | [Check here](../src/Converter/Randomizer/RandomizeText.php) | A string that contains the replacement characters. |
 
 Example:

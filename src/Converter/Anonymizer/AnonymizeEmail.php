@@ -28,6 +28,8 @@ class AnonymizeEmail extends AnonymizeText
      */
     public function __construct(array $parameters = [])
     {
+        parent::__construct($parameters);
+
         if (array_key_exists('domains', $parameters)) {
             if (!is_array($parameters['domains'])) {
                 throw new UnexpectedValueException('The parameter "domains" must be an array.');

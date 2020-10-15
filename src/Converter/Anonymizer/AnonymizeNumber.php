@@ -4,29 +4,64 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Anonymizer;
 
-class AnonymizeNumber extends AnonymizeText
+use Smile\GdprDump\Converter\ConverterInterface;
+
+class AnonymizeNumber implements ConverterInterface
 {
+    /**
+     * @var string
+     */
+    private $replacement = '*';
+
+    /**
+     * @var int
+     */
+    private $minNumberLength = 1;
+
+    /**
+     * @param array $parameters
+     */
+    public function __construct(array $parameters = [])
+    {
+        if (array_key_exists('replacement', $parameters)) {
+            $this->replacement = (string) $parameters['replacement'];
+        }
+
+        if (array_key_exists('min_number_length', $parameters)) {
+            $this->minNumberLength = (int) $parameters['min_number_length'];
+        }
+    }
+
     /**
      * @inheritdoc
      */
     public function convert($value, array $context = [])
     {
-        $isFirstCharacter = true;
+        $result = '';
+        $currentNumberLength = 0;
+        $value = mb_str_split((string) $value);
+        $lastKey = array_key_last($value);
 
-        foreach (str_split((string) $value) as $index => $char) {
+        foreach ($value as $index => $char) {
+            // Preserve non-numeric characters
             if (!is_numeric($char)) {
-                $isFirstCharacter = true;
+                $result .= $char;
+                $currentNumberLength = 0;
                 continue;
             }
 
-            if ($isFirstCharacter) {
-                $isFirstCharacter = false;
-                continue;
-            }
+            // Add the replacement character (unless it is the first character of the word) and increase counters
+            $result .= $currentNumberLength === 0 ? $char : $this->replacement;
+            $currentNumberLength++;
 
-            $value[$index] = '*';
+            // Make sure the generated word has the minimum expected size
+            $checkNumberLength = $index === $lastKey || !is_numeric($value[$index + 1]);
+            if ($checkNumberLength && $currentNumberLength < $this->minNumberLength) {
+                $multiplier = $this->minNumberLength - $currentNumberLength;
+                $result .= str_repeat($this->replacement, $multiplier);
+            }
         }
 
-        return $value;
+        return $result;
     }
 }
