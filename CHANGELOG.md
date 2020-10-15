@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
+- New options available for the following converters:
+    - anonymizeText: `delimiters`, `replacement`, `min_word_length`
+    - anonymizeEmail: `delimiters`, `replacement`, `min_word_length`
+    - anonymizeNumber: `replacement`, `min_number_length`
 - Reduce phar file size by ~50%
 - Remove disabled converters instead of replacing them by dummy converters
 - Replace deprecated Doctrine functions
