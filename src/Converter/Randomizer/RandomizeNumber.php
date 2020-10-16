@@ -29,6 +29,10 @@ class RandomizeNumber implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        return preg_replace_callback('/[0-9]/', $this->replaceCallback, $value);
+        $string = (string) $value;
+
+        return $string !== ''
+            ? preg_replace_callback('/[0-9]/', $this->replaceCallback, $string)
+            : $value;
     }
 }

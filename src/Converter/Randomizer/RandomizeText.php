@@ -50,8 +50,13 @@ class RandomizeText implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        $length = strlen((string) $value);
-        $value = '';
+        $string = (string) $value;
+        if ($string === '') {
+            return $value;
+        }
+
+        $length = strlen($string);
+        $result = '';
 
         if ($length < $this->minLength) {
             $length = $this->minLength;
@@ -59,9 +64,9 @@ class RandomizeText implements ConverterInterface
 
         for ($index = 0; $index < $length; $index++) {
             $replacementIndex = mt_rand(0, $this->replacementsCount - 1);
-            $value .=  $this->replacements[$replacementIndex];
+            $result .=  $this->replacements[$replacementIndex];
         }
 
-        return $value;
+        return $result;
     }
 }

@@ -19,6 +19,11 @@ class AnonymizeNumber implements ConverterInterface
     private $minNumberLength = 1;
 
     /**
+     * @var bool
+     */
+    private $multiByteEnabled;
+
+    /**
      * @param array $parameters
      */
     public function __construct(array $parameters = [])
@@ -30,6 +35,9 @@ class AnonymizeNumber implements ConverterInterface
         if (array_key_exists('min_number_length', $parameters)) {
             $this->minNumberLength = (int) $parameters['min_number_length'];
         }
+
+        // Call the extension_loaded function only once (few seconds gain when converting millions of values)
+        $this->multiByteEnabled = extension_loaded('mbstring');
     }
 
     /**
@@ -37,12 +45,17 @@ class AnonymizeNumber implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
+        $string = (string) $value;
+        if ($string === '') {
+            return $value;
+        }
+
         $result = '';
         $currentNumberLength = 0;
-        $value = mb_str_split((string) $value);
-        $lastKey = array_key_last($value);
+        $array = $this->multiByteEnabled ? mb_str_split($string, 1, 'UTF-8') : str_split($string);
+        $lastKey = array_key_last($array);
 
-        foreach ($value as $index => $char) {
+        foreach ($array as $index => $char) {
             // Preserve non-numeric characters
             if (!is_numeric($char)) {
                 $result .= $char;
@@ -55,7 +68,7 @@ class AnonymizeNumber implements ConverterInterface
             $currentNumberLength++;
 
             // Make sure the generated word has the minimum expected size
-            $checkNumberLength = $index === $lastKey || !is_numeric($value[$index + 1]);
+            $checkNumberLength = $index === $lastKey || !is_numeric($array[$index + 1]);
             if ($checkNumberLength && $currentNumberLength < $this->minNumberLength) {
                 $multiplier = $this->minNumberLength - $currentNumberLength;
                 $result .= str_repeat($this->replacement, $multiplier);

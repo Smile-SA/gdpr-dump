@@ -66,6 +66,11 @@ class RandomizeDate implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
+        $string = (string) $value;
+        if ($string === '') {
+            return $value;
+        }
+
         $this->randomizeDate();
 
         return $this->date->format($this->format);

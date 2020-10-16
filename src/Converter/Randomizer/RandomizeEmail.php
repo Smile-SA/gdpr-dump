@@ -50,7 +50,12 @@ class RandomizeEmail extends RandomizeText
      */
     public function convert($value, array $context = [])
     {
-        $parts = explode('@', $value);
+        $string = (string) $value;
+        if ($string === '') {
+            return $value;
+        }
+
+        $parts = explode('@', $string);
 
         if (isset($parts[0])) {
             $parts[0] = parent::convert($parts[0]);

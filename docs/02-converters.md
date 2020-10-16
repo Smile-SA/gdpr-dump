@@ -191,7 +191,7 @@ Parameters:
 
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
-| **min_length** | N | `3` | The minimum length of the generated value. |
+| **min_length** | N | `3` | The minimum length of the generated value (when not empty). |
 | **replacements** | N | [Check here](../src/Converter/Randomizer/RandomizeText.php) | A string that contains the replacement characters. |
 
 Example:
@@ -232,7 +232,7 @@ Parameters:
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
 | **domains** | N | `['example.com', 'example.net', 'example.org']` | A list of email domains. |
-| **min_length** | N | `3` | The minimum length of the generated username. |
+| **min_length** | N | `3` | The minimum length of the generated username (when not empty). |
 | **replacements** | N | [Check here](../src/Converter/Randomizer/RandomizeText.php) | A string that contains the replacement characters. |
 
 Example:
@@ -247,7 +247,7 @@ tables:
 
 ## [randomizeDate](../src/Converter/Randomizer/RandomizeDate.php)
 
-Generates a random date.
+Converts a date into a random one.
 
 For example, one of the possible conversions for "1990-01-01" is "2002-01-20".
 
@@ -271,7 +271,7 @@ tables:
 
 ## [randomizeDateTime](../src/Converter/Randomizer/RandomizeDateTime.php)
 
-Generates a random date time.
+Converts a date time into a random one.
 
 For example, one of the possible conversions for "1990-01-01 00:00:00" is "2002-01-20 23:05:49".
 

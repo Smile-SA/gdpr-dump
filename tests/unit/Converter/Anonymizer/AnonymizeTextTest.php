@@ -37,6 +37,20 @@ class AnonymizeTextTest extends TestCase
     }
 
     /**
+     * Test the converter with an UTF-8 encoded value.
+     */
+    public function testEncoding(): void
+    {
+        $converter = new AnonymizeText();
+
+        $value = $converter->convert('àà éé èè üü øø');
+        $this->assertSame('à* é* è* ü* ø*', $value);
+
+        $value = $converter->convert('汉字 한글 漢字');
+        $this->assertSame('汉* 한* 漢*', $value);
+    }
+
+    /**
      * Test the converter with a minimum length per word.
      */
     public function testMinWordLength(): void

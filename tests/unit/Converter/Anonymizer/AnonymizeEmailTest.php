@@ -20,11 +20,28 @@ class AnonymizeEmailTest extends TestCase
         $value = $converter->convert('');
         $this->assertSame('', $value);
 
+        $value = $converter->convert('user1');
+        $this->assertSame('u****', $value);
+
         $value = $converter->convert('user1@gmail.com');
         $this->assertSame('u****@example.org', $value);
 
         $value = $converter->convert('john.doe@gmail.com');
         $this->assertSame('j***.d**@example.org', $value);
+    }
+
+    /**
+     * Test the converter with an UTF-8 encoded value.
+     */
+    public function testEncoding(): void
+    {
+        $converter = new AnonymizeEmail(['domains' => ['example.org']]);
+
+        $value = $converter->convert('àà.éé.èè.üü.øø@gmail.com');
+        $this->assertSame('à*.é*.è*.ü*.ø*@example.org', $value);
+
+        $value = $converter->convert('汉字.한글.漢字@gmail.com');
+        $this->assertSame('汉*.한*.漢*@example.org', $value);
     }
 
     /**

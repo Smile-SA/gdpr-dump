@@ -25,6 +25,11 @@ class AnonymizeText implements ConverterInterface
     private $minWordLength = 1;
 
     /**
+     * @var bool
+     */
+    private $multiByteEnabled;
+
+    /**
      * @param array $parameters
      */
     public function __construct(array $parameters = [])
@@ -47,6 +52,9 @@ class AnonymizeText implements ConverterInterface
 
         // Flip separators array for increased performance
         $this->delimiters = array_flip($this->delimiters);
+
+        // Call the extension_loaded function only once (few seconds gain when converting millions of values)
+        $this->multiByteEnabled = extension_loaded('mbstring');
     }
 
     /**
@@ -54,12 +62,17 @@ class AnonymizeText implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
+        $string = (string) $value;
+        if ($string === '') {
+            return $value;
+        }
+
         $result = '';
         $currentWordLength = 0;
-        $value = mb_str_split((string) $value);
-        $lastKey = array_key_last($value);
+        $array = $this->multiByteEnabled ? mb_str_split($string, 1, 'UTF-8') : str_split($string);
+        $lastKey = array_key_last($array);
 
-        foreach ($value as $index => $char) {
+        foreach ($array as $index => $char) {
             // Preserve separator characters
             if (array_key_exists($char, $this->delimiters)) {
                 $result .= $char;
@@ -72,7 +85,7 @@ class AnonymizeText implements ConverterInterface
             $currentWordLength++;
 
             // Make sure the generated word has the minimum expected size
-            $checkWordLength = $index === $lastKey || array_key_exists($value[$index + 1], $this->delimiters);
+            $checkWordLength = $index === $lastKey || array_key_exists($array[$index + 1], $this->delimiters);
             if ($checkWordLength && $currentWordLength < $this->minWordLength) {
                 $multiplier = $this->minWordLength - $currentWordLength;
                 $result .= str_repeat($this->replacement, $multiplier);
