@@ -36,6 +36,20 @@ class AnonymizeNumberTest extends TestCase
     }
 
     /**
+     * Test the converter with an UTF-8 encoded value.
+     */
+    public function testEncoding(): void
+    {
+        $converter = new AnonymizeNumber();
+
+        $value = $converter->convert('àà10 éé20 èè30 üü40 øø50');
+        $this->assertSame('àà1* éé2* èè3* üü4* øø5*', $value);
+
+        $value = $converter->convert('汉字10 한글20 漢字30');
+        $this->assertSame('汉字1* 한글2* 漢字3*', $value);
+    }
+
+    /**
      * Test the converter with a minimum length per number.
      */
     public function testMinNumberLength(): void

@@ -17,6 +17,9 @@ class RandomizeTextTest extends TestCase
     {
         $converter = new RandomizeText();
 
+        $value = $converter->convert('');
+        $this->assertSame('', $value);
+
         $value = $converter->convert('user1');
         $this->assertStringNotContainsString('user1', $value);
     }

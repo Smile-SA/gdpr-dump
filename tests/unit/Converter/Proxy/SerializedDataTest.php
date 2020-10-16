@@ -27,6 +27,9 @@ class SerializedDataTest extends TestCase
 
         $converter = new SerializedData($parameters);
 
+        $value = $converter->convert('');
+        $this->assertSame('', $value);
+
         $value = $converter->convert($this->getSerializedData());
         $this->assertSame($this->getExpectedData(), $value);
     }

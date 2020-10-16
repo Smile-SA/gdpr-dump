@@ -35,9 +35,14 @@ class AnonymizeDate implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        $date = DateTime::createFromFormat($this->format, $value);
+        $string = (string) $value;
+        if ($string === '') {
+            return $value;
+        }
+
+        $date = DateTime::createFromFormat($this->format, $string);
         if ($date === false) {
-            throw new UnexpectedValueException(sprintf('Failed to convert the value "%s" to a date.', $value));
+            throw new UnexpectedValueException(sprintf('Failed to convert the value "%s" to a date.', $string));
         }
 
         $this->anonymizeDate($date);

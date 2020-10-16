@@ -43,8 +43,12 @@ class JsonData implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        $decoded = json_decode($value, true);
+        $string = (string) $value;
+        if ($string === '') {
+            return $value;
+        }
 
+        $decoded = json_decode($string, true);
         if (!is_array($decoded)) {
             return $value;
         }

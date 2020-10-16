@@ -17,6 +17,9 @@ class RandomizeEmailTest extends TestCase
     {
         $converter = new RandomizeEmail(['domains' => ['example.org']]);
 
+        $value = $converter->convert('');
+        $this->assertSame('', $value);
+
         $value = $converter->convert('user1@gmail.com');
         $this->assertStringNotContainsString('user1', $value);
         $this->assertStringNotContainsString('@gmail.com', $value);

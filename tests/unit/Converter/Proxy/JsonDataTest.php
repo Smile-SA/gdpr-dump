@@ -27,6 +27,9 @@ class JsonDataTest extends TestCase
 
         $converter = new JsonData($parameters);
 
+        $value = $converter->convert('');
+        $this->assertSame('', $value);
+
         $value = $converter->convert($this->getJsonData());
         $this->assertSame($this->getExpectedData(), $value);
     }
