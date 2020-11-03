@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
+namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 
 use DateTime;
+use Smile\GdprDump\Converter\Generator\RandomDate;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
-use Smile\GdprDump\Converter\Randomizer\RandomizeDate;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class RandomizeDateTest extends TestCase
+class RandomDateTest extends TestCase
 {
     /**
      * Test the converter.
      */
     public function testConverter(): void
     {
-        $converter = new RandomizeDate();
+        $converter = new RandomDate();
 
         $value = $converter->convert(null);
         $this->assertNotNull($value);
@@ -32,7 +32,7 @@ class RandomizeDateTest extends TestCase
     public function testFormatParameter(): void
     {
         $format = 'd/m/Y';
-        $converter = new RandomizeDate(['format' => $format]);
+        $converter = new RandomDate(['format' => $format]);
 
         $date = '31/12/1990';
         $value = $converter->convert($date);
@@ -44,7 +44,7 @@ class RandomizeDateTest extends TestCase
      */
     public function testYearParameters(): void
     {
-        $converter = new RandomizeDate(['min_year' => 1970, 'max_year' => 2020]);
+        $converter = new RandomDate(['min_year' => 1970, 'max_year' => 2020]);
 
         $date = '1990-12-31';
         $value = $converter->convert($date);
@@ -56,7 +56,7 @@ class RandomizeDateTest extends TestCase
      */
     public function testNullYears(): void
     {
-        $converter = new RandomizeDate(['min_year' => null, 'max_year' => null]);
+        $converter = new RandomDate(['min_year' => null, 'max_year' => null]);
 
         $date = '1990-12-31';
         $value = $converter->convert($date);
@@ -72,7 +72,7 @@ class RandomizeDateTest extends TestCase
     public function testEmptyFormat(): void
     {
         $this->expectException(ValidationException::class);
-        new RandomizeDate(['format' => '']);
+        new RandomDate(['format' => '']);
     }
 
     /**
@@ -81,7 +81,7 @@ class RandomizeDateTest extends TestCase
     public function testYearConflict(): void
     {
         $this->expectException(ValidationException::class);
-        new RandomizeDate(['min_year' => 2020, 'max_year' => 2019]);
+        new RandomDate(['min_year' => 2020, 'max_year' => 2019]);
     }
 
     /**

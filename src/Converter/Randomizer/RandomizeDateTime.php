@@ -4,27 +4,34 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Randomizer;
 
-class RandomizeDateTime extends RandomizeDate
+use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Generator\RandomDateTime;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
+
+/**
+ * @deprecated Use "randomDateTime" instead.
+ */
+class RandomizeDateTime implements ConverterInterface
 {
     /**
-     * @inheritdoc
+     * @var ConverterInterface
      */
-    protected $format = 'Y-m-d H:i:s';
+    private $converter;
+
+    /**
+     * @param array $parameters
+     * @throws ValidationException
+     */
+    public function __construct(array $parameters = [])
+    {
+        $this->converter = new RandomDateTime($parameters);
+    }
 
     /**
      * @inheritdoc
      */
-    protected function randomizeDate(): void
+    public function convert($value, array $context = [])
     {
-        // Randomize the year, month and day
-        parent::randomizeDate();
-
-        // Randomize the hour, minute and second
-        $hour = mt_rand(0, 23);
-        $minute = mt_rand(0, 59);
-        $second = mt_rand(0, 59);
-
-        // Replace the values
-        $this->date->setTime($hour, $minute, $second);
+        return $this->converter->convert($value, $context);
     }
 }
