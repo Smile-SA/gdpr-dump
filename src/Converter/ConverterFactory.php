@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Converter;
 use RuntimeException;
 use Smile\GdprDump\Converter\Proxy\Cache;
 use Smile\GdprDump\Converter\Proxy\Conditional;
+use Smile\GdprDump\Converter\Proxy\Faker;
 use Smile\GdprDump\Converter\Proxy\Unique;
 use Smile\GdprDump\Faker\FakerService;
 use UnexpectedValueException;

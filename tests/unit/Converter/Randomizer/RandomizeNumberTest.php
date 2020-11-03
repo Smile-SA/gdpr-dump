@@ -16,7 +16,7 @@ class RandomizeNumberTest extends TestCase
     {
         $converter = new RandomizeNumber();
 
-        $value = $converter->convert('');
+        $value = $converter->convert(null);
         $this->assertSame('', $value);
 
         $value = $converter->convert('+33601010101');

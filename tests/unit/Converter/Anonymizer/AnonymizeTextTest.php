@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeText;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use UnexpectedValueException;
 
 class AnonymizeTextTest extends TestCase
 {
@@ -17,23 +17,22 @@ class AnonymizeTextTest extends TestCase
     {
         $converter = new AnonymizeText();
 
-        $value = $converter->convert('');
+        $value = $converter->convert(null);
         $this->assertSame('', $value);
+
+        $value = $converter->convert('a');
+        $this->assertSame('a**', $value);
+
+        $value = $converter->convert('a.b');
+        $this->assertSame('a**.b**', $value);
 
         $value = $converter->convert('John Doe');
         $this->assertSame('J*** D**', $value);
 
-        $value = $converter->convert('John_Doe');
-        $this->assertSame('J***_D**', $value);
-
-        $value = $converter->convert('John.Doe');
-        $this->assertSame('J***.D**', $value);
-
-        $value = $converter->convert('John-Doe');
-        $this->assertSame('J*******', $value);
-
-        $value = $converter->convert('  John Doe  ');
-        $this->assertSame('  J*** D**  ', $value);
+        foreach ([' ', '_', '-', '.'] as $separator) {
+            $value = $converter->convert('John' . $separator . 'Doe');
+            $this->assertSame('J***' . $separator . 'D**', $value);
+        }
     }
 
     /**
@@ -44,10 +43,10 @@ class AnonymizeTextTest extends TestCase
         $converter = new AnonymizeText();
 
         $value = $converter->convert('àà éé èè üü øø');
-        $this->assertSame('à* é* è* ü* ø*', $value);
+        $this->assertSame('à** é** è** ü** ø**', $value);
 
         $value = $converter->convert('汉字 한글 漢字');
-        $this->assertSame('汉* 한* 漢*', $value);
+        $this->assertSame('汉** 한** 漢**', $value);
     }
 
     /**
@@ -65,6 +64,15 @@ class AnonymizeTextTest extends TestCase
     }
 
     /**
+     * Assert that an exception is thrown when the parameter "min_word_length" is empty.
+     */
+    public function testEmptyMinWordLength(): void
+    {
+        $this->expectException(ValidationException::class);
+        new AnonymizeText(['min_word_length' => null]);
+    }
+
+    /**
      * Test the converter with a custom replacement character.
      */
     public function testCustomReplacement(): void
@@ -73,6 +81,15 @@ class AnonymizeTextTest extends TestCase
 
         $value = $converter->convert('John Doe');
         $this->assertSame('Jxxx Dxx', $value);
+    }
+
+    /**
+     * Assert that an exception is thrown when the parameter "replacement" is empty.
+     */
+    public function testEmptyReplacement(): void
+    {
+        $this->expectException(ValidationException::class);
+        new AnonymizeText(['replacement' => '']);
     }
 
     /**
@@ -109,7 +126,7 @@ class AnonymizeTextTest extends TestCase
      */
     public function testInvalidDelimiters(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new AnonymizeText(['delimiters' => 'invalid']);
     }
 }

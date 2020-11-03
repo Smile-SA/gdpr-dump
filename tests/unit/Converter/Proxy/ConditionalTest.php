@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
-use InvalidArgumentException;
 use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Proxy\Conditional;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use UnexpectedValueException;
+use stdClass;
 
 class ConditionalTest extends TestCase
 {
@@ -45,8 +45,28 @@ class ConditionalTest extends TestCase
             'condition' => '{{id}} === 1',
         ];
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         new Conditional($parameters);
+    }
+
+    /**
+     * Assert that an exception is thrown when the parameter
+     * "if_true_converter" is not an instance of ConverterInterface.
+     */
+    public function testIfTrueConverterNotValid(): void
+    {
+        $this->expectException(ValidationException::class);
+        new Conditional(['if_true_converter' => new stdClass()]);
+    }
+
+    /**
+     * Assert that an exception is thrown when the parameter
+     * "if_false_converter" is not an instance of ConverterInterface.
+     */
+    public function testIfFalseConverterNotValid(): void
+    {
+        $this->expectException(ValidationException::class);
+        new Conditional(['if_false_converter' => new stdClass()]);
     }
 
     /**
@@ -58,7 +78,7 @@ class ConditionalTest extends TestCase
             'if_true_converter' => $this->createIfTrueConverter(),
         ];
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         new Conditional($parameters);
     }
 
@@ -72,7 +92,7 @@ class ConditionalTest extends TestCase
             'condition' => '',
         ];
 
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new Conditional($parameters);
     }
 

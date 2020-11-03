@@ -9,5 +9,5 @@ class AnonymizeDateTime extends AnonymizeDate
     /**
      * @inheritdoc
      */
-    protected $format = 'Y-m-d H:i:s';
+    protected $defaultFormat = 'Y-m-d H:i:s';
 }

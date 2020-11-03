@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeNumber;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class AnonymizeNumberTest extends TestCase
@@ -16,7 +17,7 @@ class AnonymizeNumberTest extends TestCase
     {
         $converter = new AnonymizeNumber();
 
-        $value = $converter->convert('');
+        $value = $converter->convert(null);
         $this->assertSame('', $value);
 
         $value = $converter->convert('123456');
@@ -65,6 +66,15 @@ class AnonymizeNumberTest extends TestCase
     }
 
     /**
+     * Assert that an exception is thrown when the parameter "min_number_length" is empty.
+     */
+    public function testEmptyMinNumberLength(): void
+    {
+        $this->expectException(ValidationException::class);
+        new AnonymizeNumber(['min_number_length' => null]);
+    }
+
+    /**
      * Test the converter with a custom replacement character.
      */
     public function testCustomReplacement(): void
@@ -73,5 +83,14 @@ class AnonymizeNumberTest extends TestCase
 
         $value = $converter->convert('123-456');
         $this->assertSame('1xx-4xx', $value);
+    }
+
+    /**
+     * Assert that an exception is thrown when the parameter "replacement" is empty.
+     */
+    public function testEmptyReplacement(): void
+    {
+        $this->expectException(ValidationException::class);
+        new AnonymizeNumber(['replacement' => '']);
     }
 }

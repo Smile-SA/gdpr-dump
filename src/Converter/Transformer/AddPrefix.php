@@ -2,31 +2,31 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Converter\Proxy;
+namespace Smile\GdprDump\Converter\Transformer;
 
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 
-class Chain implements ConverterInterface
+class AddPrefix implements ConverterInterface
 {
     /**
-     * @var ConverterInterface[]
+     * @var string
      */
-    private $converters;
+    private $prefix;
 
     /**
      * @param array $parameters
      * @throws ValidationException
      */
-    public function __construct(array $parameters)
+    public function __construct(array $parameters = [])
     {
         $input = (new ParameterProcessor())
-            ->addParameter('converters', Parameter::TYPE_ARRAY, true)
+            ->addParameter('prefix', Parameter::TYPE_STRING, true)
             ->process($parameters);
 
-        $this->converters = $input->get('converters');
+        $this->prefix = $input->get('prefix');
     }
 
     /**
@@ -34,10 +34,8 @@ class Chain implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        foreach ($this->converters as $converter) {
-            $value = $converter->convert($value, $context);
-        }
+        $value = (string) $value;
 
-        return $value;
+        return $value !== '' ? $this->prefix . $value : $value;
     }
 }

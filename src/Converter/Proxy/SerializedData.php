@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Proxy;
 
-use InvalidArgumentException;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Helper\ArrayHelper;
-use UnexpectedValueException;
+use Smile\GdprDump\Converter\Parameters\Parameter;
+use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class SerializedData implements ConverterInterface
 {
@@ -18,24 +19,15 @@ class SerializedData implements ConverterInterface
 
     /**
      * @param array $parameters
-     * @throws InvalidArgumentException
-     * @throws UnexpectedValueException
+     * @throws ValidationException
      */
     public function __construct(array $parameters)
     {
-        if (!array_key_exists('converters', $parameters)) {
-            throw new InvalidArgumentException('The parameter "converters" is required.');
-        }
+        $input = (new ParameterProcessor())
+            ->addParameter('converters', Parameter::TYPE_ARRAY, true)
+            ->process($parameters);
 
-        if (!is_array($parameters['converters'])) {
-            throw new UnexpectedValueException('The parameter "converters" must be an array.');
-        }
-
-        if (empty($parameters['converters'])) {
-            throw new UnexpectedValueException('The parameter "converters" must not be empty.');
-        }
-
-        $this->converters = $parameters['converters'];
+        $this->converters = $input->get('converters');
     }
 
     /**
@@ -43,12 +35,8 @@ class SerializedData implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        $string = (string) $value;
-        if ($string === '') {
-            return $value;
-        }
-
-        $decoded = @unserialize($string);
+        // Decode the value
+        $decoded = @unserialize((string) $value);
         if (!is_array($decoded)) {
             return $value;
         }

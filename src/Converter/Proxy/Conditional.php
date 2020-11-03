@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Proxy;
 
-use InvalidArgumentException;
 use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Converter\ConverterInterface;
-use UnexpectedValueException;
+use Smile\GdprDump\Converter\Parameters\Parameter;
+use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class Conditional implements ConverterInterface
 {
@@ -28,36 +29,26 @@ class Conditional implements ConverterInterface
 
     /**
      * @param array $parameters
-     * @throws InvalidArgumentException
-     * @throws UnexpectedValueException
+     * @throws ValidationException
      */
     public function __construct(array $parameters)
     {
-        if (!array_key_exists('condition', $parameters)) {
-            throw new InvalidArgumentException('The parameter "condition" is required.');
-        }
-
-        $condition = (string) $parameters['condition'];
-        if ($condition === '') {
-            throw new UnexpectedValueException('The parameter "condition" must not be empty.');
-        }
+        $input = (new ParameterProcessor())
+            ->addParameter('condition', Parameter::TYPE_STRING, true)
+            ->addParameter('if_true_converter', ConverterInterface::class)
+            ->addParameter('if_false_converter', ConverterInterface::class)
+            ->process($parameters);
 
         if (!isset($parameters['if_true_converter']) && !isset($parameters['if_false_converter'])) {
-            throw new InvalidArgumentException(
+            throw new ValidationException(
                 'The conditional converter requires a "if_true_converter" and/or "if_false_converter" parameter.'
             );
         }
 
         $conditionBuilder = new ConditionBuilder();
-        $this->condition = $conditionBuilder->build($condition);
-
-        if (isset($parameters['if_true_converter'])) {
-            $this->ifTrueConverter = $parameters['if_true_converter'];
-        }
-
-        if (isset($parameters['if_false_converter'])) {
-            $this->ifFalseConverter = $parameters['if_false_converter'];
-        }
+        $this->condition = $conditionBuilder->build($input->get('condition'));
+        $this->ifTrueConverter = $input->get('if_true_converter');
+        $this->ifFalseConverter = $input->get('if_false_converter');
     }
 
     /**

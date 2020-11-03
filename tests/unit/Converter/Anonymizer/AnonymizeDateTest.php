@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Anonymizer;
 
 use DateTime;
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeDate;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use UnexpectedValueException;
 
@@ -18,9 +19,12 @@ class AnonymizeDateTest extends TestCase
     {
         $converter = new AnonymizeDate();
 
+        $value = $converter->convert(null);
+        $this->assertSame('', $value);
+
         $date = '1990-12-31';
-        $anonymizedDate = $converter->convert($date);
-        $this->assertDateIsAnonymized($anonymizedDate, $date, 'Y-m-d');
+        $value = $converter->convert($date);
+        $this->assertDateIsAnonymized($value, $date, 'Y-m-d');
     }
 
     /**
@@ -32,8 +36,8 @@ class AnonymizeDateTest extends TestCase
         $converter = new AnonymizeDate(['format' => $format]);
 
         $date = '31/12/1990';
-        $anonymizedDate = $converter->convert($date);
-        $this->assertDateIsAnonymized($anonymizedDate, $date, $format);
+        $value = $converter->convert($date);
+        $this->assertDateIsAnonymized($value, $date, $format);
     }
 
     /**
@@ -41,7 +45,7 @@ class AnonymizeDateTest extends TestCase
      */
     public function testEmptyFormat(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new AnonymizeDate(['format' => '']);
     }
 

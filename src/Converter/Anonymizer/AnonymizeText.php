@@ -5,24 +5,26 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\ConverterInterface;
-use UnexpectedValueException;
+use Smile\GdprDump\Converter\Parameters\Parameter;
+use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class AnonymizeText implements ConverterInterface
 {
     /**
      * @var string[]
      */
-    private $delimiters = [' ', '_', '.'];
+    private $delimiters;
 
     /**
      * @var string
      */
-    private $replacement = '*';
+    private $replacement;
 
     /**
      * @var int
      */
-    private $minWordLength = 1;
+    private $minWordLength;
 
     /**
      * @var bool
@@ -31,24 +33,19 @@ class AnonymizeText implements ConverterInterface
 
     /**
      * @param array $parameters
+     * @throws ValidationException
      */
     public function __construct(array $parameters = [])
     {
-        if (array_key_exists('delimiters', $parameters)) {
-            if (!is_array($parameters['delimiters'])) {
-                throw new UnexpectedValueException('The parameter "delimiters" must be an array.');
-            }
+        $input = (new ParameterProcessor())
+            ->addParameter('delimiters', Parameter::TYPE_ARRAY, false, [' ', '_', '-', '.'])
+            ->addParameter('replacement', Parameter::TYPE_STRING, true, '*')
+            ->addParameter('min_word_length', Parameter::TYPE_INT, true, 3)
+            ->process($parameters);
 
-            $this->delimiters = $parameters['delimiters'];
-        }
-
-        if (array_key_exists('replacement', $parameters)) {
-            $this->replacement = (string) $parameters['replacement'];
-        }
-
-        if (array_key_exists('min_word_length', $parameters)) {
-            $this->minWordLength = (int) $parameters['min_word_length'];
-        }
+        $this->delimiters = $input->get('delimiters');
+        $this->replacement = $input->get('replacement');
+        $this->minWordLength = $input->get('min_word_length');
 
         // Flip separators array for increased performance
         $this->delimiters = array_flip($this->delimiters);
@@ -59,22 +56,23 @@ class AnonymizeText implements ConverterInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function convert($value, array $context = [])
     {
-        $string = (string) $value;
-        if ($string === '') {
+        $value = (string) $value;
+        if ($value === '') {
             return $value;
         }
 
         $result = '';
         $currentWordLength = 0;
-        $array = $this->multiByteEnabled ? mb_str_split($string, 1, 'UTF-8') : str_split($string);
-        $lastKey = array_key_last($array);
+        $array = $this->multiByteEnabled ? mb_str_split($value, 1, 'UTF-8') : str_split($value);
+        $lastKey = null;
 
         foreach ($array as $index => $char) {
-            // Preserve separator characters
-            if (array_key_exists($char, $this->delimiters)) {
+            // Preserve separator characters (using isset instead of array_key_exists because it's faster)
+            if (isset($this->delimiters[$char])) {
                 $result .= $char;
                 $currentWordLength = 0;
                 continue;
@@ -85,10 +83,16 @@ class AnonymizeText implements ConverterInterface
             $currentWordLength++;
 
             // Make sure the generated word has the minimum expected size
-            $checkWordLength = $index === $lastKey || array_key_exists($array[$index + 1], $this->delimiters);
-            if ($checkWordLength && $currentWordLength < $this->minWordLength) {
-                $multiplier = $this->minWordLength - $currentWordLength;
-                $result .= str_repeat($this->replacement, $multiplier);
+            if ($currentWordLength < $this->minWordLength) {
+                if ($lastKey === null) {
+                    // Calculate the last key only once and when needed
+                    $lastKey = array_key_last($array);
+                }
+
+                if ($index === $lastKey || isset($this->delimiters[$array[$index + 1]])) {
+                    $multiplier = $this->minWordLength - $currentWordLength;
+                    $result .= str_repeat($this->replacement, $multiplier);
+                }
             }
         }
 

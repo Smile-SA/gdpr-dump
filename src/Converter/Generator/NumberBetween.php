@@ -2,20 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Converter\Proxy;
+namespace Smile\GdprDump\Converter\Generator;
 
 use Smile\GdprDump\Converter\ConverterInterface;
-use Smile\GdprDump\Converter\Helper\ArrayHelper;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 
-class FromContext implements ConverterInterface
+class NumberBetween implements ConverterInterface
 {
     /**
-     * @var string
+     * @var int
      */
-    private $key;
+    private $min;
+
+    /**
+     * @var int
+     */
+    private $max;
 
     /**
      * @param array $parameters
@@ -24,10 +28,16 @@ class FromContext implements ConverterInterface
     public function __construct(array $parameters = [])
     {
         $input = (new ParameterProcessor())
-            ->addParameter('key', Parameter::TYPE_STRING, true)
+            ->addParameter('min', Parameter::TYPE_INT, true)
+            ->addParameter('max', Parameter::TYPE_INT, true)
             ->process($parameters);
 
-        $this->key = $input->get('key');
+        $this->min = $input->get('min');
+        $this->max = $input->get('max');
+
+        if ($this->min > $this->max) {
+            throw new ValidationException('The parameter "min" must be lower than the parameter "max".');
+        }
     }
 
     /**
@@ -35,6 +45,6 @@ class FromContext implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        return ArrayHelper::getPath($context, $this->key);
+        return mt_rand($this->min, $this->max);
     }
 }

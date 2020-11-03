@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
 
 use DateTime;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Randomizer\RandomizeDate;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use UnexpectedValueException;
 
-class DateRandomizerTest extends TestCase
+class RandomizeDateTest extends TestCase
 {
     /**
      * Test the converter.
@@ -18,9 +18,12 @@ class DateRandomizerTest extends TestCase
     {
         $converter = new RandomizeDate();
 
+        $value = $converter->convert(null);
+        $this->assertNotNull($value);
+
         $date = '1990-12-31';
-        $randomizedDate = $converter->convert($date);
-        $this->assertDateIsRandomized($randomizedDate, $date, 'Y-m-d');
+        $value = $converter->convert($date);
+        $this->assertDateIsRandomized($value, $date, 'Y-m-d');
     }
 
     /**
@@ -32,8 +35,8 @@ class DateRandomizerTest extends TestCase
         $converter = new RandomizeDate(['format' => $format]);
 
         $date = '31/12/1990';
-        $randomizedDate = $converter->convert($date);
-        $this->assertDateIsRandomized($randomizedDate, $date, $format);
+        $value = $converter->convert($date);
+        $this->assertDateIsRandomized($value, $date, $format);
     }
 
     /**
@@ -44,8 +47,8 @@ class DateRandomizerTest extends TestCase
         $converter = new RandomizeDate(['min_year' => 1970, 'max_year' => 2020]);
 
         $date = '1990-12-31';
-        $randomizedDate = $converter->convert($date);
-        $this->assertDateIsRandomized($randomizedDate, $date, 'Y-m-d');
+        $value = $converter->convert($date);
+        $this->assertDateIsRandomized($value, $date, 'Y-m-d');
     }
 
     /**
@@ -56,10 +59,10 @@ class DateRandomizerTest extends TestCase
         $converter = new RandomizeDate(['min_year' => null, 'max_year' => null]);
 
         $date = '1990-12-31';
-        $randomizedDate = $converter->convert($date);
+        $value = $converter->convert($date);
 
         $currentYear = (new DateTime())->format('Y');
-        $randomizedYear = (new DateTime($randomizedDate))->format('Y');
+        $randomizedYear = (new DateTime($value))->format('Y');
         $this->assertSame($currentYear, $randomizedYear);
     }
 
@@ -68,7 +71,7 @@ class DateRandomizerTest extends TestCase
      */
     public function testEmptyFormat(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new RandomizeDate(['format' => '']);
     }
 
@@ -77,7 +80,7 @@ class DateRandomizerTest extends TestCase
      */
     public function testYearConflict(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new RandomizeDate(['min_year' => 2020, 'max_year' => 2019]);
     }
 

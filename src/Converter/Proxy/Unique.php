@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Proxy;
 
-use InvalidArgumentException;
 use OverflowException;
 use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Parameters\Parameter;
+use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class Unique implements ConverterInterface
 {
@@ -27,16 +29,17 @@ class Unique implements ConverterInterface
 
     /**
      * @param array $parameters
-     * @throws InvalidArgumentException
+     * @throws ValidationException
      */
     public function __construct(array $parameters)
     {
-        if (!isset($parameters['converter'])) {
-            throw new InvalidArgumentException('The parameter "converter" is required.');
-        }
+        $input = (new ParameterProcessor())
+            ->addParameter('converter', ConverterInterface::class, true)
+            ->addParameter('max_retries', Parameter::TYPE_INT, true, 100)
+            ->process($parameters);
 
-        $this->converter = $parameters['converter'];
-        $this->maxRetries = (int) ($parameters['maxRetries'] ?? 100);
+        $this->converter = $input->get('converter');
+        $this->maxRetries = $input->get('max_retries');
     }
 
     /**

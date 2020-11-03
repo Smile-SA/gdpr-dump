@@ -6,6 +6,9 @@ namespace Smile\GdprDump\Converter\Anonymizer;
 
 use DateTime;
 use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Parameters\Parameter;
+use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use UnexpectedValueException;
 
 class AnonymizeDate implements ConverterInterface
@@ -13,36 +16,40 @@ class AnonymizeDate implements ConverterInterface
     /**
      * @var string
      */
-    protected $format = 'Y-m-d';
+    protected $defaultFormat = 'Y-m-d';
+
+    /**
+     * @var string
+     */
+    private $format;
 
     /**
      * @param array $parameters
-     * @throws UnexpectedValueException
+     * @throws ValidationException
      */
     public function __construct(array $parameters = [])
     {
-        if (array_key_exists('format', $parameters)) {
-            $this->format = (string) $parameters['format'];
+        $input = (new ParameterProcessor())
+            ->addParameter('format', Parameter::TYPE_STRING, true, $this->defaultFormat)
+            ->process($parameters);
 
-            if ($this->format === '') {
-                throw new UnexpectedValueException('The parameter "format" must not be empty.');
-            }
-        }
+        $this->format = $input->get('format');
     }
 
     /**
      * @inheritdoc
+     * @throws UnexpectedValueException
      */
     public function convert($value, array $context = [])
     {
-        $string = (string) $value;
-        if ($string === '') {
+        $value = (string) $value;
+        if ($value === '') {
             return $value;
         }
 
-        $date = DateTime::createFromFormat($this->format, $string);
+        $date = DateTime::createFromFormat($this->format, $value);
         if ($date === false) {
-            throw new UnexpectedValueException(sprintf('Failed to convert the value "%s" to a date.', $string));
+            throw new UnexpectedValueException(sprintf('Failed to convert the value "%s" to a date.', $value));
         }
 
         $this->anonymizeDate($date);
@@ -51,11 +58,11 @@ class AnonymizeDate implements ConverterInterface
     }
 
     /**
-     * Anonymize a date, by randomizing the day and month.
+     * Anonymize the date.
      *
      * @param DateTime $date
      */
-    protected function anonymizeDate(DateTime $date): void
+    private function anonymizeDate(DateTime $date): void
     {
         // Get the year, month and day
         $year = (int) $date->format('Y');

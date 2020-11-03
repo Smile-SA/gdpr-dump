@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeEmail;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use UnexpectedValueException;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class AnonymizeEmailTest extends TestCase
 {
     /**
@@ -17,8 +20,14 @@ class AnonymizeEmailTest extends TestCase
     {
         $converter = new AnonymizeEmail(['domains' => ['example.org']]);
 
-        $value = $converter->convert('');
+        $value = $converter->convert(null);
         $this->assertSame('', $value);
+
+        $value = $converter->convert('a');
+        $this->assertSame('a**', $value);
+
+        $value = $converter->convert('a@gmail.com');
+        $this->assertSame('a**@example.org', $value);
 
         $value = $converter->convert('user1');
         $this->assertSame('u****', $value);
@@ -38,10 +47,10 @@ class AnonymizeEmailTest extends TestCase
         $converter = new AnonymizeEmail(['domains' => ['example.org']]);
 
         $value = $converter->convert('àà.éé.èè.üü.øø@gmail.com');
-        $this->assertSame('à*.é*.è*.ü*.ø*@example.org', $value);
+        $this->assertSame('à**.é**.è**.ü**.ø**@example.org', $value);
 
         $value = $converter->convert('汉字.한글.漢字@gmail.com');
-        $this->assertSame('汉*.한*.漢*@example.org', $value);
+        $this->assertSame('汉**.한**.漢**@example.org', $value);
     }
 
     /**
@@ -56,6 +65,15 @@ class AnonymizeEmailTest extends TestCase
     }
 
     /**
+     * Assert that an exception is thrown when the parameter "min_word_length" is empty.
+     */
+    public function testEmptyMinWordLength(): void
+    {
+        $this->expectException(ValidationException::class);
+        new AnonymizeEmail(['min_word_length' => null]);
+    }
+
+    /**
      * Test the converter with a custom replacement character.
      */
     public function testCustomReplacement(): void
@@ -64,6 +82,15 @@ class AnonymizeEmailTest extends TestCase
 
         $value = $converter->convert('john.doe@gmail.com');
         $this->assertSame('jxxx.dxx@example.org', $value);
+    }
+
+    /**
+     * Assert that an exception is thrown when the parameter "replacement" is empty.
+     */
+    public function testEmptyReplacement(): void
+    {
+        $this->expectException(ValidationException::class);
+        new AnonymizeEmail(['replacement' => '']);
     }
 
     /**
@@ -99,7 +126,7 @@ class AnonymizeEmailTest extends TestCase
      */
     public function testInvalidDelimiters(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new AnonymizeEmail(['delimiters' => 'invalid']);
     }
 
@@ -108,7 +135,7 @@ class AnonymizeEmailTest extends TestCase
      */
     public function testEmptyDomains(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new AnonymizeEmail(['domains' => []]);
     }
 
@@ -117,7 +144,7 @@ class AnonymizeEmailTest extends TestCase
      */
     public function testInvalidDomains(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new AnonymizeEmail(['domains' => 'invalid']);
     }
 }
