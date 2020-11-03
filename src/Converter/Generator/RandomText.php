@@ -1,0 +1,67 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Smile\GdprDump\Converter\Generator;
+
+use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Parameters\Parameter;
+use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
+
+class RandomText implements ConverterInterface
+{
+    /**
+     * @var string
+     */
+    protected $characters;
+
+    /**
+     * @var int
+     */
+    private $minLength;
+
+    /**
+     * @var int
+     */
+    private $maxLength;
+
+    /**
+     * @var int
+     */
+    private $charactersCount;
+
+    /**
+     * @param array $parameters
+     * @throws ValidationException
+     */
+    public function __construct(array $parameters = [])
+    {
+        $input = (new ParameterProcessor())
+            ->addParameter('characters', Parameter::TYPE_STRING, true, '0123456789abcdefghijklmnopqrstuvwxyz')
+            ->addParameter('min_length', Parameter::TYPE_INT, true, 3)
+            ->addParameter('max_length', Parameter::TYPE_INT, true, 16)
+            ->process($parameters);
+
+        $this->characters = $input->get('characters');
+        $this->minLength = $input->get('min_length');
+        $this->maxLength = $input->get('max_length');
+        $this->charactersCount = strlen($this->characters);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function convert($value, array $context = [])
+    {
+        $result = '';
+        $length = mt_rand($this->minLength, $this->maxLength);
+
+        for ($index = 0; $index < $length; $index++) {
+            $characterIndex = mt_rand(0, $this->charactersCount - 1);
+            $result .= $this->characters[$characterIndex];
+        }
+
+        return $result;
+    }
+}
