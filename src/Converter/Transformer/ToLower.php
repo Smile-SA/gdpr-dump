@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Converter\Base;
+namespace Smile\GdprDump\Converter\Transformer;
 
 use Smile\GdprDump\Converter\ConverterInterface;
 

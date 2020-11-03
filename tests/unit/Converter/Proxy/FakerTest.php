@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Converter;
+namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
 use Faker\Factory as FakerFactory;
-use InvalidArgumentException;
-use Smile\GdprDump\Converter\Faker;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Proxy\Faker;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use stdClass;
 
 class FakerTest extends TestCase
 {
@@ -51,8 +52,17 @@ class FakerTest extends TestCase
     public function testProviderNotSet(): void
     {
         $parameters = ['formatter' => 'safeEmail'];
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         new Faker($parameters);
+    }
+
+    /**
+     * Assert that an exception is thrown when the parameter "converter" is not an instance of ConverterInterface.
+     */
+    public function testProviderNotValid(): void
+    {
+        $this->expectException(ValidationException::class);
+        new Faker(['faker' => new stdClass()]);
     }
 
     /**
@@ -61,7 +71,7 @@ class FakerTest extends TestCase
     public function testFormatterNotSet(): void
     {
         $parameters = ['faker' => FakerFactory::create()];
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         new Faker($parameters);
     }
 }

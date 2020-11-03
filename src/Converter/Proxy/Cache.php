@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Proxy;
 
-use InvalidArgumentException;
 use Smile\GdprDump\Converter\ConverterInterface;
-use UnexpectedValueException;
+use Smile\GdprDump\Converter\Parameters\Parameter;
+use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class Cache implements ConverterInterface
 {
@@ -27,25 +28,17 @@ class Cache implements ConverterInterface
 
     /**
      * @param array $parameters
-     * @throws InvalidArgumentException
-     * @throws UnexpectedValueException
+     * @throws ValidationException
      */
     public function __construct(array $parameters)
     {
-        if (!isset($parameters['converter'])) {
-            throw new InvalidArgumentException('The parameter "converter" is required.');
-        }
+        $input = (new ParameterProcessor())
+            ->addParameter('converter', ConverterInterface::class, true)
+            ->addParameter('cache_key', Parameter::TYPE_STRING, true)
+            ->process($parameters);
 
-        if (!array_key_exists('cache_key', $parameters)) {
-            throw new InvalidArgumentException('The parameter "cache_key" is required.');
-        }
-
-        $this->converter = $parameters['converter'];
-        $this->cacheKey = (string) $parameters['cache_key'];
-
-        if ($this->cacheKey === '') {
-            throw new UnexpectedValueException('The parameter "cache_key" must not be empty.');
-        }
+        $this->converter = $input->get('converter');
+        $this->cacheKey = $input->get('cache_key');
     }
 
     /**

@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Converter\Base;
+namespace Smile\GdprDump\Converter\Generator;
 
-use InvalidArgumentException;
 use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class SetValue implements ConverterInterface
 {
@@ -16,15 +17,15 @@ class SetValue implements ConverterInterface
 
     /**
      * @param array $parameters
-     * @throws InvalidArgumentException
+     * @throws ValidationException
      */
     public function __construct(array $parameters)
     {
-        if (!array_key_exists('value', $parameters)) {
-            throw new InvalidArgumentException('The parameter "value" is required.');
-        }
+        $input = (new ParameterProcessor())
+            ->addParameter('value', null, true)
+            ->process($parameters);
 
-        $this->value = $parameters['value'];
+        $this->value = $input->get('value');
     }
 
     /**

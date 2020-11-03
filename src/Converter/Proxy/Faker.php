@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Converter;
+namespace Smile\GdprDump\Converter\Proxy;
 
 use Faker\Generator;
-use InvalidArgumentException;
-use UnexpectedValueException;
+use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Parameters\Parameter;
+use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class Faker implements ConverterInterface
 {
@@ -32,30 +34,19 @@ class Faker implements ConverterInterface
 
     /**
      * @param array $parameters
-     * @throws InvalidArgumentException
-     * @throws UnexpectedValueException
+     * @throws ValidationException
      */
     public function __construct(array $parameters)
     {
-        if (!isset($parameters['faker'])) {
-            throw new InvalidArgumentException('The parameter "faker" is required.');
-        }
+        $input = (new ParameterProcessor())
+            ->addParameter('faker', Generator::class, true)
+            ->addParameter('formatter', Parameter::TYPE_STRING, true)
+            ->addParameter('arguments', Parameter::TYPE_ARRAY, false, [])
+            ->process($parameters);
 
-        if (!array_key_exists('formatter', $parameters)) {
-            throw new InvalidArgumentException('The parameter "formatter" is required.');
-        }
-
-        if (array_key_exists('arguments', $parameters) && !is_array($parameters['arguments'])) {
-            throw new UnexpectedValueException('The parameter "arguments" must be an array.');
-        }
-
-        $this->faker = $parameters['faker'];
-        $this->formatter = (string) $parameters['formatter'];
-        $this->arguments = $parameters['arguments'] ?? [];
-
-        if ($this->formatter === '') {
-            throw new UnexpectedValueException('The parameter "formatter" must not be empty.');
-        }
+        $this->faker = $input->get('faker');
+        $this->formatter = $input->get('formatter');
+        $this->arguments = $input->get('arguments') ?? [];
 
         foreach ($this->arguments as $name => $value) {
             if ($value === '{{value}}') {

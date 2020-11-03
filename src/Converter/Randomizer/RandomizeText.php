@@ -5,19 +5,21 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter\Randomizer;
 
 use Smile\GdprDump\Converter\ConverterInterface;
-use UnexpectedValueException;
+use Smile\GdprDump\Converter\Parameters\Parameter;
+use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class RandomizeText implements ConverterInterface
 {
     /**
      * @var int
      */
-    private $minLength = 3;
+    private $minLength;
 
     /**
      * @var string
      */
-    private $replacements = '0123456789abcdefghijklmnopqrstuvwxyz';
+    private $replacements;
 
     /**
      * @var int
@@ -26,22 +28,17 @@ class RandomizeText implements ConverterInterface
 
     /**
      * @param array $parameters
-     * @throws UnexpectedValueException
+     * @throws ValidationException
      */
     public function __construct(array $parameters = [])
     {
-        if (array_key_exists('min_length', $parameters)) {
-            $this->minLength = (int) $parameters['min_length'];
-        }
+        $input = (new ParameterProcessor())
+            ->addParameter('replacements', Parameter::TYPE_STRING, true, '0123456789abcdefghijklmnopqrstuvwxyz')
+            ->addParameter('min_length', Parameter::TYPE_STRING, true, 3)
+            ->process($parameters);
 
-        if (array_key_exists('replacements', $parameters)) {
-            $this->replacements = (string) $parameters['replacements'];
-
-            if ($this->replacements === '') {
-                throw new UnexpectedValueException('The parameter "replacements" must not be empty.');
-            }
-        }
-
+        $this->replacements = $input->get('replacements');
+        $this->minLength = $input->get('min_length');
         $this->replacementsCount = strlen($this->replacements);
     }
 
@@ -50,13 +47,13 @@ class RandomizeText implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        $string = (string) $value;
-        if ($string === '') {
+        $value = (string) $value;
+        if ($value === '') {
             return $value;
         }
 
-        $length = strlen($string);
         $result = '';
+        $length = strlen($value);
 
         if ($length < $this->minLength) {
             $length = $this->minLength;

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
-use InvalidArgumentException;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Proxy\Cache;
 use Smile\GdprDump\Converter\Randomizer\RandomizeText;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use UnexpectedValueException;
+use stdClass;
 
 class CacheTest extends TestCase
 {
@@ -34,8 +34,17 @@ class CacheTest extends TestCase
      */
     public function testConverterNotSet(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         new Cache(['cache_key' => 'username']);
+    }
+
+    /**
+     * Assert that an exception is thrown when the parameter "converter" is not an instance of ConverterInterface.
+     */
+    public function testConverterNotValid(): void
+    {
+        $this->expectException(ValidationException::class);
+        new Cache(['converter' => new stdClass()]);
     }
 
     /**
@@ -43,7 +52,7 @@ class CacheTest extends TestCase
      */
     public function testCacheKeyNotSet(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         new Cache(['converter' => new RandomizeText()]);
     }
 
@@ -52,7 +61,7 @@ class CacheTest extends TestCase
      */
     public function testEmptyCacheKey(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new Cache(['converter' => new RandomizeText(), 'cache_key' => '']);
     }
 }

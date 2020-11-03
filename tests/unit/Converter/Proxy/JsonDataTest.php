@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
-use InvalidArgumentException;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Proxy\JsonData;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use UnexpectedValueException;
 
 class JsonDataTest extends TestCase
 {
@@ -27,8 +26,9 @@ class JsonDataTest extends TestCase
 
         $converter = new JsonData($parameters);
 
-        $value = $converter->convert('');
-        $this->assertSame('', $value);
+        // Values that can't be decoded are returned as-is
+        $value = $converter->convert(null);
+        $this->assertSame(null, $value);
 
         $value = $converter->convert($this->getJsonData());
         $this->assertSame($this->getExpectedData(), $value);
@@ -56,7 +56,7 @@ class JsonDataTest extends TestCase
      */
     public function testConvertersNotSet(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         new JsonData([]);
     }
 
@@ -65,7 +65,7 @@ class JsonDataTest extends TestCase
      */
     public function testEmptyConverters(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new JsonData(['converters' => []]);
     }
 
@@ -74,7 +74,7 @@ class JsonDataTest extends TestCase
      */
     public function testInvalidConverters(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new JsonData(['converters' => 'notAnArray']);
     }
 

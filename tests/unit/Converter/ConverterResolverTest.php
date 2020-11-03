@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter;
 
 use RuntimeException;
-use Smile\GdprDump\Converter\Base\ToLower;
 use Smile\GdprDump\Converter\ConverterResolver;
-use Smile\GdprDump\Converter\Faker;
+use Smile\GdprDump\Converter\Proxy\Faker;
 use Smile\GdprDump\Converter\Proxy\Unique;
+use Smile\GdprDump\Converter\Transformer\ToLower;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class ConverterResolverTest extends TestCase

@@ -4,44 +4,35 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Randomizer;
 
-use UnexpectedValueException;
+use Smile\GdprDump\Converter\Parameters\Parameter;
+use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class RandomizeEmail extends RandomizeText
 {
     /**
      * @var string[]
      */
-    private $domains = [
-        'example.com',
-        'example.net',
-        'example.org',
-    ];
+    protected $domains;
 
     /**
      * @var int
      */
-    private $domainsCount;
+    protected $domainsCount;
 
     /**
      * @param array $parameters
-     * @throws UnexpectedValueException
+     * @throws ValidationException
      */
     public function __construct(array $parameters = [])
     {
         parent::__construct($parameters);
 
-        if (array_key_exists('domains', $parameters)) {
-            if (!is_array($parameters['domains'])) {
-                throw new UnexpectedValueException('The parameter "domains" must be an array.');
-            }
+        $input = (new ParameterProcessor())
+            ->addParameter('domains', Parameter::TYPE_ARRAY, true, ['example.com', 'example.net', 'example.org'])
+            ->process($parameters);
 
-            if (empty($parameters['domains'])) {
-                throw new UnexpectedValueException('The parameter "domains" must not be empty.');
-            }
-
-            $this->domains = $parameters['domains'];
-        }
-
+        $this->domains = $input->get('domains');
         $this->domainsCount = count($this->domains);
     }
 
@@ -50,23 +41,23 @@ class RandomizeEmail extends RandomizeText
      */
     public function convert($value, array $context = [])
     {
-        $string = (string) $value;
-        if ($string === '') {
+        $value = (string) $value;
+        if ($value === '') {
             return $value;
         }
 
-        $parts = explode('@', $string);
+        // Replace the username
+        $parts = explode('@', $value);
+        $value = parent::convert($parts[0]);
 
-        if (isset($parts[0])) {
-            $parts[0] = parent::convert($parts[0]);
+        if (!isset($parts[1])) {
+            return $value;
         }
 
         // Replace the email domain
-        if (isset($parts[1])) {
-            $index = mt_rand(0, $this->domainsCount - 1);
-            $parts[1] = $this->domains[$index];
-        }
+        $index = mt_rand(0, $this->domainsCount - 1);
+        $value .= '@' . $this->domains[$index];
 
-        return implode('@', $parts);
+        return $value;
     }
 }

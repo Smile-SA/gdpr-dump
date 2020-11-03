@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
 
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Randomizer\RandomizeText;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use UnexpectedValueException;
 
 class RandomizeTextTest extends TestCase
 {
@@ -17,11 +17,22 @@ class RandomizeTextTest extends TestCase
     {
         $converter = new RandomizeText();
 
-        $value = $converter->convert('');
+        $value = $converter->convert(null);
         $this->assertSame('', $value);
 
         $value = $converter->convert('user1');
         $this->assertStringNotContainsString('user1', $value);
+    }
+
+    /**
+     * Test the converter with a custom min length.
+     */
+    public function testCustomLength(): void
+    {
+        $converter = new RandomizeText(['min_length' => 10]);
+
+        $value = $converter->convert('user1');
+        $this->assertSame(10, strlen($value));
     }
 
     /**
@@ -40,7 +51,7 @@ class RandomizeTextTest extends TestCase
      */
     public function testEmptyReplacements(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new RandomizeText(['replacements' => '']);
     }
 }

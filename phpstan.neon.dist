@@ -12,3 +12,6 @@ parameters:
         -
             message: '#Method [a-zA-Z\\]+::configure\(\) has no return typehint specified#'
             path: src/Console/Command
+        -
+            message: '#Instanceof between object and string\|null results in an error#'
+            path: src/Converter/Parameters/ParameterProcessor.php

@@ -6,10 +6,17 @@ namespace Smile\GdprDump\Converter\Randomizer;
 
 use DateTime;
 use Smile\GdprDump\Converter\ConverterInterface;
-use UnexpectedValueException;
+use Smile\GdprDump\Converter\Parameters\Parameter;
+use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class RandomizeDate implements ConverterInterface
 {
+    /**
+     * @var string
+     */
+    protected $defaultFormat = 'Y-m-d';
+
     /**
      * @var string
      */
@@ -32,32 +39,24 @@ class RandomizeDate implements ConverterInterface
 
     /**
      * @param array $parameters
-     * @throws UnexpectedValueException
+     * @throws ValidationException
      */
     public function __construct(array $parameters = [])
     {
         $this->date = new DateTime();
 
-        if (array_key_exists('format', $parameters)) {
-            $this->format = (string) $parameters['format'];
+        $input = (new ParameterProcessor())
+            ->addParameter('format', Parameter::TYPE_STRING, true, $this->defaultFormat)
+            ->addParameter('min_year', Parameter::TYPE_INT, false, 1900)
+            ->addParameter('max_year', Parameter::TYPE_INT)
+            ->process($parameters);
 
-            if ($this->format === '') {
-                throw new UnexpectedValueException('The parameter "replacement" must not be empty.');
-            }
-        }
-
-        // Min year is the current year if the parameter is set to null, 1900 if the parameter is not defined
-        if (array_key_exists('min_year', $parameters)) {
-            $this->minYear = (int) ($parameters['min_year'] !== null
-                ? $parameters['min_year']
-                : $this->date->format('Y'));
-        }
-
-        // Max year is the current year if the parameter is not defined or set to null
-        $this->maxYear = (int) ($parameters['max_year'] ?? $this->date->format('Y'));
+        $this->format = $input->get('format');
+        $this->minYear = $input->get('min_year') ?? (int) $this->date->format('Y');
+        $this->maxYear = $input->get('max_year') ?? (int) $this->date->format('Y');
 
         if ($this->minYear > $this->maxYear) {
-            throw new UnexpectedValueException('The parameter "min_year" must be lower than the parameter "max_year".');
+            throw new ValidationException('The parameter "min_year" must be lower than the parameter "max_year".');
         }
     }
 
@@ -66,11 +65,6 @@ class RandomizeDate implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        $string = (string) $value;
-        if ($string === '') {
-            return $value;
-        }
-
         $this->randomizeDate();
 
         return $this->date->format($this->format);

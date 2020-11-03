@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Converter\Base;
+namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 
-use Smile\GdprDump\Converter\Base\SetNull;
+use Smile\GdprDump\Converter\Generator\SetNull;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class SetNullTest extends TestCase
@@ -15,6 +15,12 @@ class SetNullTest extends TestCase
     public function testConverter(): void
     {
         $converter = new SetNull();
+
+        $value = $converter->convert(null);
+        $this->assertNull($value);
+
+        $value = $converter->convert('');
+        $this->assertNull($value);
 
         $value = $converter->convert('notAnonymized');
         $this->assertNull($value);

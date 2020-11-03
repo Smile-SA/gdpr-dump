@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Converter\Base;
+namespace Smile\GdprDump\Tests\Unit\Converter\Transformer;
 
-use Smile\GdprDump\Converter\Base\ToLower;
+use Smile\GdprDump\Converter\Transformer\ToLower;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class ToLowerTest extends TestCase
@@ -15,6 +15,9 @@ class ToLowerTest extends TestCase
     public function testConverter(): void
     {
         $converter = new ToLower();
+
+        $value = $converter->convert(null);
+        $this->assertSame('', $value);
 
         $value = $converter->convert('VaLuE');
         $this->assertSame('value', $value);

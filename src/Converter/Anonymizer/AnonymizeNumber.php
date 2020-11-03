@@ -5,18 +5,21 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Parameters\Parameter;
+use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class AnonymizeNumber implements ConverterInterface
 {
     /**
      * @var string
      */
-    private $replacement = '*';
+    private $replacement;
 
     /**
      * @var int
      */
-    private $minNumberLength = 1;
+    private $minNumberLength;
 
     /**
      * @var bool
@@ -25,16 +28,17 @@ class AnonymizeNumber implements ConverterInterface
 
     /**
      * @param array $parameters
+     * @throws ValidationException
      */
     public function __construct(array $parameters = [])
     {
-        if (array_key_exists('replacement', $parameters)) {
-            $this->replacement = (string) $parameters['replacement'];
-        }
+        $input = (new ParameterProcessor())
+            ->addParameter('replacement', Parameter::TYPE_STRING, true, '*')
+            ->addParameter('min_number_length', Parameter::TYPE_INT, true, 1)
+            ->process($parameters);
 
-        if (array_key_exists('min_number_length', $parameters)) {
-            $this->minNumberLength = (int) $parameters['min_number_length'];
-        }
+        $this->replacement = $input->get('replacement');
+        $this->minNumberLength = $input->get('min_number_length');
 
         // Call the extension_loaded function only once (few seconds gain when converting millions of values)
         $this->multiByteEnabled = extension_loaded('mbstring');
@@ -42,18 +46,19 @@ class AnonymizeNumber implements ConverterInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function convert($value, array $context = [])
     {
-        $string = (string) $value;
-        if ($string === '') {
+        $value = (string) $value;
+        if ($value === '') {
             return $value;
         }
 
         $result = '';
         $currentNumberLength = 0;
-        $array = $this->multiByteEnabled ? mb_str_split($string, 1, 'UTF-8') : str_split($string);
-        $lastKey = array_key_last($array);
+        $array = $this->multiByteEnabled ? mb_str_split($value, 1, 'UTF-8') : str_split($value);
+        $lastKey = null;
 
         foreach ($array as $index => $char) {
             // Preserve non-numeric characters
@@ -68,10 +73,16 @@ class AnonymizeNumber implements ConverterInterface
             $currentNumberLength++;
 
             // Make sure the generated word has the minimum expected size
-            $checkNumberLength = $index === $lastKey || !is_numeric($array[$index + 1]);
-            if ($checkNumberLength && $currentNumberLength < $this->minNumberLength) {
-                $multiplier = $this->minNumberLength - $currentNumberLength;
-                $result .= str_repeat($this->replacement, $multiplier);
+            if ($currentNumberLength < $this->minNumberLength) {
+                if ($lastKey === null) {
+                    // Calculate the last key only once and when needed
+                    $lastKey = array_key_last($array);
+                }
+
+                if ($index === $lastKey || !is_numeric($array[$index + 1])) {
+                    $multiplier = $this->minNumberLength - $currentNumberLength;
+                    $result .= str_repeat($this->replacement, $multiplier);
+                }
             }
         }
 

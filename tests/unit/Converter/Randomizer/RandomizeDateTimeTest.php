@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
 
 use DateTime;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Randomizer\RandomizeDateTime;
-use UnexpectedValueException;
 
-class DateTimeRandomizerTest extends DateRandomizerTest
+class RandomizeDateTimeTest extends RandomizeDateTest
 {
     /**
      * Test the converter.
@@ -17,9 +17,12 @@ class DateTimeRandomizerTest extends DateRandomizerTest
     {
         $converter = new RandomizeDateTime();
 
+        $value = $converter->convert(null);
+        $this->assertNotNull($value);
+
         $date = '1990-12-31 12:05:41';
-        $randomizedDate = $converter->convert($date);
-        $this->assertDateIsRandomized($randomizedDate, $date, 'Y-m-d H:i:s');
+        $value = $converter->convert($date);
+        $this->assertDateIsRandomized($value, $date, 'Y-m-d H:i:s');
     }
 
     /**
@@ -67,7 +70,7 @@ class DateTimeRandomizerTest extends DateRandomizerTest
      */
     public function testEmptyFormat(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new RandomizeDateTime(['format' => '']);
     }
 
@@ -76,7 +79,7 @@ class DateTimeRandomizerTest extends DateRandomizerTest
      */
     public function testYearConflict(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new RandomizeDateTime(['min_year' => 2020, 'max_year' => 2019]);
     }
 }

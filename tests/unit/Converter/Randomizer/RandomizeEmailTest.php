@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
 
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Randomizer\RandomizeEmail;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use UnexpectedValueException;
 
 class RandomizeEmailTest extends TestCase
 {
@@ -17,7 +17,7 @@ class RandomizeEmailTest extends TestCase
     {
         $converter = new RandomizeEmail(['domains' => ['example.org']]);
 
-        $value = $converter->convert('');
+        $value = $converter->convert(null);
         $this->assertSame('', $value);
 
         $value = $converter->convert('user1@gmail.com');
@@ -27,11 +27,25 @@ class RandomizeEmailTest extends TestCase
     }
 
     /**
+     * Test the converter with a custom min length.
+     */
+    public function testCustomLength(): void
+    {
+        $converter = new RandomizeEmail(['domains' => ['example.org'], 'min_length' => 10]);
+
+        $value = $converter->convert('user1@example.org');
+        $this->assertStringEndsWith('@example.org', $value);
+
+        $parts = explode('@', $value);
+        $this->assertSame(10, strlen($parts[0]));
+    }
+
+    /**
      * Test the converter with a custom character replacement string.
      */
     public function testCustomReplacements(): void
     {
-        $converter = new RandomizeEmail(['replacements' => 'a', 'domains' => ['example.org']]);
+        $converter = new RandomizeEmail(['domains' => ['example.org'], 'replacements' => 'a']);
 
         $value = $converter->convert('user1@example.org');
         $this->assertSame('aaaaa@example.org', $value);
@@ -42,7 +56,7 @@ class RandomizeEmailTest extends TestCase
      */
     public function testEmptyDomains(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new RandomizeEmail(['domains' => []]);
     }
 
@@ -51,7 +65,7 @@ class RandomizeEmailTest extends TestCase
      */
     public function testInvalidDomains(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         new RandomizeEmail(['domains' => 'invalid']);
     }
 }
