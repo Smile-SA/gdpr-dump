@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter\Transformer;
 
 use Smile\GdprDump\Converter\ConverterInterface;
-use Smile\GdprDump\Converter\Parameters\Parameter;
-use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 
+/**
+ * @deprecated Use "prependText" instead.
+ */
 class AddPrefix implements ConverterInterface
 {
     /**
-     * @var string
+     * @var ConverterInterface
      */
-    private $prefix;
+    private $converter;
 
     /**
      * @param array $parameters
@@ -22,11 +23,12 @@ class AddPrefix implements ConverterInterface
      */
     public function __construct(array $parameters = [])
     {
-        $input = (new ParameterProcessor())
-            ->addParameter('prefix', Parameter::TYPE_STRING, true)
-            ->process($parameters);
+        if (array_key_exists('prefix', $parameters)) {
+            $parameters['value'] = $parameters['prefix'];
+            unset($parameters['prefix']);
+        }
 
-        $this->prefix = $input->get('prefix');
+        $this->converter = new PrependText($parameters);
     }
 
     /**
@@ -34,8 +36,6 @@ class AddPrefix implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        $value = (string) $value;
-
-        return $value !== '' ? $this->prefix . $value : $value;
+        return $this->converter->convert($value, $context);
     }
 }

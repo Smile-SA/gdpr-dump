@@ -28,16 +28,16 @@ tables:
             - ['created_at', 'gt', 'expr: date_sub(now(), interval 55 day)']
         converters:
             email:
-                converter: 'addPrefix'
+                converter: 'prependText'
                 condition: '{{store_id}} == @main_store_id'
                 parameters:
-                    prefix: 'test_'
+                    value: 'test_'
             firstname:
-                converter: 'addPrefix'
+                converter: 'prependText'
                 parameters:
-                    prefix: 'test_'
+                    value: 'test_'
             lastname:
-                converter: 'addPrefix'
+                converter: 'prependText'
                 parameters:
-                    prefix: 'test_'
+                    value: 'test_'
         skip_conversion_if: '{{customer_id}} == 2'
