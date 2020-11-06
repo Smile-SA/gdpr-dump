@@ -2,67 +2,48 @@
 
 ## Table of Contents
 
-- [faker](#user-content-faker)
-- [anonymizeText](#user-content-anonymizetext)
-- [anonymizeNumber](#user-content-anonymizenumber)
-- [anonymizeEmail](#user-content-anonymizeemail)
-- [anonymizeDate](#user-content-anonymizedate)
-- [anonymizeDateTime](#user-content-anonymizedatetime)
-- [randomizeText](#user-content-randomizetext)
-- [randomizeNumber](#user-content-randomizenumber)
-- [randomizeEmail](#user-content-randomizeemail)
-- [randomizeDate](#user-content-randomizedate)
-- [randomizeDateTime](#user-content-randomizedatetime)
-- [numberBetween](#user-content-numberbetween)
-- [toLower](#user-content-tolower)
-- [toUpper](#user-content-toupper)
-- [setNull](#user-content-setnull)
-- [setValue](#user-content-setvalue)
-- [addPrefix](#user-content-addprefix)
-- [addSuffix](#user-content-addsuffix)
-- [jsonData](#user-content-jsondata)
-- [serializedData](#user-content-serializeddata)
-- [chain](#user-content-chain)
-- [fromContext](#user-content-fromcontext)
+- [Anonymizers](#user-content-anonymizers)
+    - [anonymizeText](#user-content-anonymizetext)
+    - [anonymizeEmail](#user-content-anonymizeemail)
+    - [anonymizeNumber](#user-content-anonymizenumber)
+    - [anonymizeDate](#user-content-anonymizedate)
+    - [anonymizeDateTime](#user-content-anonymizedatetime)
+- [Randomizers](#user-content-randomizers)
+    - [randomizeText](#user-content-randomizetext)
+    - [randomizeEmail](#user-content-randomizeemail)
+    - [randomizeNumber](#user-content-randomizenumber)
+- [Generators](#user-content-generators)
+    - [randomText](#user-content-text)
+    - [randomEmail](#user-content-email)
+    - [randomDate](#user-content-randomizedate)
+    - [randomDateTime](#user-content-randomizedatetime)
+    - [numberBetween](#user-content-randomizenumber)
+    - [setNull](#user-content-setnull)
+    - [setValue](#user-content-setvalue)
+- [Transformers](#user-content-transformers)
+    - [toLower](#user-content-tolower)
+    - [toUpper](#user-content-toupper)
+    - [prependText](#user-content-prependtext)
+    - [appendText](#user-content-appendtext)
+    - [hash](#user-content-hash)
+- [Advanced Converters](#user-content-advanced-converters)
+    - [faker](#user-content-faker)
+    - [jsonData](#user-content-jsondata)
+    - [serializedData](#user-content-serializeddata)
+    - [chain](#user-content-chain)
+    - [fromContext](#user-content-fromcontext)
+- [Deprecated Converters](#user-content-deprecated-converters)
+    - [addPrefix](#user-content-addprefix)
+    - [addSuffix](#user-content-addsuffix)
+    - [randomizeDate](#user-content-randomizedate)
+    - [randomizeDateTime](#user-content-randomizedatetime)
 
-## [faker](../src/Converter/Faker.php)
+## Anonymizers
 
-Allows to use any formatter defined in the [Faker](https://github.com/fzaninotto/Faker) library.
+These converters anonymize an input value.
+Empty values are not converted.
 
-Parameters:
-
-| Name | Required | Default | Description |
-| --- | --- | --- | --- |
-| **formatter** | Y | | The formatter name. |
-| **arguments** | N | `[]` | The formatter arguments. |
-
-Example:
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column:
-                converter: 'faker'
-                parameters:
-                    formatter: 'numberBetween'
-                    arguments: [1, 100]
-```
-
-To use a formatter that requires the original value as an argument, you can use the `{{value}}` placeholder:
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column:
-                converter: 'faker'
-                parameters:
-                    formatter: 'shuffle'
-                    arguments: ['{{value}}']
-```
-
-## [anonymizeText](../src/Converter/Anonymizer/AnonymizeText.php)
+### [anonymizeText](../src/Converter/Anonymizer/AnonymizeText.php)
 
 Anonymizes string values by replacing all characters with the `*` character.
 The first letter of each word is preserved.
@@ -75,8 +56,8 @@ Parameters:
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
 | **replacement** | N | `'*'` | The replacement character. |
-| **delimiters** | N | `[' ', '_', '.']` | The word separator characters. |
-| **min_word_length** | N | `1` | The minimum length per anonymized word. Useful only if at least one word separator is defined. |
+| **delimiters** | N | `[' ', '_', '-', .']` | The word separator characters. |
+| **min_word_length** | N | `3` | The minimum length per anonymized word. Useful only if at least one word separator is defined. |
 
 Example:
 
@@ -88,32 +69,12 @@ tables:
                 converter: 'anonymizeText'
 ```
 
-## [anonymizeNumber](../src/Converter/Anonymizer/AnonymizeNumber.php)
+### [anonymizeEmail](../src/Converter/Anonymizer/AnonymizeEmail.php)
 
-Anonymizes numeric values by replacing all numbers with the `*` character.
-The first digit of each number is preserved.
+Applies the following transformations on the input value:
 
-For example, it converts "user123" to "user1\*\*".
-
-| Name | Required | Default | Description |
-| --- | --- | --- | --- |
-| **replacement** | N | `'*'` | The replacement character. |
-| **min_number_length** | N | `1` | The minimum length per anonymized number. |
-
-Example:
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column:
-                converter: 'anonymizeNumber'
-```
-
-## [anonymizeEmail](../src/Converter/Anonymizer/AnonymizeEmail.php)
-
-Same as `anonymizeText`, but it doesn't obfuscate the email domain.
-The email domain is replaced by a safe domain.
+- Applies the `anonymizeText` converter on the username part.
+- Replaces the domain (if any) by a safe one.
 
 For example, one of the possible conversions for "user1@gmail.com" is "u\*\*\*\*@example.org".
 
@@ -123,8 +84,8 @@ Parameters:
 | --- | --- | --- | --- |
 | **domains** | N | `['example.com', 'example.net', 'example.org']` | A list of email domains. |
 | **replacement** | N | `'*'` | The replacement character. |
-| **delimiters** | N | `[' ', '_', '.']` | The word separator characters. |
-| **min_word_length** | N | `1` | The minimum length per anonymized word. Useful only if at least one word delimiter is defined. |
+| **delimiters** | N | `[' ', '_', '-', '.']` | The word separator characters. |
+| **min_word_length** | N | `3` | The minimum length per anonymized word. Useful only if at least one word delimiter is defined. |
 
 Example:
 
@@ -136,14 +97,38 @@ tables:
                 converter: 'anonymizeEmail'
 ```
 
-## [anonymizeDate](../src/Converter/Anonymizer/AnonymizeDate.php)
+### [anonymizeNumber](../src/Converter/Anonymizer/AnonymizeNumber.php)
+
+Anonymizes numeric values by replacing all numbers with the `*` character.
+The first digit of each number is preserved.
+
+For example, it converts "user123" to "user1\*\*".
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **replacement** | N | `'*'` | The replacement character. |
+| **min_number_length** | N | `1` | The minimum length per anonymized number  (when not empty). |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'anonymizeNumber'
+```
+
+### [anonymizeDate](../src/Converter/Anonymizer/AnonymizeDate.php)
 
 Anonymizes date values.
 It can be used to anonymize a date of birth.
 
-The day and month are randomized, the year is not changed.
-
+The day and month are randomized.
+The year is not changed.
 For example, one of the possible conversions for "1990-01-01" is "1990-11-25".
+
+The date format of the input value MUST match the `format` parameter, otherwise an exception is thrown.
 
 Parameters:
 
@@ -161,9 +146,9 @@ tables:
                 converter: 'anonymizeDate'
 ```
 
-## [anonymizeDateTime](../src/Converter/Anonymizer/AnonymizeDateTime.php)
+### [anonymizeDateTime](../src/Converter/Anonymizer/AnonymizeDateTime.php)
 
-This is exactly the same as the `anonymizeDate` converter, but the default value of the format parameter is `Y-m-d H:i:s` instead of `Y-m-d`.
+Same as `anonymizeDate`, but the default value of the format parameter is `Y-m-d H:i:s` instead of `Y-m-d`.
 
 Parameters:
 
@@ -181,7 +166,14 @@ tables:
                 converter: 'anonymizeDateTime'
 ```
 
-## [randomizeText](../src/Converter/Randomizer/RandomizeText.php)
+## Randomizers
+
+These converters replace parts of the input value with random characters.
+For example, the `randomizeNumber` converter replaces all numeric characters with random numbers.
+
+Only non-empty values are processed.
+
+### [randomizeText](../src/Converter/Randomizer/RandomizeText.php)
 
 Converts all alphanumeric characters to random alphanumeric characters.
 
@@ -204,26 +196,12 @@ tables:
                 converter: 'randomizeText'
 ```
 
-## [randomizeNumber](../src/Converter/Randomizer/RandomizeNumber.php)
+### [randomizeEmail](../src/Converter/Randomizer/RandomizeEmail.php)
 
-Converts all numeric characters to random numbers.
+Applies the following transformations on the input value:
 
-For example, one of the possible conversions for "number_123456" is "number_086714"
-
-Example:
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column:
-                converter: 'randomizeNumber'
-```
-
-## [randomizeEmail](../src/Converter/Randomizer/RandomizeEmail.php)
-
-Same as `randomizeText`, but it doesn't randomize the email domain.
-The email domain is replaced by a safe domain.
+- Applies the `randomizeText` converter on the username part.
+- Replaces the domain (if any) by a safe one.
 
 For example, one of the possible conversions for "user1@gmail.com" is "Jv4oq@example.org".
 
@@ -245,11 +223,80 @@ tables:
                 converter: 'randomizeEmail'
 ```
 
-## [randomizeDate](../src/Converter/Randomizer/RandomizeDate.php)
+### [randomizeNumber](../src/Converter/Randomizer/RandomizeNumber.php)
 
-Converts a date into a random one.
+Converts all numeric characters to random numbers.
+Other characters are not modified.
 
-For example, one of the possible conversions for "1990-01-01" is "2002-01-20".
+For example, one of the possible conversions for "number_123456" is "number_086714"
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'randomizeNumber'
+```
+
+## Generators
+
+These converters generate random values.
+
+### [randomText](../src/Converter/Generator/RandomText.php)
+
+Generates a random text value.
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **min_length** | N | `3` | The minimum length of the generated value. |
+| **max_length** | N | `16` | The minimum length of the generated value. |
+| **characters** | N | [Check here](../src/Converter/Generator/RandomText.php) | A string that contains the characters used to generate the value. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'randomText'
+                parameters:
+                    min_length: 0
+                    max_length: 10
+```
+
+### [randomEmail](../src/Converter/Generator/RandomEmail.php)
+
+Generates a random email address.
+The username part of the email is generated with the `randomText` converter.
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **domains** | N | `['example.com', 'example.net', 'example.org']` | A list of email domains. |
+| **min_length** | N | `3` | The minimum length of the username. |
+| **max_length** | N | `16` | The minimum length of the username. |
+| **characters** | N | [Check here](../src/Converter/Generator/RandomText.php) | A string that contains the characters used to generate the username. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'randomEmail'
+```
+
+
+### [randomDate](../src/Converter/Generator/RandomDate.php)
+
+Generates a random date (e.g. `2005-08-03`).
 
 Parameters:
 
@@ -266,20 +313,21 @@ tables:
     my_table:
         converters:
             my_column:
-                converter: 'randomizeDate'
+                converter: 'randomDate'
+                parameters:
+                    min_year: 2000
+                    max_year: 2050
 ```
 
-## [randomizeDateTime](../src/Converter/Randomizer/RandomizeDateTime.php)
+### [randomDateTime](../src/Converter/Generator/RandomDateTime.php)
 
-Converts a date time into a random one.
-
-For example, one of the possible conversions for "1990-01-01 00:00:00" is "2002-01-20 23:05:49".
+Same as `randomDate`, but the default value of the format parameter is `Y-m-d H:i:s` instead of `Y-m-d`.
 
 Parameters:
 
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
-| **format** | N | `'Y-m-d H:i:s'` | The date format. |
+| **format** | N | `'Y-m-d'` | The date format. |
 | **min_year** | N | `1900` | The min year. If set to `null`, the min year is the current year. |
 | **max_year** | N | `null` | The max year. If set to `null`, the max year is the current year. |
 
@@ -290,10 +338,13 @@ tables:
     my_table:
         converters:
             my_column:
-                converter: 'randomizeDateTime'
+                converter: 'randomDateTime'
+                parameters:
+                    min_year: 2000
+                    max_year: 2050
 ```
 
-## [numberBetween](../src/Converter/Base/NumberBetween.php)
+### [numberBetween](../src/Converter/Generator/NumberBetween.php)
 
 Generates a number between a min and a max value.
 
@@ -317,35 +368,7 @@ tables:
                     max: 100
 ```
 
-## [toLower](../src/Converter/Base/ToLower.php)
-
-Converts all characters to lower case.
-
-Example:
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column:
-                converter: 'toLower'
-```
-
-## [toUpper](../src/Converter/Base/ToUpper.php)
-
-Converts all characters to upper case.
-
-Example:
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column:
-                converter: 'toUpper'
-```
-
-## [setNull](../src/Converter/Base/SetNull.php)
+### [setNull](../src/Converter/Generator/SetNull.php)
 
 Converts all values to `null`.
 
@@ -359,7 +382,7 @@ tables:
                 converter: 'setNull'
 ```
 
-## [setValue](../src/Converter/Base/SetValue.php)
+### [setValue](../src/Converter/Generator/SetValue.php)
 
 This converter always returns the same value.
 
@@ -381,17 +404,50 @@ tables:
                     value: 0
 ```
 
-## [addPrefix](../src/Converter/Base/AddPrefix.php)
+## Transformers
+
+These converters apply transformations on the input value (e.g. converting to lower case).
+Empty values are not converted.
+
+### [toLower](../src/Converter/Transformer/ToLower.php)
+
+Converts all characters to lower case.
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'toLower'
+```
+
+### [toUpper](../src/Converter/Transformer/ToUpper.php)
+
+Converts all characters to upper case.
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'toUpper'
+```
+
+### [prependText](../src/Converter/Transformer/PrependText.php)
 
 This converter adds a prefix to every value.
 
-For example, the value `value` is converted to `anonymized_value` if the prefix is `anonymized_`.
+For example, the value `user1` is converted to `test_user1` if the prefix is `test_`.
 
 Parameters:
 
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
-| **prefix** | Y | | The prefix to add. |
+| **value** | Y | | The value to prepend. |
 
 Example:
 
@@ -400,22 +456,22 @@ tables:
     my_table:
         converters:
             my_column:
-                converter: 'addPrefix'
+                converter: 'prependText'
                 parameters:
-                    prefix: 'test_'
+                    value: 'test_'
 ```
 
-## [addSuffix](../src/Converter/Base/AddSuffix.php)
+### [appendText](../src/Converter/Transformer/AppendText.php)
 
 This converter adds a suffix to every value.
 
-For example, the value `value` is converted to `value_anonymized` if the suffix is `_anonymized_`.
+For example, the value `user1` is converted to `user1_test` if the suffix is `_test`.
 
 Parameters:
 
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
-| **suffix** | Y | | The suffix to add. |
+| **value** | Y | | The value to append. |
 
 Example:
 
@@ -424,10 +480,39 @@ tables:
     my_table:
         converters:
             my_column:
-                converter: 'addSuffix'
+                converter: 'appendText'
                 parameters:
-                    suffix: '_test'
+                    value: '_test'
 ```
+
+### [hash](../src/Converter/Transformer/Hash.php)
+
+This converter applies a hash algorithm on the value.
+
+The default algorithm is `sha1`.
+
+Any algorithm returned by the function [hash_algos](https://www.php.net/manual/en/function.hash-algos.php) can be used.
+Examples: md5, sha1, sha256, sha512, crc32.
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **algorithm** | Y | `'sha1'` | The algorithm to use. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'hash'
+                parameters:
+                    algorithm: 'sha256'
+```
+
+## Advanced Converters
 
 ## [jsonData](../src/Converter/Proxy/JsonData.php)
 
@@ -536,4 +621,65 @@ tables:
                           parameters:
                               key: 'processed_data.email'
                         - converter: 'toLower'
+```
+
+# Deprecated Converters
+
+These converters are deprecated.
+They will be removed from the next major release of GdprDump.
+
+## addPrefix
+
+This converter is **deprecated**, use `prependText` instead.
+
+## addSuffix
+
+This converter is **deprecated**, use `appendText` instead.
+
+## randomizeDate
+
+This converter is **deprecated**, use `randomDate` instead.
+
+## randomizeDateTime
+
+This converter is **deprecated**, use `randomDateTime` instead.
+
+## faker
+
+Allows to use any formatter defined in the [Faker](https://github.com/fzaninotto/Faker) library.
+
+This converter is deprecated because the faker library was abandoned.
+It is not decided yet if this converter will be removed in a future release of GdprDump.
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **formatter** | Y | | The formatter name. |
+| **arguments** | N | `[]` | The formatter arguments. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'faker'
+                parameters:
+                    formatter: 'numberBetween'
+                    arguments: [1, 100]
+```
+
+To use a formatter that requires the original value as an argument, you can use the `{{value}}` placeholder:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'faker'
+                parameters:
+                    formatter: 'shuffle'
+                    arguments: ['{{value}}']
 ```
