@@ -16,35 +16,29 @@ services:
         arguments:
             - '@Smile\GdprDump\Dumper\SqlDumper'
             - '@Smile\GdprDump\Config\Config'
-            - '@Smile\GdprDump\Config\ConfigLoader'
-            - '@Smile\GdprDump\Config\Version\VersionLoader'
+            - '@Smile\GdprDump\Config\Loader\ConfigLoader'
             - '@Smile\GdprDump\Config\Validator\JsonSchemaValidator'
 
     # --- Config ---
     Smile\GdprDump\Config\Config:
         public: true # used by functional tests
 
-    Smile\GdprDump\Config\ConfigLoader:
+    Smile\GdprDump\Config\Loader\ConfigLoader:
         public: true # used by functional tests
         arguments:
             - '@Smile\GdprDump\Config\Config'
             - '@Smile\GdprDump\Config\Parser\YamlParser'
-            - ['@Smile\GdprDump\Config\Processor\EnvVarProcessor']
-            - '@Smile\GdprDump\Config\Resolver\PathResolver'
+            - '@Smile\GdprDump\Config\Loader\FileLocator'
 
-    Smile\GdprDump\Config\Parser\YamlParser: ~
-
-    Smile\GdprDump\Config\Processor\EnvVarProcessor: ~
-
-    Smile\GdprDump\Config\Resolver\PathResolver:
+    Smile\GdprDump\Config\Loader\FileLocator:
         arguments:
             - '%config.templates_dir%'
+
+    Smile\GdprDump\Config\Parser\YamlParser: ~
 
     Smile\GdprDump\Config\Validator\JsonSchemaValidator:
         arguments:
             - '%config.schema_file%'
-
-    Smile\GdprDump\Config\Version\VersionLoader: ~
 
     # --- Dumper ---
     Smile\GdprDump\Dumper\SqlDumper:

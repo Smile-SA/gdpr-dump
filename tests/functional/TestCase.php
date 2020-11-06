@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 use RuntimeException;
 use Smile\GdprDump\AppKernel;
 use Smile\GdprDump\Config\Config;
-use Smile\GdprDump\Config\ConfigLoader;
+use Smile\GdprDump\Config\Loader\ConfigLoader;
 use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Dumper\Config\DatabaseConfig;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -54,9 +54,11 @@ abstract class TestCase extends BaseTestCase
         // Parse the config file
         /** @var ConfigLoader $loader */
         $loader = static::getContainer()->get(ConfigLoader::class);
-        $loader->loadFile(static::getResource('config/templates/test.yaml'));
+        $loader->load(static::getResource('config/templates/test.yaml'));
+
         /** @var Config $config */
         $config = static::getContainer()->get(Config::class);
+        $config->compile();
 
         // Initialize the shared connection
         $dbParams = $config->get('database');

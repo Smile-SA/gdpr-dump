@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Config\Resolver;
+namespace Smile\GdprDump\Config\Loader;
 
-class PathResolver implements PathResolverInterface
+class FileLocator implements FileLocatorInterface
 {
     /**
      * @var string
@@ -12,7 +12,7 @@ class PathResolver implements PathResolverInterface
     private $templatesDirectory;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $templates;
 
@@ -27,13 +27,13 @@ class PathResolver implements PathResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve(string $path, string $currentPath = null): string
+    public function locate(string $path, string $currentDirectory = null): string
     {
-        $isTemplate = $this->isTemplate($path);
+        $this->resolveTemplates();
 
         // Check if it is a config template
-        if ($isTemplate) {
-            return $this->getTemplate($path);
+        if (array_key_exists($path, $this->templates)) {
+            return $this->templates[$path];
         }
 
         // Absolute path: check if file exists and return the path
@@ -46,8 +46,8 @@ class PathResolver implements PathResolverInterface
         }
 
         // Append the current path if specified
-        if ($currentPath !== null) {
-            $path = $currentPath . '/' . $path;
+        if ($currentDirectory !== null) {
+            $path = $currentDirectory . '/' . $path;
         }
 
         // Get the absolute path (to ensure compatibility with phar file)
@@ -55,38 +55,12 @@ class PathResolver implements PathResolverInterface
     }
 
     /**
-     * Check if the specified file is a config template.
-     *
-     * @param string $name
-     * @return bool
+     * Locate the config templates.
      */
-    private function isTemplate(string $name): bool
-    {
-        $templates = $this->getTemplates();
-
-        return array_key_exists($name, $templates);
-    }
-
-    /**
-     * Get the path to a template.
-     *
-     * @param string $name
-     * @return string
-     */
-    private function getTemplate(string $name): string
-    {
-        return $this->getTemplates()[$name];
-    }
-
-    /**
-     * Get the config templates.
-     *
-     * @return string[]
-     */
-    private function getTemplates(): array
+    private function resolveTemplates(): void
     {
         if ($this->templates !== null) {
-            return $this->templates;
+            return;
         }
 
         // Can't use glob, doesn't work with phar
@@ -100,8 +74,6 @@ class PathResolver implements PathResolverInterface
             $template = pathinfo($fileName, PATHINFO_FILENAME);
             $this->templates[$template] = $this->templatesDirectory . '/' . $fileName;
         }
-
-        return $this->templates;
     }
 
     /**

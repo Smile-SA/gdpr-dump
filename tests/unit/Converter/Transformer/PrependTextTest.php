@@ -17,7 +17,6 @@ class PrependTextTest extends TestCase
     {
         $converter = new PrependText(['value' => 'test_']);
 
-        // Empty value: no prefix added
         $value = $converter->convert(null);
         $this->assertSame('', $value);
 

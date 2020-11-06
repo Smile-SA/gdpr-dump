@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter;
 
 use RuntimeException;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Proxy\Cache;
 use Smile\GdprDump\Converter\Proxy\Conditional;
 use Smile\GdprDump\Converter\Proxy\Faker;
@@ -39,6 +40,7 @@ class ConverterFactory
      *
      * @param array $definition
      * @return ConverterInterface
+     * @throws ValidationException
      */
     public function create(array $definition): ConverterInterface
     {

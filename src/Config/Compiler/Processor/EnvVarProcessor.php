@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Config\Processor;
+namespace Smile\GdprDump\Config\Compiler\Processor;
+
+use Smile\GdprDump\Config\Compiler\CompileException;
+use Smile\GdprDump\Config\ConfigInterface;
 
 class EnvVarProcessor implements ProcessorInterface
 {
@@ -25,7 +28,41 @@ class EnvVarProcessor implements ProcessorInterface
     /**
      * @inheritdoc
      */
-    public function process($value)
+    public function process(ConfigInterface $config): void
+    {
+        $data = $this->processItem($config->toArray());
+        $config->reset($data);
+    }
+
+    /**
+     * Process a config item.
+     *
+     * @param array $data
+     * @return array
+     * @throws CompileException
+     */
+    private function processItem(array $data): array
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = $this->processItem($value);
+                continue;
+            }
+
+            $data[$key] = $this->processValue($value);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Process a config value.
+     *
+     * @param mixed $value
+     * @return mixed
+     * @throws CompileException
+     */
+    private function processValue($value)
     {
         if (!is_string($value) || strpos($value, '%env(') !== 0 || substr($value, -2) !== ')%') {
             return $value;
@@ -36,7 +73,7 @@ class EnvVarProcessor implements ProcessorInterface
 
         $value = getenv($name);
         if ($value === false) {
-            throw new ProcessException(sprintf('The environment variable "%s" is not defined.', $name));
+            throw new CompileException(sprintf('The environment variable "%s" is not defined.', $name));
         }
 
         if ($type === 'json') {
@@ -53,7 +90,7 @@ class EnvVarProcessor implements ProcessorInterface
      *
      * @param string $name
      * @return array
-     * @throws ProcessException
+     * @throws CompileException
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private function parse(string $name): array
@@ -68,17 +105,17 @@ class EnvVarProcessor implements ProcessorInterface
         }
 
         if (!in_array($type, $this->types, true)) {
-            throw new ProcessException(
+            throw new CompileException(
                 sprintf('Invalid type "%s". Expected: %s.', $type, implode(', ', $this->types))
             );
         }
 
         if ($name === '') {
-            throw new ProcessException('Environment variable name must not be empty.');
+            throw new CompileException('Environment variable name must not be empty.');
         }
 
         if (!preg_match('/^' . self::VAR_NAME_REGEX . '$/', $name)) {
-            throw new ProcessException(
+            throw new CompileException(
                 sprintf('"%s" is not a valid environment variable name. Expected format: "[A-Z][A-Z0-9_]*".', $name)
             );
         }
@@ -92,14 +129,14 @@ class EnvVarProcessor implements ProcessorInterface
      * @param string $value
      * @param string $name
      * @return mixed
-     * @throws ProcessException
+     * @throws CompileException
      */
     private function decodeJson(string $value, string $name)
     {
         $value = json_decode($value, true);
 
         if ($value === null) {
-            throw new ProcessException(
+            throw new CompileException(
                 sprintf('Failed to parse the JSON value of the environment variable "%s".', $name)
             );
         }

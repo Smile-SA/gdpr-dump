@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Config\Version;
+namespace Smile\GdprDump\Config\Compiler\Processor;
 
+use Smile\GdprDump\Config\Compiler\Processor\Version\MissingVersionException;
+use Smile\GdprDump\Config\Compiler\Processor\Version\VersionMatcher;
 use Smile\GdprDump\Config\ConfigInterface;
 
-class VersionLoader implements VersionLoaderInterface
+class VersionProcessor implements ProcessorInterface
 {
     /**
      * @inheritdoc
      */
-    public function load(ConfigInterface $config): void
+    public function process(ConfigInterface $config): void
     {
         $requiresVersion = (bool) $config->get('requires_version');
         $version = (string) $config->get('version');

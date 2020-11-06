@@ -1,29 +1,10 @@
 ---
-requires_version: true
+extends:
+    - 'test_parent_parent_1.yaml'
+    - 'test_parent_parent_2.yaml'
 
 tables:
     table1:
         converters:
-            field1:
-                converter: 'randomizeEmail'
-
-    table2:
-        truncate: true
-
-    table3:
-        limit: 100
-
-if_version:
-    '<1.1.0':
-        tables:
-            table1:
-                converters:
-                    field1:
-                        disabled: true
-
-    '>=1.1.0':
-        tables:
-            table1:
-                converters:
-                    field1:
-                        converter: 'anonymizeEmail'
+            field2:
+                converter: 'anonymizeText'

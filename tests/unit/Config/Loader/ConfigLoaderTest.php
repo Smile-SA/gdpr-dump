@@ -2,32 +2,31 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Config;
+namespace Smile\GdprDump\Tests\Unit\Config\Loader;
 
 use Smile\GdprDump\Config\Config;
-use Smile\GdprDump\Config\ConfigLoader;
+use Smile\GdprDump\Config\Loader\ConfigLoader;
+use Smile\GdprDump\Config\Loader\FileLocator;
+use Smile\GdprDump\Config\Loader\FileNotFoundException;
 use Smile\GdprDump\Config\Parser\ParseException;
 use Smile\GdprDump\Config\Parser\YamlParser;
-use Smile\GdprDump\Config\Processor\EnvVarProcessor;
-use Smile\GdprDump\Config\Resolver\FileNotFoundException;
-use Smile\GdprDump\Config\Resolver\PathResolver;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class ConfigLoaderTest extends TestCase
 {
     /**
-     * Test the "loadFile" method.
+     * Test the "load" method.
      */
-    public function testLoadFile(): void
+    public function testLoad(): void
     {
-        $config = new Config();
+        $config = new Config(['version' => '2.0.0']);
         $configLoader = $this->createConfigLoader($config);
-        $configLoader->loadFile($this->getTestConfigFile());
-        $tablesConfig = $config->get('tables');
+        $configLoader->load(static::getResource('config/templates/test.yaml'));
 
-        $expectedSubset = ['output' => 'dump.sql'];
+        $expectedSubset = ['output' => '%env(DUMP_OUTPUT)%'];
         $this->assertArraySubset($expectedSubset, $config->get('dump'));
 
+        $tablesConfig = $config->get('tables');
         $expectedSubset = ['table1' => ['converters' => ['field1' => ['converter' => 'randomizeEmail']]]];
         $this->assertArraySubset($expectedSubset, $tablesConfig);
 
@@ -56,7 +55,7 @@ class ConfigLoaderTest extends TestCase
         $configLoader = $this->createConfigLoader($config);
 
         $this->expectException(FileNotFoundException::class);
-        $configLoader->loadFile('not_exists.yaml');
+        $configLoader->load('not_exists.yaml');
     }
 
     /**
@@ -68,7 +67,7 @@ class ConfigLoaderTest extends TestCase
         $configLoader = $this->createConfigLoader($config);
 
         $this->expectException(ParseException::class);
-        $configLoader->loadFile(static::getResource('config/templates/invalid_data.yaml'));
+        $configLoader->load(static::getResource('config/templates/invalid_data.yaml'));
     }
 
     /**
@@ -119,22 +118,6 @@ class ConfigLoaderTest extends TestCase
     {
         $templatesDirectory = $this->getResource('config/templates');
 
-        $processorMock = $this->createMock(EnvVarProcessor::class);
-        $processorMock->method('process')
-            ->willReturnCallback(function ($value) {
-                return $value === '%env(DUMP_OUTPUT)%' ? 'dump.sql' : $value;
-            });
-
-        return new ConfigLoader($config, new YamlParser(), [$processorMock], new PathResolver($templatesDirectory));
-    }
-
-    /**
-     * Get the config file used for the tests.
-     *
-     * @return string
-     */
-    private static function getTestConfigFile(): string
-    {
-        return static::getResource('config/templates/test.yaml');
+        return new ConfigLoader($config, new YamlParser(), new FileLocator($templatesDirectory));
     }
 }
