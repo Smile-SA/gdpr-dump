@@ -13,11 +13,11 @@
     - [randomizeEmail](#user-content-randomizeemail)
     - [randomizeNumber](#user-content-randomizenumber)
 - [Generators](#user-content-generators)
-    - [randomText](#user-content-text)
-    - [randomEmail](#user-content-email)
-    - [randomDate](#user-content-randomizedate)
-    - [randomDateTime](#user-content-randomizedatetime)
-    - [numberBetween](#user-content-randomizenumber)
+    - [randomText](#user-content-randomtext)
+    - [randomEmail](#user-content-randomemail)
+    - [randomDate](#user-content-randomdate)
+    - [randomDateTime](#user-content-randomdatetime)
+    - [numberBetween](#user-content-numberbetween)
     - [setNull](#user-content-setnull)
     - [setValue](#user-content-setvalue)
 - [Transformers](#user-content-transformers)
@@ -27,12 +27,12 @@
     - [appendText](#user-content-appendtext)
     - [hash](#user-content-hash)
 - [Advanced Converters](#user-content-advanced-converters)
-    - [faker](#user-content-faker)
+    - [chain](#user-content-chain)
     - [jsonData](#user-content-jsondata)
     - [serializedData](#user-content-serializeddata)
-    - [chain](#user-content-chain)
     - [fromContext](#user-content-fromcontext)
 - [Deprecated Converters](#user-content-deprecated-converters)
+    - [faker](#user-content-faker)
     - [addPrefix](#user-content-addprefix)
     - [addSuffix](#user-content-addsuffix)
     - [randomizeDate](#user-content-randomizedate)
@@ -293,7 +293,6 @@ tables:
                 converter: 'randomEmail'
 ```
 
-
 ### [randomDate](../src/Converter/Generator/RandomDate.php)
 
 Generates a random date (e.g. `2005-08-03`).
@@ -514,42 +513,6 @@ tables:
 
 ## Advanced Converters
 
-## [jsonData](../src/Converter/Proxy/JsonData.php)
-
-This converter can be used to anonymize data that are stored in a JSON object.
-
-Parameters:
-
-| Name | Required | Default | Description |
-| --- | --- | --- | --- |
-| **converters** | Y | | A list of converter definitions. The key of each converter definition is the path to the value within the JSON object. |
-
-For example, if the following JSON data is stored in a column:
-
-`{"customer":{"email":"john.doe@example.com","username":"john.doe"}}`
-
-The following converter can be used:
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column:
-                converter: 'jsonData'
-                parameters:
-                    converters:
-                        customer.email:
-                            converter: 'anonymizeEmail'
-                        customer.username:
-                            converter: 'anonymizeText'
-```
-
-## [serializedData](../src/Converter/Proxy/SerializedData.php)
-
-Same as `jsonData` converter, but works with serialized data instead.
-
-The serialized data must be an array.
-
 ## [chain](../src/Converter/Proxy/Chain.php)
 
 This converter executes a list of converters.
@@ -590,6 +553,42 @@ tables:
                             disabled: true
 ```
 
+## [jsonData](../src/Converter/Proxy/JsonData.php)
+
+This converter can be used to anonymize data that are stored in a JSON object.
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **converters** | Y | | A list of converter definitions. The key of each converter definition is the path to the value within the JSON object. |
+
+For example, if the following JSON data is stored in a column:
+
+`{"customer":{"email":"john.doe@example.com","username":"john.doe"}}`
+
+The following converter can be used:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'jsonData'
+                parameters:
+                    converters:
+                        customer.email:
+                            converter: 'anonymizeEmail'
+                        customer.username:
+                            converter: 'anonymizeText'
+```
+
+## [serializedData](../src/Converter/Proxy/SerializedData.php)
+
+Same as `jsonData` converter, but works with serialized data instead.
+
+The serialized data must be an array.
+
 ## [fromContext](../src/Converter/Proxy/FromContext.php)
 
 This converter returns a value from the `$context` array passed to converters.
@@ -628,28 +627,11 @@ tables:
 These converters are deprecated.
 They will be removed from the next major release of GdprDump.
 
-## addPrefix
-
-This converter is **deprecated**, use `prependText` instead.
-
-## addSuffix
-
-This converter is **deprecated**, use `appendText` instead.
-
-## randomizeDate
-
-This converter is **deprecated**, use `randomDate` instead.
-
-## randomizeDateTime
-
-This converter is **deprecated**, use `randomDateTime` instead.
-
 ## faker
 
 Allows to use any formatter defined in the [Faker](https://github.com/fzaninotto/Faker) library.
 
 This converter is deprecated because the faker library was abandoned.
-It is not decided yet if this converter will be removed in a future release of GdprDump.
 
 Parameters:
 
@@ -683,3 +665,19 @@ tables:
                     formatter: 'shuffle'
                     arguments: ['{{value}}']
 ```
+
+## addPrefix
+
+This converter is **deprecated**, use `prependText` instead.
+
+## addSuffix
+
+This converter is **deprecated**, use `appendText` instead.
+
+## randomizeDate
+
+This converter is **deprecated**, use `randomDate` instead.
+
+## randomizeDateTime
+
+This converter is **deprecated**, use `randomDateTime` instead.
