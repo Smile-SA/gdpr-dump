@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Config\Version;
+namespace Smile\GdprDump\Config\Compiler\Processor\Version;
 
 class VersionMatcher
 {

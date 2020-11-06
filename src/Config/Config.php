@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config;
 
+use Smile\GdprDump\Config\Compiler\Compiler;
+use Smile\GdprDump\Config\Compiler\Processor\EnvVarProcessor;
+use Smile\GdprDump\Config\Compiler\Processor\VersionProcessor;
+
 class Config implements ConfigInterface
 {
     /**
@@ -30,19 +34,19 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function has(string $key): bool
-    {
-        return array_key_exists($key, $this->items);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function set(string $key, $value): ConfigInterface
     {
         $this->items[$key] = $value;
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function has(string $key): bool
+    {
+        return array_key_exists($key, $this->items);
     }
 
     /**
@@ -56,11 +60,35 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
+    public function reset(array $items = []): ConfigInterface
+    {
+        $this->items = $items;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function merge(array $data): ConfigInterface
     {
         $this->items = $this->mergeArray($this->items, $data);
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function compile(): void
+    {
+        $processors = [
+            new EnvVarProcessor(),
+            new VersionProcessor(),
+        ];
+
+        $compiler = new Compiler($processors);
+        $compiler->compile($this);
     }
 
     /**

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Config\Version;
+namespace Smile\GdprDump\Tests\Unit\Config\Compiler\Processor\Version;
 
-use Smile\GdprDump\Config\Version\InvalidVersionException;
-use Smile\GdprDump\Config\Version\VersionCondition;
+use Smile\GdprDump\Config\Compiler\Processor\Version\InvalidVersionException;
+use Smile\GdprDump\Config\Compiler\Processor\Version\VersionCondition;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class VersionConditionTest extends TestCase

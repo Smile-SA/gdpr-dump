@@ -5,11 +5,6 @@ dump:
     output: '%env(DUMP_OUTPUT)%'
 
 tables:
-    table1:
-        converters:
-            field2:
-                converter: 'anonymizeText'
-
     table3:
         limit: 10
 

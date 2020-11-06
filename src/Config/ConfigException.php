@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Config\Processor;
+namespace Smile\GdprDump\Config;
 
 use Exception;
 use Throwable;
 
-class ProcessException extends Exception
+class ConfigException extends Exception
 {
     /**
      * @param string $message

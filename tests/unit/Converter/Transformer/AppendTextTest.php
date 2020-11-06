@@ -17,7 +17,6 @@ class AppendTextTest extends TestCase
     {
         $converter = new AppendText(['value' => '_test']);
 
-        // Empty value: no suffix added
         $value = $converter->convert(null);
         $this->assertSame('', $value);
 

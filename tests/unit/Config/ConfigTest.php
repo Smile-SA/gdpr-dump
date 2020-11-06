@@ -46,6 +46,22 @@ class ConfigTest extends TestCase
     }
 
     /**
+     * Test the "reset" method.
+     */
+    public function testReset(): void
+    {
+        $config = new Config($this->data);
+        $this->assertNotEmpty($config->toArray());
+
+        $config->reset();
+        $this->assertEmpty($config->toArray());
+
+        $data = ['key' => 'value'];
+        $config->reset($data);
+        $this->assertSame($data, $config->toArray());
+    }
+
+    /**
      * Test the "merge" method.
      */
     public function testMerge(): void
@@ -68,7 +84,7 @@ class ConfigTest extends TestCase
         $config->merge(['object' => ['sub_object' => null]]);
         $this->assertFalse($config->has('object'));
 
-        // Assert that objects set to null are added to the array if they are not already
+        // Assert that objects set to null are removed from the config
         $config->merge(['object2' => ['sub_object' => null]]);
         $this->assertSame(['sub_object' => null], $config->get('object2'));
     }

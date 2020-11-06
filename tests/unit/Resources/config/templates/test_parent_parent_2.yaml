@@ -1,0 +1,7 @@
+---
+tables:
+    table2:
+        truncate: true
+
+    table3:
+        limit: 100
