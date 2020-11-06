@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 use DateTime;
 use Smile\GdprDump\Converter\Generator\RandomDate;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Randomizer\RandomizeDate;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class RandomDateTest extends TestCase
@@ -17,12 +18,19 @@ class RandomDateTest extends TestCase
     public function testConverter(): void
     {
         $converter = new RandomDate();
+        $deprecatedConverter = new RandomizeDate();
 
         $value = $converter->convert(null);
         $this->assertNotNull($value);
 
+        $value = $deprecatedConverter->convert(null);
+        $this->assertNotNull($value);
+
         $date = '1990-12-31';
         $value = $converter->convert($date);
+        $this->assertDateIsRandomized($value, $date, 'Y-m-d');
+
+        $value = $deprecatedConverter->convert($date);
         $this->assertDateIsRandomized($value, $date, 'Y-m-d');
     }
 
