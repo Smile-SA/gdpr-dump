@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump;
+namespace Smile\GdprDump\Phar;
 
 use Phar;
 use RuntimeException;
@@ -29,7 +29,7 @@ class Compiler
      */
     public function __construct(string $locale)
     {
-        $this->basePath = dirname(__DIR__);
+        $this->basePath = dirname(dirname(__DIR__));
         $this->locale = $locale;
     }
 

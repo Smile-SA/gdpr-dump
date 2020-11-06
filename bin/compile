@@ -2,7 +2,7 @@
 <?php
 
 use Smile\GdprDump\AppKernel;
-use Smile\GdprDump\Compiler;
+use Smile\GdprDump\Phar\Compiler;
 
 $basePath = dirname(__DIR__);
 
