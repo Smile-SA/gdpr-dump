@@ -14,10 +14,11 @@
     - [Data Converters](#user-content-data-converters)
     - [Skipping Data Conversion](#user-content-skipping-data-conversion)
     - [Sharing Converter Results](#user-content-sharing-converter-results)
-- [User-Defined Variables](#user-content-user-defined-variables)
-- [Environments Variables](#user-content-environment-variables)
-- [Unsetting Values Declared in Config Templates](#user-content-unsetting-values-declared-in-config-templates)
-- [Version-specific Configuration](#user-content-version-specific-configuration)
+- [Advanced Configuration](#user-content-advanced-configuration)
+    - [Environments Variables](#user-content-environment-variables)
+    - [SQL Variables](#user-content-sql-variables)
+    - [Unsetting Values Declared in Config Templates](#user-content-unsetting-values-declared-in-config-templates)
+    - [Version-specific Configuration](#user-content-version-specific-configuration)
 
 ## Overriding Configuration
 
@@ -227,6 +228,7 @@ tables:
 Available filter operators:
 
 - `eq` (equal to)
+- `neq` (not equal to)
 - `gt` (greater than)
 - `lt` (less than)
 - `ge` (greater than or equal to)
@@ -351,7 +353,39 @@ Notes:
   If the parameter is missing somewhere, it can result in a infinite loop situation.
 - This feature is not used in the default templates (`magento2`, ...), because it may require a lot of memory, depending on the size of the tables.
 
-## User-Defined Variables
+## Advanced Configuration
+
+### Environment Variables
+
+You can use environment variables with the following syntax:
+
+```yaml
+database:
+    host: '%env(DATABASE_HOST)%'
+    user: '%env(DATABASE_USER)%'
+    password: '%env(DATABASE_PASSWORD)%'
+    name: '%env(DATABASE_NAME)%'
+```
+
+You can also set the variable type with the following syntax:
+
+```yaml
+tables:
+    cache:
+        truncate: '%env(bool:TRUNCATE_CACHE_TABLE)%'
+```
+
+Available types: string (default), bool, int, float, json.
+
+The JSON type can be used to define array values. For example:
+
+```yaml
+tables_blacklist: '%env(json:TABLES_BLACKLIST)%'
+```
+
+Example value of the environment variable: `["table1", "table2", "table3"]`.
+
+### SQL Variables
 
 It is possible to store SQL query results in user-defined variables:
 
@@ -382,37 +416,7 @@ tables:
             condition: '{{attribute_id}} == @firstname_attribute_id'
 ```
 
-## Environment Variables
-
-You can use environment variables with the following syntax:
-
-```yaml
-database:
-    host: '%env(DATABASE_HOST)%'
-    user: '%env(DATABASE_USER)%'
-    password: '%env(DATABASE_PASSWORD)%'
-    name: '%env(DATABASE_NAME)%'
-```
-
-You can also set the variable type with the following syntax:
-
-```yaml
-tables:
-    cache:
-        truncate: '%env(bool:TRUNCATE_CACHE_TABLE)%'
-```
-
-Available types: string (default), bool, int, float, json.
-
-The JSON type can be used to define array values. For example:
-
-```yaml
-tables_blacklist: '%env(json:TABLES_BLACKLIST)%'
-```
-
-Example value of the environment variable: `["table1", "table2", "table3"]`.
-
-## Unsetting Values Declared in Config Templates
+### Unsetting Values Declared in Config Templates
 
 It is possible to unset values that were declared in a parent config file, by setting them to `null`.
 
@@ -456,7 +460,7 @@ tables:
                 disabled: true
 ```
 
-## Version-specific Configuration
+### Version-specific Configuration
 
 The `if_version` property allows to define configuration that will be read only if the version of your application matches a requirement.
 

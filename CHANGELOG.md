@@ -8,6 +8,12 @@ All notable changes to this project will be documented in this file.
     - anonymizeText: `delimiters`, `replacement`, `min_word_length`
     - anonymizeEmail: `delimiters`, `replacement`, `min_word_length`
     - anonymizeNumber: `replacement`, `min_number_length`
+- New converters: `randomText`, `randomEmail`
+- Renamed converters (old names are still available, but deprecated):
+    - `randomizeDate` -> `randomDate`
+    - `randomizeDateTime` -> `randomDateTime`
+    - `addPrefix` -> `prependText`
+    - `addSuffix` -> `appendText`
 - Reduce phar file size by ~50%
 - Remove disabled converters instead of replacing them by dummy converters
 - Replace deprecated Doctrine functions
