@@ -6,11 +6,11 @@ namespace Smile\GdprDump\Converter\Parameters;
 
 class Parameter
 {
-    const TYPE_BOOL = 'bool';
-    const TYPE_STRING = 'string';
-    const TYPE_INT = 'int';
-    const TYPE_FLOAT = 'float';
-    const TYPE_ARRAY = 'array';
+    public const TYPE_BOOL = 'bool';
+    public const TYPE_STRING = 'string';
+    public const TYPE_INT = 'int';
+    public const TYPE_FLOAT = 'float';
+    public const TYPE_ARRAY = 'array';
 
     /**
      * @var string

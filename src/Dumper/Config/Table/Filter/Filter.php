@@ -8,18 +8,18 @@ use UnexpectedValueException;
 
 class Filter
 {
-    const OPERATOR_EQ = 'eq';
-    const OPERATOR_NEQ = 'neq';
-    const OPERATOR_LT = 'lt';
-    const OPERATOR_LTE = 'lte';
-    const OPERATOR_GT = 'gt';
-    const OPERATOR_GTE = 'gte';
-    const OPERATOR_IS_NULL = 'isNull';
-    const OPERATOR_IS_NOT_NULL = 'isNotNull';
-    const OPERATOR_LIKE = 'like';
-    const OPERATOR_NOT_LIKE = 'notLike';
-    const OPERATOR_IN = 'in';
-    const OPERATOR_NOT_IN = 'notIn';
+    public const OPERATOR_EQ = 'eq';
+    public const OPERATOR_NEQ = 'neq';
+    public const OPERATOR_LT = 'lt';
+    public const OPERATOR_LTE = 'lte';
+    public const OPERATOR_GT = 'gt';
+    public const OPERATOR_GTE = 'gte';
+    public const OPERATOR_IS_NULL = 'isNull';
+    public const OPERATOR_IS_NOT_NULL = 'isNotNull';
+    public const OPERATOR_LIKE = 'like';
+    public const OPERATOR_NOT_LIKE = 'notLike';
+    public const OPERATOR_IN = 'in';
+    public const OPERATOR_NOT_IN = 'notIn';
 
     /**
      * @var string[]
