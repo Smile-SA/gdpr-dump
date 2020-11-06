@@ -12,7 +12,7 @@ class EnvVarProcessor implements ProcessorInterface
     /**
      * Environment variable name format.
      */
-    const VAR_NAME_REGEX = '[A-Z][A-Z0-9_]*';
+    private const VAR_NAME_REGEX = '[A-Z][A-Z0-9_]*';
 
     /**
      * @var string[]

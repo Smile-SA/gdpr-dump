@@ -11,12 +11,12 @@ class SortOrder
     /**
      * Ascending direction.
      */
-    const DIRECTION_ASC = 'ASC';
+    public const DIRECTION_ASC = 'ASC';
 
     /**
      * Descending direction.
      */
-    const DIRECTION_DESC = 'DESC';
+    public const DIRECTION_DESC = 'DESC';
 
     /**
      * @var string
