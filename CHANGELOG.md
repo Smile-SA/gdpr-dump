@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
+- Add support for PHP 8
 - New options available for the following converters:
     - anonymizeText: `delimiters`, `replacement`, `min_word_length`
     - anonymizeEmail: `delimiters`, `replacement`, `min_word_length`

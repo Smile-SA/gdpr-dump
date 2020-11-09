@@ -91,7 +91,6 @@ class EnvVarProcessor implements ProcessorInterface
      * @param string $name
      * @return array
      * @throws CompileException
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private function parse(string $name): array
     {

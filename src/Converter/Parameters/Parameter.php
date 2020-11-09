@@ -37,7 +37,6 @@ class Parameter
      * @param string|null $type
      * @param bool $required
      * @param mixed $default
-     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function __construct(string $name, string $type = null, bool $required = false, $default = null)
     {

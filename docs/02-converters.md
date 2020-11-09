@@ -27,12 +27,12 @@
     - [appendText](#user-content-appendtext)
     - [hash](#user-content-hash)
 - [Advanced Converters](#user-content-advanced-converters)
+    - [faker](#user-content-faker)
     - [chain](#user-content-chain)
     - [jsonData](#user-content-jsondata)
     - [serializedData](#user-content-serializeddata)
     - [fromContext](#user-content-fromcontext)
 - [Deprecated Converters](#user-content-deprecated-converters)
-    - [faker](#user-content-faker)
     - [addPrefix](#user-content-addprefix)
     - [addSuffix](#user-content-addsuffix)
     - [randomizeDate](#user-content-randomizedate)
@@ -513,6 +513,43 @@ tables:
 
 ## Advanced Converters
 
+### [faker](../src/Converter/Proxy/Faker.php)
+
+Allows to use any formatter defined in the [Faker](https://github.com/FakerPHP/Faker) library.
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **formatter** | Y | | The formatter name. |
+| **arguments** | N | `[]` | The formatter arguments. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'faker'
+                parameters:
+                    formatter: 'numberBetween'
+                    arguments: [1, 100]
+```
+
+To use a formatter that requires the original value as an argument, you can use the `{{value}}` placeholder:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'faker'
+                parameters:
+                    formatter: 'shuffle'
+                    arguments: ['{{value}}']
+```
+
 ## [chain](../src/Converter/Proxy/Chain.php)
 
 This converter executes a list of converters.
@@ -626,45 +663,6 @@ tables:
 
 These converters are deprecated.
 They will be removed from the next major release of GdprDump.
-
-## faker
-
-Allows to use any formatter defined in the [Faker](https://github.com/fzaninotto/Faker) library.
-
-This converter is deprecated because the faker library was abandoned.
-
-Parameters:
-
-| Name | Required | Default | Description |
-| --- | --- | --- | --- |
-| **formatter** | Y | | The formatter name. |
-| **arguments** | N | `[]` | The formatter arguments. |
-
-Example:
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column:
-                converter: 'faker'
-                parameters:
-                    formatter: 'numberBetween'
-                    arguments: [1, 100]
-```
-
-To use a formatter that requires the original value as an argument, you can use the `{{value}}` placeholder:
-
-```yaml
-tables:
-    my_table:
-        converters:
-            my_column:
-                converter: 'faker'
-                parameters:
-                    formatter: 'shuffle'
-                    arguments: ['{{value}}']
-```
 
 ## addPrefix
 

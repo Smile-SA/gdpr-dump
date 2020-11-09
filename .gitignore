@@ -6,6 +6,5 @@
 /.phpunit.result.cache
 /composer.lock
 /phpcs.xml
-/phpmd.xml
 /phpstan.neon
 /phpunit.xml

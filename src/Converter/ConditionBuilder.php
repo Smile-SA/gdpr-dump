@@ -135,7 +135,6 @@ class ConditionBuilder
      *
      * @param string $condition
      * @return string
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function parseCondition(string $condition): string
     {

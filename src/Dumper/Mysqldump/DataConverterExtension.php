@@ -64,7 +64,6 @@ class DataConverterExtension implements ExtensionInterface
      * Get the data conversion hook function.
      *
      * @return callable
-     * @SuppressWarnings(PHPMD.EvalExpression)
      */
     private function getHook(): callable
     {

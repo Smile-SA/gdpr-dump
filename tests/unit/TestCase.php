@@ -6,9 +6,6 @@ namespace Smile\GdprDump\Tests\Unit;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
-/**
- * @SuppressWarnings(PHPMD.NumberOfChildren)
- */
 abstract class TestCase extends BaseTestCase
 {
     /**

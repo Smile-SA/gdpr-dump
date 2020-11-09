@@ -53,7 +53,6 @@ class Conditional implements ConverterInterface
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.EvalExpression)
      */
     public function convert($value, array $context = [])
     {

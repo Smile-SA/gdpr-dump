@@ -41,7 +41,9 @@ class SqlDumperTest extends TestCase
         $dumper = $this->createDumper();
 
         // Make sure the dump file does not already exist
-        @unlink($this->dumpFile);
+        if (file_exists($this->dumpFile)) {
+            unlink($this->dumpFile);
+        }
 
         // Create the dump
         $dumper->dump($config);
@@ -58,7 +60,7 @@ class SqlDumperTest extends TestCase
 
         // Make sure the file contains the dump output
         $output = file_get_contents($this->dumpFile);
-        @unlink($this->dumpFile);
+        unlink($this->dumpFile);
         $this->assertNotEmpty($output);
 
         // Assert that only whitelisted tables are included in the dump

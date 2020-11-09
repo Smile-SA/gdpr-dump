@@ -5,13 +5,22 @@ parameters:
         - src
         - tests
     checkMissingIterableValueType: false
+    # This must be set to false because of the last ignored error that occurs only with PHP 8.0
+    reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         -
+            # Weird false positive
             message: '#Unable to resolve the template type T in call to method static method Doctrine\\DBAL\\DriverManager::getConnection\(\)#'
             path: src/Database
         -
+            # Can't add a type hint until it is also added to the parent class
             message: '#Method [a-zA-Z\\]+::configure\(\) has no return typehint specified#'
             path: src/Console/Command
         -
+            # False positive
             message: '#Instanceof between object and string\|null results in an error#'
             path: src/Converter/Parameters/ParameterProcessor.php
+        -
+            # False positive on PHP 8.0
+            message: '#Parameter \#1 \$stub of method Phar::setStub\(\) expects resource, string given#'
+            path: src/Phar

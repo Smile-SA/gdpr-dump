@@ -91,7 +91,6 @@ class ConverterResolver
      * @param string $baseDirectory
      * @return array
      * @throws ReflectionException
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private function findClassNames(string $namespace, string $directory, string $baseDirectory = ''): array
     {

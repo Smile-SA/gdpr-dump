@@ -8,5 +8,4 @@ if [ ! -d "vendor/bin" ]; then
 fi
 
 vendor/bin/phpcs
-vendor/bin/phpmd bin,src,tests xml phpmd.xml.dist
 vendor/bin/phpstan analyse

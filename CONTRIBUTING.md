@@ -30,7 +30,7 @@ Follow these steps:
 2. Create a new branch.
 3. Implement your bugfix/feature.
    Don't forget to update the functional and unit tests accordingly.
-4. Run the tests (phpcs, phpmd, phpunit).
+4. Run the tests (phpcs, phpstan, phpunit).
    All tests must succeed.
 5. Create the pull request:
     - Source branch: the branch of your fork
@@ -58,7 +58,7 @@ If you are running on Mac/Windows, docker should work out of the box (needs conf
     docker-compose run --rm app composer install
     ```
 
-2. Run the code validation tools (phpcs, phpmd, phpstan):
+2. Run the code validation tools (phpcs, phpstan):
 
     ```
     docker-compose run --rm app run-sniffers
@@ -76,7 +76,6 @@ Run the following commands:
 
 ```
 vendor/bin/phpcs
-vendor/bin/phpmd bin,src,tests xml phpmd.xml.dist
 vendor/bin/phpstan analyse
 vendor/bin/phpunit
 ```

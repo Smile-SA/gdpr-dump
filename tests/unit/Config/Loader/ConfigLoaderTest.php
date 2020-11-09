@@ -87,7 +87,6 @@ class ConfigLoaderTest extends TestCase
      * @param array $subset
      * @param array $array
      * @return bool
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private function isArraySubset(array $subset, array $array): bool
     {
