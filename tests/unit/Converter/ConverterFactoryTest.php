@@ -17,9 +17,6 @@ use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use UnexpectedValueException;
 
-/**
- * @SuppressWarnings(PHPMD.TooManyPublicMethods)
- */
 class ConverterFactoryTest extends TestCase
 {
     /**

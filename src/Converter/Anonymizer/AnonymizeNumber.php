@@ -46,7 +46,6 @@ class AnonymizeNumber implements ConverterInterface
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function convert($value, array $context = [])
     {

@@ -97,7 +97,6 @@ class Config implements ConfigInterface
      * @param array $data
      * @param array $override
      * @return array
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private function mergeArray(array $data, array $override): array
     {

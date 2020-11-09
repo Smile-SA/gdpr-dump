@@ -8,9 +8,6 @@ use Smile\GdprDump\Converter\Anonymizer\AnonymizeEmail;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-/**
- * @SuppressWarnings(PHPMD.TooManyPublicMethods)
- */
 class AnonymizeEmailTest extends TestCase
 {
     /**

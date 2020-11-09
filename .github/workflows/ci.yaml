@@ -15,6 +15,7 @@ jobs:
                 php-version:
                     - '7.3'
                     - '7.4'
+                    - '8.0'
 
         services:
             mysql:
@@ -57,9 +58,6 @@ jobs:
 
             - name: 'Run PHP CodeSniffer'
               run: 'vendor/bin/phpcs'
-
-            - name: 'Run PHP Mess Detector'
-              run: 'vendor/bin/phpmd bin,src,tests xml phpmd.xml.dist'
 
             - name: 'Run PHPStan'
               run: 'vendor/bin/phpstan analyse'

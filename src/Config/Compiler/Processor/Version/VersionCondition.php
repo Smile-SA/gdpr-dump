@@ -55,7 +55,6 @@ class VersionCondition
      *
      * @param string $condition
      * @throws InvalidVersionException
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private function parseCondition(string $condition): void
     {
