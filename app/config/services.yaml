@@ -10,52 +10,56 @@ services:
         autoconfigure: false # not useful in this app
         public: false
 
-    # --- Dump Command ---
-    Smile\GdprDump\Console\Command\DumpCommand:
+    command.dump:
+        class: 'Smile\GdprDump\Console\Command\DumpCommand'
         public: true
         arguments:
-            - '@Smile\GdprDump\Dumper\SqlDumper'
-            - '@Smile\GdprDump\Config\Config'
-            - '@Smile\GdprDump\Config\Loader\ConfigLoader'
-            - '@Smile\GdprDump\Config\Validator\JsonSchemaValidator'
+            - '@dumper'
+            - '@dumper.config'
+            - '@dumper.config_loader'
+            - '@config.schema_validator'
 
-    # --- Config ---
-    Smile\GdprDump\Config\Config:
-        public: true # used by functional tests
-
-    Smile\GdprDump\Config\Loader\ConfigLoader:
-        public: true # used by functional tests
-        arguments:
-            - '@Smile\GdprDump\Config\Config'
-            - '@Smile\GdprDump\Config\Parser\YamlParser'
-            - '@Smile\GdprDump\Config\Loader\FileLocator'
-
-    Smile\GdprDump\Config\Loader\FileLocator:
+    config.file_locator:
+        class: 'Smile\GdprDump\Config\Loader\FileLocator'
         arguments:
             - '%config.templates_dir%'
 
-    Smile\GdprDump\Config\Parser\YamlParser: ~
+    config.parser:
+        class: 'Smile\GdprDump\Config\Parser\YamlParser'
 
-    Smile\GdprDump\Config\Validator\JsonSchemaValidator:
+    config.schema_validator:
+        class: 'Smile\GdprDump\Config\Validator\JsonSchemaValidator'
         arguments:
             - '%config.schema_file%'
 
-    # --- Dumper ---
-    Smile\GdprDump\Dumper\SqlDumper:
+    converter.factory:
+        class: 'Smile\GdprDump\Converter\ConverterFactory'
         arguments:
-            - '@Smile\GdprDump\Converter\ConverterFactory'
+            - '@converter.resolver'
+            - '@faker.service'
 
-    # --- Converter ---
-    Smile\GdprDump\Converter\ConverterFactory:
+    converter.resolver:
+        class: 'Smile\GdprDump\Converter\ConverterResolver'
+
+    dumper:
+        class: 'Smile\GdprDump\Dumper\SqlDumper'
         public: true # used by functional tests
         arguments:
-            - '@Smile\GdprDump\Converter\ConverterResolver'
-            - '@Smile\GdprDump\Faker\FakerService'
+            - '@converter.factory'
 
-    Smile\GdprDump\Converter\ConverterResolver:
-        public: true # used by app kernel to init the paths
+    dumper.config:
+        class: 'Smile\GdprDump\Config\Config'
+        public: true # used by functional tests
 
-    # --- Faker ---
-    Smile\GdprDump\Faker\FakerService:
+    dumper.config_loader:
+        class: 'Smile\GdprDump\Config\Loader\ConfigLoader'
+        public: true # used by functional tests
+        arguments:
+            - '@dumper.config'
+            - '@config.parser'
+            - '@config.file_locator'
+
+    faker.service:
+        class: 'Smile\GdprDump\Faker\FakerService'
         arguments:
             - {locale: '%faker.locale%'}

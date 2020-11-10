@@ -102,7 +102,7 @@ class SqlDumperTest extends TestCase
     private function createConfig(): Config
     {
         /** @var Config $config */
-        $config = $this->getContainer()->get(Config::class);
+        $config = $this->getContainer()->get('dumper.config');
 
         $dumpParams = $config->get('dump');
         $dumpParams['output'] = $this->dumpFile;
@@ -118,9 +118,9 @@ class SqlDumperTest extends TestCase
      */
     private function createDumper(): SqlDumper
     {
-        /** @var ConverterFactory $converterFactory */
-        $converterFactory = $this->getContainer()->get(ConverterFactory::class);
+        /** @var SqlDumper $dumper */
+        $dumper = $this->getContainer()->get('dumper');
 
-        return new SqlDumper($converterFactory);
+        return $dumper;
     }
 }

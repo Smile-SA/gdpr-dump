@@ -23,6 +23,14 @@ class ConverterResolver
     private $resolved;
 
     /**
+     * Constructor. Default converters are automatically included.
+     */
+    public function __construct()
+    {
+        $this->addPath('Smile\\GdprDump\\Converter\\', __DIR__);
+    }
+
+    /**
      * Add a path.
      *
      * @param string $namespace
@@ -61,7 +69,6 @@ class ConverterResolver
 
         return $this->resolved[$name];
     }
-
 
     /**
      * Initialize the converter name <-> class name array.
