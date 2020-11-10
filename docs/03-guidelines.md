@@ -2,6 +2,7 @@
 
 ## Table of Contents
 
+- [Migration Guidelines](#user-content-migration-guidelines)
 - [Performance](#user-content-performance)
 - [Security](#user-content-security)
 - [Custom Tables](#user-content-custom-tables)

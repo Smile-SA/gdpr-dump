@@ -51,7 +51,7 @@ composer create-project --no-dev --prefer-dist smile/gdpr-dump
 Command:
 
 ```
-bin/gdpr-dump <config_file>...
+./gdpr-dump.phar <config_file>...
 ```
 
 Arguments:
