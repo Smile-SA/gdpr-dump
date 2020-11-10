@@ -177,7 +177,7 @@ class JsonSchemaValidatorTest extends TestCase
             'tables' => [
                 'table1' => [
                     'limit' => 100,
-                    'orderBy' => 'id desc',
+                    'order_by' => 'id desc',
                     'filters' => [
                         ['email', 'like', '%@example.org'],
                         ['created_at', 'gt', 'expr: date_sub(now(), interval 60 day)'],

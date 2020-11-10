@@ -39,7 +39,7 @@ class ConfigLoaderTest extends TestCase
         $expectedSubset = ['table3' => ['limit' => 10]];
         $this->assertArraySubset($expectedSubset, $tablesConfig);
 
-        $expectedSubset = ['table4' => ['orderBy' => 'field1']];
+        $expectedSubset = ['table4' => ['order_by' => 'field1']];
         $this->assertArraySubset($expectedSubset, $tablesConfig);
 
         // Assert that the converters of table 4 were removed (by setting it to null in the child config file)

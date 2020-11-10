@@ -4,18 +4,25 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
+Major changes:
+
 - Add support for PHP 8
+- The following converters were renamed (old names are still available, but deprecated):
+    - `randomizeDate` -> `randomDate`
+    - `randomizeDateTime` -> `randomDateTime`
+    - `addPrefix` -> `prependText`
+    - `addSuffix` -> `appendText`
+- The `orderBy` parameter was renamed to `order_by`.
+  The `orderBy` syntax is still supported, but deprecated.
 - New options available for the following converters:
     - anonymizeText: `delimiters`, `replacement`, `min_word_length`
     - anonymizeEmail: `delimiters`, `replacement`, `min_word_length`
     - anonymizeNumber: `replacement`, `min_number_length`
 - New converters: `randomText`, `randomEmail`, `hash`
-- Renamed converters (old names are still available, but deprecated):
-    - `randomizeDate` -> `randomDate`
-    - `randomizeDateTime` -> `randomDateTime`
-    - `addPrefix` -> `prependText`
-    - `addSuffix` -> `appendText`
 - Reduce phar file size by ~50%
+
+Minor fixes / code refactoring:
+
 - Remove disabled converters instead of replacing them by dummy converters
 - Replace deprecated Doctrine functions
 - Fix conditions not working properly in functional tests
