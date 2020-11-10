@@ -53,11 +53,11 @@ abstract class TestCase extends BaseTestCase
 
         // Parse the config file
         /** @var ConfigLoader $loader */
-        $loader = static::getContainer()->get(ConfigLoader::class);
+        $loader = static::getContainer()->get('dumper.config_loader');
         $loader->load(static::getResource('config/templates/test.yaml'));
 
         /** @var Config $config */
-        $config = static::getContainer()->get(Config::class);
+        $config = static::getContainer()->get('dumper.config');
         $config->compile();
 
         // Initialize the shared connection

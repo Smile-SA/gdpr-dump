@@ -7,8 +7,6 @@ namespace Smile\GdprDump;
 use ErrorException;
 use RuntimeException;
 use Smile\GdprDump\Console\Application;
-use Smile\GdprDump\Console\Command\DumpCommand;
-use Smile\GdprDump\Converter\ConverterResolver;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -39,7 +37,7 @@ class AppKernel
         $application = new Application();
 
         /** @var Command $command */
-        $command = $this->container->get(DumpCommand::class);
+        $command = $this->container->get('command.dump');
         $application->add($command);
         $application->setDefaultCommand($command->getName(), true);
         $application->run();
@@ -59,10 +57,6 @@ class AppKernel
 
         // Build the service container
         $this->container = $this->buildContainer();
-
-        // Initialize the converter resolver
-        $this->container->get(ConverterResolver::class)
-            ->addPath('Smile\\GdprDump\\Converter\\', __DIR__ . '/Converter');
 
         $this->booted = true;
     }
