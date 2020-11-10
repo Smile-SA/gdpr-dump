@@ -108,7 +108,7 @@ class Compiler
                     [
                         'bin/',
                         'justinrainbow/json-schema/demo/',
-                        '#fzaninotto/faker/src/Faker/Provider/(?!' . $this->locale . ')[a-zA-Z_]+/#',
+                        '#fakerphp/faker/src/Faker/Provider/(?!' . $this->locale . ')[a-zA-Z_]+/#',
                     ]
                 ),
             $this->createFinder($this->basePath . '/app')
