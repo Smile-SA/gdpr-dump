@@ -2,9 +2,10 @@
 
 ## Table of Contents
 
-- [Overriding Configuration](#user-content-overriding-configuration)
 - [Templates](#user-content-templates)
-- [Application Version](#user-content-application-version)
+    - [Default Templates](#user-content-default-templates)
+    - [Custom Templates](#user-content-custom-templates)
+    - [Extending Multiple Files](#user-content-extending-multiple-files)
 - [Database Settings](#user-content-database-settings)
 - [Dump Settings](#user-content-dump-settings)
 - [Table Whitelist](#user-content-table-whitelist)
@@ -20,29 +21,9 @@
     - [Unsetting Values Declared in Config Templates](#user-content-unsetting-values-declared-in-config-templates)
     - [Version-specific Configuration](#user-content-version-specific-configuration)
 
-## Overriding Configuration
-
-You can create a custom config file that inherits the properties of another config file, by using the `extends` parameter.
-
-**Syntax**
-
-```yaml
-extends: 'path/to/config.yaml'
-```
-
-It can be an absolute path, or relative to the configuration file.
-
-**Extending Multiple Files**
-
-It is possible to override multiple config files:
-
-```yaml
-extends:
-    - 'path/to/config1.yaml'
-    - 'path/to/config2.yaml'
-```
-
 ## Templates
+
+### Default Templates
 
 The tool is bundled with predefined configuration templates.
 Each template provides anonymization rules for a specific framework.
@@ -60,7 +41,28 @@ For example:
 
 ```yaml
 extends: 'magento2'
-version: '2.3.3'
+version: '2.4.1'
+```
+
+### Custom Templates
+
+The `extends` parameter can also be used with custom config files:
+
+```yaml
+extends: 'path/to/config.yaml'
+```
+
+The contents of this template will automatically be merged with the configuration file.
+The path to the file can be an absolute path, or relative to the configuration file.
+
+### Extending Multiple Files
+
+It is possible to override multiple config files:
+
+```yaml
+extends:
+    - 'path/to/config1.yaml'
+    - 'path/to/config2.yaml'
 ```
 
 ## Database Settings
