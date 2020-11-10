@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Converter\Helper;
+namespace Smile\GdprDump\Util;
 
 class ArrayHelper
 {

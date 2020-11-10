@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Converter\Helper;
+namespace Smile\GdprDump\Tests\Unit\Util;
 
-use Smile\GdprDump\Converter\Helper\ArrayHelper;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Util\ArrayHelper;
 
 class ArrayHelperTest extends TestCase
 {

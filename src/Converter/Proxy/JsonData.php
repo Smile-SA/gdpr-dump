@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter\Proxy;
 
 use Smile\GdprDump\Converter\ConverterInterface;
-use Smile\GdprDump\Converter\Helper\ArrayHelper;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Util\ArrayHelper;
 
 class JsonData implements ConverterInterface
 {
