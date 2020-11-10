@@ -153,7 +153,8 @@ class ConditionBuilder
             }
 
             // Replace SQL column names by their values in the condition
-            if ($token->getName() === 'T_STRING'
+            if (
+                $token->getName() === 'T_STRING'
                 && $index >= 2
                 && $index <= $tokenCount - 3
                 && $tokens[$index - 1]->getName() === 'T_OPEN_CURLY'
