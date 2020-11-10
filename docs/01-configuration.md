@@ -185,7 +185,7 @@ Available properties:
 
 - `truncate`: to dump a table without any data.
 - `limit`: to limit the number of rows to dump.
-- `orderBy`: same as SQL (e.g. `name asc, id desc`).
+- `order_by`: same as SQL (e.g. `name asc, id desc`).
 - `filters`: a list of filters to apply.
 
 How to define a truncate:
@@ -211,7 +211,7 @@ How to define a sort order:
 ```yaml
 tables:
     my_table:
-        orderBy: 'sku, entity_id desc'
+        order_by: 'sku, entity_id desc'
 ```
 
 How to define a filter:

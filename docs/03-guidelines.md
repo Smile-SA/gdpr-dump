@@ -8,6 +8,20 @@
 - [Data Consistency](#user-content-data-consistency)
 - [Magento](#user-content-magento)
 
+## Migration Guidelines
+
+GdprDump 2.1.0 introduced the following changes to the config file syntax:
+
+- The following converters were renamed:
+    - `randomizeDate` -> `randomDate`
+    - `randomizeDateTime` -> `randomDateTime`
+    - `addPrefix` -> `prependText`
+    - `addSuffix` -> `appendText`
+- The `orderBy` parameter was renamed to `order_by`.
+  This was the only parameter that didn't use snake case.
+
+The old converter names and the `orderBy` parameter are still supported, but they will be removed from the next major release (3.0.0).
+
 ## Performance
 
 Since this tool is a pure PHP implementation of a MySQL dumper, it is way slower than mysqldump.

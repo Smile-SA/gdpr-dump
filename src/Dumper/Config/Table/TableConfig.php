@@ -176,9 +176,13 @@ class TableConfig
      */
     private function prepareSortOrder(array $tableData): void
     {
-        $orderBy = (string) ($tableData['orderBy'] ?? '');
+        $orderBy = (string) ($tableData['order_by'] ?? '');
         if ($orderBy === '') {
-            return;
+            // Deprecated syntax "orderBy"
+            $orderBy = (string) ($tableData['orderBy'] ?? '');
+            if ($orderBy === '') {
+                return;
+            }
         }
 
         $orders = explode(',', $orderBy);

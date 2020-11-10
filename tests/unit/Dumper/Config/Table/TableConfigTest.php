@@ -107,11 +107,11 @@ class TableConfigTest extends TestCase
     }
 
     /**
-     * Test the "orderBy" parameter.
+     * Test the "order_by" parameter.
      */
     public function testSortOrder(): void
     {
-        $config = new TableConfig('table1', ['orderBy' => 'name, id desc']);
+        $config = new TableConfig('table1', ['order_by' => 'name, id desc']);
 
         $this->assertCount(2, $config->getSortOrders());
         $this->assertTrue($config->hasSortOrder());
@@ -123,7 +123,7 @@ class TableConfigTest extends TestCase
     public function testInvalidSortOrder(): void
     {
         $this->expectException(UnexpectedValueException::class);
-        new TableConfig('table1', ['orderBy' => 'this is not a valid sort order']);
+        new TableConfig('table1', ['order_by' => 'this is not a valid sort order']);
     }
 
     /**

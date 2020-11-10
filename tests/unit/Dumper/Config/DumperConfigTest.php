@@ -42,7 +42,7 @@ class DumperConfigTest extends TestCase
             'tables' => [
                 'table1' => ['truncate' => true],
                 'table2' => ['limit' => 1],
-                'table3' => ['orderBy' => 'field1'],
+                'table3' => ['order_by' => 'field1'],
                 'table4' => ['converters' => ['field1' => ['converter' => 'randomizeEmail']]],
             ],
         ];

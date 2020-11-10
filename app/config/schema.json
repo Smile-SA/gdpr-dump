@@ -217,6 +217,9 @@
                         "maxItems": 3
                     }
                 },
+                "order_by": {
+                    "type": ["string", "number"]
+                },
                 "orderBy": {
                     "type": ["string", "number"]
                 },

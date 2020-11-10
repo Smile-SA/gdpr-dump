@@ -18,7 +18,7 @@ tables_whitelist:
 
 tables:
     stores:
-        orderBy: 'code'
+        order_by: 'code'
         filters:
             - ['store_id', 'in', [1, 2]]
 

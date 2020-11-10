@@ -9,4 +9,4 @@ tables:
         limit: 10
 
     table4:
-        orderBy: 'field1'
+        order_by: 'field1'
