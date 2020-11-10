@@ -38,8 +38,8 @@ It is possible to override multiple config files:
 
 ```yaml
 extends:
-  - 'path/to/config1.yaml'
-  - 'path/to/config2.yaml'
+    - 'path/to/config1.yaml'
+    - 'path/to/config2.yaml'
 ```
 
 ## Templates
