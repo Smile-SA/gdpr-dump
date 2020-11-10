@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Functional\Dumper;
 
 use Smile\GdprDump\Config\Config;
-use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\Dumper\SqlDumper;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
