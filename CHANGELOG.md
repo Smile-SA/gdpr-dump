@@ -20,7 +20,7 @@ Major changes:
     - anonymizeEmail: `delimiters`, `replacement`, `min_word_length`
     - anonymizeNumber: `replacement`, `min_number_length`
 - New converters: `randomText`, `randomEmail`, `hash`
-- Reduce phar file size by ~50%
+- Reduce phar file size by ~70%
 
 Minor fixes / code refactoring:
 
