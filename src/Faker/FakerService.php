@@ -10,7 +10,7 @@ use Faker\Generator;
 class FakerService
 {
     /**
-     * @var Generator
+     * @var Generator|null
      */
     private $generator;
 

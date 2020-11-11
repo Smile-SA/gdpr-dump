@@ -10,7 +10,7 @@ use JsonSchema\Validator;
 class JsonSchemaValidator implements ValidatorInterface
 {
     /**
-     * @var Validator
+     * @var Validator|null
      */
     private $schemaValidator;
 

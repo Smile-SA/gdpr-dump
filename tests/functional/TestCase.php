@@ -16,12 +16,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class TestCase extends BaseTestCase
 {
     /**
-     * @var AppKernel
+     * @var AppKernel|null
      */
     protected static $kernel;
 
     /**
-     * @var Database
+     * @var Database|null
      */
     protected static $database;
 
