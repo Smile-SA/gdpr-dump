@@ -13,12 +13,12 @@ class RandomizeEmail extends RandomizeText
     /**
      * @var string[]
      */
-    protected $domains;
+    private $domains;
 
     /**
      * @var int
      */
-    protected $domainsCount;
+    private $domainsCount;
 
     /**
      * @param array $parameters

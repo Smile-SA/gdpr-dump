@@ -37,8 +37,8 @@ class RandomizeText implements ConverterInterface
             ->addParameter('min_length', Parameter::TYPE_STRING, true, 3)
             ->process($parameters);
 
-        $this->replacements = $input->get('replacements');
         $this->minLength = $input->get('min_length');
+        $this->replacements = $input->get('replacements');
         $this->replacementsCount = strlen($this->replacements);
     }
 
