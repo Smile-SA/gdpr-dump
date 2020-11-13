@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Replace double quotes by single quotes in SQL queries
+
 ## [2.1.0] - 2020-11-10
 [2.1.0]: https://github.com/Smile-SA/gdpr-dump/compare/2.0.3...2.1.0
 

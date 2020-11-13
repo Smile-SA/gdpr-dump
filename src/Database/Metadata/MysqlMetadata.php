@@ -35,7 +35,7 @@ class MysqlMetadata implements MetadataInterface
     {
         $query = 'SELECT TABLE_NAME '
             . 'FROM INFORMATION_SCHEMA.TABLES '
-            . 'WHERE TABLE_TYPE="BASE TABLE" AND TABLE_SCHEMA=? '
+            . 'WHERE TABLE_TYPE=\'BASE TABLE\' AND TABLE_SCHEMA=? '
             . 'ORDER BY TABLE_NAME ASC';
 
         $statement = $this->connection->prepare($query);
