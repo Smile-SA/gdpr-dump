@@ -67,7 +67,7 @@ extends:
 
 ## Database Settings
 
-The database information can be specified in the `dababase` object:
+The database information can be specified in the `database` object:
 
 ```yaml
 database:
