@@ -19,7 +19,6 @@ class ParameterProcessor
      * @param bool $required
      * @param mixed $default
      * @return $this
-     * @SuppressWarnings(BooleanArgumentFlag)
      */
     public function addParameter(string $name, string $type = null, bool $required = false, $default = null): self
     {
