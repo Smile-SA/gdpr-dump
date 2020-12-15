@@ -68,12 +68,10 @@ class ConfigProcessor
     private function processTablesData(ConfigInterface $config): void
     {
         $tablesData = $config->get('tables', []);
-        if (empty($tablesData)) {
-            return;
+        if (!empty($tablesData)) {
+            $resolved = $this->resolveTablesData($tablesData);
+            $config->set('tables', $resolved);
         }
-
-        $resolved = $this->resolveTablesData($tablesData);
-        $config->set('tables', $resolved);
     }
 
     /**
@@ -88,11 +86,9 @@ class ConfigProcessor
 
         foreach ($tableNames as $tableName) {
             $matches = $this->findTablesByName((string) $tableName);
-            if (empty($matches)) {
-                continue;
+            if (!empty($matches)) {
+                $resolved = array_merge($resolved, $matches);
             }
-
-            $resolved = array_merge($resolved, $matches);
         }
 
         return array_unique($resolved);
@@ -106,31 +102,21 @@ class ConfigProcessor
      */
     private function resolveTablesData(array $tablesData): array
     {
+        $resolved = [];
+
         foreach ($tablesData as $tableName => $tableData) {
-            $tableName = (string) $tableName;
+            $matches = $this->findTablesByName((string) $tableName);
 
-            // Find all tables matching the pattern
-            $matches = $this->findTablesByName($tableName);
-
-            // Table found is the same as the table name -> nothing to do
-            if (count($matches) === 1 && $matches[0] === $tableName) {
-                continue;
-            }
-
-            // If tables were found -> update the tables data
             foreach ($matches as $match) {
-                if (!array_key_exists($match, $tablesData)) {
-                    $tablesData[$match] = [];
+                if (!array_key_exists($match, $resolved)) {
+                    $resolved[$match] = [];
                 }
 
-                $tablesData[$match] += $tableData;
+                $resolved[$match] += $tableData;
             }
-
-            // Remove the entry from the tables data
-            unset($tablesData[$tableName]);
         }
 
-        return $tablesData;
+        return $resolved;
     }
 
     /**
