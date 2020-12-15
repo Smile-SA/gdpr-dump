@@ -29,6 +29,6 @@ class YamlParserTest extends TestCase
     {
         $parser = new YamlParser();
         $this->expectException(ParseException::class);
-        $parser->parse('[invalid]Yaml');
+        $parser->parse('{{invalid}}Yaml');
     }
 }

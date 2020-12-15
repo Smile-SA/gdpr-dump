@@ -1,2 +1,2 @@
 ---
-This is a string, only array are allowed. The config loader must throw a ParseException when trying to load this file.
+This is a string, only arrays are allowed. The config loader must throw a ParseException when trying to load this file.
