@@ -17,9 +17,9 @@ class QueryValidator
      * @var string[]
      */
     private $statementBlacklist = [
-        'grant', 'create', 'alter', 'drop', 'insert',
-        'update', 'delete', 'truncate', 'replace',
-        'prepare', 'execute',
+        'grant', 'revoke', 'create', 'alter', 'drop', 'rename',
+        'insert', 'update', 'delete', 'truncate', 'replace',
+        'prepare', 'execute', 'lock', 'unlock', 'optimize', 'repair',
     ];
 
     /**
@@ -44,7 +44,9 @@ class QueryValidator
         foreach ($tokens as $token) {
             // If the token is a word, check if it contains a forbidden statement
             if ($token->getName() === 'T_STRING' && in_array($token->getValue(), $this->statementBlacklist, true)) {
-                throw new ValidationException(sprintf('This query contains forbidden keywords: "%s".', $query));
+                $message = 'The following query contains a forbidden keyword: "%s". '
+                    . 'You may use "`%s`" to prevent this error.';
+                throw new ValidationException(sprintf($message, $query, $token->getValue()));
             }
         }
     }

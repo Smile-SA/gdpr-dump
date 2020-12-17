@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
+- The following keywords are now forbidden in the `variables` param: `revoke`, `rename`, `lock`, `unlock`, `optimize`, `repair`
 - Replace double quotes by single quotes in SQL queries
 
 ## [2.1.0] - 2020-11-10
