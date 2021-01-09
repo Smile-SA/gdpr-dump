@@ -60,3 +60,5 @@ services:
 
     faker.service:
         class: 'Smile\GdprDump\Faker\FakerService'
+        arguments:
+            - '@dumper.config'

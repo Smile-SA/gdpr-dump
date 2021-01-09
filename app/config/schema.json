@@ -47,6 +47,9 @@
                 "type": ["string", "number"],
                 "minLength": 1
             }
+        },
+        "faker": {
+            "$ref": "#/definitions/faker"
         }
     },
     "additionalProperties": false,
