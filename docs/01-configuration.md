@@ -20,6 +20,7 @@
     - [SQL Variables](#user-content-sql-variables)
     - [Unsetting Values Declared in Config Templates](#user-content-unsetting-values-declared-in-config-templates)
     - [Version-specific Configuration](#user-content-version-specific-configuration)
+    - [Faker Locale](#user-content-faker-locale)
 
 ## Templates
 
