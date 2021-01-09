@@ -2,7 +2,6 @@
 parameters:
     config.schema_file: '%app_root%/app/config/schema.json'
     config.templates_dir: '%app_root%/app/config/templates'
-    faker.locale: '%config.faker.locale%'
 
 services:
     _defaults:
@@ -61,5 +60,3 @@ services:
 
     faker.service:
         class: 'Smile\GdprDump\Faker\FakerService'
-        arguments:
-            - {locale: '%faker.locale%'}

@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Faker;
 
 use Faker\Factory;
 use Faker\Generator;
+use Smile\GdprDump\Config\ConfigInterface;
 
 class FakerService
 {
@@ -20,12 +21,13 @@ class FakerService
     private $options;
 
     /**
+     * @param ConfigInterface $config
      * @param array $options
      */
-    public function __construct(array $options = [])
+    public function __construct(ConfigInterface $config, array $options = [])
     {
         $this->options = $options + [
-            'locale' => Factory::DEFAULT_LOCALE,
+            'locale' => $config->get('faker.locale', Factory::DEFAULT_LOCALE),
         ];
     }
 
