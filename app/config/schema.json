@@ -279,6 +279,15 @@
                 }
             },
             "additionalProperties": false
+        },
+        "faker": {
+            "type": "object",
+            "properties": {
+                "locale": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
         }
     }
 }

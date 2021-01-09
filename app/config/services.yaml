@@ -2,7 +2,7 @@
 parameters:
     config.schema_file: '%app_root%/app/config/schema.json'
     config.templates_dir: '%app_root%/app/config/templates'
-    faker.locale: 'en_US'
+    faker.locale: '%config.faker.locale%'
 
 services:
     _defaults:

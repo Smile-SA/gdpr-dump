@@ -481,3 +481,16 @@ The [magento2 template](../app/config/templates/magento2.yaml) uses that feature
 
 There is little point to use this feature in your custom configuration file(s).
 It is mainly used to provide default config templates that are compatible with all versions of a framework.
+
+### Faker Locale
+
+In order to customize the locale used in faker formatters, the locale can be set using the `faker.locale` parameter.
+
+```yaml
+faker:
+    locale: 'de_DE'
+```
+
+The locale setting defaults to `en_US`.
+
+Available locales can be found in the official [faker documentation](https://fakerphp.github.io/).
