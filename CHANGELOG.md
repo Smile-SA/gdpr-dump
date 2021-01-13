@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
+- New parameter `faker.locale` added to the dump configuration file
 - The following keywords are now forbidden in the `variables` param: `revoke`, `rename`, `lock`, `unlock`, `optimize`, `repair`
 - Replace double quotes by single quotes in SQL queries
 
