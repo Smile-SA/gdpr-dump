@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Config;
+namespace Smile\GdprDump\Database;
 
 use UnexpectedValueException;
 
-class DatabaseConfig
+class Config implements ConfigInterface
 {
     /**
      * @var string
@@ -39,9 +39,7 @@ class DatabaseConfig
     }
 
     /**
-     * Get the database driver.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getDriver(): string
     {
@@ -49,9 +47,7 @@ class DatabaseConfig
     }
 
     /**
-     * Get the driver options.
-     *
-     * @return array
+     * @inheritdoc
      */
     public function getDriverOptions(): array
     {
@@ -59,9 +55,7 @@ class DatabaseConfig
     }
 
     /**
-     * Get the connection parameters (host, port, user...).
-     *
-     * @return array
+     * @inheritdoc
      */
     public function getConnectionParams(): array
     {
@@ -69,10 +63,7 @@ class DatabaseConfig
     }
 
     /**
-     * Get the value of a connection parameter.
-     *
-     * @param string $name
-     * @return mixed
+     * @inheritdoc
      */
     public function getConnectionParam(string $name)
     {

@@ -11,7 +11,6 @@ use Smile\GdprDump\Database\Driver\DriverInterface;
 use Smile\GdprDump\Database\Driver\MysqlDriver;
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Database\Metadata\MysqlMetadata;
-use Smile\GdprDump\Dumper\Config\DatabaseConfig;
 use UnexpectedValueException;
 
 /**
@@ -42,12 +41,18 @@ class Database implements DatabaseInterface
     private $metadata;
 
     /**
-     * @param DatabaseConfig $config
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
+     * @param ConfigInterface $config
      * @throws Exception
      * @throws UnexpectedValueException
      */
-    public function __construct(DatabaseConfig $config)
+    public function __construct(ConfigInterface $config)
     {
+        $this->config = $config;
         $this->connection = $this->createConnection($config);
         $driver = $config->getDriver();
 
@@ -95,13 +100,21 @@ class Database implements DatabaseInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getConfig(): ConfigInterface
+    {
+        return $this->config;
+    }
+
+    /**
      * Create a Doctrine connection.
      *
-     * @param DatabaseConfig $config
+     * @param ConfigInterface $config
      * @return Connection
      * @throws Exception
      */
-    private function createConnection(DatabaseConfig $config): Connection
+    private function createConnection(ConfigInterface $config): Connection
     {
         // Get the connection parameters from the config
         $params = $config->getConnectionParams();

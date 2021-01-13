@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Faker;
 
-use Smile\GdprDump\Config\Config;
+use Faker\Factory;
 use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
@@ -15,47 +15,23 @@ class FakerServiceTest extends TestCase
      */
     public function testGenerator(): void
     {
-        $fakerService = new FakerService($this->createMock(Config::class));
+        $fakerService = new FakerService();
 
         $generator = $fakerService->getGenerator();
         $this->assertNotEmpty($generator->getProviders());
+        $this->assertSame(Factory::DEFAULT_LOCALE, $fakerService->getLocale());
     }
 
     /**
-     * Test the "getGenerator" looks for the configured locale
+     * Test the "getGenerator" method with a custom locale.
      */
-    public function testGeneratorUsesLocaleConfiguration(): void
+    public function testGeneratorWithCustomLocale(): void
     {
-        $configMock = $this->createMock(Config::class);
-        $configMock
-            ->expects($this->once())
-            ->method('get')
-            ->with('faker')
-            ->willReturn(null);
-
-        $fakerService = new FakerService($configMock);
-
+        $fakerService = new FakerService();
         $generator = $fakerService->getGenerator();
-        $this->assertNotEmpty($generator->getProviders());
-    }
 
-    /**
-     * Test the "getGenerator" works with a locale configured
-     */
-    public function testGeneratorWithLocaleConfigured(): void
-    {
-        $configMock = $this->createMock(Config::class);
-        $configMock
-            ->expects($this->once())
-            ->method('get')
-            ->with('faker')
-            ->willReturn([
-                'locale' => 'de_DE'
-            ]);
-
-        $fakerService = new FakerService($configMock);
-
-        $generator = $fakerService->getGenerator();
-        $this->assertNotEmpty($generator->getProviders());
+        $fakerService->setLocale('ru_RU');
+        $this->assertSame('ru_RU', $fakerService->getLocale());
+        $this->assertNotSame($generator, $fakerService->getGenerator());
     }
 }

@@ -16,16 +16,16 @@ class FakerService
     private $generator;
 
     /**
-     * @var ConfigInterface
+     * @var string
      */
-    private $config;
+    private $locale;
 
     /**
-     * @param ConfigInterface $config
+     * @param string $locale
      */
-    public function __construct(ConfigInterface $config)
+    public function __construct(string $locale = Factory::DEFAULT_LOCALE)
     {
-        $this->config = $config;
+        $this->locale = $locale;
     }
 
     /**
@@ -36,10 +36,35 @@ class FakerService
     public function getGenerator(): Generator
     {
         if ($this->generator === null) {
-            $locale = $this->config->get('faker', [])['locale'] ?? Factory::DEFAULT_LOCALE;
-            $this->generator = Factory::create($locale);
+            $this->generator = Factory::create($this->locale);
         }
 
         return $this->generator;
+    }
+
+    /**
+     * Get the current locale.
+     *
+     * @return string
+     */
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    /**
+     * Set the current locale.
+     *
+     * @param string $locale
+     * @return $this
+     */
+    public function setLocale(string $locale): self
+    {
+        if ($this->locale !== $locale) {
+            $this->locale = $locale;
+            $this->generator = null;
+        }
+
+        return $this;
     }
 }

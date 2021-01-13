@@ -12,6 +12,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use UnexpectedValueException;
 
 /**
  * @codeCoverageIgnore
@@ -95,6 +96,7 @@ class AppKernel
      * Build the service container.
      *
      * @return ContainerInterface
+     * @throws UnexpectedValueException
      */
     private function buildContainer(): ContainerInterface
     {
@@ -106,6 +108,15 @@ class AppKernel
 
         $container->setParameter('app_root', $basePath);
         $container->compile();
+
+        $locale = $container->getParameter('faker.locale');
+        $installedLocales = $container->getParameter('faker.installed_locales');
+
+        if (!in_array($locale, $installedLocales, true)) {
+            throw new UnexpectedValueException(
+                sprintf('Locale "%s" is missing from "faker.installed_locales" in app/config/services.yaml.', $locale)
+            );
+        }
 
         return $container;
     }

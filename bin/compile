@@ -15,11 +15,11 @@ $fileName = $basePath . '/build/dist/gdpr-dump.phar';
 // Get the locale
 $application = new AppKernel();
 $application->boot();
-$locale = $application->getContainer()->getParameter('faker.locale');
+$locales = $application->getContainer()->getParameter('faker.installed_locales');
 
 try {
     // Create the phar file
-    $compiler = new Compiler($locale);
+    $compiler = new Compiler($locales);
     $compiler->compile($fileName);
 } catch (RuntimeException $e) {
     die('ERROR: ' . $e->getMessage() . "\n");

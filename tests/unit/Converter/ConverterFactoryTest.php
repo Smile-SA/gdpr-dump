@@ -180,9 +180,6 @@ class ConverterFactoryTest extends TestCase
         $resolver = new ConverterResolver();
         $resolver->addPath('Smile\\GdprDump\\Converter\\', dirname(dirname(dirname(__DIR__))) . '/src/Converter');
 
-        return new ConverterFactory(
-            $resolver,
-            new FakerService($this->createMock(Config::class))
-        );
+        return new ConverterFactory($resolver, new FakerService());
     }
 }

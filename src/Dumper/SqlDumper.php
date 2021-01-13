@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper;
 
+use Doctrine\DBAL\Exception as DBALException;
 use Ifsnop\Mysqldump\Mysqldump;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Converter\ConverterFactory;
+use Smile\GdprDump\Database\Config as DatabaseConfig;
 use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
-use Smile\GdprDump\Dumper\Config\DatabaseConfig;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Mysqldump\DataConverterExtension;
 use Smile\GdprDump\Dumper\Mysqldump\TableFilterExtension;
+use Smile\GdprDump\Faker\FakerService;
 
 class SqlDumper implements DumperInterface
 {
@@ -22,11 +24,18 @@ class SqlDumper implements DumperInterface
     private $converterFactory;
 
     /**
-     * @param ConverterFactory $converterFactory
+     * @var FakerService
      */
-    public function __construct(ConverterFactory $converterFactory)
+    private $faker;
+
+    /**
+     * @param ConverterFactory $converterFactory
+     * @param FakerService $faker
+     */
+    public function __construct(ConverterFactory $converterFactory, FakerService $faker)
     {
         $this->converterFactory = $converterFactory;
+        $this->faker = $faker;
     }
 
     /**
@@ -34,13 +43,13 @@ class SqlDumper implements DumperInterface
      */
     public function dump(ConfigInterface $config): DumperInterface
     {
-        // Create the database connection
-        $databaseConfig = new DatabaseConfig($config->get('database', []));
-        $database = new Database($databaseConfig);
-
         // Process the configuration
+        $database = $this->getDatabase($config);
         $processor = new ConfigProcessor($database->getMetadata());
         $config = $processor->process($config);
+
+        // Configure faker
+        $this->configureFaker($config);
 
         // Set the SQL variables
         $connection = $database->getConnection();
@@ -58,10 +67,10 @@ class SqlDumper implements DumperInterface
         // Create the MySQLDump object
         $dumper = new Mysqldump(
             $database->getDriver()->getDsn(),
-            $databaseConfig->getConnectionParam('user'),
-            $databaseConfig->getConnectionParam('password'),
+            $database->getConfig()->getConnectionParam('user'),
+            $database->getConfig()->getConnectionParam('password'),
             $dumpSettings,
-            $databaseConfig->getDriverOptions()
+            $database->getConfig()->getDriverOptions()
         );
 
         // Register a data conversion extension
@@ -80,6 +89,20 @@ class SqlDumper implements DumperInterface
         $dumper->start($output);
 
         return $this;
+    }
+
+    /**
+     * Create a database object.
+     *
+     * @param ConfigInterface $config
+     * @return Database
+     * @throws DBALException
+     */
+    private function getDatabase(ConfigInterface $config): Database
+    {
+        $databaseConfig = new DatabaseConfig($config->get('database', []));
+
+        return new Database($databaseConfig);
     }
 
     /**
@@ -113,5 +136,19 @@ class SqlDumper implements DumperInterface
         $settings['no-data'] = $config->getTablesToTruncate();
 
         return $settings;
+    }
+
+    /**
+     * Set faker settings.
+     *
+     * @param DumperConfig $config
+     */
+    private function configureFaker(DumperConfig $config): void
+    {
+        $locale = (string) ($config->getFakerSettings()['locale'] ?? '');
+
+        if ($locale !== '') {
+            $this->faker->setLocale($locale);
+        }
     }
 }

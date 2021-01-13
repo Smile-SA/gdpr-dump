@@ -9,8 +9,8 @@ use RuntimeException;
 use Smile\GdprDump\AppKernel;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\Loader\ConfigLoader;
+use Smile\GdprDump\Database\Config as DatabaseConfig;
 use Smile\GdprDump\Database\Database;
-use Smile\GdprDump\Dumper\Config\DatabaseConfig;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class TestCase extends BaseTestCase

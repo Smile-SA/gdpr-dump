@@ -30,4 +30,11 @@ interface DatabaseInterface
      * @return MetadataInterface
      */
     public function getMetadata(): MetadataInterface;
+
+    /**
+     * Get the database config.
+     *
+     * @return ConfigInterface
+     */
+    public function getConfig(): ConfigInterface;
 }

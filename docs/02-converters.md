@@ -550,7 +550,7 @@ tables:
                     arguments: ['{{value}}']
 ```
 
-The faker locale can be set in the [configuration file](01-configuration.md) and defaults to `en_US`.
+The faker locale can be set in the [configuration file](01-configuration.md#user-content-faker-locale) and defaults to `en_US`.
 
 ## [chain](../src/Converter/Proxy/Chain.php)
 

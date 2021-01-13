@@ -22,6 +22,9 @@
         "dump": {
             "$ref": "#/definitions/dump"
         },
+        "faker": {
+            "$ref": "#/definitions/faker"
+        },
         "variables": {
             "type": "object",
             "additionalProperties": {
@@ -47,9 +50,6 @@
                 "type": ["string", "number"],
                 "minLength": 1
             }
-        },
-        "faker": {
-            "$ref": "#/definitions/faker"
         }
     },
     "additionalProperties": false,
@@ -197,6 +197,15 @@
             },
             "additionalProperties": false
         },
+        "faker": {
+            "type": "object",
+            "properties": {
+                "locale": {
+                    "type": ["string", "null"]
+                }
+            },
+            "additionalProperties": false
+        },
         "table": {
             "type": "object",
             "properties": {
@@ -279,15 +288,6 @@
                 },
                 "disabled": {
                     "type": "boolean"
-                }
-            },
-            "additionalProperties": false
-        },
-        "faker": {
-            "type": "object",
-            "properties": {
-                "locale": {
-                    "type": "string"
                 }
             },
             "additionalProperties": false
