@@ -20,17 +20,17 @@ class Compiler
     private $basePath;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $locale;
+    private $locales;
 
     /**
-     * @param string $locale
+     * @param string[] $locales
      */
-    public function __construct(string $locale)
+    public function __construct(array $locales)
     {
         $this->basePath = dirname(dirname(__DIR__));
-        $this->locale = $locale;
+        $this->locales = $locales;
     }
 
     /**
@@ -108,7 +108,7 @@ class Compiler
                     [
                         'bin/',
                         'justinrainbow/json-schema/demo/',
-                        '#fakerphp/faker/src/Faker/Provider/(?!' . $this->locale . ')[a-zA-Z_]+/#',
+                        '#fakerphp/faker/src/Faker/Provider/(?!' . implode('|', $this->locales) . ')[a-zA-Z_]+/#',
                     ]
                 ),
             $this->createFinder($this->basePath . '/app')

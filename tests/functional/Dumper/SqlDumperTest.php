@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Tests\Functional\Dumper;
 
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Dumper\SqlDumper;
+use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
 class SqlDumperTest extends TestCase
@@ -44,9 +45,16 @@ class SqlDumperTest extends TestCase
             unlink($this->dumpFile);
         }
 
+        /** @var FakerService $faker */
+        $faker = $this->getContainer()->get('faker.service');
+        $this->assertSame('en_US', $faker->getLocale());
+
         // Create the dump
         $dumper->dump($config);
         $this->assertDumpIsValid();
+
+        // Assert that the faker locale was changed
+        $this->assertSame('fr_FR', $faker->getLocale());
     }
 
     /**

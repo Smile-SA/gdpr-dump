@@ -22,6 +22,9 @@
         "dump": {
             "$ref": "#/definitions/dump"
         },
+        "faker": {
+            "$ref": "#/definitions/faker"
+        },
         "variables": {
             "type": "object",
             "additionalProperties": {
@@ -190,6 +193,15 @@
                 },
                 "skip_definer": {
                     "type": "boolean"
+                }
+            },
+            "additionalProperties": false
+        },
+        "faker": {
+            "type": "object",
+            "properties": {
+                "locale": {
+                    "type": ["string", "null"]
                 }
             },
             "additionalProperties": false

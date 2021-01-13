@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Dumper\Config;
+namespace Smile\GdprDump\Tests\Unit\Database;
 
 use PDO;
-use Smile\GdprDump\Dumper\Config\DatabaseConfig;
+use Smile\GdprDump\Database\Config;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use UnexpectedValueException;
 
-class DatabaseConfigTest extends TestCase
+class ConfigTest extends TestCase
 {
     /**
      * Test the getter methods.
@@ -27,7 +27,7 @@ class DatabaseConfigTest extends TestCase
             'driver_options' => [PDO::ATTR_TIMEOUT, 60],
         ];
 
-        $config = new DatabaseConfig($params);
+        $config = new Config($params);
 
         $this->assertSame($params['driver'], $config->getDriver());
         $this->assertSame($params['driver_options'], $config->getDriverOptions());
@@ -42,7 +42,7 @@ class DatabaseConfigTest extends TestCase
      */
     public function testDefaultValues(): void
     {
-        $config = new DatabaseConfig(['name' => 'test']);
+        $config = new Config(['name' => 'test']);
 
         $this->assertSame('pdo_mysql', $config->getDriver());
         $this->assertSame('test', $config->getConnectionParam('name'));
@@ -58,6 +58,6 @@ class DatabaseConfigTest extends TestCase
     public function testMissingDatabaseName(): void
     {
         $this->expectException(UnexpectedValueException::class);
-        new DatabaseConfig([]);
+        new Config([]);
     }
 }

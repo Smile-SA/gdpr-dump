@@ -3,6 +3,9 @@ parameters:
     config.schema_file: '%app_root%/app/config/schema.json'
     config.templates_dir: '%app_root%/app/config/templates'
     faker.locale: 'en_US'
+    faker.installed_locales:
+        - 'en_US'
+        - 'fr_FR'
 
 services:
     _defaults:
@@ -46,6 +49,7 @@ services:
         public: true # used by functional tests
         arguments:
             - '@converter.factory'
+            - '@faker.service'
 
     dumper.config:
         class: 'Smile\GdprDump\Config\Config'
@@ -61,5 +65,6 @@ services:
 
     faker.service:
         class: 'Smile\GdprDump\Faker\FakerService'
+        public: true
         arguments:
-            - {locale: '%faker.locale%'}
+            - '%faker.locale%'

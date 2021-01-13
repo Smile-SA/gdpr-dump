@@ -18,6 +18,7 @@
 - [Advanced Configuration](#user-content-advanced-configuration)
     - [Environments Variables](#user-content-environment-variables)
     - [SQL Variables](#user-content-sql-variables)
+    - [Faker Locale](#user-content-faker-locale)
     - [Unsetting Values Declared in Config Templates](#user-content-unsetting-values-declared-in-config-templates)
     - [Version-specific Configuration](#user-content-version-specific-configuration)
 
@@ -417,6 +418,26 @@ tables:
             converter: 'anonymizeText'
             condition: '{{attribute_id}} == @firstname_attribute_id'
 ```
+
+### Faker Locale
+
+By default, the locale used in faker formatters is `en_US`.
+It can be changed with the following setting:
+
+```yaml
+faker:
+    locale: 'de_DE'
+```
+
+Available locales can be found in the official [faker documentation](https://fakerphp.github.io/).
+
+**Warning**: the default phar distribution only includes the "en_US" locale.
+To use additional locales, you must compile your own phar file:
+
+1. Clone the project.
+2. Add your locale to the parameter `faker.installed_locales` in app/config/services.yaml.
+3. Run the following command: `php -d phar.readonly=off bin/compile`.
+   This will create a file named "gdpr-dump.phar" in the folder "build/dist".
 
 ### Unsetting Values Declared in Config Templates
 

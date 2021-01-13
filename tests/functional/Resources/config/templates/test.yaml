@@ -9,6 +9,9 @@ database:
 dump:
     output: 'php://stdout'
 
+faker:
+    locale: 'fr_FR'
+
 variables:
     main_store_id: 'select store_id from stores where code = "store1"'
 

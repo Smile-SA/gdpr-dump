@@ -57,7 +57,7 @@ class DumperConfigTest extends TestCase
     }
 
     /**
-     * Test the dump settings.
+     * Test dump settings.
      */
     public function testDumpSettings(): void
     {
@@ -70,6 +70,18 @@ class DumperConfigTest extends TestCase
         $settings = $config->getDumpSettings();
         $this->assertArrayHasKey('hex_blob', $settings);
         $this->assertTrue($settings['hex_blob']);
+    }
+
+    /**
+     * Test faker settings.
+     */
+    public function testFakerSettings(): void
+    {
+        $config = $this->createConfig(['faker' => ['locale' => 'en_US']]);
+
+        $settings = $config->getFakerSettings();
+        $this->assertArrayHasKey('locale', $settings);
+        $this->assertSame('en_US', $settings['locale']);
     }
 
     /**
@@ -102,9 +114,16 @@ class DumperConfigTest extends TestCase
 
         // Test these values because they differ from MySQLDump-PHP
         $settings = $config->getDumpSettings();
+        $this->assertArrayHasKey('add_drop_table', $settings);
         $this->assertTrue($settings['add_drop_table']);
+        $this->assertArrayHasKey('hex_blob', $settings);
         $this->assertFalse($settings['hex_blob']);
+        $this->assertArrayHasKey('lock_tables', $settings);
         $this->assertFalse($settings['lock_tables']);
+
+        $settings = $config->getFakerSettings();
+        $this->assertArrayHasKey('locale', $settings);
+        $this->assertSame(null, $settings['locale']);
     }
 
     /**

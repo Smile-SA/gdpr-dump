@@ -50,6 +50,13 @@ class DumperConfig
     /**
      * @var array
      */
+    private $fakerSettings = [
+        'locale' => null,
+    ];
+
+    /**
+     * @var array
+     */
     private $dumpSettings = [
         'output' => 'php://stdout',
         'compress' => Mysqldump::NONE,
@@ -81,6 +88,7 @@ class DumperConfig
 
     /**
      * @param ConfigInterface $config
+     * @throws UnexpectedValueException
      */
     public function __construct(ConfigInterface $config)
     {
@@ -98,13 +106,23 @@ class DumperConfig
     }
 
     /**
-     * Get the dump settings.
+     * Get dump settings.
      *
      * @return array
      */
     public function getDumpSettings(): array
     {
         return $this->dumpSettings;
+    }
+
+    /**
+     * Get faker settings.
+     *
+     * @return array
+     */
+    public function getFakerSettings(): array
+    {
+        return $this->fakerSettings;
     }
 
     /**
@@ -195,11 +213,15 @@ class DumperConfig
      * Prepare the config.
      *
      * @param ConfigInterface $config
+     * @throws UnexpectedValueException
      */
     private function prepareConfig(ConfigInterface $config): void
     {
         // Dump settings
         $this->prepareDumpSettings($config);
+
+        // Faker settings
+        $this->prepareFakerSettings($config);
 
         // Tables config
         $this->prepareTablesConfig($config);
@@ -215,9 +237,10 @@ class DumperConfig
     }
 
     /**
-     * Prepare the dump settings.
+     * Prepare dump settings.
      *
      * @param ConfigInterface $config
+     * @throws UnexpectedValueException
      */
     private function prepareDumpSettings(ConfigInterface $config): void
     {
@@ -242,9 +265,29 @@ class DumperConfig
     }
 
     /**
+     * Prepare faker settings.
+     *
+     * @param ConfigInterface $config
+     * @throws UnexpectedValueException
+     */
+    private function prepareFakerSettings(ConfigInterface $config): void
+    {
+        $settings = $config->get('faker', []);
+
+        foreach ($settings as $param => $value) {
+            if (!array_key_exists($param, $this->fakerSettings)) {
+                throw new UnexpectedValueException(sprintf('Invalid faker setting "%s".', $param));
+            }
+
+            $this->fakerSettings[$param] = $value;
+        }
+    }
+
+    /**
      * Prepare the tables configuration.
      *
      * @param ConfigInterface $config
+     * @throws UnexpectedValueException
      */
     private function prepareTablesConfig(ConfigInterface $config): void
     {
