@@ -6,8 +6,6 @@ namespace Smile\GdprDump\Dumper\Mysqldump;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Ifsnop\Mysqldump\Mysqldump;
-use Smile\GdprDump\Database\DatabaseInterface;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Database\TableDependencyResolver;
@@ -34,22 +32,15 @@ class TableFilterExtension implements ExtensionInterface
     private $config;
 
     /**
-     * @param DatabaseInterface $database
-     * @param DumperConfig $config
-     */
-    public function __construct(DatabaseInterface $database, DumperConfig $config)
-    {
-        $this->connection = $database->getConnection();
-        $this->metadata = $database->getMetadata();
-        $this->config = $config;
-    }
-
-    /**
      * @inheritdoc
      */
-    public function register(Mysqldump $dumper): void
+    public function register(Context $context): void
     {
-        $dumper->setTableWheres($this->buildTablesWhere());
+        $this->connection = $context->getDatabase()->getConnection();
+        $this->metadata = $context->getDatabase()->getMetadata();
+        $this->config = $context->getConfig();
+
+        $context->getDumper()->setTableWheres($this->buildTablesWhere());
     }
 
     /**

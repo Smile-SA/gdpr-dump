@@ -47,8 +47,7 @@ services:
         class: 'Smile\GdprDump\Dumper\SqlDumper'
         public: true # used by functional tests
         arguments:
-            - '@converter.factory'
-            - '@faker.service'
+            - ['@dumper.data_converter_extension', '@dumper.table_filter_extension']
 
     dumper.config:
         class: 'Smile\GdprDump\Config\Config'
@@ -61,6 +60,15 @@ services:
             - '@dumper.config'
             - '@config.parser'
             - '@config.file_locator'
+
+    dumper.data_converter_extension:
+        class: 'Smile\GdprDump\Dumper\Mysqldump\DataConverterExtension'
+        arguments:
+            - '@converter.factory'
+            - '@faker.service'
+
+    dumper.table_filter_extension:
+        class: 'Smile\GdprDump\Dumper\Mysqldump\TableFilterExtension'
 
     faker.service:
         class: 'Smile\GdprDump\Faker\FakerService'
