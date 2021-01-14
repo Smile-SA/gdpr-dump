@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter;
 
 use RuntimeException;
-use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\Converter\ConverterResolver;
 use Smile\GdprDump\Converter\Proxy\Cache;

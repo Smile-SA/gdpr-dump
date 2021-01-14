@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Mysqldump;
 
-use Ifsnop\Mysqldump\Mysqldump;
-
 interface ExtensionInterface
 {
     /**
      * Register the extension.
      *
-     * @param Mysqldump $dumper
+     * @param Context $context
      */
-    public function register(Mysqldump $dumper): void;
+    public function register(Context $context): void;
 }

@@ -7,35 +7,26 @@ namespace Smile\GdprDump\Dumper;
 use Doctrine\DBAL\Exception as DBALException;
 use Ifsnop\Mysqldump\Mysqldump;
 use Smile\GdprDump\Config\ConfigInterface;
-use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\Database\Config as DatabaseConfig;
 use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
-use Smile\GdprDump\Dumper\Mysqldump\DataConverterExtension;
-use Smile\GdprDump\Dumper\Mysqldump\TableFilterExtension;
-use Smile\GdprDump\Faker\FakerService;
+use Smile\GdprDump\Dumper\Mysqldump\Context;
+use Smile\GdprDump\Dumper\Mysqldump\ExtensionInterface;
 
 class SqlDumper implements DumperInterface
 {
     /**
-     * @var ConverterFactory
+     * @var ExtensionInterface[]
      */
-    private $converterFactory;
+    private $extensions;
 
     /**
-     * @var FakerService
+     * @param ExtensionInterface[] $extensions
      */
-    private $faker;
-
-    /**
-     * @param ConverterFactory $converterFactory
-     * @param FakerService $faker
-     */
-    public function __construct(ConverterFactory $converterFactory, FakerService $faker)
+    public function __construct(array $extensions = [])
     {
-        $this->converterFactory = $converterFactory;
-        $this->faker = $faker;
+        $this->extensions = $extensions;
     }
 
     /**
@@ -47,9 +38,6 @@ class SqlDumper implements DumperInterface
         $database = $this->getDatabase($config);
         $processor = new ConfigProcessor($database->getMetadata());
         $config = $processor->process($config);
-
-        // Configure faker
-        $this->configureFaker($config);
 
         // Set the SQL variables
         $connection = $database->getConnection();
@@ -73,13 +61,11 @@ class SqlDumper implements DumperInterface
             $database->getConfig()->getDriverOptions()
         );
 
-        // Register a data conversion extension
-        $dataConverterExtension = new DataConverterExtension($config, $this->converterFactory, $context);
-        $dataConverterExtension->register($dumper);
-
-        // Register a table filter extension
-        $tableFilterExtension = new TableFilterExtension($database, $config);
-        $tableFilterExtension->register($dumper);
+        // Register extensions
+        $extensionContext = new Context($dumper, $database, $config, $context);
+        foreach ($this->extensions as $extension) {
+            $extension->register($extensionContext);
+        }
 
         // Unset the database object to close the database connection
         unset($database);
@@ -136,19 +122,5 @@ class SqlDumper implements DumperInterface
         $settings['no-data'] = $config->getTablesToTruncate();
 
         return $settings;
-    }
-
-    /**
-     * Set faker settings.
-     *
-     * @param DumperConfig $config
-     */
-    private function configureFaker(DumperConfig $config): void
-    {
-        $locale = (string) ($config->getFakerSettings()['locale'] ?? '');
-
-        if ($locale !== '') {
-            $this->faker->setLocale($locale);
-        }
     }
 }

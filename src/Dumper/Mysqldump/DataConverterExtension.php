@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Mysqldump;
 
-use Ifsnop\Mysqldump\Mysqldump;
 use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
+use Smile\GdprDump\Faker\FakerService;
 
 class DataConverterExtension implements ExtensionInterface
 {
@@ -17,9 +17,9 @@ class DataConverterExtension implements ExtensionInterface
     private $converterFactory;
 
     /**
-     * @var DumperConfig
+     * @var FakerService
      */
-    private $config;
+    private $faker;
 
     /**
      * @var array
@@ -38,26 +38,33 @@ class DataConverterExtension implements ExtensionInterface
 
     /**
      * @param ConverterFactory $converterFactory
-     * @param DumperConfig $config
-     * @param array $context
+     * @param FakerService $faker
      */
-    public function __construct(DumperConfig $config, ConverterFactory $converterFactory, array $context = [])
+    public function __construct(ConverterFactory $converterFactory, FakerService $faker)
     {
-        $this->config = $config;
         $this->converterFactory = $converterFactory;
-        $this->context = $context;
+        $this->faker = $faker;
     }
 
     /**
      * @inheritdoc
      */
-    public function register(Mysqldump $dumper): void
+    public function register(Context $context): void
     {
-        if ($this->converters === null) {
-            $this->prepareConverters();
+        $this->context = $context->getDumperContext();
+
+        // Set the Faker locale
+        $locale = (string) ($context->getConfig()->getFakerSettings()['locale'] ?? '');
+        if ($locale !== '') {
+            $this->faker->setLocale($locale);
         }
 
-        $dumper->setTransformTableRowHook($this->getHook());
+        // Prepare converters
+        if ($this->converters === null) {
+            $this->prepareConverters($context->getConfig());
+        }
+
+        $context->getDumper()->setTransformTableRowHook($this->getHook());
     }
 
     /**
@@ -102,13 +109,15 @@ class DataConverterExtension implements ExtensionInterface
 
     /**
      * Create the converters, grouped by table.
+     *
+     * @param DumperConfig $config
      */
-    private function prepareConverters(): void
+    private function prepareConverters(DumperConfig $config): void
     {
         $this->converters = [];
         $this->skipConditions = [];
 
-        foreach ($this->config->getTablesConfig() as $tableName => $tableConfig) {
+        foreach ($config->getTablesConfig() as $tableName => $tableConfig) {
             foreach ($tableConfig->getConverters() as $columnName => $definition) {
                 $this->converters[$tableName][$columnName] = $this->converterFactory->create($definition);
             }
