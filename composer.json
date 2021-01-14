@@ -25,7 +25,7 @@
         "theseer/tokenizer": "^1.1"
     },
     "require-dev": {
-        "phpstan/phpstan": "^0.12.62",
+        "phpstan/phpstan": "^0.12.66",
         "phpunit/phpunit": "^9.5",
         "squizlabs/php_codesniffer": "^3.5"
     },
