@@ -24,17 +24,17 @@ class DataConverterExtension implements ExtensionInterface
     /**
      * @var array
      */
-    private $context;
+    private $context = [];
 
     /**
      * @var ConverterInterface[][]
      */
-    private $converters;
+    private $converters = [];
 
     /**
      * @var string[]
      */
-    private $skipConditions;
+    private $skipConditions = [];
 
     /**
      * @param ConverterFactory $converterFactory
@@ -53,17 +53,8 @@ class DataConverterExtension implements ExtensionInterface
     {
         $this->context = $context->getDumperContext();
 
-        // Set the Faker locale
-        $locale = (string) ($context->getConfig()->getFakerSettings()['locale'] ?? '');
-        if ($locale !== '') {
-            $this->faker->setLocale($locale);
-        }
-
-        // Prepare converters
-        if ($this->converters === null) {
-            $this->prepareConverters($context->getConfig());
-        }
-
+        $this->prepareFaker($context->getConfig());
+        $this->prepareConverters($context->getConfig());
         $context->getDumper()->setTransformTableRowHook($this->getHook());
     }
 
@@ -105,6 +96,19 @@ class DataConverterExtension implements ExtensionInterface
 
             return $row;
         };
+    }
+
+    /**
+     * Configure the Faker service.
+     *
+     * @param DumperConfig $config
+     */
+    private function prepareFaker(DumperConfig $config): void
+    {
+        $locale = (string) ($config->getFakerSettings()['locale'] ?? '');
+        if ($locale !== '') {
+            $this->faker->setLocale($locale);
+        }
     }
 
     /**
