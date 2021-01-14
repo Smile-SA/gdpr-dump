@@ -5,7 +5,6 @@ parameters:
     faker.locale: 'en_US'
     faker.installed_locales:
         - 'en_US'
-        - 'fr_FR'
 
 services:
     _defaults:

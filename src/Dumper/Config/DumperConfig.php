@@ -50,13 +50,6 @@ class DumperConfig
     /**
      * @var array
      */
-    private $fakerSettings = [
-        'locale' => null,
-    ];
-
-    /**
-     * @var array
-     */
     private $dumpSettings = [
         'output' => 'php://stdout',
         'compress' => Mysqldump::NONE,
@@ -84,6 +77,13 @@ class DumperConfig
         'skip_comments' => false,
         'skip_dump_date' => false,
         'skip_definer' => false,
+    ];
+
+    /**
+     * @var array
+     */
+    private $fakerSettings = [
+        'locale' => null,
     ];
 
     /**

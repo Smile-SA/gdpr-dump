@@ -6,7 +6,6 @@ namespace Smile\GdprDump\Faker;
 
 use Faker\Factory;
 use Faker\Generator;
-use Smile\GdprDump\Config\ConfigInterface;
 
 class FakerService
 {
