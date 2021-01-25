@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [2.1.1] - 2020-01-25
+[2.1.1]: https://github.com/Smile-SA/gdpr-dump/compare/2.1.0...2.1.1
 
 - New parameter `faker.locale` added to the dump configuration file
 - The following keywords are now forbidden in the `variables` param: `revoke`, `rename`, `lock`, `unlock`, `optimize`, `repair`
