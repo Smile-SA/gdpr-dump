@@ -1,0 +1,72 @@
+---
+tables:
+    mdl_logstore_standard_log:
+        truncate: true
+
+    mdl_search_simpledb_index:
+        converters:
+            title:
+                converter: 'randomizeText'
+
+    mdl_user:
+        converters:
+            username:
+                converter: 'randomizeText'
+                unique: true
+            password:
+                converter: 'randomizeText'
+            firstname:
+                converter: 'randomizeText'
+            lastname:
+                converter: 'randomizeText'
+            email:
+                converter: 'randomizeEmail'
+                unique: true
+            icq:
+                converter: 'randomizeNumber'
+            skype:
+                converter: 'randomizeText'
+            yahoo:
+                converter: 'randomizeText'
+            aim:
+                converter: 'randomizeText'
+            msn:
+                converter: 'randomizeText'
+            phone1:
+                converter: 'randomizeNumber'
+            phone2:
+                converter: 'randomizeNumber'
+            address:
+                converter: 'randomizeNumber'
+            lastip:
+                converter: 'anonymizeNumber'
+            lastnamephonetic:
+                converter: 'randomizeText'
+            firstnamephonetic:
+                converter: 'randomizeText'
+            middlename:
+                converter: 'randomizeText'
+            alternatename:
+                converter: 'randomizeText'
+
+
+    mdl_assignfeedback_comments:
+        converters:
+            commenttext:
+                converter: 'randomizeText'
+
+    mdl_chat_messages:
+        converters:
+            message:
+                converter: 'randomizeText'
+
+    mdl_chat_messages_current:
+        converters:
+            message:
+                converter: 'randomizeText'
+
+    mdl_comments:
+        converters:
+            content:
+                converter: 'randomizeText'
+

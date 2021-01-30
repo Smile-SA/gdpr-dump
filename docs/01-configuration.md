@@ -36,6 +36,7 @@ Available templates:
 - [magento1](../app/config/templates/magento1.yaml)
 - [magento2](../app/config/templates/magento2.yaml)
 - [oro4](../app/config/templates/oro4.yaml)
+- [moodle](../app/config/templates/moodle.yaml) (experimental)
 
 To extend a configuration template, you must specify its name, and the version of your application.
 For example:
