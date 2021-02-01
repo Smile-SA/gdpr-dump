@@ -9,6 +9,9 @@ RUN set -eux; \
 # Install required PHP extensions
 RUN docker-php-ext-install pdo_mysql
 
+# Copy PHP configuration
+COPY config/php.ini /usr/local/etc/php/conf.d/gdpr-dump.ini
+
 # Create a user with access to the application
 ARG APP_USER=app
 ARG APP_GROUP=app
