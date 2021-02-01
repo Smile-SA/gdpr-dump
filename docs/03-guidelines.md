@@ -25,28 +25,28 @@ The old converter names and the `orderBy` parameter are still supported, but the
 
 ## Performance
 
-Since this tool is a pure PHP implementation of a MySQL dumper, it is way slower than mysqldump.
+Since this tool is a pure PHP implementation of a MySQL dumper, it is slower than mysqldump.
 
-If the database to dump has very large tables, it is strongly recommended to use the [table filter](01-configuration.md#user-content-filtering-values) mechanism.
+If the database to dump has very large tables, it is recommended to use the [table filter](01-configuration.md#user-content-filtering-values) mechanism.
 
 ## Security
 
-On production environments, it is recommended to use two separate configuration files:
-
-- A file that contains the dump output settings and the anonymization rules.
-  This file should be versioned in the VCS repository of your project.
-- A file that contains the database information (name, host, user, password...).
-  This file **must not** be versioned, it contains the database password.
+If you want to share your configuration file, don't include the database credentials.
+Instead, use [environment variables](#02-converters.md#user-content-environment-variables):
 
 Example:
 
-```
-bin/gdpr-dump path/to/project_anonymization.yaml path/to/database_info.yaml
+```yaml
+database:
+    host: '%env(DB_HOST)%'
+    user: '%env(DB_USER)%'
+    password: '%env(DB_PASSWORD)%'
+    name: '%env(DB_NAME)%'
 ```
 
 ## Custom Tables
 
-If your project has custom tables with sensible data, your config file must declare converters that anonymizes this data.
+If your project has custom tables with sensible data, your config file must declare converters that anonymize this data.
 
 Example of sensible data:
 

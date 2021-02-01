@@ -364,10 +364,10 @@ You can use environment variables with the following syntax:
 
 ```yaml
 database:
-    host: '%env(DATABASE_HOST)%'
-    user: '%env(DATABASE_USER)%'
-    password: '%env(DATABASE_PASSWORD)%'
-    name: '%env(DATABASE_NAME)%'
+    host: '%env(DB_HOST)%'
+    user: '%env(DB_USER)%'
+    password: '%env(DB_PASSWORD)%'
+    name: '%env(DB_NAME)%'
 ```
 
 You can also set the variable type with the following syntax:
