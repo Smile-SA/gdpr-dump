@@ -83,6 +83,7 @@ vendor/bin/phpunit
 The PHPUnit tests require a database with the following credentials:
 
 - host: `127.0.0.1` (can be changed by setting the `$DB_HOST` environment variable)
+- port: `3306` (can be changed by setting the `$DB_PORT` environment variable)
 - database: `tests` (can be changed by setting the `$DB_NAME` environment variable)
 - user: `tests` (can be changed by setting the `$DB_USER` environment variable)
 - password: `tests` (can be changed by setting the `$DB_PASSWORD` environment variable)
