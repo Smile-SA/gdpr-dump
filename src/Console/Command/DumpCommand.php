@@ -14,6 +14,7 @@ use Smile\GdprDump\Dumper\DumperInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
@@ -104,7 +105,7 @@ class DumpCommand extends Command
                 throw $e;
             }
 
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
+            $this->getErrorOutput($output)->writeln('<error>' . $e->getMessage() . '</error>');
             return 1;
         }
 
@@ -154,9 +155,21 @@ class DumpCommand extends Command
      */
     private function outputValidationResult(ValidationResultInterface $result, OutputInterface $output): void
     {
-        $output->writeln("<error>The following errors were detected:</error>");
+        $stdErr = $this->getErrorOutput($output);
+        $stdErr->writeln("<error>The following errors were detected:</error>");
         foreach ($result->getMessages() as $message) {
-            $output->writeln('  - ' . $message);
+            $stdErr->writeln('  - ' . $message);
         }
+    }
+
+    /**
+     * Get the error output.
+     *
+     * @param OutputInterface $output
+     * @return OutputInterface
+     */
+    private function getErrorOutput(OutputInterface $output): OutputInterface
+    {
+        return $output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output;
     }
 }
