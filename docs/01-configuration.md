@@ -44,6 +44,11 @@ For example:
 extends: 'magento2'
 version: '2.4.1'
 ```
+### Community Templates
+
+While it is not the aim of this project to cover each framework, you are encouraged to publish your templates on GitHub under the topic `smile-sa-gdpr-dump-template`.
+
+[Browse Community Templates](https://github.com/topics/smile-sa-gdpr-dump-template)
 
 ### Custom Templates
 
