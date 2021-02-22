@@ -594,6 +594,17 @@ if_version:
                     email_imported:
                         converter: 'randomizeEmail'
 
+            email_sms_order_queue:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+                    phone_number:
+                        converter: 'randomizeNumber'
+                    content:
+                        converter: 'anonymizeText'
+                    message:
+                        converter: 'anonymizeText'
+
     '<2.2':
         tables:
             # Before Magento 2.2, additional data was serialized instead of JSON-encoded

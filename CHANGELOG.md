@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## WIP
 
 - Use stderr to display error messages
+- Magento 2 template: anonymize table "email_sms_order_queue"
 
 ## [2.1.1] - 2020-01-25
 [2.1.1]: https://github.com/Smile-SA/gdpr-dump/compare/2.1.0...2.1.1
