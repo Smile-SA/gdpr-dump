@@ -2,10 +2,10 @@
 
 ## Table of Contents
 
-- [How to Compile the Phar](#user-content-how-to-compile-the-phar)
-- [Adding Custom Converters](#user-content-adding-custom-converters)
-- [Adding Custom Templates](#user-content-adding-custom-templates)
-- [Adding Faker Locales](#user-content-adding-faker-locales)
+- [How to Compile the Phar](#how-to-compile-the-phar)
+- [Adding Custom Converters](#adding-custom-converters)
+- [Adding Custom Templates](#adding-custom-templates)
+- [Adding Faker Locales](#adding-faker-locales)
 
 ## How to Compile the Phar
 

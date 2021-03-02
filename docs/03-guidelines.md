@@ -2,12 +2,12 @@
 
 ## Table of Contents
 
-- [Migration Guidelines](#user-content-migration-guidelines)
-- [Performance](#user-content-performance)
-- [Security](#user-content-security)
-- [Custom Tables](#user-content-custom-tables)
-- [Data Consistency](#user-content-data-consistency)
-- [Magento](#user-content-magento)
+- [Migration Guidelines](#migration-guidelines)
+- [Performance](#performance)
+- [Security](#security)
+- [Custom Tables](#custom-tables)
+- [Data Consistency](#data-consistency)
+- [Magento](#magento)
 
 ## Migration Guidelines
 
@@ -27,12 +27,12 @@ The old converter names and the `orderBy` parameter are still supported, but the
 
 Since this tool is a pure PHP implementation of a MySQL dumper, it is slower than mysqldump.
 
-If the database to dump has very large tables, it is recommended to use the [table filter](01-configuration.md#user-content-filtering-values) mechanism.
+If the database to dump has very large tables, it is recommended to use the [table filter](01-configuration.md#filtering-values) mechanism.
 
 ## Security
 
 If you want to share your configuration file, don't include the database credentials.
-Instead, use [environment variables](#02-converters.md#user-content-environment-variables):
+Instead, use [environment variables](#01-configuration.md#environment-variables):
 
 Example:
 
@@ -66,7 +66,7 @@ Example of sensible data:
 If you use the default templates (e.g. `magento2`), the anonymized data is not consistent.
 For example, the anonymized customer email won't have the same value between the customer table and the quote table.
 
-You can add data consistency by specifying a [cache key](01-configuration.md#user-content-sharing-converter-results).
+You can add data consistency by specifying a [cache key](01-configuration.md#sharing-converter-results).
 For example, in Magento 2:
 
 ```yaml
