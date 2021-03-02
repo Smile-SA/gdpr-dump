@@ -5,8 +5,6 @@ parameters:
         - src
         - tests
     checkMissingIterableValueType: false
-    # This must be set to false because of the last ignored error that occurs only with PHP 8.0
-    reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         -
             # Can't add a type hint until it is also added to the parent class
