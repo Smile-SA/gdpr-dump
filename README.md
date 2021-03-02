@@ -70,6 +70,7 @@ Configuration file examples:
 1. [Configuration](docs/01-configuration.md)
 2. [Data Converters](docs/02-converters.md)
 3. [Guidelines](docs/03-guidelines.md) (read this before deploying the tool to a production server!)
+4. [Phar File Compilation](docs/04-phar.md) (if you need to compile your own phar file in order to add converters, templates...)
 
 ## Community Templates
 

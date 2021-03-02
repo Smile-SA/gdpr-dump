@@ -429,15 +429,8 @@ faker:
     locale: 'de_DE'
 ```
 
-Available locales can be found in the official [faker documentation](https://fakerphp.github.io/).
-
 **Warning**: the default phar distribution only includes the "en_US" locale.
-To use additional locales, you must compile your own phar file:
-
-1. Clone the project.
-2. Add your locale to the parameter `faker.installed_locales` in app/config/services.yaml.
-3. Run the following command: `php -d phar.readonly=off bin/compile`.
-   This will create a file named "gdpr-dump.phar" in the folder "build/dist".
+To use other locales with the phar, you must [compile your own phar file](04-phar.md) that includes the required locales.
 
 ### Unsetting Values Declared in Config Templates
 
