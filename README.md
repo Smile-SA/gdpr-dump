@@ -71,6 +71,10 @@ Configuration file examples:
 2. [Data Converters](docs/02-converters.md)
 3. [Guidelines](docs/03-guidelines.md) (read this before deploying the tool to a production server!)
 
+## Community Templates
+
+While it is not the aim of this project to cover each framework, you are encouraged to publish your templates on GitHub under the topic [smile-sa-gdpr-dump-template](https://github.com/topics/smile-sa-gdpr-dump-template).
+
 ## FAQ
 
 **Why don't you use Doctrine to generate the dump?**
