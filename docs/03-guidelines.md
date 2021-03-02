@@ -32,7 +32,7 @@ If the database to dump has very large tables, it is recommended to use the [tab
 ## Security
 
 If you want to share your configuration file, don't include the database credentials.
-Instead, use [environment variables](#01-configuration.md#environment-variables):
+Instead, use [environment variables](01-configuration.md#environment-variables):
 
 Example:
 
