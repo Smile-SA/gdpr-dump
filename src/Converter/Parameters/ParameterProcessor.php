@@ -75,7 +75,7 @@ class ParameterProcessor
         if ($type !== null && $value !== null) {
             $this->validateType($parameter, $value);
 
-            if ($parameter->isScalar() || $parameter->isArray()) {
+            if ($parameter->isScalar()) {
                 settype($value, $type);
             }
         }
