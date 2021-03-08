@@ -156,7 +156,7 @@ class DumpCommand extends Command
     private function outputValidationResult(ValidationResultInterface $result, OutputInterface $output): void
     {
         $stdErr = $this->getErrorOutput($output);
-        $stdErr->writeln("<error>The following errors were detected:</error>");
+        $stdErr->writeln('<error>The following errors were detected:</error>');
         foreach ($result->getMessages() as $message) {
             $stdErr->writeln('  - ' . $message);
         }
