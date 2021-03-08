@@ -186,8 +186,8 @@ The data is automatically filtered for all tables that depend on the target tabl
 
 Available properties:
 
-- `truncate`: to dump a table without any data.
-- `limit`: to limit the number of rows to dump.
+- `truncate`: whether to dump a table without any data (`true` or `false`).
+- `limit`: max number of rows to dump (must be greater than 0, otherwise it is ignored).
 - `order_by`: same as SQL (e.g. `name asc, id desc`).
 - `filters`: a list of filters to apply.
 
@@ -206,8 +206,6 @@ tables:
     my_table:
         limit: 10000
 ```
-
-The limit must be greater or equal than zero. If set to 0, it will be ignored.
 
 How to define a sort order:
 
