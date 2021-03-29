@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
+- Add two converters:
+    - `replace` (performs a search and replace)
+    - `regexReplace` (performs a regular expression search and replace)
 - Use stderr to display error messages
 - Magento 2 template: anonymize table "email_sms_order_queue"
 
