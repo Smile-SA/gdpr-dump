@@ -33,11 +33,11 @@ class PrependTextTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when the prefix is not set.
+     * Assert that an exception is thrown when the prefix is empty.
      */
-    public function testPrefixNotSet(): void
+    public function testEmptyPrefix(): void
     {
         $this->expectException(ValidationException::class);
-        new PrependText();
+        new PrependText(['value' => '']);
     }
 }

@@ -25,6 +25,8 @@
     - [toUpper](#toupper)
     - [prependText](#prependtext)
     - [appendText](#appendtext)
+    - [replace](#replace)
+    - [regexReplace](#regexreplace)
     - [hash](#hash)
 - [Advanced Converters](#advanced-converters)
     - [faker](#faker)
@@ -482,6 +484,55 @@ tables:
                 converter: 'appendText'
                 parameters:
                     value: '_test'
+```
+
+### [replace](../src/Converter/Transformer/Replace.php)
+
+This converter replaces all occurrences of the search string with the replacement string.
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **search** | Y | | The text to replace. |
+| **replacement** | N | '' | The replacement text. |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'replace'
+                parameters:
+                    search: 'bar'
+                    replacement: 'baz'
+```
+
+### [regexReplace](../src/Converter/Transformer/RegexReplace.php)
+
+This converter performs a regular expression search and replace.
+
+Parameters:
+
+| Name | Required | Default | Description |
+| --- | --- | --- | --- |
+| **pattern** | Y | | The pattern to find. |
+| **replacement** | N | '' | The replacement text. |
+| **limit** | N | -1 | The max number of replacements to perform. No limit if set to -1 (default value). |
+
+Example:
+
+```yaml
+tables:
+    my_table:
+        converters:
+            my_column:
+                converter: 'regexReplace'
+                parameters:
+                    pattern: '/[0-9]+/'
+                    replacement: '15'
 ```
 
 ### [hash](../src/Converter/Transformer/Hash.php)

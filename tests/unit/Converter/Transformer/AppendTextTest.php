@@ -33,11 +33,11 @@ class AppendTextTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when the suffix is not set.
+     * Assert that an exception is thrown when the suffix is empty.
      */
-    public function testSuffixNotSet(): void
+    public function testEmptySuffix(): void
     {
         $this->expectException(ValidationException::class);
-        new AppendText();
+        new AppendText(['suffix' => '']);
     }
 }
