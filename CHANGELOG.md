@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [2.2.0] - 2020-03-29
+[2.2.0]: https://github.com/Smile-SA/gdpr-dump/compare/2.1.1...2.2.0
 
 - Add two converters:
     - `replace` (performs a search and replace)
