@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.2.0] - 2020-03-29
+## [2.2.0] - 2021-03-29
 [2.2.0]: https://github.com/Smile-SA/gdpr-dump/compare/2.1.1...2.2.0
 
 - Add two converters:
@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 - Use stderr to display error messages
 - Magento 2 template: anonymize table "email_sms_order_queue"
 
-## [2.1.1] - 2020-01-25
+## [2.1.1] - 2021-01-25
 [2.1.1]: https://github.com/Smile-SA/gdpr-dump/compare/2.1.0...2.1.1
 
 - New parameter `faker.locale` added to the dump configuration file
