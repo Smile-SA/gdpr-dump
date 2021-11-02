@@ -33,6 +33,17 @@ class TableDependencyResolverTest extends TestCase
         $this->assertCount(2, $dependencies);
         $this->assertHasTableDependency('addresses', 'customers', $dependencies);
         $this->assertHasTableDependency('customers', 'stores', $dependencies);
+
+        //Tables with a dependency on each other A -> B; B -> A
+        $dependencies = $dependencyResolver->getTableDependencies('media');
+        $this->assertCount(2, $dependencies);
+        $this->assertHasTableDependency('media', 'users', $dependencies);
+        $this->assertHasTableDependency('users', 'media', $dependencies);
+
+        $dependencies = $dependencyResolver->getTableDependencies('users');
+        $this->assertCount(2, $dependencies);
+        $this->assertHasTableDependency('users', 'media', $dependencies);
+        $this->assertHasTableDependency('media', 'users', $dependencies);
     }
 
     /**
@@ -81,13 +92,15 @@ class TableDependencyResolverTest extends TestCase
 
         // Mock the "getTableNames" method
         $metadataMock->method('getTableNames')
-            ->willReturn(['stores', 'customers', 'addresses']);
+            ->willReturn(['stores', 'customers', 'addresses', 'media', 'users']);
 
         // Mock the "getForeignKeys" method
         $valueMap = [
             ['stores', []],
             ['customers', [new ForeignKey('fk_stores', 'customers', ['store_id'], 'stores', ['store_id'])]],
             ['addresses', [new ForeignKey('fk_stores', 'addresses', ['customer_id'], 'customers', ['customer_id'])]],
+            ['media', [new ForeignKey('fk_users', 'media', ['user_id'], 'users', ['user_id'])]],
+            ['users', [new ForeignKey('fk_media', 'users', ['media_id'], 'media', ['media_id'])]],
         ];
 
         $metadataMock->method('getForeignKeys')
