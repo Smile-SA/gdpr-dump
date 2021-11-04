@@ -95,13 +95,22 @@ class TableFilterExtension implements ExtensionInterface
      * @param QueryBuilder $queryBuilder
      * @param array $dependencies
      * @param int $subQueryCount
+     * @param array $processedTables
      */
     private function addDependentFilter(
         string $tableName,
         QueryBuilder $queryBuilder,
         array &$dependencies,
-        int &$subQueryCount = 0
+        int &$subQueryCount = 0,
+        array &$processedTables = []
     ): void {
+
+        //do not process tables that have been already processed
+        if (isset($processedTables[$tableName])) {
+            return;
+        }
+        $processedTables[$tableName] = true;
+
         /** @var ForeignKey $dependency */
         foreach ($dependencies[$tableName] as $dependency) {
             $tableName = $dependency->getForeignTableName();
@@ -111,7 +120,7 @@ class TableFilterExtension implements ExtensionInterface
 
             // Recursively add condition on parent tables
             if ($subQuery->getMaxResults() !== 0 && array_key_exists($tableName, $dependencies)) {
-                $this->addDependentFilter($tableName, $subQuery, $dependencies, $subQueryCount);
+                $this->addDependentFilter($tableName, $subQuery, $dependencies, $subQueryCount, $processedTables);
             }
 
             // Prepare the condition data
