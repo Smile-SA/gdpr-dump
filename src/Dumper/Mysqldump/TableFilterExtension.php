@@ -116,7 +116,7 @@ class TableFilterExtension implements ExtensionInterface
             $tableName = $dependency->getForeignTableName();
 
             $subQuery = $this->createQueryBuilder($tableName);
-            $subQuery->select($this->getColumnsSql($dependency->getForeignColumns()));
+            $subQuery->select($this->getColumnsSql($dependency->getForeignColumns(), false));
 
             // Recursively add condition on parent tables
             if ($subQuery->getMaxResults() !== 0 && array_key_exists($tableName, $dependencies)) {
@@ -209,9 +209,11 @@ class TableFilterExtension implements ExtensionInterface
      * Get the SQL query that represents a list of columns.
      *
      * @param array $columns
+     * @param bool $withParentheses
+     *
      * @return string
      */
-    private function getColumnsSql(array $columns): string
+    private function getColumnsSql(array $columns, bool $withParentheses = true): string
     {
         foreach ($columns as $index => $column) {
             $columns[$index] = $this->connection->quoteIdentifier($column);
@@ -219,7 +221,7 @@ class TableFilterExtension implements ExtensionInterface
 
         $result = implode(',', $columns);
 
-        if (count($columns) > 1) {
+        if ($withParentheses && count($columns) > 1) {
             $result = '(' . $result . ')';
         }
 
