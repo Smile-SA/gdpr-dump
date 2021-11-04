@@ -89,8 +89,8 @@ class TableDependencyResolver
         foreach ($foreignKeys as $foreignKey) {
             $dependencyTable = $foreignKey->getLocalTableName();
 
-            // Detect cyclic dependencies
-            if ($dependencyTable === $tableName) {
+            // Detect cyclic dependencies (on itself or between two tables)
+            if ($dependencyTable === $tableName || isset($resolved[$dependencyTable][$tableName])) {
                 continue;
             }
 

@@ -110,14 +110,14 @@ class TableFilterExtension implements ExtensionInterface
             $subQuery->select($this->getColumnsSql($dependency->getForeignColumns()));
 
             // Recursively add condition on parent tables
-            if ($subQuery->getMaxResults() !== 0 && array_key_exists($tableName, $dependencies)) {
+            if ($subQuery->getMaxResults() > 0 && array_key_exists($tableName, $dependencies)) {
                 $this->addDependentFilter($tableName, $subQuery, $dependencies, $subQueryCount);
             }
 
             // Prepare the condition data
             $subQueryCount++;
             $subQueryName = $this->connection->quoteIdentifier('sub_' . $subQueryCount);
-            $columnsSql = $this->getColumnsSql($dependency->getLocalColumns());
+            $columnsSql = $this->getColumnsSql($dependency->getLocalColumns(), true);
 
             // Filter on the foreign keys
             // (wrap the sub query in a SELECT * FROM (...),
@@ -200,9 +200,10 @@ class TableFilterExtension implements ExtensionInterface
      * Get the SQL query that represents a list of columns.
      *
      * @param array $columns
+     * @param bool $enclose
      * @return string
      */
-    private function getColumnsSql(array $columns): string
+    private function getColumnsSql(array $columns, bool $enclose = false): string
     {
         foreach ($columns as $index => $column) {
             $columns[$index] = $this->connection->quoteIdentifier($column);
@@ -210,7 +211,8 @@ class TableFilterExtension implements ExtensionInterface
 
         $result = implode(',', $columns);
 
-        if (count($columns) > 1) {
+        if (count($columns) > 1 && $enclose) {
+            // Enclose selected columns with parentheses
             $result = '(' . $result . ')';
         }
 
