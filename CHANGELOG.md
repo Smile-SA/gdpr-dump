@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- [#57](https://github.com/Smile-SA/gdpr-dump/issues/57) PHP fatal error (memory limit) when tables table depend on each other (cyclic dependency)
+
 ## [2.2.0] - 2021-03-29
 [2.2.0]: https://github.com/Smile-SA/gdpr-dump/compare/2.1.1...2.2.0
 
