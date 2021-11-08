@@ -58,7 +58,7 @@ class MysqlMetadataTest extends TestCase
     private function validateCustomersForeignKeys(MetadataInterface $metadata): void
     {
         $foreignKeys = $metadata->getForeignKeys('customers');
-        $this->assertCount(1, $foreignKeys);
+        $this->assertCount(2, $foreignKeys);
 
         $foreignKey = reset($foreignKeys);
         $this->assertNotEmpty($foreignKey->getConstraintName());
