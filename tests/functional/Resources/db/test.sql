@@ -2,6 +2,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `addresses`;
 DROP TABLE IF EXISTS `customers`;
 DROP TABLE IF EXISTS `stores`;
+DROP TABLE IF EXISTS `config`;
 SET FOREIGN_KEY_CHECKS=1;
 
 CREATE TABLE `stores`(
@@ -57,3 +58,17 @@ INSERT INTO `addresses` VALUES(9, 'street1', '59000', 'Lille', 'FR', 5);
 
 -- Create a cyclic dependency between customers and addresses
 ALTER TABLE `customers` ADD FOREIGN KEY (`main_address_id`) REFERENCES `addresses` (`address_id`);
+
+-- This table won't be included in the dump
+CREATE TABLE `config`(
+    `config_id` int(10) unsigned NOT NULL auto_increment,
+    `path` varchar(255) NOT NULL,
+    `value` text DEFAULT NULL,
+    `store_id` smallint(5) unsigned NOT NULL,
+    PRIMARY KEY (`config_id`),
+    FOREIGN KEY (`store_id`) REFERENCES `stores` (`store_id`)
+);
+
+INSERT INTO `config` VALUES(1, 'currency', 'EUR', 1);
+INSERT INTO `config` VALUES(2, 'currency', 'USD', 2);
+INSERT INTO `config` VALUES(3, 'currency', 'GBP', 3);

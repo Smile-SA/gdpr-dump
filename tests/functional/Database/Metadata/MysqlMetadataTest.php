@@ -24,7 +24,7 @@ class MysqlMetadataTest extends TestCase
     public function testTableNames(): void
     {
         $metadata = $this->getMetadata();
-        $this->assertEqualsCanonicalizing(['stores', 'customers', 'addresses'], $metadata->getTableNames());
+        $this->assertEqualsCanonicalizing(['stores', 'customers', 'addresses', 'config'], $metadata->getTableNames());
     }
 
     /**

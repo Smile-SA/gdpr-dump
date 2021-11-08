@@ -15,9 +15,9 @@ faker:
 variables:
     main_store_id: 'select store_id from stores where code = "store1"'
 
-tables_whitelist:
-    - 'customers'
-    - 'stores'
+tables_blacklist:
+    - 'config'
+    - 'not_exists'
 
 tables:
     stores:

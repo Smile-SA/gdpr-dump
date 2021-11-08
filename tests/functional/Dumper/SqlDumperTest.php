@@ -73,7 +73,8 @@ class SqlDumperTest extends TestCase
         // Assert that only whitelisted tables are included in the dump
         $this->assertStringContainsString('CREATE TABLE `customers`', $output);
         $this->assertStringContainsString('CREATE TABLE `stores`', $output);
-        $this->assertStringNotContainsString('CREATE TABLE `addresses`', $output);
+        $this->assertStringContainsString('CREATE TABLE `addresses`', $output);
+        $this->assertStringNotContainsString('CREATE TABLE `config`', $output);
 
         // User 1 must not be dumped (does not match the date filter)
         $this->assertStringNotContainsString('user1@test.org', $output);
