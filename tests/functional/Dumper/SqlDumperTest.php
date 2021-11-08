@@ -76,6 +76,12 @@ class SqlDumperTest extends TestCase
         $this->assertStringContainsString('CREATE TABLE `addresses`', $output);
         $this->assertStringNotContainsString('CREATE TABLE `config`', $output);
 
+        // store3 must not be included in the dump
+        $this->assertStringContainsString('store1', $output);
+        $this->assertStringContainsString('store2', $output);
+        $this->assertStringNotContainsString('store3', $output);
+
+
         // User 1 must not be dumped (does not match the date filter)
         $this->assertStringNotContainsString('user1@test.org', $output);
 
@@ -100,6 +106,17 @@ class SqlDumperTest extends TestCase
 
         // User 5 must not be dumped (store id condition not matched)
         $this->assertStringNotContainsString('user5@test.org', $output);
+
+        // Only the addresses of dumped users must be included
+        $this->assertStringContainsString('street3', $output);
+        $this->assertStringContainsString('street4', $output);
+        $this->assertStringContainsString('street5', $output);
+        $this->assertStringContainsString('street6', $output);
+        $this->assertStringContainsString('street7', $output);
+        $this->assertStringNotContainsString('street1', $output);
+        $this->assertStringNotContainsString('street2', $output);
+        $this->assertStringNotContainsString('street8', $output);
+        $this->assertStringNotContainsString('street9', $output);
     }
 
     /**

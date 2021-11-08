@@ -61,7 +61,7 @@ class TableFilterExtension implements ExtensionInterface
 
         // Get the foreign keys of each table that depends on the filters listed in the configuration
         $dependencyResolver = new TableDependencyResolver($this->metadata);
-        $dependencies = $dependencyResolver->getTablesDependencies($tablesToFilter);
+        $dependencies = $dependencyResolver->getDependencies($tablesToFilter);
 
         // Tables to query are:
         // - tables with filters or sort orders declared in the config
@@ -89,29 +89,64 @@ class TableFilterExtension implements ExtensionInterface
     }
 
     /**
-     * Add a filter on the dependent tables.
+     * Add a filter on the dependent tables, by iterating on all foreign keys of the table.
+     *
+     * Example with the following dependencies:
+     * - "addresses": foreign key to "customers" (customer_id field)
+     * - "customers": foreign key to "stores" (store_id field)
+     *
+     * With $tableName = 'addresses', this function will add the following filter to the query:
+     *
+     * ```
+     * WHERE `customer_id` IN (
+     *     SELECT * FROM (SELECT `customer_id` FROM `customers` WHERE ... AND `store_id` IN (
+     *         SELECT * FROM (SELECT `store_id` FROM `stores` WHERE ...) `sub2`
+     *     )) `sub1`
+     * );
+     * ```
+     *
+     * Where `...` are the filters defined in the YAML config (if any).
+     *
+     * Internal parameters:
+     * - $processedTables: used to detect cyclic dependencies and stop the recursion
+     * - $subQueryCount: used to generate unique query names
      *
      * @param string $tableName
      * @param QueryBuilder $queryBuilder
      * @param array $dependencies
+     * @param array $processedTables
      * @param int $subQueryCount
      */
     private function addDependentFilter(
         string $tableName,
         QueryBuilder $queryBuilder,
-        array &$dependencies,
+        array $dependencies,
+        array $processedTables = [],
         int &$subQueryCount = 0
     ): void {
+        if (empty($processedTables)) {
+            // Initialize $processedTables with the table name that was initially passed to the function
+            // (otherwise, if this table had a cyclic dependency on itself, it would not be detected)
+            $processedTables[$tableName] = true;
+        }
+
         /** @var ForeignKey $dependency */
         foreach ($dependencies[$tableName] as $dependency) {
             $tableName = $dependency->getForeignTableName();
+
+            // Stop recursion when a cyclic dependency is detected
+            if (array_key_exists($tableName, $processedTables)) {
+                continue;
+            }
+
+            $processedTables[$tableName] = true;
 
             $subQuery = $this->createQueryBuilder($tableName);
             $subQuery->select($this->getColumnsSql($dependency->getForeignColumns()));
 
             // Recursively add condition on parent tables
-            if ($subQuery->getMaxResults() > 0 && array_key_exists($tableName, $dependencies)) {
-                $this->addDependentFilter($tableName, $subQuery, $dependencies, $subQueryCount);
+            if ($subQuery->getMaxResults() !== 0 && array_key_exists($tableName, $dependencies)) {
+                $this->addDependentFilter($tableName, $subQuery, $dependencies, $processedTables, $subQueryCount);
             }
 
             // Prepare the condition data

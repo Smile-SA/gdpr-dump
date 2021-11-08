@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Database;
 
-use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 use Smile\GdprDump\Database\Metadata\MysqlMetadata;
 use Smile\GdprDump\Database\TableDependencyResolver;
@@ -13,74 +12,103 @@ use Smile\GdprDump\Tests\Unit\TestCase;
 class TableDependencyResolverTest extends TestCase
 {
     /**
-     * Test the "getTableDependencies" method.
-     */
-    public function testTableDependencies(): void
-    {
-        $dependencyResolver = $this->createTableDependencyResolver($this->getStoreFkMap());
-
-        // Table with no dependency
-        $dependencies = $dependencyResolver->getTableDependencies('addresses');
-        $this->assertEmpty($dependencies);
-
-        // Table with a single dependency
-        $dependencies = $dependencyResolver->getTableDependencies('customers');
-        $this->assertCount(1, $dependencies);
-        $this->assertHasTableDependency('addresses', 'customers', $dependencies);
-
-        // Table with multiple dependencies
-        $dependencies = $dependencyResolver->getTableDependencies('stores');
-        $this->assertCount(2, $dependencies);
-        $this->assertHasTableDependency('addresses', 'customers', $dependencies);
-        $this->assertHasTableDependency('customers', 'stores', $dependencies);
-    }
-
-    /**
      * Test the "getTablesDependencies" method.
      */
-    public function testTablesDependencies(): void
+    public function testGetDependencies(): void
     {
-        $dependencyResolver = $this->createTableDependencyResolver($this->getStoreFkMap());
+        $fkMap = [
+            ['stores', []],
+            [
+                'customers',
+                [
+                    new ForeignKey('fk_c1', 'customers', ['store_id'], 'stores', ['store_id']),
+                    new ForeignKey('fk_c2', 'customers', ['main_billing_address_id'], 'addresses', ['address_id']),
+                    new ForeignKey('fk_c3', 'customers', ['main_shipping_address_id'], 'addresses', ['address_id']),
+                ]
+            ],
+            ['addresses', [new ForeignKey('fk_a1', 'addresses', ['customer_id'], 'customers', ['customer_id'])]],
+        ];
 
-        $dependencies = $dependencyResolver->getTablesDependencies(['stores', 'customers', 'addresses']);
+        /**
+         * Expected array:
+         * - addresses
+         *     - fk_a1: FK object
+         * - customers:
+         *     - fk_c1: FK object
+         *     - fk_c2: FK object
+         *     - fk_c3: FK object
+         */
+        $dependencyResolver = $this->createTableDependencyResolver($fkMap);
+        $dependencies = $dependencyResolver->getDependencies(['stores', 'customers', 'addresses']);
         $this->assertCount(2, $dependencies);
-        $this->assertHasTableDependency('addresses', 'customers', $dependencies);
-        $this->assertHasTableDependency('customers', 'stores', $dependencies);
+        $this->assertArrayHasKey('customers', $dependencies);
+        $this->assertArrayHasKey('addresses', $dependencies);
+        $this->assertCount(3, $dependencies['customers']);
+        $this->assertArrayHasKey('fk_c1', $dependencies['customers']);
+        $this->assertArrayHasKey('fk_c2', $dependencies['customers']);
+        $this->assertArrayHasKey('fk_c3', $dependencies['customers']);
+        $this->assertCount(1, $dependencies['addresses']);
+        $this->assertArrayHasKey('fk_a1', $dependencies['addresses']);
+
+        /**
+         * Expected array:
+         * - addresses
+         *     - fk_a1: FK object
+         * - customers:
+         *     - fk_c1: FK object
+         *     - fk_c2: FK object
+         *     - fk_c3: FK object
+         */
+        $dependencies = $dependencyResolver->getDependencies(['addresses']);
+        $this->assertCount(2, $dependencies);
+        $this->assertArrayHasKey('customers', $dependencies);
+        $this->assertArrayHasKey('addresses', $dependencies);
+        $this->assertCount(2, $dependencies['customers']);
+        $this->assertArrayHasKey('fk_c2', $dependencies['customers']);
+        $this->assertArrayHasKey('fk_c3', $dependencies['customers']);
+        $this->assertCount(1, $dependencies['addresses']);
+        $this->assertArrayHasKey('fk_a1', $dependencies['addresses']);
     }
 
     /**
-     * Assert that cyclic dependencies do not result in an infinite loop.
+     * Assert that the application does not get stuck in an infinite loop when a table depends on itself.
      */
-    public function testCyclicDependencies(): void
+    public function testCyclicDependencyOnSameTable(): void
     {
-        $dependencyResolver = $this->createTableDependencyResolver($this->getCyclicFkMap());
+        $fkMap = [
+            ['table', [new ForeignKey('fk', 'table', ['parent_id'], 'table', ['id'])]],
+        ];
 
-        $dependencies = $dependencyResolver->getTablesDependencies(['table1', 'table2']);
-        $this->assertCount(2, $dependencies);
-        $this->assertHasTableDependency('table1', 'table2', $dependencies);
-        $this->assertHasTableDependency('table2', 'table1', $dependencies);
+        $dependencyResolver = $this->createTableDependencyResolver($fkMap);
+
+        // The foreign key must have been ignored by the resolver
+        $dependencies = $dependencyResolver->getDependencies(['table']);
+        $this->assertCount(1, $dependencies);
+        $this->assertArrayHasKey('table', $dependencies);
+        $this->assertCount(1, $dependencies['table']);
+        $this->assertArrayHasKey('fk', $dependencies['table']);
     }
 
     /**
-     * Assert that a dependency exists between a child table and a parent table.
-     *
-     * @param string $localTableName
-     * @param string $foreignTableName
-     * @param array $dependencies
+     * Assert that the application does not get stuck in an infinite loop when multiple tables depend on each other.
      */
-    private function assertHasTableDependency(
-        string $localTableName,
-        string $foreignTableName,
-        array $dependencies
-    ): void {
-        $this->assertArrayHasKey($localTableName, $dependencies);
-        $this->assertCount(1, $dependencies[$localTableName]);
-        $this->assertArrayHasKey($foreignTableName, $dependencies[$localTableName]);
+    public function testCyclicDependencyOnTableSequence(): void
+    {
+        $fkMap = [
+            ['table1', [new ForeignKey('fk1', 'table1', ['id'], 'table2', ['id'])]],
+            ['table2', [new ForeignKey('fk2', 'table2', ['id'], 'table1', ['id'])]],
+        ];
 
-        /** @var ForeignKeyConstraint $foreignKey */
-        $foreignKey = $dependencies[$localTableName][$foreignTableName];
-        $this->assertSame($foreignTableName, $foreignKey->getForeignTableName());
-        $this->assertSame($localTableName, $foreignKey->getLocalTableName());
+        $dependencyResolver = $this->createTableDependencyResolver($fkMap);
+
+        $dependencies = $dependencyResolver->getDependencies(['table1', 'table2']);
+        $this->assertCount(2, $dependencies);
+        $this->assertArrayHasKey('table1', $dependencies);
+        $this->assertArrayHasKey('table2', $dependencies);
+        $this->assertCount(1, $dependencies['table1']);
+        $this->assertArrayHasKey('fk1', $dependencies['table1']);
+        $this->assertCount(1, $dependencies['table2']);
+        $this->assertArrayHasKey('fk2', $dependencies['table2']);
     }
 
     /**
@@ -104,32 +132,5 @@ class TableDependencyResolverTest extends TestCase
 
         /** @var MysqlMetadata $metadataMock */
         return new TableDependencyResolver($metadataMock);
-    }
-
-    /**
-     * Returns a foreign key map that simulates a store.
-     *
-     * @return array[]
-     */
-    private function getStoreFkMap(): array
-    {
-        return [
-            ['stores', []],
-            ['customers', [new ForeignKey('fk1', 'customers', ['store_id'], 'stores', ['store_id'])]],
-            ['addresses', [new ForeignKey('fk2', 'addresses', ['customer_id'], 'customers', ['customer_id'])]],
-        ];
-    }
-
-    /**
-     * Returns a foreign key map that simulates a cyclic dependency.
-     *
-     * @return array[]
-     */
-    private function getCyclicFkMap(): array
-    {
-        return [
-            ['table1', [new ForeignKey('fk1', 'table1', ['version_id'], 'table2', ['version_id'])]],
-            ['table2', [new ForeignKey('fk2', 'table2', ['version_id'], 'table1', ['version_id'])]],
-        ];
     }
 }

@@ -28,37 +28,32 @@ class TableDependencyResolver
     }
 
     /**
-     * Get the foreign keys that are related to the specified table.
+     * Get the foreign keys that are related to the specified tables.
      *
-     * e.g.
-     * - with $tableName as "table1"
-     * - with foreign keys as: table2 with FK to table 1, table 3 with FK to table 2
+     * Example with the following foreign keys:
+     * - table2: foreign key "fk_t2" to table 1
+     * - table3: foreign key "fk_t3" to table 2
      *
-     * Result will be:
+     * If `$tableNames` is `['table1', 'table2', 'table3']`, the returned array is:
      * ```
      * [
-     *    'table2' => [FK of table 2 to table 1]
-     *    'table3' => [FK of table 3 to table 2]
+     *    'table2' => [
+     *        'fk_t2' => FK object,
+     *    ],
+     *    'table3' => [
+     *        'fk_t3' => FK object,
+     *    ],
      * ]
      * ```
      *
-     * @param string $tableName
-     * @return array
-     */
-    public function getTableDependencies(string $tableName): array
-    {
-        $this->buildDependencyTree();
-
-        return $this->resolveDependencies($tableName);
-    }
-
-    /**
-     * Get the foreign keys that are related to the specified tables.
+     * Same result if `$tableNames` is `['table1']`.
+     * If `$tableNames` is `['table2']`, the result array has a single key `'table3'`.
+     * If `$tableNames` is `['table3']`, the result array is empty.
      *
      * @param array $tableNames
      * @return array
      */
-    public function getTablesDependencies(array $tableNames): array
+    public function getDependencies(array $tableNames): array
     {
         $this->buildDependencyTree();
 
@@ -88,13 +83,14 @@ class TableDependencyResolver
 
         foreach ($foreignKeys as $foreignKey) {
             $dependencyTable = $foreignKey->getLocalTableName();
+            $fkName = $foreignKey->getConstraintName();
 
-            // Detect cyclic dependencies (on itself or between two tables)
-            if ($dependencyTable === $tableName || isset($resolved[$dependencyTable][$tableName])) {
+            // Stop recursion when a cyclic dependency is detected
+            if (isset($resolved[$dependencyTable][$fkName])) {
                 continue;
             }
 
-            $resolved[$dependencyTable][$tableName] = $foreignKey;
+            $resolved[$dependencyTable][$fkName] = $foreignKey;
             $resolved = $this->resolveDependencies($dependencyTable, $resolved);
         }
 
