@@ -17,7 +17,7 @@ class TableDependencyResolverTest extends TestCase
      */
     public function testTableDependencies(): void
     {
-        $dependencyResolver = $this->createTableDependencyResolver();
+        $dependencyResolver = $this->createTableDependencyResolver($this->getStoreFkMap());
 
         // Table with no dependency
         $dependencies = $dependencyResolver->getTableDependencies('addresses');
@@ -40,12 +40,25 @@ class TableDependencyResolverTest extends TestCase
      */
     public function testTablesDependencies(): void
     {
-        $dependencyResolver = $this->createTableDependencyResolver();
+        $dependencyResolver = $this->createTableDependencyResolver($this->getStoreFkMap());
 
         $dependencies = $dependencyResolver->getTablesDependencies(['stores', 'customers', 'addresses']);
         $this->assertCount(2, $dependencies);
         $this->assertHasTableDependency('addresses', 'customers', $dependencies);
         $this->assertHasTableDependency('customers', 'stores', $dependencies);
+    }
+
+    /**
+     * Assert that cyclic dependencies do not result in an infinite loop.
+     */
+    public function testCyclicDependencies(): void
+    {
+        $dependencyResolver = $this->createTableDependencyResolver($this->getCyclicFkMap());
+
+        $dependencies = $dependencyResolver->getTablesDependencies(['table1', 'table2']);
+        $this->assertCount(2, $dependencies);
+        $this->assertHasTableDependency('table1', 'table2', $dependencies);
+        $this->assertHasTableDependency('table2', 'table1', $dependencies);
     }
 
     /**
@@ -73,27 +86,50 @@ class TableDependencyResolverTest extends TestCase
     /**
      * Create a table dependency resolver object.
      *
+     * @param array $foreignKeyMap
      * @return TableDependencyResolver
      */
-    private function createTableDependencyResolver(): TableDependencyResolver
+    private function createTableDependencyResolver(array $foreignKeyMap): TableDependencyResolver
     {
         $metadataMock = $this->createMock(MysqlMetadata::class);
 
         // Mock the "getTableNames" method
+        $tableNames = array_column($foreignKeyMap, 0);
         $metadataMock->method('getTableNames')
-            ->willReturn(['stores', 'customers', 'addresses']);
+            ->willReturn($tableNames);
 
         // Mock the "getForeignKeys" method
-        $valueMap = [
-            ['stores', []],
-            ['customers', [new ForeignKey('fk_stores', 'customers', ['store_id'], 'stores', ['store_id'])]],
-            ['addresses', [new ForeignKey('fk_stores', 'addresses', ['customer_id'], 'customers', ['customer_id'])]],
-        ];
-
         $metadataMock->method('getForeignKeys')
-            ->willReturnMap($valueMap);
+            ->willReturnMap($foreignKeyMap);
 
         /** @var MysqlMetadata $metadataMock */
         return new TableDependencyResolver($metadataMock);
+    }
+
+    /**
+     * Returns a foreign key map that simulates a store.
+     *
+     * @return array[]
+     */
+    private function getStoreFkMap(): array
+    {
+        return [
+            ['stores', []],
+            ['customers', [new ForeignKey('fk1', 'customers', ['store_id'], 'stores', ['store_id'])]],
+            ['addresses', [new ForeignKey('fk2', 'addresses', ['customer_id'], 'customers', ['customer_id'])]],
+        ];
+    }
+
+    /**
+     * Returns a foreign key map that simulates a cyclic dependency.
+     *
+     * @return array[]
+     */
+    private function getCyclicFkMap(): array
+    {
+        return [
+            ['table1', [new ForeignKey('fk1', 'table1', ['version_id'], 'table2', ['version_id'])]],
+            ['table2', [new ForeignKey('fk2', 'table2', ['version_id'], 'table1', ['version_id'])]],
+        ];
     }
 }
