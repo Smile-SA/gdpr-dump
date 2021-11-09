@@ -15,6 +15,9 @@ class TableDependencyResolver
     private $metadata;
 
     /**
+     * Foreign keys by referenced table name.
+     * E.g. key "table1" will contain an array with all foreign key that reference that table.
+     *
      * @var ForeignKey[][]
      */
     private $foreignKeys;
@@ -28,9 +31,12 @@ class TableDependencyResolver
     }
 
     /**
-     * Get the foreign keys that are related to the specified tables.
+     * Get all dependencies of the specified tables:
+     * - Tables with foreign key(s) that reference one of the specified tables
+     * - Tables with foreign key(s) that reference a table which depends on the specified tables (dependency chain)
      *
      * Example with the following foreign keys:
+     * - table1: no foreign key
      * - table2: foreign key "fk_t2" to table 1
      * - table3: foreign key "fk_t3" to table 2
      *
