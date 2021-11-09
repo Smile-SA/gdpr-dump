@@ -12,7 +12,7 @@ use Smile\GdprDump\Tests\Unit\TestCase;
 class TableDependencyResolverTest extends TestCase
 {
     /**
-     * Test the "getTablesDependencies" method.
+     * Test the "getDependencies" method.
      */
     public function testGetDependencies(): void
     {
