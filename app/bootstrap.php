@@ -13,7 +13,7 @@ foreach ([$basePath . '/vendor/autoload.php', $basePath . '/../../autoload.php']
 if (!$autoload) {
     die(
         'You need to set up the project dependencies using the following commands:' . PHP_EOL .
-        'curl -s http://getcomposer.org/installer | php' . PHP_EOL .
+        'curl -s https://getcomposer.org/installer | php' . PHP_EOL .
         'php composer.phar install' . PHP_EOL
     );
 }
