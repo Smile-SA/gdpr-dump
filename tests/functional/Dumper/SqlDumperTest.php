@@ -81,7 +81,6 @@ class SqlDumperTest extends TestCase
         $this->assertStringContainsString('store2', $output);
         $this->assertStringNotContainsString('store3', $output);
 
-
         // User 1 must not be dumped (does not match the date filter)
         $this->assertStringNotContainsString('user1@test.org', $output);
 

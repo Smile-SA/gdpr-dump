@@ -44,7 +44,7 @@ class FilterTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when the value is an array and the operator is neither "in" or "notIn".
+     * Assert that an exception is thrown when the value is an array and the operator is neither "in" nor "notIn".
      */
     public function testArrayValueWithIncompatibleOperator(): void
     {

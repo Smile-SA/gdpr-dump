@@ -93,13 +93,10 @@ class ConfigLoader implements ConfigLoaderInterface
      *
      * @param string[] $fileNames
      * @param string $currentDirectory
-     * @return array
      * @throws ConfigException
      */
-    private function loadParentFiles(array $fileNames, string $currentDirectory): array
+    private function loadParentFiles(array $fileNames, string $currentDirectory): void
     {
-        $data = [];
-
         foreach ($fileNames as $fileName) {
             $fileName = $this->fileLocator->locate($fileName, $currentDirectory);
 
@@ -109,7 +106,5 @@ class ConfigLoader implements ConfigLoaderInterface
                 $this->loadedTemplates[] = $fileName;
             }
         }
-
-        return $data;
     }
 }

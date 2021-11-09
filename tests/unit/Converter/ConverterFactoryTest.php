@@ -177,7 +177,7 @@ class ConverterFactoryTest extends TestCase
     private function createFactory(): ConverterFactory
     {
         $resolver = new ConverterResolver();
-        $resolver->addPath('Smile\\GdprDump\\Converter\\', dirname(dirname(dirname(__DIR__))) . '/src/Converter');
+        $resolver->addPath('Smile\\GdprDump\\Converter\\', dirname(__DIR__, 3) . '/src/Converter');
 
         return new ConverterFactory($resolver, new FakerService());
     }

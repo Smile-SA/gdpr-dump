@@ -29,7 +29,7 @@ class Compiler
      */
     public function __construct(array $locales)
     {
-        $this->basePath = dirname(dirname(__DIR__));
+        $this->basePath = dirname(__DIR__, 2);
         $this->locales = $locales;
     }
 

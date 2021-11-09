@@ -66,7 +66,7 @@ class ConverterResolverTest extends TestCase
     private function createResolver(): ConverterResolver
     {
         $resolver = new ConverterResolver();
-        $resolver->addPath('Smile\\GdprDump\\Converter\\', dirname(dirname(dirname(__DIR__))) . '/src/Converter');
+        $resolver->addPath('Smile\\GdprDump\\Converter\\', dirname(__DIR__, 3) . '/src/Converter');
 
         return $resolver;
     }
