@@ -18,19 +18,12 @@ class RandomDateTest extends TestCase
     public function testConverter(): void
     {
         $converter = new RandomDate();
-        $deprecatedConverter = new RandomizeDate();
 
         $value = $converter->convert(null);
         $this->assertNotNull($value);
 
-        $value = $deprecatedConverter->convert(null);
-        $this->assertNotNull($value);
-
         $date = '1990-12-31';
         $value = $converter->convert($date);
-        $this->assertDateIsRandomized($value, $date, 'Y-m-d');
-
-        $value = $deprecatedConverter->convert($date);
         $this->assertDateIsRandomized($value, $date, 'Y-m-d');
     }
 

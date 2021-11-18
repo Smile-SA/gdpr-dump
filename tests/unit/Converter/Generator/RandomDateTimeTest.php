@@ -17,19 +17,12 @@ class RandomDateTimeTest extends RandomDateTest
     public function testConverter(): void
     {
         $converter = new RandomDateTime();
-        $deprecatedConverter = new RandomizeDateTime();
 
         $value = $converter->convert(null);
         $this->assertNotNull($value);
 
-        $value = $deprecatedConverter->convert(null);
-        $this->assertNotNull($value);
-
         $date = '1990-12-31 12:05:41';
         $value = $converter->convert($date);
-        $this->assertDateIsRandomized($value, $date, 'Y-m-d H:i:s');
-
-        $value = $deprecatedConverter->convert($date);
         $this->assertDateIsRandomized($value, $date, 'Y-m-d H:i:s');
     }
 
