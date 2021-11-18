@@ -178,11 +178,7 @@ class TableConfig
     {
         $orderBy = (string) ($tableData['order_by'] ?? '');
         if ($orderBy === '') {
-            // Deprecated syntax "orderBy"
-            $orderBy = (string) ($tableData['orderBy'] ?? '');
-            if ($orderBy === '') {
-                return;
-            }
+            return;
         }
 
         $orders = explode(',', $orderBy);

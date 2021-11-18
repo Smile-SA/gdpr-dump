@@ -21,7 +21,7 @@ GdprDump 2.1.0 introduced the following changes to the config file syntax:
 - The `orderBy` parameter was renamed to `order_by`.
   This was the only parameter that didn't use snake case.
 
-The old converter names and the `orderBy` parameter are still supported, but they will be removed from the next major release (3.0.0).
+The old converter names and the `orderBy` parameter are deprecated, and are no longer available in version 3.0.
 
 ## Performance
 
