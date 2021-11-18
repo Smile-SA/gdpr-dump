@@ -53,8 +53,7 @@ class MysqlMetadata implements MetadataInterface
             . 'ORDER BY TABLE_NAME ASC';
 
         $statement = $this->connection->prepare($query);
-        $statement->execute([$this->schema]);
-        $this->tableNames = $statement->fetchFirstColumn();
+        $this->tableNames = $statement->executeQuery([$this->schema])->fetchFirstColumn();
 
         return $this->tableNames;
     }
@@ -75,12 +74,12 @@ class MysqlMetadata implements MetadataInterface
             . 'ORDER BY TABLE_NAME ASC, COLUMN_NAME ASC';
 
         $statement = $this->connection->prepare($query);
-        $statement->execute([$this->schema, $this->schema]);
+        $result = $statement->executeQuery([$this->schema, $this->schema]);
 
         $fksByTable = [];
 
         // Prepare an array that groups foreign key data by constraint name
-        while ($row = $statement->fetchAssociative()) {
+        while ($row = $result->fetchAssociative()) {
             $constraintName = $row['CONSTRAINT_NAME'];
             $tableName = $row['TABLE_NAME'];
 
