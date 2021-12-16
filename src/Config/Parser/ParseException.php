@@ -8,5 +8,4 @@ use Smile\GdprDump\Config\ConfigException;
 
 class ParseException extends ConfigException
 {
-
 }

@@ -8,5 +8,4 @@ use Smile\GdprDump\Config\ConfigException;
 
 class CompileException extends ConfigException
 {
-
 }

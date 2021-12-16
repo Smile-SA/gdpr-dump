@@ -8,5 +8,4 @@ use Smile\GdprDump\Config\Compiler\CompileException;
 
 class InvalidVersionException extends CompileException
 {
-
 }
