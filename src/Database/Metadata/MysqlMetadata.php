@@ -20,6 +20,11 @@ class MysqlMetadata implements MetadataInterface
     private $schema;
 
     /**
+     * @var array
+     */
+    private $allForeignKeys;
+
+    /**
      * @param Connection $connection
      */
     public function __construct(Connection $connection)
@@ -44,10 +49,21 @@ class MysqlMetadata implements MetadataInterface
         return $statement->fetchFirstColumn();
     }
 
-    /**
-     * @inheritdoc
-     */
+
     public function getForeignKeys(string $tableName): array
+    {
+        if ($this->allForeignKeys === null) {
+            $this->allForeignKeys = $this->getAllForeignKeys();
+        }
+
+        return $this->allForeignKeys[$tableName] ?? [];
+    }
+
+    /**
+     * Get all foreign keys for all tables
+     * This is much faster than getting the foreign keys separately per table
+     */
+    private function getAllForeignKeys(): array
     {
         $query = 'SELECT MAIN.CONSTRAINT_NAME, MAIN.TABLE_NAME, MAIN.COLUMN_NAME, '
             . 'MAIN.REFERENCED_TABLE_NAME, MAIN.REFERENCED_COLUMN_NAME, '
@@ -57,20 +73,21 @@ class MysqlMetadata implements MetadataInterface
             . 'ON MAIN.CONSTRAINT_NAME=REF.CONSTRAINT_NAME AND MAIN.TABLE_NAME=REF.TABLE_NAME '
             . 'AND MAIN.TABLE_SCHEMA = REF.CONSTRAINT_SCHEMA '
             . 'WHERE MAIN.REFERENCED_TABLE_NAME IS NOT NULL '
-            . 'AND MAIN.TABLE_NAME=? AND MAIN.TABLE_SCHEMA=? AND MAIN.CONSTRAINT_SCHEMA=? '
+            . 'AND MAIN.TABLE_SCHEMA=? AND MAIN.CONSTRAINT_SCHEMA=? '
             . 'ORDER BY TABLE_NAME ASC';
 
         $statement = $this->connection->prepare($query);
-        $statement->execute([$tableName, $this->schema, $this->schema]);
+        $statement->execute([$this->schema, $this->schema]);
 
-        $fksData = [];
+        $allFksData = [];
 
-        // Prepare an array that groups foreign key data by constraint name
+        // Prepare an array that groups foreign key data by table and constraint name
         while ($row = $statement->fetchAssociative()) {
             $constraintName = $row['CONSTRAINT_NAME'];
+            $tableName = $row['TABLE_NAME'];
 
-            if (!isset($fksData[$constraintName])) {
-                $fksData[$constraintName] = [
+            if (!isset($allFksData[$constraintName])) {
+                $allFksData[$tableName][$constraintName] = [
                     'constraint_name' => $constraintName,
                     'local_table_name' => $row['TABLE_NAME'],
                     'local_columns' => [],
@@ -81,23 +98,25 @@ class MysqlMetadata implements MetadataInterface
                 ];
             }
 
-            $fksData[$constraintName]['local_columns'][] = $row['COLUMN_NAME'];
-            $fksData[$constraintName]['foreign_columns'][] = $row['REFERENCED_COLUMN_NAME'];
+            $allFksData[$tableName][$constraintName]['local_columns'][] = $row['COLUMN_NAME'];
+            $allFksData[$tableName][$constraintName]['foreign_columns'][] = $row['REFERENCED_COLUMN_NAME'];
         }
 
         $foreignKeys = [];
 
         // Create the foreign keys
-        foreach ($fksData as $fkData) {
-            $foreignKeys[] = new ForeignKey(
-                $fkData['constraint_name'],
-                $fkData['local_table_name'],
-                $fkData['local_columns'],
-                $fkData['foreign_table_name'],
-                $fkData['foreign_columns'],
-                $fkData['on_update'],
-                $fkData['on_delete'],
-            );
+        foreach ($allFksData as $tableName => $fksData) {
+            foreach ($fksData as $fkData) {
+                $foreignKeys[$tableName][] = new ForeignKey(
+                    $fkData['constraint_name'],
+                    $fkData['local_table_name'],
+                    $fkData['local_columns'],
+                    $fkData['foreign_table_name'],
+                    $fkData['foreign_columns'],
+                    $fkData['on_update'],
+                    $fkData['on_delete'],
+                );
+            }
         }
 
         return $foreignKeys;
