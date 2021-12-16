@@ -6,6 +6,12 @@ namespace Smile\GdprDump\Database\Metadata\Definition\Constraint;
 
 class ForeignKey
 {
+    public const ACTION_CASCADE = 'CASCADE';
+    public const ACTION_NO_ACTION = 'NO ACTION';
+    public const ACTION_RESTRICT = 'RESTRICT';
+    public const ACTION_SET_DEFAULT = 'SET_DEFAULT';
+    public const ACTION_SET_NULL = 'SET NULL';
+
     /**
      * @var string
      */
@@ -32,24 +38,40 @@ class ForeignKey
     private $foreignColumns;
 
     /**
+     * @var string
+     */
+    private $onUpdate;
+
+    /**
+     * @var string
+     */
+    private $onDelete;
+
+    /**
      * @param string $constraintName
      * @param string $localTableName
      * @param string[] $localColumns
      * @param string $foreignTableName
      * @param string[] $foreignColumns
+     * @param string $onUpdate
+     * @param string $onDelete
      */
     public function __construct(
         string $constraintName,
         string $localTableName,
         array $localColumns,
         string $foreignTableName,
-        array $foreignColumns
+        array $foreignColumns,
+        string $onUpdate = self::ACTION_RESTRICT,
+        string $onDelete = self::ACTION_RESTRICT
     ) {
         $this->constraintName = $constraintName;
         $this->localTableName = $localTableName;
         $this->localColumns = $localColumns;
         $this->foreignTableName = $foreignTableName;
         $this->foreignColumns = $foreignColumns;
+        $this->onUpdate = $onUpdate;
+        $this->onDelete = $onDelete;
     }
 
     /**
@@ -100,5 +122,25 @@ class ForeignKey
     public function getForeignColumns(): array
     {
         return $this->foreignColumns;
+    }
+
+    /**
+     * Get the update action.
+     *
+     * @return string
+     */
+    public function getOnUpdate(): string
+    {
+        return $this->onUpdate;
+    }
+
+    /**
+     * Get the delete action.
+     *
+     * @return string
+     */
+    public function getOnDelete(): string
+    {
+        return $this->onDelete;
     }
 }

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Apply filters on table dependencies only for foreign keys that have a delete rule set to "CASCADE"
+
 ## [2.2.1] - 2021-11-09
 [2.2.1]: https://github.com/Smile-SA/gdpr-dump/compare/2.2.0...2.2.1
 

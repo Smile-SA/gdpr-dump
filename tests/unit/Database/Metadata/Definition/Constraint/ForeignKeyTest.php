@@ -14,14 +14,24 @@ class ForeignKeyTest extends TestCase
      */
     public function testGetters(): void
     {
-        list($constraintName, $localTable, $localColumns, $foreignTable, $foreignColumns) = $this->getForeignKeyData();
+        list(
+            $constraintName,
+            $localTable,
+            $localColumns,
+            $foreignTable,
+            $foreignColumns,
+            $onUpdate,
+            $onDelete
+        ) = $this->getForeignKeyData();
 
         $foreignKey = new ForeignKey(
             $constraintName,
             $localTable,
             $localColumns,
             $foreignTable,
-            $foreignColumns
+            $foreignColumns,
+            $onUpdate,
+            $onDelete
         );
 
         $this->assertSame($constraintName, $foreignKey->getConstraintName());
@@ -29,6 +39,8 @@ class ForeignKeyTest extends TestCase
         $this->assertSame($localColumns, $foreignKey->getLocalColumns());
         $this->assertSame($foreignTable, $foreignKey->getForeignTableName());
         $this->assertSame($foreignColumns, $foreignKey->getForeignColumns());
+        $this->assertSame($onUpdate, $foreignKey->getOnUpdate());
+        $this->assertSame($onDelete, $foreignKey->getOnDelete());
     }
 
     /**
@@ -44,6 +56,8 @@ class ForeignKeyTest extends TestCase
             ['local_column_1', 'local_column_2'],
             'foreign_table',
             ['foreign_column_1', 'foreign_column_2'],
+            ForeignKey::ACTION_CASCADE,
+            ForeignKey::ACTION_SET_NULL,
         ];
     }
 }

@@ -49,10 +49,14 @@ class MysqlMetadata implements MetadataInterface
      */
     public function getForeignKeys(string $tableName): array
     {
-        $query = 'SELECT CONSTRAINT_NAME, TABLE_NAME, COLUMN_NAME, '
-            . 'REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME '
-            . 'FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE '
-            . 'WHERE REFERENCED_TABLE_NAME IS NOT NULL AND TABLE_NAME=? AND TABLE_SCHEMA=? AND CONSTRAINT_SCHEMA=? '
+        $query = 'SELECT MAIN.CONSTRAINT_NAME, MAIN.TABLE_NAME, MAIN.COLUMN_NAME, '
+            . 'MAIN.REFERENCED_TABLE_NAME, MAIN.REFERENCED_COLUMN_NAME, '
+            . 'REF.UPDATE_RULE, REF.DELETE_RULE '
+            . 'FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS MAIN '
+            . 'LEFT JOIN INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS AS REF '
+            . 'ON MAIN.CONSTRAINT_NAME=REF.CONSTRAINT_NAME AND MAIN.TABLE_NAME=REF.TABLE_NAME '
+            . 'WHERE MAIN.REFERENCED_TABLE_NAME IS NOT NULL '
+            . 'AND MAIN.TABLE_NAME=? AND MAIN.TABLE_SCHEMA=? AND MAIN.CONSTRAINT_SCHEMA=? '
             . 'ORDER BY TABLE_NAME ASC';
 
         $statement = $this->connection->prepare($query);
@@ -71,6 +75,8 @@ class MysqlMetadata implements MetadataInterface
                     'local_columns' => [],
                     'foreign_table_name' => $row['REFERENCED_TABLE_NAME'],
                     'foreign_columns' => [],
+                    'on_update' => $row['UPDATE_RULE'],
+                    'on_delete' => $row['DELETE_RULE'],
                 ];
             }
 
@@ -87,7 +93,9 @@ class MysqlMetadata implements MetadataInterface
                 $fkData['local_table_name'],
                 $fkData['local_columns'],
                 $fkData['foreign_table_name'],
-                $fkData['foreign_columns']
+                $fkData['foreign_columns'],
+                $fkData['on_update'],
+                $fkData['on_delete'],
             );
         }
 

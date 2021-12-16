@@ -28,7 +28,7 @@ CREATE TABLE `customers`(
     `store_id` smallint(5) unsigned NOT NULL,
     PRIMARY KEY (`customer_id`),
     UNIQUE KEY (`email`),
-    FOREIGN KEY (`store_id`) REFERENCES `stores` (`store_id`)
+    FOREIGN KEY (`store_id`) REFERENCES `stores` (`store_id`) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 INSERT INTO `customers` VALUES(1, 'user1@test.org', 'firstname1', 'lastname1', 1, date_sub(now(), interval 60 day), 1, 2, 1);
@@ -45,7 +45,7 @@ CREATE TABLE `addresses`(
     `country_id` varchar(2) NOT NULL,
     `customer_id` int(10) unsigned NOT NULL,
     PRIMARY KEY (`address_id`),
-    FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`)
+    FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 INSERT INTO `addresses` VALUES(1, 'street1', '75011', 'Paris', 'FR', 1);
@@ -65,7 +65,7 @@ CREATE TABLE `config`(
     `value` text DEFAULT NULL,
     `store_id` smallint(5) unsigned NOT NULL,
     PRIMARY KEY (`config_id`),
-    FOREIGN KEY (`store_id`) REFERENCES `stores` (`store_id`)
+    FOREIGN KEY (`store_id`) REFERENCES `stores` (`store_id`) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 INSERT INTO `config` VALUES(1, 'currency', 'EUR', 1);
@@ -74,5 +74,5 @@ INSERT INTO `config` VALUES(3, 'currency', 'GBP', 3);
 
 -- Create cyclic dependencies
 ALTER TABLE `stores` ADD FOREIGN KEY (`parent_store_id`) REFERENCES `stores` (`store_id`);
-ALTER TABLE `customers` ADD FOREIGN KEY (`billing_address_id`) REFERENCES `addresses` (`address_id`);
-ALTER TABLE `customers` ADD FOREIGN KEY (`shipping_address_id`) REFERENCES `addresses` (`address_id`);
+ALTER TABLE `customers` ADD FOREIGN KEY (`billing_address_id`) REFERENCES `addresses` (`address_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `customers` ADD FOREIGN KEY (`shipping_address_id`) REFERENCES `addresses` (`address_id`) ON UPDATE CASCADE ON DELETE CASCADE;

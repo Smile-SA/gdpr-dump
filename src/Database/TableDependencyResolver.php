@@ -118,8 +118,10 @@ class TableDependencyResolver
             $foreignKeys = $this->metadata->getForeignKeys($tableName);
 
             foreach ($foreignKeys as $foreignKey) {
-                $foreignTableName = $foreignKey->getForeignTableName();
-                $this->foreignKeys[$foreignTableName][] = $foreignKey;
+                if ($foreignKey->getOnDelete() === ForeignKey::ACTION_CASCADE) {
+                    $foreignTableName = $foreignKey->getForeignTableName();
+                    $this->foreignKeys[$foreignTableName][] = $foreignKey;
+                }
             }
         }
     }

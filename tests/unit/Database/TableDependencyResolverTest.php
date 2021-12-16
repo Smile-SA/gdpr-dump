@@ -18,8 +18,14 @@ class TableDependencyResolverTest extends TestCase
     {
         $fkMap = [
             ['stores', []],
-            ['customers', [new ForeignKey('fk_stores', 'customers', ['store_id'], 'stores', ['store_id'])]],
-            ['addresses', [new ForeignKey('fk_customers', 'addresses', ['customer_id'], 'customers', ['customer_id'])]],
+            [
+                'customers',
+                [$this->createForeignKey('fk_stores', 'customers', ['store_id'], 'stores', ['store_id'])],
+            ],
+            [
+                'addresses',
+                [$this->createForeignKey('fk_customers', 'addresses', ['customer_id'], 'customers', ['customer_id'])],
+            ],
         ];
 
         $dependencyResolver = $this->createTableDependencyResolver($fkMap);
@@ -52,7 +58,7 @@ class TableDependencyResolverTest extends TestCase
     public function testCyclicDependencyOnSameTable(): void
     {
         $fkMap = [
-            ['table', [new ForeignKey('fk', 'table', ['parent_id'], 'table', ['id'])]],
+            ['table', [$this->createForeignKey('fk', 'table', ['parent_id'], 'table', ['id'])]],
         ];
 
         $dependencyResolver = $this->createTableDependencyResolver($fkMap);
@@ -75,8 +81,8 @@ class TableDependencyResolverTest extends TestCase
     public function testCyclicDependencyOnTableSequence(): void
     {
         $fkMap = [
-            ['table1', [new ForeignKey('fk1', 'table1', ['id'], 'table2', ['id'])]],
-            ['table2', [new ForeignKey('fk2', 'table2', ['id'], 'table1', ['id'])]],
+            ['table1', [$this->createForeignKey('fk1', 'table1', ['id'], 'table2', ['id'])]],
+            ['table2', [$this->createForeignKey('fk2', 'table2', ['id'], 'table1', ['id'])]],
         ];
 
         $dependencyResolver = $this->createTableDependencyResolver($fkMap);
@@ -122,8 +128,8 @@ class TableDependencyResolverTest extends TestCase
             [
                 'table2',
                 [
-                    new ForeignKey('fk1', 'table2', ['column1'], 'table1', ['column1']),
-                    new ForeignKey('fk2', 'table2', ['column2'], 'table1', ['column2']),
+                    $this->createForeignKey('fk1', 'table2', ['column1'], 'table1', ['column1']),
+                    $this->createForeignKey('fk2', 'table2', ['column2'], 'table1', ['column2']),
                 ],
             ],
         ];
@@ -168,6 +174,34 @@ class TableDependencyResolverTest extends TestCase
 
         /** @var MysqlMetadata $metadataMock */
         return new TableDependencyResolver($metadataMock);
+    }
+
+    /**
+     * Create a foreign key object.
+     *
+     * @param string $constraintName
+     * @param string $localTableName
+     * @param array $localColumns
+     * @param string $foreignTableName
+     * @param array $foreignColumns
+     * @return ForeignKey
+     */
+    private function createForeignKey(
+        string $constraintName,
+        string $localTableName,
+        array $localColumns,
+        string $foreignTableName,
+        array $foreignColumns
+    ): ForeignKey {
+        return new ForeignKey(
+            $constraintName,
+            $localTableName,
+            $localColumns,
+            $foreignTableName,
+            $foreignColumns,
+            ForeignKey::ACTION_CASCADE,
+            ForeignKey::ACTION_CASCADE
+        );
     }
 
     /**
