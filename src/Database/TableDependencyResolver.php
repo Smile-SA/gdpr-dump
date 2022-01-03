@@ -115,7 +115,7 @@ class TableDependencyResolver
         $tableNames = $this->metadata->getTableNames();
 
         foreach ($tableNames as $tableName) {
-            $foreignKeys = $this->metadata->getForeignKeys($tableName);
+            $foreignKeys = $this->metadata->getTableForeignKeys($tableName);
 
             foreach ($foreignKeys as $foreignKey) {
                 $foreignTableName = $foreignKey->getForeignTableName();

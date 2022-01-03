@@ -46,7 +46,7 @@ class MysqlMetadataTest extends TestCase
      */
     private function validateStoresForeignKeys(MetadataInterface $metadata): void
     {
-        $foreignKeys = $metadata->getForeignKeys('stores');
+        $foreignKeys = $metadata->getTableForeignKeys('stores');
         $this->assertCount(1, $foreignKeys);
 
         $foreignKey = reset($foreignKeys);
@@ -64,17 +64,10 @@ class MysqlMetadataTest extends TestCase
      */
     private function validateCustomersForeignKeys(MetadataInterface $metadata): void
     {
-        $foreignKeys = $metadata->getForeignKeys('customers');
+        $foreignKeys = $metadata->getTableForeignKeys('customers');
         $this->assertCount(3, $foreignKeys);
 
         $foreignKey = reset($foreignKeys);
-        $this->assertNotEmpty($foreignKey->getConstraintName());
-        $this->assertSame('customers', $foreignKey->getLocalTableName());
-        $this->assertSame(['store_id'], $foreignKey->getLocalColumns());
-        $this->assertSame('stores', $foreignKey->getForeignTableName());
-        $this->assertSame(['store_id'], $foreignKey->getForeignColumns());
-
-        $foreignKey = next($foreignKeys);
         $this->assertNotEmpty($foreignKey->getConstraintName());
         $this->assertSame('customers', $foreignKey->getLocalTableName());
         $this->assertSame(['billing_address_id'], $foreignKey->getLocalColumns());
@@ -87,6 +80,13 @@ class MysqlMetadataTest extends TestCase
         $this->assertSame(['shipping_address_id'], $foreignKey->getLocalColumns());
         $this->assertSame('addresses', $foreignKey->getForeignTableName());
         $this->assertSame(['address_id'], $foreignKey->getForeignColumns());
+
+        $foreignKey = next($foreignKeys);
+        $this->assertNotEmpty($foreignKey->getConstraintName());
+        $this->assertSame('customers', $foreignKey->getLocalTableName());
+        $this->assertSame(['store_id'], $foreignKey->getLocalColumns());
+        $this->assertSame('stores', $foreignKey->getForeignTableName());
+        $this->assertSame(['store_id'], $foreignKey->getForeignColumns());
     }
 
     /**
@@ -96,7 +96,7 @@ class MysqlMetadataTest extends TestCase
      */
     private function validateAddressesForeignKeys(MetadataInterface $metadata): void
     {
-        $foreignKeys = $metadata->getForeignKeys('addresses');
+        $foreignKeys = $metadata->getTableForeignKeys('addresses');
         $this->assertCount(1, $foreignKeys);
 
         $foreignKey = reset($foreignKeys);
