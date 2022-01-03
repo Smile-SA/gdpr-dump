@@ -59,22 +59,31 @@ class TableFilterExtension implements ExtensionInterface
             return [];
         }
 
-        // Get the foreign keys of each table that depends on the filters listed in the configuration
-        $dependencyResolver = new TableDependencyResolver($this->metadata);
-        $dependencies = $dependencyResolver->getDependencies($tablesToFilter);
+        $dependencies = [];
+        $tableWheres = [];
+
+        // If recursive filters are enabled, tables to query must contain
+        // all tables that depend on the tables that have filters/sort order
+        if ($this->config->isFilterPropagationEnabled()) {
+            $dependencyResolver = new TableDependencyResolver($this->metadata, $this->config);
+            $dependencies = $dependencyResolver->getDependencies($tablesToFilter);
+        }
 
         // Tables to query are:
         // - tables with filters or sort orders declared in the config
         // - tables that depend on the tables to filter
         $tablesToQuery = array_unique(array_merge(array_keys($dependencies), $tablesToFilter, $tablesToSort));
-        $tableWheres = [];
 
         foreach ($tablesToQuery as $tableName) {
             // Create the query that will contain a combination of filter / sort order / limit
             $queryBuilder = $this->createQueryBuilder($tableName);
 
             // Add where conditions on the parent tables that also have active filters
-            if ($queryBuilder->getMaxResults() !== 0 && array_key_exists($tableName, $dependencies)) {
+            if (
+                $this->config->isFilterPropagationEnabled()
+                && $queryBuilder->getMaxResults() !== 0
+                && array_key_exists($tableName, $dependencies)
+            ) {
                 $this->addDependentFilter($tableName, $queryBuilder, $dependencies);
             }
 

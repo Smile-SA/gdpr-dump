@@ -38,7 +38,7 @@ class DumperConfigTest extends TestCase
      */
     public function testTablesData(): void
     {
-        $configData = [
+        $data = [
             'tables' => [
                 'table1' => ['truncate' => true],
                 'table2' => ['limit' => 1],
@@ -47,7 +47,7 @@ class DumperConfigTest extends TestCase
             ],
         ];
 
-        $config = $this->createConfig($configData);
+        $config = $this->createConfig($data);
 
         $this->assertSame(['table1'], $config->getTablesToTruncate());
         $this->assertSame(['table1', 'table2'], $config->getTablesToFilter());
@@ -70,6 +70,24 @@ class DumperConfigTest extends TestCase
         $settings = $config->getDumpSettings();
         $this->assertArrayHasKey('hex_blob', $settings);
         $this->assertTrue($settings['hex_blob']);
+    }
+
+    /**
+     * Test filter propagation settings.
+     */
+    public function testFilterPropagationSettings(): void
+    {
+        $data = [
+            'filter_propagation' => [
+                'enabled' => true,
+                'ignored_foreign_keys' => ['fk1', 'fk2'],
+            ],
+        ];
+
+        $config = $this->createConfig($data);
+
+        $this->assertSame($data['filter_propagation']['enabled'], $config->isFilterPropagationEnabled());
+        $this->assertSame($data['filter_propagation']['ignored_foreign_keys'], $config->getIgnoredForeignKeys());
     }
 
     /**
@@ -104,13 +122,15 @@ class DumperConfigTest extends TestCase
     {
         $config = $this->createConfig([]);
 
-        $this->assertEmpty($config->getTablesWhitelist());
-        $this->assertEmpty($config->getTablesBlacklist());
-        $this->assertEmpty($config->getTablesToSort());
-        $this->assertEmpty($config->getTablesToFilter());
-        $this->assertEmpty($config->getTablesToTruncate());
-        $this->assertEmpty($config->getTablesConfig());
+        $this->assertSame([], $config->getTablesWhitelist());
+        $this->assertSame([], $config->getTablesBlacklist());
+        $this->assertSame([], $config->getTablesToSort());
+        $this->assertSame([], $config->getTablesToFilter());
+        $this->assertSame([], $config->getTablesToTruncate());
+        $this->assertSame([], $config->getTablesConfig());
         $this->assertSame('php://stdout', $config->getDumpOutput());
+        $this->assertTrue($config->isFilterPropagationEnabled());
+        $this->assertSame([], $config->getIgnoredForeignKeys());
 
         // Test these values because they differ from MySQLDump-PHP
         $settings = $config->getDumpSettings();

@@ -10,9 +10,11 @@
 - [Dump Settings](#dump-settings)
 - [Table Whitelist](#table-whitelist)
 - [Table Blacklist](#table-blacklist)
-- [Tables Configuration](#tables-configuration)
+- [Table Filters](#table-filters)
     - [Filtering Values](#filtering-values)
-    - [Data Converters](#data-converters)
+    - [Filter Propagation](#filter-propagation)
+- [Data Converters](#data-converters)
+    - [Declaring Converters](#declaring-converters)
     - [Skipping Data Conversion](#skipping-data-conversion)
     - [Sharing Converter Results](#sharing-converter-results)
 - [Advanced Configuration](#advanced-configuration)
@@ -164,7 +166,7 @@ If a table is both blacklisted and whitelisted, it will not be included in the d
 
 The wildcard character `*` can be used in table names (e.g. `cache_*`).
 
-## Tables Configuration
+## Table Filters
 
 The configuration of each table must be specified in the `tables` parameter.
 
@@ -180,9 +182,7 @@ The wildcard character `*` can be used in table names (e.g. `cache_*`).
 
 ### Filtering Values
 
-It is possible to limit the data dumped for each table:
-
-The data is automatically filtered for all tables that depend on the target table (foreign keys).
+It is possible to filter the dumped data of any table.
 
 Available properties:
 
@@ -251,7 +251,29 @@ tables:
             - ['website_id', 'eq', 'expr: (SELECT website_id FROM store_website WHERE name = "base")']
 ```
 
-### Data Converters
+### Filter Propagation
+
+By default, table filters are automatically propagated to all table dependencies (by following foreign keys).
+
+This feature can be disabled by adding the following configuration at the root of the config file:
+
+```yaml
+filter_propagation:
+    enabled: false
+```
+
+In some very specific cases, you might want to disable filter propagation for some foreign keys.
+This can be achieved with the following configuration:
+
+```yaml
+filter_propagation:
+    ignored_foreign_keys:
+        - 'FK_CONSTRAINT_NAME'
+```
+
+## Data Converters
+
+### Declaring Converters
 
 It is possible to define data converters for any column.
 

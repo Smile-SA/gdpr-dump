@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Database;
 
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
+use Smile\GdprDump\Dumper\Config\DumperConfig;
 
 class TableDependencyResolver
 {
@@ -13,6 +14,11 @@ class TableDependencyResolver
      * @var MetadataInterface
      */
     private $metadata;
+
+    /**
+     * @var DumperConfig
+     */
+    private $config;
 
     /**
      * Foreign keys by referenced table name.
@@ -24,10 +30,12 @@ class TableDependencyResolver
 
     /**
      * @param MetadataInterface $metadata
+     * @param DumperConfig $config
      */
-    public function __construct(MetadataInterface $metadata)
+    public function __construct(MetadataInterface $metadata, DumperConfig $config)
     {
         $this->metadata = $metadata;
+        $this->config = $config;
     }
 
     /**
@@ -118,9 +126,28 @@ class TableDependencyResolver
             $foreignKeys = $this->metadata->getTableForeignKeys($tableName);
 
             foreach ($foreignKeys as $foreignKey) {
-                $foreignTableName = $foreignKey->getForeignTableName();
-                $this->foreignKeys[$foreignTableName][] = $foreignKey;
+                if (!$this->isForeignKeyIgnored($foreignKey)) {
+                    $foreignTableName = $foreignKey->getForeignTableName();
+                    $this->foreignKeys[$foreignTableName][] = $foreignKey;
+                }
             }
         }
+    }
+
+    /**
+     * Check whether the foreign key must be skipped.
+     *
+     * @param ForeignKey $foreignKey
+     * @return bool
+     */
+    private function isForeignKeyIgnored(ForeignKey $foreignKey): bool
+    {
+        foreach ($this->config->getIgnoredForeignKeys() as $constraintName) {
+            if ($foreignKey->getConstraintName() === $constraintName) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
