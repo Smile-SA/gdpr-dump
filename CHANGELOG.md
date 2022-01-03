@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## WIP
 
 - Performance optimization: use a single query to fetch all foreign keys
+- Add settings to enable/disable table filter propagation
 
 ## [2.2.1] - 2021-11-09
 [2.2.1]: https://github.com/Smile-SA/gdpr-dump/compare/2.2.0...2.2.1

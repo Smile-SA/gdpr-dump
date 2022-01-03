@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Database;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 use Smile\GdprDump\Database\Metadata\MysqlMetadata;
 use Smile\GdprDump\Database\TableDependencyResolver;
+use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class TableDependencyResolverTest extends TestCase
@@ -22,7 +23,7 @@ class TableDependencyResolverTest extends TestCase
             ['addresses', [new ForeignKey('fk_customers', 'addresses', ['customer_id'], 'customers', ['customer_id'])]],
         ];
 
-        $dependencyResolver = $this->createTableDependencyResolver($fkMap);
+        $dependencyResolver = $this->createResolver($fkMap);
 
         // Table "addresses" has no dependency
         $dependencies = $dependencyResolver->getDependencies(['addresses']);
@@ -55,7 +56,7 @@ class TableDependencyResolverTest extends TestCase
             ['table', [new ForeignKey('fk', 'table', ['parent_id'], 'table', ['id'])]],
         ];
 
-        $dependencyResolver = $this->createTableDependencyResolver($fkMap);
+        $dependencyResolver = $this->createResolver($fkMap);
 
         // The foreign key must have been ignored by the resolver
         $dependencies = $dependencyResolver->getDependencies(['table']);
@@ -79,7 +80,7 @@ class TableDependencyResolverTest extends TestCase
             ['table2', [new ForeignKey('fk2', 'table2', ['id'], 'table1', ['id'])]],
         ];
 
-        $dependencyResolver = $this->createTableDependencyResolver($fkMap);
+        $dependencyResolver = $this->createResolver($fkMap);
 
         $validateDependencies = function (array $dependencies): void {
             $this->assertCount(2, $dependencies);
@@ -128,7 +129,7 @@ class TableDependencyResolverTest extends TestCase
             ],
         ];
 
-        $dependencyResolver = $this->createTableDependencyResolver($fkMap);
+        $dependencyResolver = $this->createResolver($fkMap);
         $dependencies = $dependencyResolver->getDependencies(['table1', 'table2']);
 
         $this->assertCount(1, $dependencies);
@@ -148,12 +149,33 @@ class TableDependencyResolverTest extends TestCase
     }
 
     /**
+     * Assert that it is possible to ignore specific foreign keys.
+     */
+    public function testIgnoredForeignKeys(): void
+    {
+        $fkMap = [
+            ['table1', []],
+            ['table2', [new ForeignKey('fk1', 'table2', ['column1'], 'table1', ['column1'])]],
+            ['table3', [new ForeignKey('fk2', 'table3', ['column2'], 'table2', ['column2'])]],
+        ];
+
+        $dependencyResolver = $this->createResolver($fkMap, ['fk2']);
+        $dependencies = $dependencyResolver->getDependencies(['table1', 'table2', 'table3']);
+
+        $this->assertCount(1, $dependencies);
+        $this->assertArrayHasKey('table2', $dependencies);
+        $this->assertCount(1, $dependencies['table2']);
+        $this->assertArrayHasKey('fk1', $dependencies['table2']);
+    }
+
+    /**
      * Create a table dependency resolver object.
      *
      * @param array $foreignKeyMap
+     * @param array $ignoredForeignKeys
      * @return TableDependencyResolver
      */
-    private function createTableDependencyResolver(array $foreignKeyMap): TableDependencyResolver
+    private function createResolver(array $foreignKeyMap, array $ignoredForeignKeys = []): TableDependencyResolver
     {
         $metadataMock = $this->createMock(MysqlMetadata::class);
 
@@ -166,8 +188,12 @@ class TableDependencyResolverTest extends TestCase
         $metadataMock->method('getTableForeignKeys')
             ->willReturnMap($foreignKeyMap);
 
+        $configMock = $this->createMock(DumperConfig::class);
+        $configMock->method('getIgnoredForeignKeys')
+            ->willReturn($ignoredForeignKeys);
+
         /** @var MysqlMetadata $metadataMock */
-        return new TableDependencyResolver($metadataMock);
+        return new TableDependencyResolver($metadataMock, $configMock);
     }
 
     /**

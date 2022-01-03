@@ -55,12 +55,21 @@ class SqlDumperTest extends TestCase
 
         // Assert that the faker locale was changed
         $this->assertSame('fr_FR', $faker->getLocale());
+
+        // Same tests but with filter propagation disabled
+        $config = $this->createConfig();
+        $config->set('filter_propagation', ['enabled' => false]);
+        $dumper = $this->createDumper();
+        $dumper->dump($config);
+        $this->assertDumpIsValid(false);
     }
 
     /**
      * Assert that the dump file contents match the dump configuration file.
+     *
+     * @param bool $filterPropagationEnabled
      */
-    private function assertDumpIsValid(): void
+    private function assertDumpIsValid(bool $filterPropagationEnabled = true): void
     {
         // Check if the file was created
         $this->assertFileExists($this->dumpFile);
@@ -104,7 +113,11 @@ class SqlDumperTest extends TestCase
         $this->assertStringNotContainsString('test_user4@test.org', $output);
 
         // User 5 must not be dumped (store id condition not matched)
-        $this->assertStringNotContainsString('user5@test.org', $output);
+        if ($filterPropagationEnabled) {
+            $this->assertStringNotContainsString('user5@test.org', $output);
+        } else {
+            $this->assertStringContainsString('user5@test.org', $output);
+        }
 
         // Only the addresses of dumped users must be included
         $this->assertStringContainsString('street3', $output);
@@ -112,10 +125,18 @@ class SqlDumperTest extends TestCase
         $this->assertStringContainsString('street5', $output);
         $this->assertStringContainsString('street6', $output);
         $this->assertStringContainsString('street7', $output);
-        $this->assertStringNotContainsString('street1', $output);
-        $this->assertStringNotContainsString('street2', $output);
-        $this->assertStringNotContainsString('street8', $output);
-        $this->assertStringNotContainsString('street9', $output);
+
+        if ($filterPropagationEnabled) {
+            $this->assertStringNotContainsString('street1', $output);
+            $this->assertStringNotContainsString('street2', $output);
+            $this->assertStringNotContainsString('street8', $output);
+            $this->assertStringNotContainsString('street9', $output);
+        } else {
+            $this->assertStringContainsString('street1', $output);
+            $this->assertStringContainsString('street2', $output);
+            $this->assertStringContainsString('street8', $output);
+            $this->assertStringContainsString('street9', $output);
+        }
     }
 
     /**

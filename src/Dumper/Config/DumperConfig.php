@@ -82,6 +82,14 @@ class DumperConfig
     /**
      * @var array
      */
+    private $filterPropagationSettings = [
+        'enabled' => true,
+        'ignored_foreign_keys' => [],
+    ];
+
+    /**
+     * @var array
+     */
     private $fakerSettings = [
         'locale' => null,
     ];
@@ -113,6 +121,26 @@ class DumperConfig
     public function getDumpSettings(): array
     {
         return $this->dumpSettings;
+    }
+
+    /**
+     * Check whether to apply table filters recursively to table dependencies (by following foreign keys).
+     *
+     * @return bool
+     */
+    public function isFilterPropagationEnabled(): bool
+    {
+        return $this->filterPropagationSettings['enabled'];
+    }
+
+    /**
+     * Get the foreign keys to exclude from the table filter propagation.
+     *
+     * @return array
+     */
+    public function getIgnoredForeignKeys(): array
+    {
+        return $this->filterPropagationSettings['ignored_foreign_keys'];
     }
 
     /**
@@ -220,6 +248,9 @@ class DumperConfig
         // Dump settings
         $this->prepareDumpSettings($config);
 
+        // Filter propagation settings
+        $this->prepareFilterPropagationSettings($config);
+
         // Faker settings
         $this->prepareFakerSettings($config);
 
@@ -262,6 +293,25 @@ class DumperConfig
             },
             $this->dumpSettings['output']
         );
+    }
+
+    /**
+     * Prepare table filter propagation settings.
+     *
+     * @param ConfigInterface $config
+     * @throws UnexpectedValueException
+     */
+    private function prepareFilterPropagationSettings(ConfigInterface $config): void
+    {
+        $settings = $config->get('filter_propagation', []);
+
+        foreach ($settings as $param => $value) {
+            if (!array_key_exists($param, $this->filterPropagationSettings)) {
+                throw new UnexpectedValueException(sprintf('Invalid filter propagation setting "%s".', $param));
+            }
+
+            $this->filterPropagationSettings[$param] = $value;
+        }
     }
 
     /**

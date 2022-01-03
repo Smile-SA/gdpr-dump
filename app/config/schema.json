@@ -22,6 +22,9 @@
         "dump": {
             "$ref": "#/definitions/dump"
         },
+        "filter_propagation": {
+            "$ref" : "#/definitions/filter_propagation"
+        },
         "faker": {
             "$ref": "#/definitions/faker"
         },
@@ -196,6 +199,20 @@
                 }
             },
             "additionalProperties": false
+        },
+        "filter_propagation": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "ignored_foreign_keys": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
         },
         "faker": {
             "type": "object",
