@@ -8,9 +8,17 @@ parameters:
     ignoreErrors:
         -
             # Can't add a type hint until it is also added to the parent class
-            message: '#Method [a-zA-Z\\]+::configure\(\) has no return typehint specified#'
+            message: '#Method [a-zA-Z\\]+::configure\(\) has no return type specified#'
             path: src/Console/Command
         -
             # False positive
             message: '#Instanceof between object and string\|null results in an error#'
             path: src/Converter/Parameters/ParameterProcessor.php
+        -
+            # False positive
+            message: '#Cannot use array destructuring on callable#'
+            path: src/Converter/Proxy/Faker.php
+        -
+            # False positive
+            message: '#Unsafe access to private property [a-zA-Z\\]+::\$[a-zA-Z]+ through static#'
+            path: src
