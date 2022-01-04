@@ -44,7 +44,7 @@ For example:
 
 ```yaml
 extends: 'magento2'
-version: '2.4.1'
+version: '2.4.3'
 ```
 
 ### Custom Templates
@@ -56,7 +56,7 @@ extends: 'path/to/config.yaml'
 ```
 
 The contents of this template will automatically be merged with the configuration file.
-The path to the file can be an absolute path, or relative to the configuration file.
+The path to the file can be an absolute path, or relative to the current file.
 
 ### Extending Multiple Files
 
