@@ -624,9 +624,9 @@ tables:
                 parameters:
                     converters:
                         - converter: 'anonymizeText'
-                          condition: 'another_column == 0'
+                          condition: '{{another_column}} == 0'
                         - converter: 'randomizeText'
-                          condition: 'another_column == 1'
+                          condition: '{{another_column}} == 1'
 ```
 
 If you need to override a chained converter defined in a parent config file, you must specify the key index.
