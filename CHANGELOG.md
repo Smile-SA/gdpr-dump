@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Fix PHP annotations being removed from the phar file
+
 ## [2.3.0] - 2022-01-04
 [2.3.0]: https://github.com/Smile-SA/gdpr-dump/compare/2.2.1...2.3.0
 
