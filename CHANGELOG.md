@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [2.3.2] - 2022-02-21
+[2.3.2]: https://github.com/Smile-SA/gdpr-dump/compare/2.3.1...2.3.2
 
 - Fix a regression that appeared in version 2.1.0 and prevented from setting empty strings with the converter "setValue"
 
