@@ -391,7 +391,7 @@ Parameters:
 
 | Name | Required | Default | Description |
 | --- | --- | --- | --- |
-| **value** | Y | | The value to set. |
+| **value** | Y | | The value to set. It must be a scalar (string, int, float, boolean) or null. |
 
 Example:
 

@@ -15,16 +15,18 @@ class SetValueTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new SetValue(['value' => 1,]);
+        // Assert that empty values are allowed
+        $this->assertValueIsSet(null);
+        $this->assertValueIsSet(false);
+        $this->assertValueIsSet('');
+        $this->assertValueIsSet('0');
+        $this->assertValueIsSet(0);
 
-        $value = $converter->convert(null);
-        $this->assertSame(1, $value);
-
-        $value = $converter->convert('');
-        $this->assertSame(1, $value);
-
-        $value = $converter->convert('notAnonymized');
-        $this->assertSame(1, $value);
+        // Assert that non-empty values are allowed
+        $this->assertValueIsSet(true);
+        $this->assertValueIsSet('notAnonymized');
+        $this->assertValueIsSet(-1);
+        $this->assertValueIsSet(10.2);
     }
 
     /**
@@ -34,5 +36,25 @@ class SetValueTest extends TestCase
     {
         $this->expectException(ValidationException::class);
         new SetValue([]);
+    }
+
+    /**
+     * Assert that an exception is thrown when the value is not a scalar and not null.
+     */
+    public function testValueNotScalar(): void
+    {
+        $this->expectException(ValidationException::class);
+        new SetValue(['value' => ['1']]);
+    }
+
+    /**
+     * Assert that the converter generates the specified value.
+     *
+     * @param mixed $value
+     */
+    private function assertValueIsSet($value): void
+    {
+        $converter = new SetValue(['value' => $value]);
+        $this->assertSame($value, $converter->convert($value));
     }
 }
