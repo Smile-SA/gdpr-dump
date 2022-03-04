@@ -435,8 +435,9 @@ Using variables in converter conditions:
 tables:
     customer_entity_varchar:
         converters:
-            converter: 'anonymizeText'
-            condition: '{{attribute_id}} == @firstname_attribute_id'
+            value:
+                converter: 'anonymizeText'
+                condition: '{{attribute_id}} == @firstname_attribute_id'
 ```
 
 ### Faker Locale
