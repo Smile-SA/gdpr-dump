@@ -15,7 +15,7 @@ We'll then discuss whether it should be added to the core.
 
 Before submitting a pull request, please ensure that your code meet these requirements:
 
-- The code must be PSR-2 compliant.
+- The code must be PSR-12 compliant.
 - GdprDump has a minimum PHP version requirement of PHP 7.3.
   Don't use features that were introduced later than PHP 7.3.
 - Use type hinting and strict typing.
