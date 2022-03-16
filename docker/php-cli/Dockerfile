@@ -17,17 +17,16 @@ ARG APP_USER=app
 ARG APP_GROUP=app
 ARG APP_UID=1000
 ARG APP_GID=1000
-RUN addgroup --gid $APP_GID $APP_GROUP; \
-    adduser --uid $APP_UID --ingroup $APP_GROUP --no-create-home --disabled-password --gecos "" $APP_USER
+RUN groupadd -g "$APP_GID" $APP_GROUP; \
+    useradd -g "$APP_GID" -u "$APP_UID" -s /bin/bash $APP_USER
 
 # Install composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /composer
 ENV COMPOSER_GITHUB_TOKEN ""
-
 RUN mkdir -p $COMPOSER_HOME/cache; \
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer; \
     chown -R $APP_USER:$APP_GROUP $COMPOSER_HOME
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Copy scripts to /usr/local/bin
 ADD bin/* /usr/local/bin/
