@@ -16,7 +16,7 @@ services:
             - 'composer-cache:/composer/cache'
 
     db:
-        image: 'mariadb:10.5'
+        image: 'mariadb:10.6'
         ports:
             - 3306
         environment:
