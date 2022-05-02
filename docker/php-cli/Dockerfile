@@ -6,7 +6,6 @@ RUN docker-php-ext-install pdo_mysql
 # Copy PHP configuration
 RUN ln -s $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 COPY ./config/php.ini $PHP_INI_DIR/conf.d/gdpr-dump.ini
-COPY ./bin/* /usr/local/bin/
 
 # Install composer
 ENV COMPOSER_ALLOW_SUPERUSER 1

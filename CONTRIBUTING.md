@@ -55,19 +55,13 @@ If you are running on Mac/Windows, docker should work out of the box (needs conf
 1. Install the project dependencies:
 
     ```
-    docker-compose run --rm app composer install
+    make install
     ```
 
-2. Run the code validation tools (phpcs, phpstan):
+2. Run static code analysis (phpcs, phpstan) and tests (phpunit):
 
     ```
-    docker-compose run --rm app run-sniffers
-    ```
-
-3. Run the unit/functional tests (phpunit):
-
-    ```
-    docker-compose run --rm app run-tests
+    make analyze test
     ```
 
 #### Running Tests Manually
