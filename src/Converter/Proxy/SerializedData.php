@@ -35,7 +35,6 @@ class SerializedData implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        // Decode the value
         $decoded = @unserialize((string) $value);
         if (!is_array($decoded)) {
             return $value;

@@ -52,7 +52,7 @@ class RegexReplace implements ConverterInterface
         $value = (string) $value;
 
         if ($value !== '') {
-            $value = preg_replace($this->pattern, $this->replacement, (string) $value, $this->limit);
+            $value = preg_replace($this->pattern, $this->replacement, $value, $this->limit);
 
             if ($value === null) {
                 throw new RuntimeException(
