@@ -2,18 +2,16 @@ version: '3.4'
 
 services:
     app:
-        build:
-            context: 'docker/php-cli'
-            args:
-                APP_UID: '${UID:-1000}'
-                APP_GID: '${GID:-1000}'
+        build: 'docker/php-cli'
+        user: '${UID?UID must be set.}:${GID?GID must be set.}'
         environment:
+            COMPOSER_AUTH: '$COMPOSER_AUTH'
             DB_HOST: 'db'
         depends_on:
             - 'db'
         volumes:
-            - '.:/app'
-            - 'composer-cache:/composer/cache'
+            - '.:/var/www/html'
+            - 'composer-cache:/tmp/composer'
 
     db:
         image: 'mariadb:10.6'
