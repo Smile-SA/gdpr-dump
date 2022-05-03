@@ -8,9 +8,9 @@ help:
 	@awk 'BEGIN {FS = ":.*##"; printf "Usage: make \033[32m<target>\033[0m\n\n"} /^[a-zA-Z_-]+:.*?##/ { printf "\033[32m%-15s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
 .PHONY: gdpr-dump
-gdpr-dump: .env vendor ## Run bin/gdpr-dump command. Example: make gdpr-dump args=test.yaml
-	@$(eval args ?=)
-	$(PHP_CLI) bin/gdpr-dump $(args)
+gdpr-dump: .env vendor ## Run bin/gdpr-dump command. Example: make gdpr-dump c=test.yaml
+	@$(eval c ?=)
+	$(PHP_CLI) bin/gdpr-dump $(c)
 
 .PHONY: compile
 compile: .env vendor ## Run bin/compile command.
