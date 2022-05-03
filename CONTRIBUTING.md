@@ -39,30 +39,13 @@ Follow these steps:
 
 ### How to Run the Tests
 
-#### Running Tests with Docker
+#### Running Tests with Docker (recommended)
 
-*Prerequisites*
+Run the following command:
 
-If you are running on Linux:
-
-- Execute the commands `id -u` and `id -g`.
-- If the output isn't "1000", then copy the ".env.example" file as ".env", and change the value of the UID/GID variables.
-
-If you are running on Mac/Windows, docker should work out of the box (needs confirmation).
-
-*Steps*
-
-1. Install the project dependencies:
-
-    ```
-    make install
-    ```
-
-2. Run static code analysis (phpcs, phpstan) and tests (phpunit):
-
-    ```
-    make analyze test
-    ```
+```
+make analyse test
+```
 
 #### Running Tests Manually
 

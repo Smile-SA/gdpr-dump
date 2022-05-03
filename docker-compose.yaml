@@ -3,9 +3,9 @@ version: '3.4'
 services:
     app:
         build: 'docker/php-cli'
-        user: '${UID?UID must be set.}:${GID?GID must be set.}'
+        user: '${UID:-}:${GID:-}'
         environment:
-            COMPOSER_AUTH: '$COMPOSER_AUTH'
+            COMPOSER_AUTH: '${COMPOSER_AUTH:-}'
             DB_HOST: 'db'
         depends_on:
             - 'db'
