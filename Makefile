@@ -27,7 +27,7 @@ test: .env vendor ## Run phpunit.
 vendor: composer.json
 	$(PHP_CLI) composer install
 
-.env:
+.env: .env.example
 ifeq ($(UNAME), Linux)
 	@sed -e "s/^UID=.*/UID=$$(id -u)/" -e "s/^GID=.*/GID=$$(id -g)/" .env.example > .env
 	@echo ".env file was created with UID=$$(id -u) and GID=$$(id -g)"
