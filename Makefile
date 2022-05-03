@@ -24,7 +24,7 @@ analyse: .env vendor ## Run code analysis tools (phpcs, phpstan).
 test: .env vendor ## Run phpunit.
 	$(PHP_CLI) vendor/bin/phpunit
 
-vendor:
+vendor: composer.json
 	$(PHP_CLI) composer install
 
 .env:
