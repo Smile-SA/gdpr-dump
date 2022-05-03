@@ -12,6 +12,10 @@ gdpr-dump: .env vendor ## Run bin/gdpr-dump command. Example: make gdpr-dump arg
 	@$(eval args ?=)
 	$(PHP_CLI) bin/gdpr-dump $(args)
 
+.PHONY: compile
+compile: .env vendor ## Run bin/compile command.
+	$(PHP_CLI) bin/compile
+
 .PHONY: analyse
 analyse: .env vendor ## Run code analysis tools (phpcs, phpstan).
 	$(PHP_CLI) vendor/bin/phpcs && vendor/bin/phpstan analyse

@@ -22,7 +22,7 @@ To compile the phar:
 
 1. Fork the project, then clone it.
 2. Do whatever you need (add custom converters, custom templates...).
-3. Run the following command: `php -d phar.readonly=off bin/compile`.
+3. Run the following command: `make compile` (it might take a few minutes).
    This will create a file named "gdpr-dump.phar" in the folder "build/dist".
 
 ## Adding Custom Converters
