@@ -1,12 +1,27 @@
 UNAME := $(shell uname)
-PHP_CLI := docker compose run --rm app
+DOCKER_COMPOSE := docker compose
+PHP_CLI := $(DOCKER_COMPOSE) run --rm app
 
 default: help
 
 .PHONY: help
 help:
-	@awk 'BEGIN {FS = ":.*##"; printf "Usage: make \033[32m<target>\033[0m\n\n"} /^[a-zA-Z_-]+:.*?##/ { printf "\033[32m%-15s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+	@grep -E '(^[a-zA-Z0-9_-]+:.*?##)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "; printf "Usage: make \033[32m<target>\033[0m\n"}{printf "\033[32m%-15s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m## /\n[33m/'
 
+## Docker
+.PHONY: up
+up: ## Build and start containers.
+	$(DOCKER_COMPOSE) up -d --remove-orphans
+
+.PHONY: down
+down: ## Stop and remove containers.
+	$(DOCKER_COMPOSE) down --remove-orphans
+
+.PHONY: ps
+ps: ## List active containers.
+	$(DOCKER_COMPOSE) ps
+
+## GdprDump
 .PHONY: gdpr-dump
 gdpr-dump: .env vendor ## Run bin/gdpr-dump command. Example: make gdpr-dump c=test.yaml
 	@$(eval c ?=)
