@@ -24,11 +24,12 @@ analyse: .env vendor ## Run code analysis tools (phpcs, phpstan).
 test: .env vendor ## Run phpunit.
 	$(PHP_CLI) vendor/bin/phpunit
 
-vendor: composer.json
+vendor:
 	$(PHP_CLI) composer install
 
-.env: .env.example
+.env:
+	@cp .env.sample .env
 ifeq ($(UNAME), Linux)
-	@sed -e "s/^UID=.*/UID=$$(id -u)/" -e "s/^GID=.*/GID=$$(id -g)/" .env.example > .env
-	@echo ".env file was created with UID=$$(id -u) and GID=$$(id -g)"
+	@sed -i -e "s/^UID=.*/UID=$$(id -u)/" -e "s/^GID=.*/GID=$$(id -g)/" .env
 endif
+	@echo ".env file was automatically created."
