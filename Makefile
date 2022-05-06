@@ -28,7 +28,7 @@ vendor:
 	$(PHP_CLI) composer install
 
 .env:
-	@cp .env.sample .env
+	@cp .env.dist .env
 ifeq ($(UNAME), Linux)
 	@sed -i -e "s/^UID=.*/UID=$$(id -u)/" -e "s/^GID=.*/GID=$$(id -g)/" .env
 endif
