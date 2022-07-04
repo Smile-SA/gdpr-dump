@@ -232,8 +232,8 @@ Available filter operators:
 - `neq` (not equal to)
 - `gt` (greater than)
 - `lt` (less than)
-- `ge` (greater than or equal to)
-- `le` (less than or equal to)
+- `gte` (greater than or equal to)
+- `lte` (less than or equal to)
 - `like`
 - `notLike`
 - `isNull` (no value)
