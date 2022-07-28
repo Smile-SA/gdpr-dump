@@ -21,12 +21,12 @@ Features:
 
 Requirements:
 
-- PHP >= 7.4
+- PHP >= 7.3
 - MySQL or equivalent (MariaDB, Percona)
 
 ## Installation
 
-**Phar File**
+**Phar File (recommended)**
 
 A phar file is available for downloading in the [releases section](https://github.com/Smile-SA/gdpr-dump/releases).
 This is the recommended way to install this application.
