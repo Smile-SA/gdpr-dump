@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.3] - 2022-07-28
+[2.3.3]: https://github.com/Smile-SA/gdpr-dump/compare/2.3.2...2.3.3
+
+- Replace anonymization character for customer name in magento2 template (fixes a validation error)
+
 ## [2.3.2] - 2022-02-21
 [2.3.2]: https://github.com/Smile-SA/gdpr-dump/compare/2.3.1...2.3.2
 

@@ -74,10 +74,16 @@ tables:
                 unique: true
             firstname:
                 converter: 'anonymizeText'
+                parameters:
+                    replacement: 'x'
             middlename:
                 converter: 'anonymizeText'
+                parameters:
+                    replacement: 'x'
             lastname:
                 converter: 'anonymizeText'
+                parameters:
+                    replacement: 'x'
             dob:
                 converter: 'anonymizeDate'
             password_hash:
