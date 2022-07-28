@@ -18,14 +18,7 @@ class SortOrder
      */
     public const DIRECTION_DESC = 'DESC';
 
-    /**
-     * @var string
-     */
     private string $column;
-
-    /**
-     * @var string
-     */
     private string $direction;
 
     /**

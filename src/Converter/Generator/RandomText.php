@@ -11,24 +11,9 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class RandomText implements ConverterInterface
 {
-    /**
-     * @var string
-     */
     protected string $characters;
-
-    /**
-     * @var int
-     */
     private int $minLength;
-
-    /**
-     * @var int
-     */
     private int $maxLength;
-
-    /**
-     * @var int
-     */
     private int $charactersCount;
 
     /**

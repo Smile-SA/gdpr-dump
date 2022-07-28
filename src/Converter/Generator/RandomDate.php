@@ -12,29 +12,10 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class RandomDate implements ConverterInterface
 {
-    /**
-     * @var string
-     */
     protected string $defaultFormat = 'Y-m-d';
-
-    /**
-     * @var DateTime
-     */
     protected DateTime $date;
-
-    /**
-     * @var string
-     */
     private string $format;
-
-    /**
-     * @var int
-     */
     private int $minYear;
-
-    /**
-     * @var int
-     */
     private int $maxYear;
 
     /**

@@ -11,14 +11,7 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class Replace implements ConverterInterface
 {
-    /**
-     * @var string
-     */
     private string $search;
-
-    /**
-     * @var string
-     */
     private string $replacement;
 
     /**

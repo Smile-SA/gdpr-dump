@@ -7,19 +7,12 @@ namespace Smile\GdprDump\Config\Compiler\Processor\Version;
 class VersionCondition
 {
     /**
-     * @var string
-     */
-    private string $version;
-
-    /**
-     * @var string
-     */
-    private string $operator;
-
-    /**
      * @var string[]
      */
     private static array $versionOperators = ['<', '>', '<=', '>=', '<>'];
+
+    private string $version;
+    private string $operator;
 
     /**
      * @param string $condition

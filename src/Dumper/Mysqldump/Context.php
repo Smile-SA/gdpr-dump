@@ -10,24 +10,9 @@ use Smile\GdprDump\Dumper\Config\DumperConfig;
 
 class Context
 {
-    /**
-     * @var Mysqldump
-     */
     private Mysqldump $dumper;
-
-    /**
-     * @var Database
-     */
     private Database $database;
-
-    /**
-     * @var DumperConfig
-     */
     private DumperConfig $config;
-
-    /**
-     * @var array
-     */
     private array $dumperContext;
 
     /**

@@ -10,15 +10,10 @@ use RuntimeException;
 
 class ConverterResolver
 {
-    /**
-     * @var array
-     */
     private array $pathsByNamespace = [];
 
     /**
      * e.g. ['unique' => 'Smile\GdprDump\Converter\Proxy\Unique', ...]
-     *
-     * @var array|null
      */
     private ?array $resolved = null;
 

@@ -11,9 +11,6 @@ use stdClass;
 
 class JsonSchemaValidatorTest extends TestCase
 {
-    /**
-     * @var JsonSchemaValidator
-     */
     private JsonSchemaValidator $validator;
 
     /**

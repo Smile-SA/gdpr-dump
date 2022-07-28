@@ -6,9 +6,6 @@ namespace Smile\GdprDump\Config\Loader;
 
 class FileLocator implements FileLocatorInterface
 {
-    /**
-     * @var string
-     */
     private string $templatesDirectory;
 
     /**

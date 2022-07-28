@@ -14,9 +14,6 @@ use Symfony\Component\Finder\Finder;
  */
 class Compiler
 {
-    /**
-     * @var string
-     */
     private string $basePath;
 
     /**

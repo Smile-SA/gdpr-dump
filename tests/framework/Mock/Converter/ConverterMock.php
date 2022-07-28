@@ -8,9 +8,6 @@ use Smile\GdprDump\Converter\ConverterInterface;
 
 class ConverterMock implements ConverterInterface
 {
-    /**
-     * @var string
-     */
     private string $prefix = 'test_';
 
     /**

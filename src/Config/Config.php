@@ -10,9 +10,6 @@ use Smile\GdprDump\Config\Compiler\Processor\VersionProcessor;
 
 class Config implements ConfigInterface
 {
-    /**
-     * @var array
-     */
     private array $items;
 
     /**

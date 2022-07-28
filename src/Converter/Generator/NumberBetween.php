@@ -11,14 +11,7 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class NumberBetween implements ConverterInterface
 {
-    /**
-     * @var int
-     */
     private int $min;
-
-    /**
-     * @var int
-     */
     private int $max;
 
     /**

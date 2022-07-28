@@ -12,9 +12,6 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class Unique implements ConverterInterface
 {
-    /**
-     * @var ConverterInterface
-     */
     private ConverterInterface $converter;
 
     /**

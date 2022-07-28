@@ -19,14 +19,7 @@ use UnexpectedValueException;
  */
 class AppKernel
 {
-    /**
-     * @var ContainerInterface
-     */
     private ContainerInterface $container;
-
-    /**
-     * @var bool
-     */
     private bool $booted = false;
 
     /**

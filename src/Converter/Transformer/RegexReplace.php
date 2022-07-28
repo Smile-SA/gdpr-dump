@@ -12,19 +12,8 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class RegexReplace implements ConverterInterface
 {
-    /**
-     * @var string
-     */
     private string $pattern;
-
-    /**
-     * @var string
-     */
     private string $replacement;
-
-    /**
-     * @var int
-     */
     private int $limit;
 
     /**

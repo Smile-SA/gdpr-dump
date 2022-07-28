@@ -11,9 +11,6 @@ use Smile\GdprDump\Tests\Functional\TestCase;
 
 class SqlDumperTest extends TestCase
 {
-    /**
-     * @var string
-     */
     private string $dumpFile;
 
     /**

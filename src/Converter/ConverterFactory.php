@@ -15,14 +15,7 @@ use UnexpectedValueException;
 
 class ConverterFactory
 {
-    /**
-     * @var ConverterResolver
-     */
     private ConverterResolver $converterResolver;
-
-    /**
-     * @var FakerService
-     */
     private FakerService $faker;
 
     /**

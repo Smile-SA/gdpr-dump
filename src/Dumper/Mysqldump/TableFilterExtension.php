@@ -16,19 +16,8 @@ use UnexpectedValueException;
 
 class TableFilterExtension implements ExtensionInterface
 {
-    /**
-     * @var Connection
-     */
     private Connection $connection;
-
-    /**
-     * @var MetadataInterface
-     */
     private MetadataInterface $metadata;
-
-    /**
-     * @var DumperConfig
-     */
     private DumperConfig $config;
 
     /**

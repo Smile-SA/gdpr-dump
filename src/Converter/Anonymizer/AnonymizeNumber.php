@@ -11,19 +11,8 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class AnonymizeNumber implements ConverterInterface
 {
-    /**
-     * @var string
-     */
     private string $replacement;
-
-    /**
-     * @var int
-     */
     private int $minNumberLength;
-
-    /**
-     * @var bool
-     */
     private bool $multiByteEnabled;
 
     /**

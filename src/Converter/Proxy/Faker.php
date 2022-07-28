@@ -12,19 +12,8 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class Faker implements ConverterInterface
 {
-    /**
-     * @var Generator
-     */
     private Generator $faker;
-
-    /**
-     * @var string
-     */
     private string $formatter;
-
-    /**
-     * @var array
-     */
     private array $arguments;
 
     /**

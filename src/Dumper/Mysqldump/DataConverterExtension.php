@@ -11,19 +11,8 @@ use Smile\GdprDump\Faker\FakerService;
 
 class DataConverterExtension implements ExtensionInterface
 {
-    /**
-     * @var ConverterFactory
-     */
     private ConverterFactory $converterFactory;
-
-    /**
-     * @var FakerService
-     */
     private FakerService $faker;
-
-    /**
-     * @var array
-     */
     private array $context = [];
 
     /**

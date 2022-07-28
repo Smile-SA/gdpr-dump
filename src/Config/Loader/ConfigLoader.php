@@ -11,19 +11,8 @@ use Smile\GdprDump\Config\Parser\ParserInterface;
 
 class ConfigLoader implements ConfigLoaderInterface
 {
-    /**
-     * @var ConfigInterface
-     */
     private ConfigInterface $config;
-
-    /**
-     * @var ParserInterface
-     */
     private ParserInterface $parser;
-
-    /**
-     * @var FileLocatorInterface
-     */
     private FileLocatorInterface $fileLocator;
 
     /**

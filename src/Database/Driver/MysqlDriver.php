@@ -8,9 +8,6 @@ use Doctrine\DBAL\Connection;
 
 class MysqlDriver implements DriverInterface
 {
-    /**
-     * @var Connection
-     */
     private Connection $connection;
 
     /**

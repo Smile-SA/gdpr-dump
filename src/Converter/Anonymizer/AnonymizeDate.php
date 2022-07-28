@@ -13,14 +13,7 @@ use UnexpectedValueException;
 
 class AnonymizeDate implements ConverterInterface
 {
-    /**
-     * @var string
-     */
     protected string $defaultFormat = 'Y-m-d';
-
-    /**
-     * @var string
-     */
     private string $format;
 
     /**

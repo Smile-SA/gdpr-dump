@@ -23,24 +23,9 @@ use Symfony\Component\Console\Question\Question;
  */
 class DumpCommand extends Command
 {
-    /**
-     * @var DumperInterface
-     */
     private DumperInterface $dumper;
-
-    /**
-     * @var ConfigInterface
-     */
     private ConfigInterface $config;
-
-    /**
-     * @var ConfigLoaderInterface
-     */
     private ConfigLoaderInterface $configLoader;
-
-    /**
-     * @var ValidatorInterface
-     */
     private ValidatorInterface $validator;
 
     /**

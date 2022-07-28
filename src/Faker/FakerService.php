@@ -9,14 +9,7 @@ use Faker\Generator;
 
 class FakerService
 {
-    /**
-     * @var Generator|null
-     */
     private ?Generator $generator = null;
-
-    /**
-     * @var string
-     */
     private string $locale;
 
     /**

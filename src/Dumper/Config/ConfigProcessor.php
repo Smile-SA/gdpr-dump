@@ -9,9 +9,6 @@ use Smile\GdprDump\Database\Metadata\MetadataInterface;
 
 class ConfigProcessor
 {
-    /**
-     * @var MetadataInterface
-     */
     private MetadataInterface $metadata;
 
     /**

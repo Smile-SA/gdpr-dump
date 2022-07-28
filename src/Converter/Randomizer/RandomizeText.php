@@ -11,19 +11,8 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class RandomizeText implements ConverterInterface
 {
-    /**
-     * @var int
-     */
     private int $minLength;
-
-    /**
-     * @var string
-     */
     private string $replacements;
-
-    /**
-     * @var int
-     */
     private int $replacementsCount;
 
     /**

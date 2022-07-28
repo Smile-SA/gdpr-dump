@@ -12,9 +12,6 @@ use Smile\GdprDump\Util\ArrayHelper;
 
 class FromContext implements ConverterInterface
 {
-    /**
-     * @var string
-     */
     private string $key;
 
     /**

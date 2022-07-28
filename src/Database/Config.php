@@ -8,24 +8,9 @@ use UnexpectedValueException;
 
 class Config implements ConfigInterface
 {
-    /**
-     * @var string
-     */
     private string $driver = 'pdo_mysql';
-
-    /**
-     * @var array
-     */
     private array $driverOptions = [];
-
-    /**
-     * @var array
-     */
     private array $connectionParams = [];
-
-    /**
-     * @var array
-     */
     private array $defaults = [
         'pdo_mysql' => ['host' => 'localhost', 'user' => 'root'],
     ];

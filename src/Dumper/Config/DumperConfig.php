@@ -47,9 +47,6 @@ class DumperConfig
      */
     private array $tablesToSort = [];
 
-    /**
-     * @var array
-     */
     private array $dumpSettings = [
         'output' => 'php://stdout',
         'compress' => Mysqldump::NONE,
@@ -79,17 +76,11 @@ class DumperConfig
         'skip_definer' => false,
     ];
 
-    /**
-     * @var array
-     */
     private array $filterPropagationSettings = [
         'enabled' => true,
         'ignored_foreign_keys' => [],
     ];
 
-    /**
-     * @var array
-     */
     private array $fakerSettings = [
         'locale' => null,
     ];

@@ -25,24 +25,9 @@ use UnexpectedValueException;
  */
 class Database implements DatabaseInterface
 {
-    /**
-     * @var Connection
-     */
     private Connection $connection;
-
-    /**
-     * @var DriverInterface
-     */
     private DriverInterface $driver;
-
-    /**
-     * @var MetadataInterface
-     */
     private MetadataInterface $metadata;
-
-    /**
-     * @var ConfigInterface
-     */
     private ConfigInterface $config;
 
     /**

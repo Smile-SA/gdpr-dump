@@ -12,19 +12,8 @@ class Parameter
     public const TYPE_FLOAT = 'float';
     public const TYPE_ARRAY = 'array';
 
-    /**
-     * @var string
-     */
     private string $name;
-
-    /**
-     * @var string|null
-     */
     private ?string $type;
-
-    /**
-     * @var bool
-     */
     private bool $required;
 
     /**

@@ -6,8 +6,5 @@ namespace Smile\GdprDump\Converter\Anonymizer;
 
 class AnonymizeDateTime extends AnonymizeDate
 {
-    /**
-     * @inheritdoc
-     */
     protected string $defaultFormat = 'Y-m-d H:i:s';
 }

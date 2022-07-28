@@ -11,10 +11,10 @@ use UnexpectedValueException;
 
 class TableConfig
 {
-    /**
-     * @var string
-     */
     private string $name;
+    private ?int $limit = null;
+    private array $converters = [];
+    private string $skipCondition = '';
 
     /**
      * @var Filter[]
@@ -25,21 +25,6 @@ class TableConfig
      * @var SortOrder[]
      */
     private array $sortOrders = [];
-
-    /**
-     * @var int|null
-     */
-    private ?int $limit = null;
-
-    /**
-     * @var array
-     */
-    private array $converters = [];
-
-    /**
-     * @var string
-     */
-    private string $skipCondition = '';
 
     /**
      * @param string $tableName

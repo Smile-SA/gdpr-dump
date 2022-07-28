@@ -15,9 +15,6 @@ class AnonymizeEmail extends AnonymizeText
      */
     private array $domains;
 
-    /**
-     * @var int
-     */
     private int $domainsCount;
 
     /**

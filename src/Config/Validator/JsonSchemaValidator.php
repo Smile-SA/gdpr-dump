@@ -9,14 +9,7 @@ use JsonSchema\Validator;
 
 class JsonSchemaValidator implements ValidatorInterface
 {
-    /**
-     * @var Validator|null
-     */
     private ?Validator $schemaValidator = null;
-
-    /**
-     * @var string
-     */
     private string $schemaFile;
 
     /**

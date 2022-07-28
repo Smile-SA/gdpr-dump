@@ -8,9 +8,6 @@ use Smile\GdprDump\Converter\ConverterInterface;
 
 class ToLower implements ConverterInterface
 {
-    /**
-     * @var bool
-     */
     private bool $multiByteEnabled;
 
     /**

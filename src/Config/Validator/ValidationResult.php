@@ -6,13 +6,10 @@ namespace Smile\GdprDump\Config\Validator;
 
 class ValidationResult implements ValidationResultInterface
 {
-    /**
-     * @var bool
-     */
     private bool $valid = false;
 
     /**
-     * @var array
+     * @var string[]
      */
     private array $messages = [];
 

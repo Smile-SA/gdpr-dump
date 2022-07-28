@@ -12,19 +12,8 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class Conditional implements ConverterInterface
 {
-    /**
-     * @var string
-     */
     private string $condition;
-
-    /**
-     * @var ConverterInterface|null
-     */
     private ?ConverterInterface $ifTrueConverter = null;
-
-    /**
-     * @var ConverterInterface|null
-     */
     private ?ConverterInterface $ifFalseConverter = null;
 
     /**

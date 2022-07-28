@@ -6,25 +6,14 @@ namespace Smile\GdprDump\Database\Metadata\Definition\Constraint;
 
 class ForeignKey
 {
-    /**
-     * @var string
-     */
     private string $constraintName;
-
-    /**
-     * @var string
-     */
     private string $localTableName;
+    private string $foreignTableName;
 
     /**
      * @var string[]
      */
     private array $localColumns;
-
-    /**
-     * @var string
-     */
-    private string $foreignTableName;
 
     /**
      * @var string[]

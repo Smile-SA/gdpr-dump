@@ -8,9 +8,6 @@ use TheSeer\Tokenizer\Tokenizer;
 
 class QueryValidator
 {
-    /**
-     * @var Tokenizer
-     */
     private Tokenizer $tokenizer;
 
     /**

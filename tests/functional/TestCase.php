@@ -15,14 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class TestCase extends BaseTestCase
 {
-    /**
-     * @var AppKernel|null
-     */
     protected static ?AppKernel $kernel = null;
-
-    /**
-     * @var Database|null
-     */
     protected static ?Database $database = null;
 
     /**

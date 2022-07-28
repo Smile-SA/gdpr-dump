@@ -11,9 +11,6 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class PrependText implements ConverterInterface
 {
-    /**
-     * @var string
-     */
     private string $prefix;
 
     /**

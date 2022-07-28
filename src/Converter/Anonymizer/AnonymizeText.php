@@ -16,19 +16,8 @@ class AnonymizeText implements ConverterInterface
      */
     private array $delimiters;
 
-    /**
-     * @var string
-     */
     private string $replacement;
-
-    /**
-     * @var int
-     */
     private int $minWordLength;
-
-    /**
-     * @var bool
-     */
     private bool $multiByteEnabled;
 
     /**

@@ -10,15 +10,9 @@ use Smile\GdprDump\Dumper\Config\DumperConfig;
 
 class TableDependencyResolver
 {
-    /**
-     * @var MetadataInterface
-     */
     private MetadataInterface $metadata;
-
-    /**
-     * @var DumperConfig
-     */
     private DumperConfig $config;
+    private bool $resolved = false;
 
     /**
      * Foreign keys by referenced table name.
@@ -27,11 +21,6 @@ class TableDependencyResolver
      * @var ForeignKey[][]
      */
     private array $foreignKeys = [];
-
-    /**
-     * @var bool
-     */
-    private bool $resolved = false;
 
     /**
      * @param MetadataInterface $metadata

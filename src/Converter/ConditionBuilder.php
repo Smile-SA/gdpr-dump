@@ -10,9 +10,6 @@ use TheSeer\Tokenizer\Token;
 
 class ConditionBuilder
 {
-    /**
-     * @var Tokenizer
-     */
     private Tokenizer $tokenizer;
 
     /**

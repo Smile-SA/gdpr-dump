@@ -10,9 +10,6 @@ use Smile\GdprDump\Tests\Unit\TestCase;
 
 class JsonSchemaValidatorTest extends TestCase
 {
-    /**
-     * @var string
-     */
     private string $schemaFile;
 
     /**

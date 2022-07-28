@@ -15,9 +15,6 @@ class RandomizeEmail extends RandomizeText
      */
     private array $domains;
 
-    /**
-     * @var int
-     */
     private int $domainsCount;
 
     /**

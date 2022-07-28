@@ -39,14 +39,7 @@ class Filter
         self::OPERATOR_NOT_IN,
     ];
 
-    /**
-     * @var string
-     */
     private string $column;
-
-    /**
-     * @var string
-     */
     private string $operator;
 
     /**
