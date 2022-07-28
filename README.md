@@ -21,7 +21,7 @@ Features:
 
 Requirements:
 
-- PHP >= 7.3
+- PHP >= 7.4
 - MySQL or equivalent (MariaDB, Percona)
 
 ## Installation
@@ -35,7 +35,8 @@ The following table lists the requirements of each major version:
 
 **GdprDump Version** | **PHP Requirement**
 ---|---
-2.x (latest) | PHP >= 7.3
+3.x (latest) | PHP >= 7.4
+2.x | PHP >= 7.3
 1.x | PHP >= 7.0
 
 **With Composer**
