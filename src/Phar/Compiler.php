@@ -140,7 +140,6 @@ class Compiler
                 ->notPath(
                     [
                         'bin/',
-                        'justinrainbow/json-schema/demo/',
                         '#fakerphp/faker/src/Faker/Provider/(?!' . implode('|', $this->locales) . ')[a-zA-Z_]+/#',
                     ]
                 ),
