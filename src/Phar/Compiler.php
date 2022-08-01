@@ -42,11 +42,13 @@ class Compiler
             unlink($fileName);
         }
 
-        $directory = pathinfo($fileName, PATHINFO_DIRNAME);
-        if (!is_dir($directory)) {
-            $this->createDirectory($directory);
+        // Create the build directory if it does not already exist
+        $buildDir = pathinfo($fileName, PATHINFO_DIRNAME);
+        if (!is_dir($buildDir) && !mkdir($buildDir, 0775, true)) {
+            throw new RuntimeException(sprintf('Failed to create the directory "%s".', $buildDir));
         }
 
+        // Create the phar file
         $phar = new Phar($fileName, 0, 'gdpr-dump.phar');
         $phar->setSignatureAlgorithm(Phar::SHA1);
         $phar->startBuffering();
@@ -113,29 +115,18 @@ class Compiler
     }
 
     /**
-     * Create a directory.
-     *
-     * @param string $path
-     * @throws RuntimeException
-     */
-    private function createDirectory(string $path): void
-    {
-        if (!mkdir($path, 0775, true)) {
-            throw new RuntimeException(sprintf('Failed to create the directory "%s".', $path));
-        }
-    }
-
-    /**
      * Get the file locators.
      *
      * @return Finder[]
      */
     private function getFinders(): array
     {
+        $finder = fn(string $directory) => (new Finder())->files()->in($directory);
+
         return [
-            $this->createFinder($this->basePath . '/src')
+            $finder($this->basePath . '/src')
                 ->name(['*.php']),
-            $this->createFinder($this->basePath . '/vendor')
+            $finder($this->basePath . '/vendor')
                 ->name(['*.php'])
                 ->notPath(
                     [
@@ -143,23 +134,9 @@ class Compiler
                         '#fakerphp/faker/src/Faker/Provider/(?!' . implode('|', $this->locales) . ')[a-zA-Z_]+/#',
                     ]
                 ),
-            $this->createFinder($this->basePath . '/app')
+            $finder($this->basePath . '/app')
                 ->notName(['example.yaml']),
         ];
-    }
-
-    /**
-     * Create a finder object.
-     *
-     * @param string $directory
-     * @return Finder
-     */
-    private function createFinder(string $directory): Finder
-    {
-        $finder = new Finder();
-
-        return $finder->files()
-            ->in($directory);
     }
 
     /**
