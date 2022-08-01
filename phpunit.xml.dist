@@ -11,12 +11,6 @@
         <env name="DB_NAME" value="tests"/>
     </php>
 
-    <coverage processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">./src</directory>
-        </include>
-    </coverage>
-
     <testsuites>
         <testsuite name="functional">
             <directory>./tests/functional</directory>

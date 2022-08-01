@@ -10,9 +10,6 @@ use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 use UnexpectedValueException;
 
-/**
- * @codeCoverageIgnore
- */
 class Compiler
 {
     private string $basePath;

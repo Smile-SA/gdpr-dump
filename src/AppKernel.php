@@ -14,9 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use UnexpectedValueException;
 
-/**
- * @codeCoverageIgnore
- */
 class AppKernel
 {
     private ContainerInterface $container;
