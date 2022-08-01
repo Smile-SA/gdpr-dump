@@ -23,7 +23,7 @@ ps: ## List active containers.
 
 ## GdprDump
 .PHONY: gdpr-dump
-gdpr-dump: .env vendor ## Run bin/gdpr-dump command. Example: make gdpr-dump c=test.yaml
+gdpr-dump: .env vendor ## Run bin/gdpr-dump command. Example: "make gdpr-dump c=test.yaml"
 	@$(eval c ?=)
 	$(PHP_CLI) bin/gdpr-dump $(c)
 
@@ -32,8 +32,10 @@ compile: .env vendor ## Run bin/compile command.
 	$(PHP_CLI) bin/compile
 
 .PHONY: analyse
-analyse: .env vendor ## Run code analysis tools (phpcs, phpstan).
-	$(PHP_CLI) vendor/bin/parallel-lint src tests && vendor/bin/phpcs && vendor/bin/phpstan analyse
+analyse: .env vendor ## Run code analysis tools (parallel-lint, phpcs, phpstan).
+	$(PHP_CLI) vendor/bin/parallel-lint src tests
+	$(PHP_CLI) vendor/bin/phpcs
+	$(PHP_CLI) vendor/bin/phpstan analyse
 
 .PHONY: test
 test: .env vendor ## Run phpunit.
