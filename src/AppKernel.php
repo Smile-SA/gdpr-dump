@@ -24,16 +24,18 @@ class AppKernel
 
     /**
      * Run the application.
+     *
+     * @param string $command
      */
-    public function run(): void
+    public function run(string $command = 'command.dump'): void
     {
         $this->boot();
         $application = new Application();
 
-        /** @var Command $command */
-        $command = $this->container->get('command.dump');
-        $application->add($command);
-        $application->setDefaultCommand($command->getName(), true);
+        /** @var Command $defaultCommand */
+        $defaultCommand = $this->container->get($command);
+        $application->add($defaultCommand);
+        $application->setDefaultCommand($defaultCommand->getName(), true);
         $application->run();
     }
 
@@ -101,15 +103,6 @@ class AppKernel
 
         $container->setParameter('app_root', $basePath);
         $container->compile();
-
-        $locale = $container->getParameter('faker.locale');
-        $installedLocales = $container->getParameter('faker.installed_locales');
-
-        if (!in_array($locale, $installedLocales, true)) {
-            throw new UnexpectedValueException(
-                sprintf('Locale "%s" is missing from "faker.installed_locales" in app/config/services.yaml.', $locale)
-            );
-        }
 
         return $container;
     }

@@ -8,6 +8,7 @@ use Phar;
 use RuntimeException;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
+use UnexpectedValueException;
 
 /**
  * @codeCoverageIgnore
@@ -28,6 +29,12 @@ class Compiler
     {
         $this->basePath = dirname(__DIR__, 2);
         $this->locales = $locales;
+
+        foreach ($locales as $locale) {
+            if (!is_dir($this->basePath . '/vendor/fakerphp/faker/src/Faker/Provider/' . $locale)) {
+                throw new UnexpectedValueException(sprintf('Faker does not support the locale "%s".', $locale));
+            }
+        }
     }
 
     /**

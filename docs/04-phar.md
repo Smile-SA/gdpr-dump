@@ -5,7 +5,7 @@
 - [How to Compile the Phar](#how-to-compile-the-phar)
 - [Adding Custom Converters](#adding-custom-converters)
 - [Adding Custom Templates](#adding-custom-templates)
-- [Adding Faker Locales](#adding-faker-locales)
+- [Faker Locales](#faker-locales)
 
 ## How to Compile the Phar
 
@@ -37,22 +37,32 @@ To add converters, there are only two requirements:
 Templates are located in the directory "app/config/templates".
 The files must use the `.yaml` extension.
 
-## Adding Faker Locales
+## Faker Locales
 
-By default, the phar file is bundled with the en_US locale of Faker.
-It does not contain the other locales.
+By default, the phar file is only bundled with the "en_US" locale (to reduce the phar file size).
 
-To add other locales, you must edit the following parameters in app/config/services.yaml:
+### Changing the Default Locale
 
-- `faker.locale`: the locale used by default
-- `faker.installed_locales`: the locales that are included in the compiled phar
-
-For example, to replace the `en_US` locale by `fr_FR`:
+The locale used by default is defined by the parameter `faker.locale` in app/services.yaml.
+For example, to change the default locale to "fr_FR":
 
 ```yaml
+parameters:
+    # ...
     faker.locale: 'fr_FR'
-    faker.installed_locales:
-        - 'fr_FR'
 ```
+
+This locale is automatically added to the phar file during the compilation process.
+
+### Adding Multiple Locales
+
+To add multiple locales to the phar file, you must compile it with the `--locale` option.
+For example, to compile a phar file that includes "de_DE" and "fr_FR":
+
+```
+docker compose run --rm app bin/compile --locale=de_DE --locale=fr_FR
+```
+
+The default locale can be omitted, it is automatically added to the phar file.
 
 Available locales can be found in the official [faker documentation](https://fakerphp.github.io/).

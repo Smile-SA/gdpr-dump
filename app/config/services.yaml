@@ -3,14 +3,18 @@ parameters:
     config.schema_file: '%app_root%/app/config/schema.json'
     config.templates_dir: '%app_root%/app/config/templates'
     faker.locale: 'en_US'
-    faker.installed_locales:
-        - 'en_US'
 
 services:
     _defaults:
         autowire: false # not phar friendly
         autoconfigure: false # not useful in this app
         public: false
+
+    command.compile:
+        class: 'Smile\GdprDump\Console\Command\CompileCommand'
+        public: true
+        arguments:
+            - '%faker.locale%'
 
     command.dump:
         class: 'Smile\GdprDump\Console\Command\DumpCommand'
