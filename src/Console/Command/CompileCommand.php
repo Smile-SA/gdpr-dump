@@ -61,7 +61,9 @@ class CompileCommand extends Command
 
         $output->writeln('');
         $output->writeln(sprintf('<info>The phar file was created in "%s".</info>', $fileName));
-        $output->writeln(sprintf('<info>It is bundled with the following Faker locales: %s.</info>', implode(', ', $locales)));
+        $output->writeln(
+            sprintf('<info>It is bundled with the following Faker locales: %s.</info>', implode(', ', $locales))
+        );
 
         return 0;
     }
