@@ -53,9 +53,15 @@ class CompileCommand extends Command
             $locales[] = $this->defaultLocale;
         }
 
+        $output->writeln('<comment>Creating the phar file, please wait...</comment>');
+
         $fileName = $this->getPharFileName();
         $compiler = new Compiler($locales);
         $compiler->compile($fileName);
+
+        $output->writeln('');
+        $output->writeln(sprintf('<info>The phar file was created in "%s".</info>', $fileName));
+        $output->writeln(sprintf('<info>It is bundled with the following Faker locales: %s.</info>', implode(', ', $locales)));
 
         return 0;
     }
