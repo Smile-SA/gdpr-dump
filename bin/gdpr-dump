@@ -3,9 +3,7 @@
 
 use Smile\GdprDump\AppKernel;
 
-// Initialize autoload
 require dirname(__DIR__) . '/app/bootstrap.php';
 
-// Run the console application
 $application = new AppKernel();
 $application->run();
