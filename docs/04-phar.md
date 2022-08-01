@@ -43,7 +43,7 @@ By default, the phar file is only bundled with the "en_US" locale (to reduce the
 
 ### Changing the Default Locale
 
-The locale used by default is defined by the parameter `faker.locale` in app/services.yaml.
+The locale used by default is defined by the parameter `faker.locale` in app/config/services.yaml.
 For example, to change the default locale to "fr_FR":
 
 ```yaml

@@ -39,7 +39,7 @@ class CompileCommand extends Command
                 null,
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
                 // phpcs:ignore Generic.Files.LineLength.TooLong
-                'Faker locale(s) added to the phar file (e.g. "en_US"). The default locale defined in app/services.yaml is always added to the phar file'
+                'Faker locale(s) added to the phar file (e.g. "en_US"). The default locale defined in app/config/services.yaml is always added to the phar file'
             );
     }
 
