@@ -52,6 +52,7 @@ make analyse test
 Run the following commands:
 
 ```
+vendor/bin/parallel-lint src tests
 vendor/bin/phpcs
 vendor/bin/phpstan analyse
 vendor/bin/phpunit

@@ -33,7 +33,7 @@ compile: .env vendor ## Run bin/compile command.
 
 .PHONY: analyse
 analyse: .env vendor ## Run code analysis tools (phpcs, phpstan).
-	$(PHP_CLI) vendor/bin/phpcs && vendor/bin/phpstan analyse
+	$(PHP_CLI) vendor/bin/parallel-lint src tests && vendor/bin/phpcs && vendor/bin/phpstan analyse
 
 .PHONY: test
 test: .env vendor ## Run phpunit.
