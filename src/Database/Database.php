@@ -111,7 +111,7 @@ class Database implements DatabaseInterface
         // Remove empty elements
         $params = array_filter(
             $params,
-            fn ($value) => $value !== null && $value !== '' && $value !== false
+            fn($value) => $value !== null && $value !== '' && $value !== false
         );
 
         // Set the driver
