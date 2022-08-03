@@ -12,7 +12,7 @@
     <!-- Show sniff codes -->
     <arg value="s"/>
 
-    <!-- PSR12 coding standard -->
+    <!-- PSR-12 coding standard -->
     <rule ref="PSR12"/>
 
     <!-- Generic rules not included in PSR-12 -->
@@ -31,40 +31,15 @@
         </properties>
     </rule>
     <rule ref="Generic.PHP.BacktickOperator"/>
+    <rule ref="Generic.PHP.DeprecatedFunctions"/>
     <rule ref="Generic.PHP.DisallowShortOpenTag">
         <exclude name="Generic.PHP.DisallowShortOpenTag.EchoFound"/>
     </rule>
     <rule ref="Generic.PHP.DiscourageGoto"/>
-    <rule ref="Generic.PHP.DeprecatedFunctions"/>
     <rule ref="Generic.PHP.SAPIUsage"/>
     <rule ref="Generic.Strings.UnnecessaryStringConcat">
         <properties>
             <property name="allowMultiline" value="true"/>
-        </properties>
-    </rule>
-
-    <!-- Looks for unused imports from other namespaces -->
-    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
-        <properties>
-            <property name="searchAnnotations" value="true"/>
-        </properties>
-    </rule>
-
-    <!-- Enforces no empty line before/after opening class/interface/trait brace -->
-    <rule ref="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces">
-        <properties>
-            <property name="linesCountAfterOpeningBrace" value="0"/>
-            <property name="linesCountBeforeClosingBrace" value="0"/>
-        </properties>
-    </rule>
-
-    <!-- Enforces having declare(strict_types=1) at the top of each PHP file -->
-    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
-        <properties>
-            <property name="declareOnFirstLine" value="false"/>
-            <property name="linesCountBeforeDeclare" value="1"/>
-            <property name="linesCountAfterDeclare" value="1"/>
-            <property name="spacesCountAroundEqualsSign" value="0"/>
         </properties>
     </rule>
 
@@ -84,14 +59,22 @@
     <!-- This sniff enforces trailing commas in multi-line arrays -->
     <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
 
+    <!-- Disallows using public properties -->
+    <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty"/>
+
+    <!-- Enforces no empty line before/after opening class/interface/trait brace -->
+    <rule ref="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces">
+        <properties>
+            <property name="linesCountAfterOpeningBrace" value="0"/>
+            <property name="linesCountBeforeClosingBrace" value="0"/>
+        </properties>
+    </rule>
+
     <!-- Checks that there is exactly one blank line between different class members -->
     <rule ref="SlevomatCodingStandard.Classes.ClassMemberSpacing"/>
 
     <!-- Checks that there is exactly one blank line between class methods -->
     <rule ref="SlevomatCodingStandard.Classes.MethodSpacing"/>
-
-    <!-- Disallows using public properties -->
-    <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty"/>
 
     <!-- Enforces configurable number of lines before first use, after last use and between two use statements -->
     <rule ref="SlevomatCodingStandard.Classes.TraitUseSpacing">
@@ -167,6 +150,13 @@
         </properties>
     </rule>
 
+    <!-- Looks for unused imports from other namespaces -->
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+        <properties>
+            <property name="searchAnnotations" value="true"/>
+        </properties>
+    </rule>
+
     <!-- Disallows direct call of __invoke() -->
     <rule ref="SlevomatCodingStandard.PHP.DisallowDirectMagicInvokeCall"/>
 
@@ -202,6 +192,16 @@
 
     <!-- Looks for useless variables -->
     <rule ref="SlevomatCodingStandard.Variables.UselessVariable"/>
+
+    <!-- Enforces having declare(strict_types=1) at the top of each PHP file -->
+    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
+        <properties>
+            <property name="declareOnFirstLine" value="false"/>
+            <property name="linesCountBeforeDeclare" value="1"/>
+            <property name="linesCountAfterDeclare" value="1"/>
+            <property name="spacesCountAroundEqualsSign" value="0"/>
+        </properties>
+    </rule>
 
     <!-- Enforces using shorthand scalar typehints -->
     <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
