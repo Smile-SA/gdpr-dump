@@ -20,7 +20,7 @@ class ParameterProcessor
      * @param mixed $default
      * @return $this
      */
-    public function addParameter(string $name, string $type = null, bool $required = false, $default = null): self
+    public function addParameter(string $name, ?string $type = null, bool $required = false, $default = null): self
     {
         $this->parameters[] = new Parameter($name, $type, $required, $default);
 

@@ -79,7 +79,7 @@ class AppKernel
     {
         set_error_handler(function (int $severity, string $message, string $file, int $line): bool {
             // Error was suppressed with the "@" operator
-            if (0 === error_reporting()) {
+            if (error_reporting() === 0) {
                 return false;
             }
 

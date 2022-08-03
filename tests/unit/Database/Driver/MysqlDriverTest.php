@@ -38,7 +38,6 @@ class MysqlDriverTest extends TestCase
         $connectionMock->method('getParams')
             ->willReturn($params);
 
-        /** @var Connection $connectionMock */
         return new MysqlDriver($connectionMock);
     }
 }

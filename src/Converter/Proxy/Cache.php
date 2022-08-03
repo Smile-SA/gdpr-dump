@@ -12,15 +12,7 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 class Cache implements ConverterInterface
 {
     private static array $values = [];
-
-    /**
-     * @var ConverterInterface
-     */
     private ConverterInterface $converter;
-
-    /**
-     * @var string
-     */
     private string $cacheKey;
 
     /**

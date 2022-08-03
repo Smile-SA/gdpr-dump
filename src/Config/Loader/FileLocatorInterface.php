@@ -14,5 +14,5 @@ interface FileLocatorInterface
      * @return string
      * @throws FileNotFoundException
      */
-    public function locate(string $path, string $currentDirectory = null): string;
+    public function locate(string $path, ?string $currentDirectory = null): string;
 }

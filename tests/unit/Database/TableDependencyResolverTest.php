@@ -192,7 +192,6 @@ class TableDependencyResolverTest extends TestCase
         $configMock->method('getIgnoredForeignKeys')
             ->willReturn($ignoredForeignKeys);
 
-        /** @var MysqlMetadata $metadataMock */
         return new TableDependencyResolver($metadataMock, $configMock);
     }
 

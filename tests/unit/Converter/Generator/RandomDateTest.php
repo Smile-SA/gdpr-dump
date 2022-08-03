@@ -7,7 +7,6 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 use DateTime;
 use Smile\GdprDump\Converter\Generator\RandomDate;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
-use Smile\GdprDump\Converter\Randomizer\RandomizeDate;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class RandomDateTest extends TestCase
@@ -97,6 +96,6 @@ class RandomDateTest extends TestCase
         $randomizedDate = DateTime::createFromFormat($format, $randomized);
         $actualDate = DateTime::createFromFormat($format, $actual);
 
-        $this->assertTrue($randomizedDate != $actualDate);
+        $this->assertTrue($randomizedDate !== $actualDate);
     }
 }

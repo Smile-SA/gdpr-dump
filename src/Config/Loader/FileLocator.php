@@ -24,7 +24,7 @@ class FileLocator implements FileLocatorInterface
     /**
      * @inheritdoc
      */
-    public function locate(string $path, string $currentDirectory = null): string
+    public function locate(string $path, ?string $currentDirectory = null): string
     {
         $this->resolveTemplates();
 

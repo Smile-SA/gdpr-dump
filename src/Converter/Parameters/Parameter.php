@@ -27,7 +27,7 @@ class Parameter
      * @param bool $required
      * @param mixed $default
      */
-    public function __construct(string $name, string $type = null, bool $required = false, $default = null)
+    public function __construct(string $name, ?string $type = null, bool $required = false, $default = null)
     {
         $this->name = $name;
         $this->type = $type;

@@ -13,15 +13,7 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 class Unique implements ConverterInterface
 {
     private ConverterInterface $converter;
-
-    /**
-     * @var int
-     */
     private int $maxRetries;
-
-    /**
-     * @var array
-     */
     private array $generated = [];
 
     /**

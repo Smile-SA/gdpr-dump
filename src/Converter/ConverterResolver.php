@@ -109,7 +109,7 @@ class ConverterResolver
 
             if (is_dir($path)) {
                 // Recursively find files in this directory
-                $newBaseDirectory = ($baseDirectory !== '') ? $baseDirectory . '/' . $fileName : $fileName;
+                $newBaseDirectory = $baseDirectory !== '' ? $baseDirectory . '/' . $fileName : $fileName;
                 $result = array_merge($result, $this->findClassNames($namespace, $path, $newBaseDirectory));
             } else {
                 // Remove the extension
@@ -117,7 +117,7 @@ class ConverterResolver
 
                 // Get the class name
                 $className = $namespace;
-                $className .= ($baseDirectory !== '')
+                $className .= $baseDirectory !== ''
                     ? str_replace('/', '\\', $baseDirectory) . '\\' . $fileName
                     : $fileName;
 

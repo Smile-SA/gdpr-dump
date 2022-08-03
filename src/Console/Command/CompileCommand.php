@@ -18,7 +18,7 @@ class CompileCommand extends Command
      * @param string $defaultLocale
      * @param string|null $name
      */
-    public function __construct(string $defaultLocale, string $name = null)
+    public function __construct(string $defaultLocale, ?string $name = null)
     {
         $this->defaultLocale = $defaultLocale;
         parent::__construct($name);

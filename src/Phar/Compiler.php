@@ -101,7 +101,7 @@ class Compiler
             if (is_string($token)) {
                 $output .= $token;
                 $isWhitespace = false;
-            } elseif (in_array($token[0], array(T_COMMENT, T_DOC_COMMENT))) {
+            } elseif (in_array($token[0], [T_COMMENT, T_DOC_COMMENT])) {
                 // Remove all comments except PHP annotations
                 $output .= substr($token[1], 0, 2) === '#[' ? $token[1] : '';
                 $isWhitespace = true;
@@ -156,7 +156,7 @@ class Compiler
         // Remove the base path of the application from the string
         $pathPrefix = $this->basePath . '/';
         $pos = strpos($realPath, $pathPrefix);
-        $relativePath = ($pos !== false) ? substr_replace($realPath, '', $pos, strlen($pathPrefix)) : $realPath;
+        $relativePath = $pos !== false ? substr_replace($realPath, '', $pos, strlen($pathPrefix)) : $realPath;
 
         return strtr($relativePath, '\\', '/');
     }

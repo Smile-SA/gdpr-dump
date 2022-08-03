@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Transformer;
 
 use Smile\GdprDump\Converter\Parameters\ValidationException;
-use Smile\GdprDump\Converter\Transformer\AddSuffix;
 use Smile\GdprDump\Converter\Transformer\AppendText;
 use Smile\GdprDump\Tests\Unit\TestCase;
 

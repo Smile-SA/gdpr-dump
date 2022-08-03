@@ -91,7 +91,7 @@ class ConverterFactoryTest extends TestCase
                     ['converter' => ConverterMock::class],
                     ['converter' => ConverterMock::class],
                 ],
-            ]
+            ],
         ]);
         $this->assertInstanceOf(Chain::class, $converter);
     }
