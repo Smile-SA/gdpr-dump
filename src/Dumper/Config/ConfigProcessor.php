@@ -39,7 +39,7 @@ class ConfigProcessor
     }
 
     /**
-     * Process the tables whitelist and the tables blacklist;
+     * Process the tables whitelist and the tables blacklist.
      *
      * @param ConfigInterface $config
      */

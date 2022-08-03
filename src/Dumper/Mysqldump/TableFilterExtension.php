@@ -293,8 +293,8 @@ class TableFilterExtension implements ExtensionInterface
     }
 
     /**
-     * Quote a value so that it can be safely injected in a SQL query.
-     * (we can't use query params because Mysqldump library doesn't allow it)
+     * Quote a value so that it can be safely injected in a SQL query
+     * (we can't use query params because Mysqldump library doesn't allow it).
      *
      * @param mixed $value
      * @return mixed
