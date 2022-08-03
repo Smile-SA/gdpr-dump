@@ -50,7 +50,7 @@ class RandomizeText implements ConverterInterface
 
         for ($index = 0; $index < $length; $index++) {
             $replacementIndex = mt_rand(0, $this->replacementsCount - 1);
-            $result .=  $this->replacements[$replacementIndex];
+            $result .= $this->replacements[$replacementIndex];
         }
 
         return $result;
