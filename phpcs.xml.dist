@@ -150,12 +150,18 @@
         </properties>
     </rule>
 
+    <!-- Checks whether uses at the top of a file are alphabetically sorted -->
+    <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
+
     <!-- Looks for unused imports from other namespaces -->
     <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
         <properties>
             <property name="searchAnnotations" value="true"/>
         </properties>
     </rule>
+
+    <!-- Looks for use alias that is same as unqualified name -->
+    <rule ref="SlevomatCodingStandard.Namespaces.UselessAlias"/>
 
     <!-- Disallows direct call of __invoke() -->
     <rule ref="SlevomatCodingStandard.PHP.DisallowDirectMagicInvokeCall"/>
@@ -206,6 +212,9 @@
     <!-- Enforces using shorthand scalar typehints -->
     <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
 
+    <!-- Enforces null type hint on last position in annotations -->
+    <rule ref="SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition"/>
+
     <!-- Checks whether the nullablity ? symbol is present before each nullable and optional parameter -->
     <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue"/>
 
@@ -233,6 +242,7 @@
     <rule ref="SlevomatCodingStandard.TypeHints.UnionTypeHintFormat">
         <properties>
             <property name="withSpaces" value="no"/>
+            <property name="nullPosition" value="last"/>
         </properties>
     </rule>
 

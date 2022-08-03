@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter;
 
 use RuntimeException;
-use TheSeer\Tokenizer\Tokenizer;
 use TheSeer\Tokenizer\Token;
+use TheSeer\Tokenizer\Tokenizer;
 
 class ConditionBuilder
 {
