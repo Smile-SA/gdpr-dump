@@ -22,6 +22,9 @@ class AppKernel
     /**
      * Run the application.
      *
+     * The console command is not lazy-loaded (cf. https://symfony.com/doc/5.4/console/lazy_commands.html)
+     * because this feature is not useful in a single command application.
+     *
      * @param string $command
      */
     public function run(string $command = 'command.dump'): void
