@@ -12,7 +12,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use UnexpectedValueException;
 
 class AppKernel
 {
@@ -91,7 +90,6 @@ class AppKernel
      * Build the service container.
      *
      * @return ContainerInterface
-     * @throws UnexpectedValueException
      */
     private function buildContainer(): ContainerInterface
     {
