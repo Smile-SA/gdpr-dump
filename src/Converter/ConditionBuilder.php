@@ -177,7 +177,7 @@ class ConditionBuilder
 
     /**
      * Remove quoted values from a variable,
-     * e.g. "$s = 'value'" is converted to "$s = ''"
+     * e.g. `$s = 'value'` is converted to `$s = ''`.
      *
      * @param string $input
      * @return string

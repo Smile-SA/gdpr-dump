@@ -34,8 +34,8 @@ class TableDependencyResolver
 
     /**
      * Get all dependencies of the specified tables:
-     * - Tables with foreign key(s) that reference one of the specified tables
-     * - Tables with foreign key(s) that reference a table which depends on the specified tables (dependency chain)
+     * - Tables with foreign key(s) that reference one of the specified tables.
+     * - Tables with foreign key(s) that reference a table which depends on the specified tables (dependency chain).
      *
      * Example with the following foreign keys:
      * - table1: no foreign key

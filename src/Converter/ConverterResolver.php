@@ -13,7 +13,7 @@ class ConverterResolver
     private array $pathsByNamespace = [];
 
     /**
-     * e.g. ['unique' => 'Smile\GdprDump\Converter\Proxy\Unique', ...]
+     * e.g. `['unique' => 'Smile\GdprDump\Converter\Proxy\Unique', ...]`.
      */
     private ?array $resolved = null;
 
@@ -85,8 +85,8 @@ class ConverterResolver
     }
 
     /**
-     * Find converter class names that reside in the specified directory.
-     * e.g. ['unique' => 'Smile\GdprDump\Data\Converter\Proxy\Unique', ...]
+     * Find converter class names that reside in the specified directory,
+     * e.g. `['unique' => 'Smile\GdprDump\Data\Converter\Proxy\Unique', ...]`.
      *
      * @param string $namespace
      * @param string $directory

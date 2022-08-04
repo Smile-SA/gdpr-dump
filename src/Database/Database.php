@@ -15,10 +15,9 @@ use UnexpectedValueException;
 
 /**
  * Wrapper that stores the following objects:
- *
- * - connection: the Doctrine connection
- * - driver: allows to retrieve the DSN that was used to connect to the database
- * - metadata: allows to fetch the database metadata (table names, foreign key constraints)
+ * - connection: the Doctrine connection.
+ * - driver: allows to retrieve the DSN that was used to connect to the database.
+ * - metadata: allows to fetch the database metadata (table names, foreign key constraints).
  *
  * We use a custom abstraction layer for database metadata, because the Doctrine schema manager
  * crashes when used with databases that use custom Doctrine types (e.g. OroCommerce).
