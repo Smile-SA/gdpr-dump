@@ -80,7 +80,7 @@ class Filter
     }
 
     /**
-     * Get the filter operator
+     * Get the filter operator.
      *
      * @return string
      */

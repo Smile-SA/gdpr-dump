@@ -172,10 +172,7 @@ class ConditionBuilder
             $result .= $token->getValue();
         }
 
-        // Remove the opening and closing tag that were added to generate the tokens
-        $result = $this->removePhpTags($result);
-
-        return $result;
+        return $this->removePhpTags($result);
     }
 
     /**
@@ -196,10 +193,7 @@ class ConditionBuilder
             $result .= $token->getName() === 'T_CONSTANT_ENCAPSED_STRING' ? "''" : $token->getValue();
         }
 
-        // Remove the opening and closing tag that were added to generate the tokens
-        $result = $this->removePhpTags($result);
-
-        return $result;
+        return $this->removePhpTags($result);
     }
 
     /**
@@ -210,10 +204,7 @@ class ConditionBuilder
      */
     private function removePhpTags(string $input): string
     {
-        $input = ltrim($input, '<?php ');
-        $input = rtrim($input, ' ?>');
-
-        return $input;
+        return rtrim(ltrim($input, '<?php '), ' ?>');
     }
 
     /**
