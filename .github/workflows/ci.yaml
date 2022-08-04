@@ -56,6 +56,9 @@ jobs:
             - name: 'Install dependencies'
               run: 'composer install --prefer-dist'
 
+            - name: 'Run PHP Parallel Lint'
+              run: 'vendor/bin/parallel-lint src tests'
+
             - name: 'Run PHP CodeSniffer'
               run: 'vendor/bin/phpcs'
 
