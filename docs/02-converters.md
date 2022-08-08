@@ -34,11 +34,6 @@
     - [jsonData](#jsondata)
     - [serializedData](#serializeddata)
     - [fromContext](#fromcontext)
-- [Deprecated Converters](#deprecated-converters)
-    - [addPrefix](#addprefix)
-    - [addSuffix](#addsuffix)
-    - [randomizeDate](#randomizedate)
-    - [randomizeDateTime](#randomizedatetime)
 
 ## Anonymizers
 
@@ -711,24 +706,3 @@ tables:
                               key: 'processed_data.email'
                         - converter: 'toLower'
 ```
-
-# Deprecated Converters
-
-These converters are deprecated.
-They will be removed from the next major release of GdprDump.
-
-## addPrefix
-
-This converter is **deprecated**, use `prependText` instead.
-
-## addSuffix
-
-This converter is **deprecated**, use `appendText` instead.
-
-## randomizeDate
-
-This converter is **deprecated**, use `randomDate` instead.
-
-## randomizeDateTime
-
-This converter is **deprecated**, use `randomDateTime` instead.
