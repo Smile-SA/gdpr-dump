@@ -31,6 +31,7 @@ gdpr-dump: .env vendor ## Run bin/gdpr-dump command. Example: "make gdpr-dump c=
 compile: .env vendor ## Run bin/compile command.
 	$(PHP_CLI) bin/compile
 
+## Code Quality
 .PHONY: analyse
 analyse: .env vendor ## Run code analysis tools (parallel-lint, phpcs, phpstan).
 	$(PHP_CLI) vendor/bin/parallel-lint src tests
