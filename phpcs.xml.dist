@@ -144,11 +144,7 @@
     <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch"/>
 
     <!-- Checks arrow function declaration -->
-    <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration">
-        <properties>
-            <property name="spacesCountAfterKeyword" value="0"/>
-        </properties>
-    </rule>
+    <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration"/>
 
     <!-- Checks whether uses at the top of a file are alphabetically sorted -->
     <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>

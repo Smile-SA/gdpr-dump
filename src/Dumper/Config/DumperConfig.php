@@ -279,7 +279,7 @@ class DumperConfig
         // Replace {...} by the current date in dump output
         $this->dumpSettings['output'] = preg_replace_callback(
             '/{([^}]+)}/',
-            fn(array $matches) => date($matches[1]),
+            fn (array $matches) => date($matches[1]),
             $this->dumpSettings['output']
         );
     }

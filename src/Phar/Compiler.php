@@ -125,7 +125,7 @@ class Compiler
      */
     private function getFinders(): array
     {
-        $finder = fn(string $directory) => (new Finder())->files()->in($directory);
+        $finder = fn (string $directory) => (new Finder())->files()->in($directory);
 
         return [
             $finder($this->basePath . '/src')
