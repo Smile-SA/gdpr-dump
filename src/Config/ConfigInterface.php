@@ -45,7 +45,7 @@ interface ConfigInterface
      * @param array $items
      * @return $this
      */
-    public function reset(array $items): ConfigInterface;
+    public function reset(array $items): self;
 
     /**
      * Merge the config data with another set of items.

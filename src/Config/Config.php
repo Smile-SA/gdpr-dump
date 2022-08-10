@@ -57,7 +57,7 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function reset(array $items = []): ConfigInterface
+    public function reset(array $items = []): self
     {
         $this->items = $items;
 
