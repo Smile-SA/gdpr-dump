@@ -14,7 +14,6 @@ class ParameterBag
     ];
 
     /**
-     * @param array $params
      * @throws UnexpectedValueException
      */
     public function __construct(array $params)
@@ -24,8 +23,6 @@ class ParameterBag
 
     /**
      * Get all parameters.
-     *
-     * @return array
      */
     public function all(): array
     {
@@ -34,12 +31,8 @@ class ParameterBag
 
     /**
      * Get the value of a parameter
-     *
-     * @param string $name
-     * @param mixed $default
-     * @return mixed
      */
-    public function get(string $name, $default = null)
+    public function get(string $name, mixed $default = null): mixed
     {
         return $this->params[$name] ?? $default;
     }
@@ -47,8 +40,6 @@ class ParameterBag
     /**
      * Prepare the connection params.
      *
-     * @param array $params
-     * @return array
      * @throws UnexpectedValueException
      */
     private function prepareParams(array $params): array

@@ -14,7 +14,6 @@ class Hash implements ConverterInterface
     private string $algorithm;
 
     /**
-     * @param array $parameters
      * @throws ValidationException
      */
     public function __construct(array $parameters = [])
@@ -36,7 +35,7 @@ class Hash implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         $value = (string) $value;
 

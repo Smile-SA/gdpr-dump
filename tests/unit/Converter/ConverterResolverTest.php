@@ -60,8 +60,6 @@ class ConverterResolverTest extends TestCase
 
     /**
      * Create a resolver object.
-     *
-     * @return ConverterResolver
      */
     private function createResolver(): ConverterResolver
     {

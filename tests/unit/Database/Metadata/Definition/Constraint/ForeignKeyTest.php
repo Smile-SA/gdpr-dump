@@ -33,8 +33,6 @@ class ForeignKeyTest extends TestCase
 
     /**
      * Get fake foreign key data.
-     *
-     * @return array
      */
     private function getForeignKeyData(): array
     {

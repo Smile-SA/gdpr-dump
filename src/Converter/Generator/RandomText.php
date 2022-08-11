@@ -17,7 +17,6 @@ class RandomText implements ConverterInterface
     private int $charactersCount;
 
     /**
-     * @param array $parameters
      * @throws ValidationException
      */
     public function __construct(array $parameters = [])
@@ -37,7 +36,7 @@ class RandomText implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         $result = '';
         $length = mt_rand($this->minLength, $this->maxLength);

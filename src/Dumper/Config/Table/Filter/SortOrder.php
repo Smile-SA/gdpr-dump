@@ -11,14 +11,9 @@ class SortOrder
     public const DIRECTION_ASC = 'ASC';
     public const DIRECTION_DESC = 'DESC';
 
-    private string $column;
     private string $direction;
 
-    /**
-     * @param string $column
-     * @param string $direction
-     */
-    public function __construct(string $column, string $direction = self::DIRECTION_ASC)
+    public function __construct(private string $column, string $direction = self::DIRECTION_ASC)
     {
         $direction = strtoupper($direction);
 
@@ -26,14 +21,11 @@ class SortOrder
             throw new UnexpectedValueException(sprintf('Invalid sort direction "%s".', $direction));
         }
 
-        $this->column = $column;
         $this->direction = $direction;
     }
 
     /**
      * Get the column name.
-     *
-     * @return string
      */
     public function getColumn(): string
     {
@@ -42,8 +34,6 @@ class SortOrder
 
     /**
      * Get the sort direction.
-     *
-     * @return string
      */
     public function getDirection(): string
     {

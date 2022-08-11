@@ -17,7 +17,6 @@ class Chain implements ConverterInterface
     private array $converters;
 
     /**
-     * @param array $parameters
      * @throws ValidationException
      */
     public function __construct(array $parameters)
@@ -32,7 +31,7 @@ class Chain implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         foreach ($this->converters as $converter) {
             $value = $converter->convert($value, $context);

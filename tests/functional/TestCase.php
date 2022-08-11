@@ -19,8 +19,6 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Get the absolute path of the application.
-     *
-     * @return string
      */
     protected static function getBasePath(): string
     {
@@ -29,9 +27,6 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Get a resource file.
-     *
-     * @param string $fileName
-     * @return string
      */
     protected static function getResource(string $fileName): string
     {
@@ -40,8 +35,6 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Get the database wrapper.
-     *
-     * @return Database
      */
     protected static function getDatabase(): Database
     {
@@ -72,8 +65,6 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Get the DI container.
-     *
-     * @return ContainerInterface
      */
     protected static function getContainer(): ContainerInterface
     {
@@ -87,8 +78,6 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Get the SQL queries that allow creating the test database.
-     *
-     * @return string
      */
     private static function getDatabaseDump(): string
     {

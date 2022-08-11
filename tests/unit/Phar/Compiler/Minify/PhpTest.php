@@ -31,8 +31,6 @@ class PhpTest extends TestCase
 
     /**
      * Get the string to minify.
-     *
-     * @return string
      */
     private function getStringToMinify(): string
     {
@@ -56,8 +54,6 @@ EOT;
 
     /**
      * Get the expected minification result.
-     *
-     * @return string
      */
     private function getExpectedMinifiedString(): string
     {

@@ -21,7 +21,6 @@ class AnonymizeText implements ConverterInterface
     private bool $multiByteEnabled;
 
     /**
-     * @param array $parameters
      * @throws ValidationException
      */
     public function __construct(array $parameters = [])
@@ -46,7 +45,7 @@ class AnonymizeText implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         $value = (string) $value;
         if ($value === '') {

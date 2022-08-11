@@ -21,8 +21,6 @@ class MysqlDriverTest extends TestCase
 
     /**
      * Get the MySQL driver.
-     *
-     * @return MysqlDriver
      */
     private function getMysqlDriver(): MysqlDriver
     {

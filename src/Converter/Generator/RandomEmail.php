@@ -18,7 +18,6 @@ class RandomEmail extends RandomText
     private int $domainsCount;
 
     /**
-     * @param array $parameters
      * @throws ValidationException
      */
     public function __construct(array $parameters = [])
@@ -36,7 +35,7 @@ class RandomEmail extends RandomText
     /**
      * @inheritdoc
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         $domainIndex = mt_rand(0, $this->domainsCount - 1);
 

@@ -15,7 +15,6 @@ class FromContext implements ConverterInterface
     private string $key;
 
     /**
-     * @param array $parameters
      * @throws ValidationException
      */
     public function __construct(array $parameters = [])
@@ -30,7 +29,7 @@ class FromContext implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         return ArrayHelper::getPath($context, $this->key);
     }

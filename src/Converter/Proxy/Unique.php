@@ -17,7 +17,6 @@ class Unique implements ConverterInterface
     private array $generated = [];
 
     /**
-     * @param array $parameters
      * @throws ValidationException
      */
     public function __construct(array $parameters)
@@ -34,7 +33,7 @@ class Unique implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         $count = 0;
 

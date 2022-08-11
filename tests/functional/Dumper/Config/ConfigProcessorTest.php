@@ -53,8 +53,6 @@ class ConfigProcessorTest extends TestCase
 
     /**
      * Create a config processor object.
-     *
-     * @return ConfigProcessor
      */
     private function createConfigProcessor(): ConfigProcessor
     {

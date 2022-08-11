@@ -39,20 +39,7 @@ class Filter
         self::OPERATOR_NOT_IN,
     ];
 
-    private string $column;
-    private string $operator;
-
-    /**
-     * @var mixed
-     */
-    private $value;
-
-    /**
-     * @param string $column
-     * @param string $operator
-     * @param mixed $value
-     */
-    public function __construct(string $column, string $operator, $value = null)
+    public function __construct(private string $column, private string $operator, private mixed $value = null)
     {
         if (!in_array($operator, self::$operators, true)) {
             throw new UnexpectedValueException(sprintf('Invalid filter operator "%s".', $operator));
@@ -63,16 +50,10 @@ class Filter
                 sprintf('The "%s" operator is not compatible with array values.', $operator)
             );
         }
-
-        $this->column = $column;
-        $this->operator = $operator;
-        $this->value = $value;
     }
 
     /**
      * Get the column name.
-     *
-     * @return string
      */
     public function getColumn(): string
     {
@@ -81,8 +62,6 @@ class Filter
 
     /**
      * Get the filter operator.
-     *
-     * @return string
      */
     public function getOperator(): string
     {
@@ -91,10 +70,8 @@ class Filter
 
     /**
      * Get the filter value.
-     *
-     * @return mixed
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }

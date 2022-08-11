@@ -30,7 +30,6 @@ class QueryValidator
     /**
      * Validate that a SQL query is safe for execution.
      *
-     * @param string $query
      * @throws ValidationException
      */
     public function validate(string $query): void

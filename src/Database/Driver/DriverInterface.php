@@ -8,8 +8,6 @@ interface DriverInterface
 {
     /**
      * Get the data source name.
-     *
-     * @return string
      */
     public function getDsn(): string;
 }

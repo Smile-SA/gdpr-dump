@@ -37,8 +37,6 @@ class EnvVarProcessor implements ProcessorInterface
     /**
      * Process a config item.
      *
-     * @param array $data
-     * @return array
      * @throws CompileException
      */
     private function processItem(array $data): array
@@ -58,11 +56,9 @@ class EnvVarProcessor implements ProcessorInterface
     /**
      * Process a config value.
      *
-     * @param mixed $value
-     * @return mixed
      * @throws CompileException
      */
-    private function processValue($value)
+    private function processValue(mixed $value): mixed
     {
         if (!is_string($value) || strpos($value, '%env(') !== 0 || substr($value, -2) !== ')%') {
             return $value;
@@ -88,8 +84,6 @@ class EnvVarProcessor implements ProcessorInterface
     /**
      * Parse "%env($name)%".
      *
-     * @param string $name
-     * @return array
      * @throws CompileException
      */
     private function parse(string $name): array
@@ -125,12 +119,9 @@ class EnvVarProcessor implements ProcessorInterface
     /**
      * Decode a JSON-encoded string.
      *
-     * @param string $value
-     * @param string $name
-     * @return mixed
      * @throws CompileException
      */
-    private function decodeJson(string $value, string $name)
+    private function decodeJson(string $value, string $name): mixed
     {
         $value = json_decode($value, true);
 

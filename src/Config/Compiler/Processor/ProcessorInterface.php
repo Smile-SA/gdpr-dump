@@ -12,7 +12,6 @@ interface ProcessorInterface
     /**
      * Process the config data.
      *
-     * @param ConfigInterface $config
      * @throws CompileException
      */
     public function process(ConfigInterface $config): void;

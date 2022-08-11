@@ -16,7 +16,6 @@ class Cache implements ConverterInterface
     private string $cacheKey;
 
     /**
-     * @param array $parameters
      * @throws ValidationException
      */
     public function __construct(array $parameters)
@@ -33,7 +32,7 @@ class Cache implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         if (!isset(self::$values[$this->cacheKey][$value])) {
             self::$values[$this->cacheKey][$value] = $this->converter->convert($value, $context);

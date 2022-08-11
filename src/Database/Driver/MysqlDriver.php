@@ -8,14 +8,8 @@ use Smile\GdprDump\Database\ParameterBag;
 
 class MysqlDriver implements DriverInterface
 {
-    private ParameterBag $connectionParams;
-
-    /**
-     * @param ParameterBag $connectionParams
-     */
-    public function __construct(ParameterBag $connectionParams)
+    public function __construct(private ParameterBag $connectionParams)
     {
-        $this->connectionParams = $connectionParams;
     }
 
     /**

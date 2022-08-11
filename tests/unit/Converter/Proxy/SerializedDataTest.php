@@ -80,8 +80,6 @@ class SerializedDataTest extends TestCase
 
     /**
      * Get the serialized data to anonymize.
-     *
-     * @return string
      */
     private function getSerializedData(): string
     {
@@ -95,8 +93,6 @@ class SerializedDataTest extends TestCase
 
     /**
      * Get the expected anonymized data.
-     *
-     * @return string
      */
     private function getExpectedData(): string
     {

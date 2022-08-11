@@ -13,15 +13,13 @@ class ParameterProcessor
 
     /**
      * Add a parameter.
-     *
-     * @param string $name
-     * @param string|null $type
-     * @param bool $required
-     * @param mixed $default
-     * @return $this
      */
-    public function addParameter(string $name, ?string $type = null, bool $required = false, $default = null): self
-    {
+    public function addParameter(
+        string $name,
+        ?string $type = null,
+        bool $required = false,
+        mixed $default = null
+    ): self {
         $this->parameters[] = new Parameter($name, $type, $required, $default);
 
         return $this;
@@ -31,8 +29,6 @@ class ParameterProcessor
      * Process an array of parameter values.
      * This method handles data validation and type casting.
      *
-     * @param array $values
-     * @return InputParameters
      * @throws ValidationException
      */
     public function process(array $values): InputParameters
@@ -54,12 +50,9 @@ class ParameterProcessor
     /**
      * Process a parameter value.
      *
-     * @param Parameter $parameter
-     * @param mixed $value
-     * @return mixed
      * @throws ValidationException
      */
-    private function processValue(Parameter $parameter, $value)
+    private function processValue(Parameter $parameter, mixed $value): mixed
     {
         if ($parameter->isRequired()) {
             if ($value === null) {
@@ -86,11 +79,9 @@ class ParameterProcessor
     /**
      * Assert that the parameter type is allowed.
      *
-     * @param Parameter $parameter
-     * @param mixed $value
      * @throws ValidationException
      */
-    private function validateType(Parameter $parameter, $value): void
+    private function validateType(Parameter $parameter, mixed $value): void
     {
         $name = $parameter->getName();
         $type = $parameter->getType();

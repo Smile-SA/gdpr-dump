@@ -10,8 +10,6 @@ use Smile\GdprDump\Dumper\Config\DumperConfig;
 
 class TableDependencyResolver
 {
-    private MetadataInterface $metadata;
-    private DumperConfig $config;
     private bool $resolved = false;
 
     /**
@@ -22,14 +20,8 @@ class TableDependencyResolver
      */
     private array $foreignKeys = [];
 
-    /**
-     * @param MetadataInterface $metadata
-     * @param DumperConfig $config
-     */
-    public function __construct(MetadataInterface $metadata, DumperConfig $config)
+    public function __construct(private MetadataInterface $metadata, private DumperConfig $config)
     {
-        $this->metadata = $metadata;
-        $this->config = $config;
     }
 
     /**
@@ -57,9 +49,6 @@ class TableDependencyResolver
      * Same result if `$tableNames` is `['table1']`.
      * If `$tableNames` is `['table2']`, the result array has a single key `'table3'`.
      * If `$tableNames` is `['table3']`, the result array is empty.
-     *
-     * @param array $tableNames
-     * @return array
      */
     public function getDependencies(array $tableNames): array
     {
@@ -75,10 +64,6 @@ class TableDependencyResolver
 
     /**
      * Recursively fetch all dependencies related to a table.
-     *
-     * @param string $tableName
-     * @param array $resolved
-     * @return array
      */
     private function resolveDependencies(string $tableName, array $resolved = []): array
     {
@@ -132,9 +117,6 @@ class TableDependencyResolver
 
     /**
      * Check whether the foreign key must be skipped.
-     *
-     * @param ForeignKey $foreignKey
-     * @return bool
      */
     private function isForeignKeyIgnored(ForeignKey $foreignKey): bool
     {

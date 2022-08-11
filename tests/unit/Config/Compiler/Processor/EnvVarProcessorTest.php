@@ -140,8 +140,6 @@ class EnvVarProcessorTest extends TestCase
 
     /**
      * Process the specified value.
-     *
-     * @param string $value
      */
     private function processValue(string $value): void
     {

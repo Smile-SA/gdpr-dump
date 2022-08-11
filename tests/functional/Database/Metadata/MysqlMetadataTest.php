@@ -33,8 +33,6 @@ class MysqlMetadataTest extends TestCase
 
     /**
      * Validate the foreign keys of the "stores" table.
-     *
-     * @param MetadataInterface $metadata
      */
     private function validateStoresForeignKeys(MetadataInterface $metadata): void
     {
@@ -51,8 +49,6 @@ class MysqlMetadataTest extends TestCase
 
     /**
      * Validate the foreign keys of the "customers" table.
-     *
-     * @param MetadataInterface $metadata
      */
     private function validateCustomersForeignKeys(MetadataInterface $metadata): void
     {
@@ -83,8 +79,6 @@ class MysqlMetadataTest extends TestCase
 
     /**
      * Validate the foreign keys of the "addresses" table.
-     *
-     * @param MetadataInterface $metadata
      */
     private function validateAddressesForeignKeys(MetadataInterface $metadata): void
     {
@@ -101,8 +95,6 @@ class MysqlMetadataTest extends TestCase
 
     /**
      * Get the metadata object.
-     *
-     * @return MysqlMetadata
      */
     private function getMetadata(): MysqlMetadata
     {
