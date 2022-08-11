@@ -171,8 +171,6 @@ class ConverterFactoryTest extends TestCase
 
     /**
      * Create a converter factory object.
-     *
-     * @return ConverterFactory
      */
     private function createFactory(): ConverterFactory
     {

@@ -86,10 +86,6 @@ class RandomDateTest extends TestCase
 
     /**
      * Assert that a date is randomized.
-     *
-     * @param string $randomized
-     * @param string $actual
-     * @param string $format
      */
     protected function assertDateIsRandomized(string $randomized, string $actual, string $format): void
     {

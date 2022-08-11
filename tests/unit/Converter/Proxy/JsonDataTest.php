@@ -80,8 +80,6 @@ class JsonDataTest extends TestCase
 
     /**
      * Get the JSON data to anonymize.
-     *
-     * @return string
      */
     private function getJsonData(): string
     {
@@ -99,8 +97,6 @@ class JsonDataTest extends TestCase
 
     /**
      * Get the expected anonymized data.
-     *
-     * @return string
      */
     private function getExpectedData(): string
     {

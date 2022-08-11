@@ -9,9 +9,6 @@ class VersionMatcher
     /**
      * Check whether the requirement (e.g. ">=1.0.0 <2.0.0") matches the specified version (e.g. "1.1.0").
      *
-     * @param string $requirement
-     * @param string $version
-     * @return bool
      * @throws InvalidVersionException
      */
     public function match(string $requirement, string $version): bool
@@ -32,7 +29,6 @@ class VersionMatcher
     /**
      * Get the conditions that are part of the requirement.
      *
-     * @param string $requirement
      * @return VersionCondition[]
      * @throws InvalidVersionException
      */

@@ -6,32 +6,20 @@ namespace Smile\GdprDump\Converter\Parameters;
 
 class InputParameters
 {
-    private array $values;
-
-    /**
-     * @param array $values
-     */
-    public function __construct(array $values)
+    public function __construct(private array $values)
     {
-        $this->values = $values;
     }
 
     /**
      * Get a parameter value.
-     *
-     * @param string $name
-     * @return mixed
      */
-    public function get(string $name)
+    public function get(string $name): mixed
     {
         return $this->values[$name] ?? null;
     }
 
     /**
      * Check if the parameter value is defined.
-     *
-     * @param string $key
-     * @return bool
      */
     public function has(string $key): bool
     {

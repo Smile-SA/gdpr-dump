@@ -10,8 +10,6 @@ abstract class TestCase extends BaseTestCase
 {
     /**
      * Get the absolute path of the application.
-     *
-     * @return string
      */
     protected static function getBasePath(): string
     {
@@ -20,9 +18,6 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Get a resource file.
-     *
-     * @param string $fileName
-     * @return string
      */
     protected static function getResource(string $fileName): string
     {

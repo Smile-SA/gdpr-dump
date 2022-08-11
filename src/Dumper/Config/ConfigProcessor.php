@@ -9,26 +9,17 @@ use Smile\GdprDump\Database\Metadata\MetadataInterface;
 
 class ConfigProcessor
 {
-    private MetadataInterface $metadata;
-
     /**
      * @var string[]|null
      */
     private ?array $tableNames = null;
 
-    /**
-     * @param MetadataInterface $metadata
-     */
-    public function __construct(MetadataInterface $metadata)
+    public function __construct(private MetadataInterface $metadata)
     {
-        $this->metadata = $metadata;
     }
 
     /**
      * Process the configuration.
-     *
-     * @param ConfigInterface $config
-     * @return DumperConfig
      */
     public function process(ConfigInterface $config): DumperConfig
     {
@@ -40,8 +31,6 @@ class ConfigProcessor
 
     /**
      * Process the tables whitelist and the tables blacklist.
-     *
-     * @param ConfigInterface $config
      */
     private function processTableLists(ConfigInterface $config): void
     {
@@ -59,8 +48,6 @@ class ConfigProcessor
 
     /**
      * Process the tables data.
-     *
-     * @param ConfigInterface $config
      */
     private function processTablesData(ConfigInterface $config): void
     {
@@ -73,9 +60,6 @@ class ConfigProcessor
 
     /**
      * Resolve a list of table name patterns.
-     *
-     * @param array $tableNames
-     * @return array
      */
     private function resolveTableNames(array $tableNames): array
     {
@@ -93,9 +77,6 @@ class ConfigProcessor
 
     /**
      * Resolve table name patterns stored as array keys.
-     *
-     * @param array $tablesData
-     * @return array
      */
     private function resolveTablesData(array $tablesData): array
     {
@@ -119,7 +100,6 @@ class ConfigProcessor
     /**
      * Get the table names that match a pattern.
      *
-     * @param string $pattern
      * @return string[]
      */
     private function findTablesByName(string $pattern): array

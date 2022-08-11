@@ -19,7 +19,7 @@ class RandomizeNumber implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         $value = (string) $value;
 

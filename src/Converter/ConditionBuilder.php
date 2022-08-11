@@ -38,8 +38,6 @@ class ConditionBuilder
     /**
      * Build the condition.
      *
-     * @param string $condition
-     * @return string
      * @throws RuntimeException
      */
     public function build(string $condition): string
@@ -60,9 +58,6 @@ class ConditionBuilder
 
     /**
      * Sanitize the condition.
-     *
-     * @param string $condition
-     * @return string
      */
     private function sanitizeCondition(string $condition): string
     {
@@ -85,7 +80,6 @@ class ConditionBuilder
     /**
      * Validate the condition.
      *
-     * @param string $condition
      * @throws RuntimeException
      */
     private function validateCondition(string $condition): void
@@ -126,9 +120,6 @@ class ConditionBuilder
 
     /**
      * Parse the tokens that represent the condition, and return the parsed condition.
-     *
-     * @param string $condition
-     * @return string
      */
     private function parseCondition(string $condition): string
     {
@@ -175,9 +166,6 @@ class ConditionBuilder
     /**
      * Remove quoted values from a variable,
      * e.g. `$s = 'value'` is converted to `$s = ''`.
-     *
-     * @param string $input
-     * @return string
      */
     private function removeQuotedValues(string $input): string
     {
@@ -195,9 +183,6 @@ class ConditionBuilder
 
     /**
      * Remove opening and closing PHP tags from a string.
-     *
-     * @param string $input
-     * @return string
      */
     private function removePhpTags(string $input): string
     {
@@ -206,9 +191,6 @@ class ConditionBuilder
 
     /**
      * Check if the token represents a variable.
-     *
-     * @param Token $token
-     * @return bool
      */
     private function isVariableToken(Token $token): bool
     {
@@ -219,9 +201,6 @@ class ConditionBuilder
 
     /**
      * Check whether the specified PHP function is allowed.
-     *
-     * @param string $function
-     * @return bool
      */
     private function isFunctionAllowed(string $function): bool
     {

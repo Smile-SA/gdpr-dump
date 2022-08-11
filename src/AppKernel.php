@@ -23,8 +23,6 @@ class AppKernel
      *
      * The console command is not lazy-loaded (cf. https://symfony.com/doc/6.2/console/lazy_commands.html)
      * because this feature is not useful in a single command application.
-     *
-     * @param string $command
      */
     public function run(string $command = 'command.dump'): void
     {
@@ -59,7 +57,6 @@ class AppKernel
     /**
      * Get the container.
      *
-     * @return ContainerInterface
      * @throws RuntimeException
      */
     public function getContainer(): ContainerInterface
@@ -93,8 +90,6 @@ class AppKernel
      * because the cache file would contain hardcoded paths (e.g. app_root).
      * It would prevent the phar file from working.
      * As a consequence, for performance reasons, autowiring is also disabled.
-     *
-     * @return ContainerInterface
      */
     private function buildContainer(): ContainerInterface
     {

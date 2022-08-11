@@ -86,7 +86,6 @@ class DumperConfig
     ];
 
     /**
-     * @param ConfigInterface $config
      * @throws UnexpectedValueException
      */
     public function __construct(ConfigInterface $config)
@@ -96,8 +95,6 @@ class DumperConfig
 
     /**
      * Get the dump output.
-     *
-     * @return string
      */
     public function getDumpOutput(): string
     {
@@ -106,8 +103,6 @@ class DumperConfig
 
     /**
      * Get dump settings.
-     *
-     * @return array
      */
     public function getDumpSettings(): array
     {
@@ -116,8 +111,6 @@ class DumperConfig
 
     /**
      * Check whether to apply table filters recursively to table dependencies (by following foreign keys).
-     *
-     * @return bool
      */
     public function isFilterPropagationEnabled(): bool
     {
@@ -126,8 +119,6 @@ class DumperConfig
 
     /**
      * Get the foreign keys to exclude from the table filter propagation.
-     *
-     * @return array
      */
     public function getIgnoredForeignKeys(): array
     {
@@ -136,8 +127,6 @@ class DumperConfig
 
     /**
      * Get faker settings.
-     *
-     * @return array
      */
     public function getFakerSettings(): array
     {
@@ -156,9 +145,6 @@ class DumperConfig
 
     /**
      * Get the configuration of a table.
-     *
-     * @param string $tableName
-     * @return TableConfig|null
      */
     public function getTableConfig(string $tableName): ?TableConfig
     {
@@ -231,7 +217,6 @@ class DumperConfig
     /**
      * Prepare the config.
      *
-     * @param ConfigInterface $config
      * @throws UnexpectedValueException
      */
     private function prepareConfig(ConfigInterface $config): void
@@ -261,7 +246,6 @@ class DumperConfig
     /**
      * Prepare dump settings.
      *
-     * @param ConfigInterface $config
      * @throws UnexpectedValueException
      */
     private function prepareDumpSettings(ConfigInterface $config): void
@@ -287,7 +271,6 @@ class DumperConfig
     /**
      * Prepare table filter propagation settings.
      *
-     * @param ConfigInterface $config
      * @throws UnexpectedValueException
      */
     private function prepareFilterPropagationSettings(ConfigInterface $config): void
@@ -306,7 +289,6 @@ class DumperConfig
     /**
      * Prepare faker settings.
      *
-     * @param ConfigInterface $config
      * @throws UnexpectedValueException
      */
     private function prepareFakerSettings(ConfigInterface $config): void
@@ -325,7 +307,6 @@ class DumperConfig
     /**
      * Prepare the tables configuration.
      *
-     * @param ConfigInterface $config
      * @throws UnexpectedValueException
      */
     private function prepareTablesConfig(ConfigInterface $config): void
@@ -354,8 +335,6 @@ class DumperConfig
 
     /**
      * Prepare the SQL queries to run.
-     *
-     * @param ConfigInterface $config
      */
     private function prepareVarQueries(ConfigInterface $config): void
     {
@@ -370,8 +349,6 @@ class DumperConfig
 
     /**
      * Prepare the tables whitelist.
-     *
-     * @param ConfigInterface $config
      */
     private function prepareTablesWhitelist(ConfigInterface $config): void
     {
@@ -384,8 +361,6 @@ class DumperConfig
 
     /**
      * Prepare the tables blacklist.
-     *
-     * @param ConfigInterface $config
      */
     private function prepareTablesBlacklist(ConfigInterface $config): void
     {

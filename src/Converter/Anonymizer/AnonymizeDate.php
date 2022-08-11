@@ -17,7 +17,6 @@ class AnonymizeDate implements ConverterInterface
     private string $format;
 
     /**
-     * @param array $parameters
      * @throws ValidationException
      */
     public function __construct(array $parameters = [])
@@ -33,7 +32,7 @@ class AnonymizeDate implements ConverterInterface
      * @inheritdoc
      * @throws UnexpectedValueException
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         $value = (string) $value;
         if ($value === '') {
@@ -52,8 +51,6 @@ class AnonymizeDate implements ConverterInterface
 
     /**
      * Anonymize the date.
-     *
-     * @param DateTime $date
      */
     private function anonymizeDate(DateTime $date): void
     {

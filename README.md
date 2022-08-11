@@ -21,16 +21,17 @@ Features:
 
 Requirements:
 
-- PHP >= 7.4
+- PHP >= 8.1
 - MySQL or equivalent (MariaDB, Percona)
 
 PHP compatibility matrix:
 
-**GdprDump Version** | **PHP Requirement**
+**GdprDump Version** | **PHP Requirement** | Maintained?
 ---|---
-3.x (latest) | \>= 7.4
-2.x | \>= 7.3
-1.x | \>= 7.0
+4.x (latest) | \>= 8.1 | Yes
+3.x | \>= 7.4 | Bugfixes only
+2.x | \>= 7.3 | No
+1.x | \>= 7.0 | No
 
 ## Installation
 

@@ -9,9 +9,7 @@ interface ParserInterface
     /**
      * Parse input into PHP.
      *
-     * @param string $input
-     * @return mixed
      * @throws ParseException
      */
-    public function parse(string $input);
+    public function parse(string $input): mixed;
 }

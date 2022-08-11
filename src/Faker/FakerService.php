@@ -10,20 +10,13 @@ use Faker\Generator;
 class FakerService
 {
     private ?Generator $generator = null;
-    private string $locale;
 
-    /**
-     * @param string $locale
-     */
-    public function __construct(string $locale = Factory::DEFAULT_LOCALE)
+    public function __construct(private string $locale = Factory::DEFAULT_LOCALE)
     {
-        $this->locale = $locale;
     }
 
     /**
      * Get the Faker generator.
-     *
-     * @return Generator
      */
     public function getGenerator(): Generator
     {
@@ -36,8 +29,6 @@ class FakerService
 
     /**
      * Get the current locale.
-     *
-     * @return string
      */
     public function getLocale(): string
     {
@@ -46,9 +37,6 @@ class FakerService
 
     /**
      * Set the current locale.
-     *
-     * @param string $locale
-     * @return $this
      */
     public function setLocale(string $locale): self
     {

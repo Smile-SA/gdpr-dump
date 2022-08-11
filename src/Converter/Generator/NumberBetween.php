@@ -15,7 +15,6 @@ class NumberBetween implements ConverterInterface
     private int $max;
 
     /**
-     * @param array $parameters
      * @throws ValidationException
      */
     public function __construct(array $parameters = [])
@@ -36,7 +35,7 @@ class NumberBetween implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         return mt_rand($this->min, $this->max);
     }

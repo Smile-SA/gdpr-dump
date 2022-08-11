@@ -15,24 +15,13 @@ use UnexpectedValueException;
 
 class ConverterFactory
 {
-    private ConverterResolver $converterResolver;
-    private FakerService $faker;
-
-    /**
-     * @param ConverterResolver $converterResolver
-     * @param FakerService $faker
-     */
-    public function __construct(ConverterResolver $converterResolver, FakerService $faker)
+    public function __construct(private ConverterResolver $converterResolver, private FakerService $faker)
     {
-        $this->converterResolver = $converterResolver;
-        $this->faker = $faker;
     }
 
     /**
      * Create a converter from a definition array.
      *
-     * @param array $definition
-     * @return ConverterInterface
      * @throws ValidationException
      */
     public function create(array $definition): ConverterInterface
@@ -69,8 +58,6 @@ class ConverterFactory
     /**
      * Get the converter data.
      *
-     * @param array $definition
-     * @return array
      * @throws UnexpectedValueException
      */
     private function getConverterData(array $definition): array
@@ -109,8 +96,6 @@ class ConverterFactory
     /**
      * Parse the converter parameters.
      *
-     * @param array $parameters
-     * @return array
      * @throws UnexpectedValueException
      */
     private function parseParameters(array $parameters): array
@@ -134,12 +119,10 @@ class ConverterFactory
     /**
      * Parse a parameter that defines an array of converter definitions.
      *
-     * @param string $name
-     * @param mixed $parameter
      * @return ConverterInterface[]
      * @throws UnexpectedValueException
      */
-    private function parseConvertersParameter(string $name, $parameter): array
+    private function parseConvertersParameter(string $name, mixed $parameter): array
     {
         if (!is_array($parameter)) {
             throw new UnexpectedValueException(sprintf('The parameter "%s" must be an array.', $name));
@@ -155,12 +138,9 @@ class ConverterFactory
     /**
      * Parse a parameter that defines a converter definition.
      *
-     * @param string $name
-     * @param mixed $parameter
-     * @return ConverterInterface
      * @throws UnexpectedValueException
      */
-    private function parseConverterParameter(string $name, $parameter): ConverterInterface
+    private function parseConverterParameter(string $name, mixed $parameter): ConverterInterface
     {
         if (!is_array($parameter)) {
             throw new UnexpectedValueException(sprintf('The parameter "%s" must be an array.', $name));
@@ -172,9 +152,6 @@ class ConverterFactory
     /**
      * Create a converter object from its name and parameters.
      *
-     * @param string $name
-     * @param array $parameters
-     * @return ConverterInterface
      * @throws RuntimeException
      */
     private function createConverter(string $name, array $parameters = []): ConverterInterface

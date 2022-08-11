@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [3.1.1] - 2022-12-13
 [3.1.1]: https://github.com/Smile-SA/gdpr-dump/compare/3.1.0...3.1.1
 
+- Set minimum PHP version to 8.1
 - Disallow phar file compilation when composer dev packages are installed
 
 ## [3.1.0] - 2022-08-22

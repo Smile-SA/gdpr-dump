@@ -229,9 +229,6 @@ class JsonSchemaValidatorTest extends TestCase
 
     /**
      * Add required data to the config params.
-     *
-     * @param array $data
-     * @return array
      */
     private function prepareData(array $data): array
     {
@@ -245,10 +242,8 @@ class JsonSchemaValidatorTest extends TestCase
 
     /**
      * Assert that the config data is valid.
-     *
-     * @param mixed $data
      */
-    private function assertDataIsValid($data): void
+    private function assertDataIsValid(mixed $data): void
     {
         $result = $this->validator->validate($data);
         $this->assertTrue($result->isValid());
@@ -256,10 +251,8 @@ class JsonSchemaValidatorTest extends TestCase
 
     /**
      * Assert that the config data is invalid.
-     *
-     * @param mixed $data
      */
-    private function assertDataIsNotValid($data): void
+    private function assertDataIsNotValid(mixed $data): void
     {
         $result = $this->validator->validate($data);
         $this->assertFalse($result->isValid());

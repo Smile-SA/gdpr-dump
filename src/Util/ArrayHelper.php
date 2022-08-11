@@ -8,13 +8,8 @@ class ArrayHelper
 {
     /**
      * Get an array value by path.
-     *
-     * @param array $array
-     * @param string $path
-     * @param mixed|null $default
-     * @return mixed
      */
-    public static function getPath(array $array, string $path, $default = null)
+    public static function getPath(array $array, string $path, mixed $default = null): mixed
     {
         $cur = $array;
 
@@ -32,12 +27,8 @@ class ArrayHelper
 
     /**
      * Set an array value by path.
-     *
-     * @param array $array
-     * @param string $path
-     * @param mixed $value
      */
-    public static function setPath(array &$array, string $path, $value): void
+    public static function setPath(array &$array, string $path, mixed $value): void
     {
         $keys = explode('.', $path);
         $lastKey = array_pop($keys);

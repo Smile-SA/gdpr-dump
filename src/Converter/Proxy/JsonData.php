@@ -18,7 +18,6 @@ class JsonData implements ConverterInterface
     private array $converters;
 
     /**
-     * @param array $parameters
      * @throws ValidationException
      */
     public function __construct(array $parameters)
@@ -33,7 +32,7 @@ class JsonData implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         $decoded = json_decode((string) $value, true);
         if (!is_array($decoded)) {

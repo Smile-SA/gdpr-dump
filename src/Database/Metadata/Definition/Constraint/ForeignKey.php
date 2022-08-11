@@ -6,45 +6,21 @@ namespace Smile\GdprDump\Database\Metadata\Definition\Constraint;
 
 class ForeignKey
 {
-    private string $constraintName;
-    private string $localTableName;
-    private string $foreignTableName;
-
     /**
-     * @var string[]
-     */
-    private array $localColumns;
-
-    /**
-     * @var string[]
-     */
-    private array $foreignColumns;
-
-    /**
-     * @param string $constraintName
-     * @param string $localTableName
      * @param string[] $localColumns
-     * @param string $foreignTableName
      * @param string[] $foreignColumns
      */
     public function __construct(
-        string $constraintName,
-        string $localTableName,
-        array $localColumns,
-        string $foreignTableName,
-        array $foreignColumns
+        private string $constraintName,
+        private string $localTableName,
+        private array $localColumns,
+        private string $foreignTableName,
+        private array $foreignColumns
     ) {
-        $this->constraintName = $constraintName;
-        $this->localTableName = $localTableName;
-        $this->localColumns = $localColumns;
-        $this->foreignTableName = $foreignTableName;
-        $this->foreignColumns = $foreignColumns;
     }
 
     /**
      * Get the name of the constraint.
-     *
-     * @return string
      */
     public function getConstraintName(): string
     {
@@ -53,8 +29,6 @@ class ForeignKey
 
     /**
      * Get the name of the local table.
-     *
-     * @return string
      */
     public function getLocalTableName(): string
     {
@@ -73,8 +47,6 @@ class ForeignKey
 
     /**
      * Get the name of the foreign table.
-     *
-     * @return string
      */
     public function getForeignTableName(): string
     {

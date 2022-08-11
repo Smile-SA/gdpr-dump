@@ -11,8 +11,6 @@ use Smile\GdprDump\Faker\FakerService;
 
 class DataConverterExtension implements ExtensionInterface
 {
-    private ConverterFactory $converterFactory;
-    private FakerService $faker;
     private array $context = [];
 
     /**
@@ -25,14 +23,8 @@ class DataConverterExtension implements ExtensionInterface
      */
     private array $skipConditions = [];
 
-    /**
-     * @param ConverterFactory $converterFactory
-     * @param FakerService $faker
-     */
-    public function __construct(ConverterFactory $converterFactory, FakerService $faker)
+    public function __construct(private ConverterFactory $converterFactory, private FakerService $faker)
     {
-        $this->converterFactory = $converterFactory;
-        $this->faker = $faker;
     }
 
     /**
@@ -49,8 +41,6 @@ class DataConverterExtension implements ExtensionInterface
 
     /**
      * Get the data conversion hook function.
-     *
-     * @return callable
      */
     private function getHook(): callable
     {
@@ -89,8 +79,6 @@ class DataConverterExtension implements ExtensionInterface
 
     /**
      * Configure the Faker service.
-     *
-     * @param DumperConfig $config
      */
     private function prepareFaker(DumperConfig $config): void
     {
@@ -102,8 +90,6 @@ class DataConverterExtension implements ExtensionInterface
 
     /**
      * Create the converters, grouped by table.
-     *
-     * @param DumperConfig $config
      */
     private function prepareConverters(DumperConfig $config): void
     {

@@ -73,6 +73,12 @@
     <!-- Checks that there is exactly one blank line between different class members -->
     <rule ref="SlevomatCodingStandard.Classes.ClassMemberSpacing"/>
 
+    <!-- Checks that there is a certain number of blank lines between constants -->
+    <rule ref="SlevomatCodingStandard.Classes.ConstantSpacing"/>
+
+    <!-- Checks that there is a certain number of blank lines between properties -->
+    <rule ref="SlevomatCodingStandard.Classes.PropertySpacing"/>
+
     <!-- Checks that there is exactly one blank line between class methods -->
     <rule ref="SlevomatCodingStandard.Classes.MethodSpacing"/>
 
@@ -83,6 +89,9 @@
             <property name="linesCountAfterLastUseWhenLastInClass" value="0"/>
         </properties>
     </rule>
+
+    <!-- Requires use of constructor property promotion -->
+    <rule ref="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion"/>
 
     <!-- Expected PHPDoc format -->
     <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing">
@@ -222,13 +231,11 @@
     <!-- Checks for missing parameter typehints -->
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint">
         <exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingTraversableTypeHintSpecification"/>
-        <exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint.UselessAnnotation"/>
     </rule>
 
     <!-- Checks for missing return typehints -->
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
         <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification"/>
-        <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation"/>
     </rule>
 
     <!-- Checks format of union type hints (only enabled if php >= 8.0) -->

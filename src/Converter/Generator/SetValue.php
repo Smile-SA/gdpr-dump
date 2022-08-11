@@ -9,13 +9,9 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class SetValue implements ConverterInterface
 {
-    /**
-     * @var mixed
-     */
-    private $value;
+    private mixed $value;
 
     /**
-     * @param array $parameters
      * @throws ValidationException
      */
     public function __construct(array $parameters)
@@ -35,7 +31,7 @@ class SetValue implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         return $this->value;
     }
