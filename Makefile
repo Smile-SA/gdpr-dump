@@ -1,7 +1,7 @@
+.DEFAULT_GOAL := help
 UNAME := $(shell uname)
 DOCKER_COMPOSE := docker compose
 PHP_CLI := $(DOCKER_COMPOSE) run --rm app
-.DEFAULT_GOAL := help
 
 .PHONY: help
 help:
@@ -29,6 +29,11 @@ gdpr-dump: .env vendor ## Run bin/gdpr-dump command. Example: "make gdpr-dump c=
 .PHONY: compile
 compile: .env vendor ## Run bin/compile command.
 	$(PHP_CLI) bin/compile
+
+## Composer
+.PHONY: composer
+composer: ## Run composer. Example: "make composer c=update"
+	$(PHP_CLI) composer $(c)
 
 ## Code Quality
 .PHONY: analyse
