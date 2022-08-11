@@ -8,35 +8,19 @@ use UnexpectedValueException;
 
 class Config implements ConfigInterface
 {
-    private string $driver = 'pdo_mysql';
-    private array $driverOptions = [];
+    private const DEFAULT_DRIVER = 'pdo_mysql';
+
     private array $connectionParams = [];
     private array $defaults = [
         'pdo_mysql' => ['host' => 'localhost', 'user' => 'root'],
     ];
 
     /**
-     * @param array $params
+     * @param array $connectionParams
      */
-    public function __construct(array $params)
+    public function __construct(array $connectionParams)
     {
-        $this->prepareConfig($params);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getDriver(): string
-    {
-        return $this->driver;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getDriverOptions(): array
-    {
-        return $this->driverOptions;
+        $this->prepareConfig($connectionParams);
     }
 
     /**
@@ -50,44 +34,34 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function getConnectionParam(string $name)
+    public function getConnectionParam(string $name, $default = null)
     {
-        return $this->connectionParams[$name] ?? null;
+        return $this->connectionParams[$name] ?? $default;
     }
 
     /**
      * Prepare the database config.
      *
-     * @param array $params
+     * @param array $connectionParams
      * @throws UnexpectedValueException
      */
-    private function prepareConfig(array $params): void
+    private function prepareConfig(array $connectionParams): void
     {
         // The database name is mandatory, no matter what driver is used
         // (this will require some refactoring if SQLite compatibility is added)
-        if (!isset($params['name'])) {
+        if (!isset($connectionParams['dbname'])) {
             throw new UnexpectedValueException('Missing database name.');
         }
 
         // Set the driver
-        if (isset($params['driver'])) {
-            $this->driver = (string) $params['driver'];
-            unset($params['driver']);
+        if (!isset($connectionParams['driver'])) {
+            $connectionParams['driver'] = self::DEFAULT_DRIVER;
         }
 
-        // Set the driver options (PDO settings)
-        if (array_key_exists('driver_options', $params)) {
-            $this->driverOptions = $params['driver_options'];
-            unset($params['driver_options']);
+        if (isset($this->defaults[$connectionParams['driver']])) {
+            $connectionParams += $this->defaults[$connectionParams['driver']];
         }
 
-        // Set connection parameters values
-        if (isset($this->defaults[$this->driver])) {
-            $this->connectionParams = $this->defaults[$this->driver];
-        }
-
-        foreach ($params as $param => $value) {
-            $this->connectionParams[$param] = (string) $value;
-        }
+        $this->connectionParams = $connectionParams;
     }
 }

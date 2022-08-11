@@ -14,27 +14,21 @@ class ConfigTest extends TestCase
     /**
      * Test the getter methods.
      */
-    public function testGetters(): void
+    public function testParams(): void
     {
         $params = [
             'host' => 'mydb',
             'port' => '3306',
             'user' => 'myuser',
             'password' => 'mypassword',
-            'name' => 'test',
+            'dbname' => 'test',
             'charset' => 'utf8mb4',
             'driver' => 'pdo_mysql',
-            'driver_options' => [PDO::ATTR_TIMEOUT, 60],
+            'driverOptions' => [PDO::ATTR_TIMEOUT, 60],
         ];
 
         $config = new Config($params);
-
-        $this->assertSame($params['driver'], $config->getDriver());
-        $this->assertSame($params['driver_options'], $config->getDriverOptions());
-
-        unset($params['driver']);
-        unset($params['driver_options']);
-        $this->assertEmpty(array_diff($params, $config->getConnectionParams()));
+        $this->assertEquals($params, $config->getConnectionParams());
     }
 
     /**
@@ -42,14 +36,14 @@ class ConfigTest extends TestCase
      */
     public function testDefaultValues(): void
     {
-        $config = new Config(['name' => 'test']);
+        $config = new Config(['dbname' => 'test']);
 
-        $this->assertSame('pdo_mysql', $config->getDriver());
-        $this->assertSame('test', $config->getConnectionParam('name'));
+        $this->assertSame('pdo_mysql', $config->getConnectionParam('driver'));
+        $this->assertSame('test', $config->getConnectionParam('dbname'));
         $this->assertSame('localhost', $config->getConnectionParam('host'));
         $this->assertNull($config->getConnectionParam('port'));
         $this->assertSame('root', $config->getConnectionParam('user'));
-        $this->assertEmpty($config->getDriverOptions());
+        $this->assertNull($config->getConnectionParam('driverOptions'));
     }
 
     /**

@@ -38,11 +38,11 @@ class Database implements DatabaseInterface
     {
         $this->config = $config;
         $this->connection = $this->createConnection($config);
-        $driver = $config->getDriver();
+        $driver = $config->getConnectionParam('driver');
 
         switch ($driver) {
             case 'pdo_mysql':
-                $this->driver = new MysqlDriver($this->connection);
+                $this->driver = new MysqlDriver($this->config);
                 $this->metadata = new MysqlMetadata($this->connection);
                 break;
 
@@ -103,19 +103,11 @@ class Database implements DatabaseInterface
         // Get the connection parameters from the config
         $params = $config->getConnectionParams();
 
-        // Rename parameters that do not match Doctrine naming conventions (name -> dbname)
-        $params['dbname'] = $params['name'];
-        unset($params['name']);
-
         // Remove empty elements
         $params = array_filter(
             $params,
             fn ($value) => $value !== null && $value !== '' && $value !== false
         );
-
-        // Set the driver
-        $params['driver'] = $config->getDriver();
-        $params['driverOptions'] = $config->getDriverOptions();
 
         return DriverManager::getConnection($params);
     }

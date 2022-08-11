@@ -16,14 +16,6 @@ class SqlDumperTest extends TestCase
     /**
      * @inheritdoc
      */
-    public static function setUpBeforeClass(): void
-    {
-        static::bootDatabase();
-    }
-
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
         $this->dumpFile = $this->getResource('db/dump.sql');

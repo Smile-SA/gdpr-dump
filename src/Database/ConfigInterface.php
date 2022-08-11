@@ -7,20 +7,6 @@ namespace Smile\GdprDump\Database;
 interface ConfigInterface
 {
     /**
-     * Get the database driver.
-     *
-     * @return string
-     */
-    public function getDriver(): string;
-
-    /**
-     * Get the driver options.
-     *
-     * @return array
-     */
-    public function getDriverOptions(): array;
-
-    /**
      * Get the connection parameters (host, port, user...).
      *
      * @return array
@@ -31,7 +17,8 @@ interface ConfigInterface
      * Get the value of a connection parameter.
      *
      * @param string $name
+     * @param mixed $default
      * @return mixed
      */
-    public function getConnectionParam(string $name);
+    public function getConnectionParam(string $name, $default = null);
 }

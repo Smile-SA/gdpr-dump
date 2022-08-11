@@ -54,8 +54,10 @@ abstract class TestCase extends BaseTestCase
         $config->compile();
 
         // Initialize the shared connection
-        $dbParams = $config->get('database');
-        static::$database = new Database(new DatabaseConfig($dbParams));
+        $connectionParams = $config->get('database');
+        $connectionParams['dbname'] = $connectionParams['name'];
+        unset($connectionParams['name']);
+        static::$database = new Database(new DatabaseConfig($connectionParams));
 
         // Create the tables
         $connection = static::$database->getConnection();

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Database\Driver;
 
-use Doctrine\DBAL\Connection;
+use Smile\GdprDump\Database\ConfigInterface;
 
 class MysqlDriver implements DriverInterface
 {
-    private Connection $connection;
+    private ConfigInterface $config;
 
     /**
      * @var string[]
@@ -22,11 +22,11 @@ class MysqlDriver implements DriverInterface
     ];
 
     /**
-     * @param Connection $connection
+     * @param ConfigInterface $config
      */
-    public function __construct(Connection $connection)
+    public function __construct(ConfigInterface $config)
     {
-        $this->connection = $connection;
+        $this->config = $config;
     }
 
     /**
@@ -34,7 +34,7 @@ class MysqlDriver implements DriverInterface
      */
     public function getDsn(): string
     {
-        $values = $this->connection->getParams();
+        $values = $this->config->getConnectionParams();
         $dsn = [];
 
         foreach ($this->params as $param) {

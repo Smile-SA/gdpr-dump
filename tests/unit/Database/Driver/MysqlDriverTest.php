@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Database\Driver;
 
-use Doctrine\DBAL\Connection;
+use Smile\GdprDump\Database\Config;
 use Smile\GdprDump\Database\Driver\MysqlDriver;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
@@ -26,18 +26,14 @@ class MysqlDriverTest extends TestCase
      */
     private function getMysqlDriver(): MysqlDriver
     {
-        $params = [
+        $config = new Config([
             'host' => 'localhost',
             'dbname' => 'mydatabase',
             'user' => 'my_user',
             'password' => 'my_password',
             'charset' => 'utf8mb4',
-        ];
+        ]);
 
-        $connectionMock = $this->createMock(Connection::class);
-        $connectionMock->method('getParams')
-            ->willReturn($params);
-
-        return new MysqlDriver($connectionMock);
+        return new MysqlDriver($config);
     }
 }

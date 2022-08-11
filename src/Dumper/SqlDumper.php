@@ -58,7 +58,7 @@ class SqlDumper implements DumperInterface
             $database->getConfig()->getConnectionParam('user'),
             $database->getConfig()->getConnectionParam('password'),
             $dumpSettings,
-            $database->getConfig()->getDriverOptions()
+            $database->getConfig()->getConnectionParam('driverOptions', [])
         );
 
         // Register extensions
@@ -84,9 +84,20 @@ class SqlDumper implements DumperInterface
      */
     private function getDatabase(ConfigInterface $config): Database
     {
-        $databaseConfig = new DatabaseConfig($config->get('database', []));
+        $params = $config->get('database', []);
 
-        return new Database($databaseConfig);
+        // Rename some keys (for compatibility with the Doctrine connection)
+        if (array_key_exists('name', $params)) {
+            $params['dbname'] = $params['name'];
+            unset($params['name']);
+        }
+
+        if (array_key_exists('driver_options', $params)) {
+            $params['driverOptions'] = $params['driver_options'];
+            unset($params['driver_options']);
+        }
+
+        return new Database(new DatabaseConfig($params));
     }
 
     /**
