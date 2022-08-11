@@ -1,8 +1,7 @@
 UNAME := $(shell uname)
 DOCKER_COMPOSE := docker compose
 PHP_CLI := $(DOCKER_COMPOSE) run --rm app
-
-default: help
+.DEFAULT_GOAL := help
 
 .PHONY: help
 help:
