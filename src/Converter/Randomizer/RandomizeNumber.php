@@ -11,9 +11,6 @@ class RandomizeNumber implements ConverterInterface
 {
     private Closure $replaceCallback;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->replaceCallback = fn () => mt_rand(0, 9);

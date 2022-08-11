@@ -30,9 +30,6 @@ class ConditionBuilder
         'time', 'trim', 'ucfirst', 'ucwords', 'vsprintf', 'wordwrap',
     ];
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->tokenizer = new Tokenizer();

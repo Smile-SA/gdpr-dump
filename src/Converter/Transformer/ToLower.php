@@ -10,9 +10,6 @@ class ToLower implements ConverterInterface
 {
     private bool $multiByteEnabled;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         // Call the extension_loaded function only once (few seconds gain when converting millions of values)

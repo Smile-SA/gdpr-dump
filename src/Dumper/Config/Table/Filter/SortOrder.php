@@ -8,14 +8,7 @@ use UnexpectedValueException;
 
 class SortOrder
 {
-    /**
-     * Ascending direction.
-     */
     public const DIRECTION_ASC = 'ASC';
-
-    /**
-     * Descending direction.
-     */
     public const DIRECTION_DESC = 'DESC';
 
     private string $column;
