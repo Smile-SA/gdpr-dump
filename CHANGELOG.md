@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## WIP
 
 - Move the compiler binary to a Symfony command
+- Compatibility with Symfony 6 components
 
 ## [3.0.0] - 2022-07-28
 [3.0.0]: https://github.com/Smile-SA/gdpr-dump/compare/2.3.3...3.0.0
