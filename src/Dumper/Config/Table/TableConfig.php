@@ -26,10 +26,6 @@ class TableConfig
      */
     private array $sortOrders = [];
 
-    /**
-     * @param string $tableName
-     * @param array $tableConfig
-     */
     public function __construct(string $tableName, array $tableConfig)
     {
         $this->name = $tableName;
@@ -38,8 +34,6 @@ class TableConfig
 
     /**
      * Get the table name.
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -68,8 +62,6 @@ class TableConfig
 
     /**
      * Get the table limit.
-     *
-     * @return int|null
      */
     public function getLimit(): ?int
     {
@@ -78,8 +70,6 @@ class TableConfig
 
     /**
      * Get the converter definitions of a table.
-     *
-     * @return array
      */
     public function getConverters(): array
     {
@@ -88,8 +78,6 @@ class TableConfig
 
     /**
      * Check if there is data to filter.
-     *
-     * @return bool
      */
     public function hasFilter(): bool
     {
@@ -98,8 +86,6 @@ class TableConfig
 
     /**
      * Check if the table data must be sorted.
-     *
-     * @return bool
      */
     public function hasSortOrder(): bool
     {
@@ -108,8 +94,6 @@ class TableConfig
 
     /**
      * Check if a limit is defined.
-     *
-     * @return bool
      */
     public function hasLimit(): bool
     {
@@ -119,8 +103,6 @@ class TableConfig
     /**
      * Get the conversion skip condition.
      * Data conversion is disabled when the condition evaluates to true.
-     *
-     * @return string
      */
     public function getSkipCondition(): string
     {
@@ -129,8 +111,6 @@ class TableConfig
 
     /**
      * Prepare the table config.
-     *
-     * @param array $tableData
      */
     private function prepareConfig(array $tableData): void
     {
@@ -142,8 +122,6 @@ class TableConfig
 
     /**
      * Prepare the table filters.
-     *
-     * @param array $tableData
      */
     private function prepareFilters(array $tableData): void
     {
@@ -156,8 +134,6 @@ class TableConfig
 
     /**
      * Prepare the table sort order.
-     *
-     * @param array $tableData
      */
     private function prepareSortOrder(array $tableData): void
     {
@@ -185,8 +161,6 @@ class TableConfig
 
     /**
      * Prepare the table limit.
-     *
-     * @param array $tableData
      */
     private function prepareLimit(array $tableData): void
     {
@@ -201,8 +175,6 @@ class TableConfig
 
     /**
      * Prepare the table converters.
-     *
-     * @param array $tableData
      */
     private function prepareConverters(array $tableData): void
     {

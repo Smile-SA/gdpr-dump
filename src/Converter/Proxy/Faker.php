@@ -22,7 +22,6 @@ class Faker implements ConverterInterface
     private array $placeholders = [];
 
     /**
-     * @param array $parameters
      * @throws ValidationException
      */
     public function __construct(array $parameters)
@@ -47,7 +46,7 @@ class Faker implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         // Faster than calling the "format" method of the Faker generator
         // (the "format" method uses call_user_func_array, which is very slow)

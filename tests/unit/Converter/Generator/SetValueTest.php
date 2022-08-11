@@ -49,10 +49,8 @@ class SetValueTest extends TestCase
 
     /**
      * Assert that the converter generates the specified value.
-     *
-     * @param mixed $value
      */
-    private function assertValueIsSet($value): void
+    private function assertValueIsSet(mixed $value): void
     {
         $converter = new SetValue(['value' => $value]);
         $this->assertSame($value, $converter->convert($value));

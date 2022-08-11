@@ -12,7 +12,7 @@ class YamlParser implements ParserInterface
     /**
      * @inheritdoc
      */
-    public function parse(string $input)
+    public function parse(string $input): mixed
     {
         try {
             return Yaml::parse($input);

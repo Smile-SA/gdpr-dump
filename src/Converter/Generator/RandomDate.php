@@ -19,7 +19,6 @@ class RandomDate implements ConverterInterface
     private int $maxYear;
 
     /**
-     * @param array $parameters
      * @throws ValidationException
      */
     public function __construct(array $parameters = [])
@@ -44,7 +43,7 @@ class RandomDate implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         $this->randomizeDate();
 

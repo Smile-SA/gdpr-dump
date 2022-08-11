@@ -10,8 +10,6 @@ interface DumperInterface
 {
     /**
      * Create a dump according to the configuration.
-     *
-     * @param ConfigInterface $config
      */
     public function dump(ConfigInterface $config): void;
 }

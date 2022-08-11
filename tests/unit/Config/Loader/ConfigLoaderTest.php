@@ -72,9 +72,6 @@ class ConfigLoaderTest extends TestCase
 
     /**
      * Assert that an array is a subset of another array.
-     *
-     * @param array $subset
-     * @param array $array
      */
     private function assertArraySubset(array $subset, array $array): void
     {
@@ -83,10 +80,6 @@ class ConfigLoaderTest extends TestCase
 
     /**
      * Check if the array is a subset of another array.
-     *
-     * @param array $subset
-     * @param array $array
-     * @return bool
      */
     private function isArraySubset(array $subset, array $array): bool
     {
@@ -109,9 +102,6 @@ class ConfigLoaderTest extends TestCase
 
     /**
      * Create a config loader object.
-     *
-     * @param Config $config
-     * @return ConfigLoader
      */
     private function createConfigLoader(Config $config): ConfigLoader
     {

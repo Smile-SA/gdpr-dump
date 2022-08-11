@@ -9,17 +9,12 @@ use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 
 class MysqlMetadata implements MetadataInterface
 {
-    private Connection $connection;
     private string $schema;
     private ?array $tableNames = null;
     private ?array $foreignKeys = null;
 
-    /**
-     * @param Connection $connection
-     */
-    public function __construct(Connection $connection)
+    public function __construct(private Connection $connection)
     {
-        $this->connection = $connection;
         $this->schema = (string) $connection->getDatabase();
     }
 

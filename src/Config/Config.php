@@ -12,9 +12,6 @@ class Config implements ConfigInterface
 {
     private array $items;
 
-    /**
-     * @param array $data
-     */
     public function __construct(array $data = [])
     {
         $this->items = $data;
@@ -23,7 +20,7 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function get(string $key, $default = null)
+    public function get(string $key, mixed $default = null): mixed
     {
         return $this->has($key) ? $this->items[$key] : $default;
     }
@@ -31,7 +28,7 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function set(string $key, $value): self
+    public function set(string $key, mixed $value): self
     {
         $this->items[$key] = $value;
 
@@ -89,10 +86,6 @@ class Config implements ConfigInterface
 
     /**
      * Merge two arrays.
-     *
-     * @param array $data
-     * @param array $override
-     * @return array
      */
     private function mergeArray(array $data, array $override): array
     {

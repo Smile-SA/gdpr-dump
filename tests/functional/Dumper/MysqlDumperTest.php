@@ -55,8 +55,6 @@ class MysqlDumperTest extends TestCase
 
     /**
      * Assert that the dump file contents match the dump configuration file.
-     *
-     * @param bool $filterPropagationEnabled
      */
     private function assertDumpIsValid(bool $filterPropagationEnabled = true): void
     {
@@ -130,8 +128,6 @@ class MysqlDumperTest extends TestCase
 
     /**
      * Create the config object.
-     *
-     * @return Config
      */
     private function createConfig(): Config
     {
@@ -147,8 +143,6 @@ class MysqlDumperTest extends TestCase
 
     /**
      * Create a SQL dumper object.
-     *
-     * @return MysqlDumper
      */
     private function createDumper(): MysqlDumper
     {

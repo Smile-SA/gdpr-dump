@@ -16,16 +16,10 @@ use Smile\GdprDump\Dumper\Mysql\ExtensionInterface;
 class MysqlDumper implements DumperInterface
 {
     /**
-     * @var ExtensionInterface[]
-     */
-    private iterable $extensions;
-
-    /**
      * @param ExtensionInterface[] $extensions
      */
-    public function __construct(iterable $extensions = [])
+    public function __construct(private iterable $extensions = [])
     {
-        $this->extensions = $extensions;
     }
 
     /**
@@ -75,8 +69,6 @@ class MysqlDumper implements DumperInterface
     /**
      * Create a database object.
      *
-     * @param ConfigInterface $config
-     * @return Database
      * @throws DBALException
      */
     private function getDatabase(ConfigInterface $config): Database
@@ -99,9 +91,6 @@ class MysqlDumper implements DumperInterface
 
     /**
      * Get the dump settings.
-     *
-     * @param DumperConfig $config
-     * @return array
      */
     private function getDumpSettings(DumperConfig $config): array
     {

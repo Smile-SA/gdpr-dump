@@ -8,10 +8,6 @@ interface ConverterInterface
 {
     /**
      * Transform the value.
-     *
-     * @param mixed $value
-     * @param array $context
-     * @return mixed
      */
-    public function convert($value, array $context = []);
+    public function convert(mixed $value, array $context = []): mixed;
 }

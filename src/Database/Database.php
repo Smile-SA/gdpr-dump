@@ -32,7 +32,6 @@ class Database
     private ParameterBag $connectionParams;
 
     /**
-     * @param array $connectionParams
      * @throws Exception
      * @throws UnexpectedValueException
      */
@@ -56,8 +55,6 @@ class Database
 
     /**
      * Get the doctrine connection.
-     *
-     * @return Connection
      */
     public function getConnection(): Connection
     {
@@ -66,8 +63,6 @@ class Database
 
     /**
      * Get the database driver.
-     *
-     * @return DriverInterface
      */
     public function getDriver(): DriverInterface
     {
@@ -76,8 +71,6 @@ class Database
 
     /**
      * Get the database metadata.
-     *
-     * @return MetadataInterface
      */
     public function getMetadata(): MetadataInterface
     {
@@ -86,8 +79,6 @@ class Database
 
     /**
      * Get the connection parameters (host, port, user...).
-     *
-     * @return ParameterBag
      */
     public function getConnectionParams(): ParameterBag
     {

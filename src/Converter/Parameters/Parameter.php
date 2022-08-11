@@ -12,33 +12,16 @@ class Parameter
     public const TYPE_FLOAT = 'float';
     public const TYPE_ARRAY = 'array';
 
-    private string $name;
-    private ?string $type;
-    private bool $required;
-
-    /**
-     * @var mixed
-     */
-    private $default;
-
-    /**
-     * @param string $name
-     * @param string|null $type
-     * @param bool $required
-     * @param mixed $default
-     */
-    public function __construct(string $name, ?string $type = null, bool $required = false, $default = null)
-    {
-        $this->name = $name;
-        $this->type = $type;
-        $this->required = $required;
-        $this->default = $default;
+    public function __construct(
+        private string $name,
+        private ?string $type = null,
+        private bool $required = false,
+        private mixed $default = null
+    ) {
     }
 
     /**
      * Get the parameter name.
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -47,8 +30,6 @@ class Parameter
 
     /**
      * Get the parameter type.
-     *
-     * @return string|null
      */
     public function getType(): ?string
     {
@@ -57,8 +38,6 @@ class Parameter
 
     /**
      * Check whether the parameter is required.
-     *
-     * @return bool
      */
     public function isRequired(): bool
     {
@@ -67,18 +46,14 @@ class Parameter
 
     /**
      * Get the default value.
-     *
-     * @return mixed
      */
-    public function getDefault()
+    public function getDefault(): mixed
     {
         return $this->default;
     }
 
     /**
      * Check if the parameter is expected to be a scalar value.
-     *
-     * @return bool
      */
     public function isScalar(): bool
     {
@@ -87,8 +62,6 @@ class Parameter
 
     /**
      * Check if the parameter is expected to be an array.
-     *
-     * @return bool
      */
     public function isArray(): bool
     {
@@ -97,8 +70,6 @@ class Parameter
 
     /**
      * Check if the parameter is expected to be an object.
-     *
-     * @return bool
      */
     public function isObject(): bool
     {

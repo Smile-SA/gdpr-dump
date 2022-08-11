@@ -61,10 +61,6 @@ class AnonymizeDateTest extends TestCase
 
     /**
      * Assert that a date is anonymized.
-     *
-     * @param string $anonymized
-     * @param string $actual
-     * @param string $format
      */
     protected function assertDateIsAnonymized(string $anonymized, string $actual, string $format): void
     {

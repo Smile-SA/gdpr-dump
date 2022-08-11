@@ -6,19 +6,13 @@ namespace Smile\GdprDump\Config\Loader;
 
 class FileLocator implements FileLocatorInterface
 {
-    private string $templatesDirectory;
-
     /**
      * @var string[]
      */
     private ?array $templates = null;
 
-    /**
-     * @param string $templatesDirectory
-     */
-    public function __construct(string $templatesDirectory)
+    public function __construct(private string $templatesDirectory)
     {
-        $this->templatesDirectory = $templatesDirectory;
     }
 
     /**
@@ -56,7 +50,6 @@ class FileLocator implements FileLocatorInterface
     /**
      * Locate the config templates.
      *
-     * @return array
      * @throws FileNotFoundException
      */
     private function getTemplates(): array
@@ -84,8 +77,6 @@ class FileLocator implements FileLocatorInterface
     /**
      * Get the absolute path of a file.
      *
-     * @param string $path
-     * @return string
      * @throws FileNotFoundException
      */
     private function realpath(string $path): string
@@ -100,9 +91,6 @@ class FileLocator implements FileLocatorInterface
 
     /**
      * Returns whether the file path is an absolute path.
-     *
-     * @param string $path
-     * @return bool
      */
     private function isAbsolutePath(string $path): bool
     {

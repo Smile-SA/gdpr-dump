@@ -15,7 +15,6 @@ class VersionCondition
     private string $operator;
 
     /**
-     * @param string $condition
      * @throws InvalidVersionException
      */
     public function __construct(string $condition)
@@ -25,8 +24,6 @@ class VersionCondition
 
     /**
      * Get the version.
-     *
-     * @return string
      */
     public function getVersion(): string
     {
@@ -35,8 +32,6 @@ class VersionCondition
 
     /**
      * Get the operator.
-     *
-     * @return string
      */
     public function getOperator(): string
     {
@@ -46,7 +41,6 @@ class VersionCondition
     /**
      * Get the version and operator from a condition, e.g. `<=2.3`.
      *
-     * @param string $condition
      * @throws InvalidVersionException
      */
     private function parseCondition(string $condition): void

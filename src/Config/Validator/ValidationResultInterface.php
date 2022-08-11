@@ -8,15 +8,12 @@ interface ValidationResultInterface
 {
     /**
      * Check whether the validation status.
-     *
-     * @return bool
      */
     public function isValid(): bool;
 
     /**
      * Set the validation status.
      *
-     * @param bool $valid
      * @return ValidationResultInterface
      */
     public function setValid(bool $valid): self;

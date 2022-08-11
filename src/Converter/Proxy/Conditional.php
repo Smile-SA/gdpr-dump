@@ -17,7 +17,6 @@ class Conditional implements ConverterInterface
     private ?ConverterInterface $ifFalseConverter = null;
 
     /**
-     * @param array $parameters
      * @throws ValidationException
      */
     public function __construct(array $parameters)
@@ -43,7 +42,7 @@ class Conditional implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert($value, array $context = [])
+    public function convert(mixed $value, array $context = []): mixed
     {
         $result = (bool) eval($this->condition);
 

@@ -10,33 +10,16 @@ use Smile\GdprDump\Dumper\Config\DumperConfig;
 
 class Context
 {
-    private Mysqldump $dumper;
-    private Database $database;
-    private DumperConfig $config;
-    private array $dumperContext;
-
-    /**
-     * @param Mysqldump $dumper
-     * @param Database $database
-     * @param DumperConfig $config
-     * @param array $dumperContext
-     */
     public function __construct(
-        Mysqldump $dumper,
-        Database $database,
-        DumperConfig $config,
-        array $dumperContext
+        private Mysqldump $dumper,
+        private Database $database,
+        private DumperConfig $config,
+        private array $dumperContext
     ) {
-        $this->dumper = $dumper;
-        $this->database = $database;
-        $this->config = $config;
-        $this->dumperContext = $dumperContext;
     }
 
     /**
      * Get the dumper config.
-     *
-     * @return DumperConfig
      */
     public function getConfig(): DumperConfig
     {
@@ -45,8 +28,6 @@ class Context
 
     /**
      * Get the database wrapper.
-     *
-     * @return Database
      */
     public function getDatabase(): Database
     {
@@ -55,8 +36,6 @@ class Context
 
     /**
      * Get the dump context.
-     *
-     * @return Mysqldump
      */
     public function getDumper(): Mysqldump
     {
@@ -65,8 +44,6 @@ class Context
 
     /**
      * Get the dumper context.
-     *
-     * @return array
      */
     public function getDumperContext(): array
     {

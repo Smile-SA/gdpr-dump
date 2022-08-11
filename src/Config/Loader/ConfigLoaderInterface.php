@@ -11,7 +11,6 @@ interface ConfigLoaderInterface
     /**
      * Load a config file and merge its data to the config storage.
      *
-     * @param string $fileName
      * @throws ConfigException
      */
     public function load(string $fileName): void;

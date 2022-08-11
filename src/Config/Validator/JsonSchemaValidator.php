@@ -12,13 +12,10 @@ class JsonSchemaValidator implements ValidatorInterface
     private ?Validator $schemaValidator = null;
     private string $schemaFile;
 
-    /**
-     * @param string $schemaFile
-     */
     public function __construct(string $schemaFile)
     {
         // Prefix the file name by the schema
-        if (strpos($schemaFile, 'phar://') === false) {
+        if (!str_contains($schemaFile, 'phar://')) {
             $schemaFile = 'file://' . $schemaFile;
         }
 
@@ -28,7 +25,7 @@ class JsonSchemaValidator implements ValidatorInterface
     /**
      * @inheritdoc
      */
-    public function validate($data): ValidationResultInterface
+    public function validate(mixed $data): ValidationResultInterface
     {
         $validator = $this->getValidator();
 
@@ -62,8 +59,6 @@ class JsonSchemaValidator implements ValidatorInterface
 
     /**
      * Get the JSON schema validator.
-     *
-     * @return Validator
      */
     private function getValidator(): Validator
     {

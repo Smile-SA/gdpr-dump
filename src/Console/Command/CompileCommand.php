@@ -12,18 +12,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CompileCommand extends Command
 {
-    private Compiler $compiler;
-    private string $defaultLocale;
-
-    /**
-     * @param Compiler $compiler
-     * @param string $defaultLocale
-     * @param string|null $name
-     */
-    public function __construct(Compiler $compiler, string $defaultLocale, ?string $name = null)
+    public function __construct(private Compiler $compiler, private string $defaultLocale, ?string $name = null)
     {
-        $this->compiler = $compiler;
-        $this->defaultLocale = $defaultLocale;
         parent::__construct($name);
     }
 
@@ -70,8 +60,6 @@ class CompileCommand extends Command
 
     /**
      * Get the file name of the phar archive.
-     *
-     * @return string
      */
     private function getPharFileName(): string
     {

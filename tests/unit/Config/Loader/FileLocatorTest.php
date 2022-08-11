@@ -77,8 +77,6 @@ class FileLocatorTest extends TestCase
 
     /**
      * Create a file locator object.
-     *
-     * @return FileLocator
      */
     private function createFileLocator(): FileLocator
     {
