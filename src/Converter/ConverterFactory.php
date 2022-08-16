@@ -186,6 +186,13 @@ class ConverterFactory
             $parameters['faker'] = $this->faker->getGenerator();
         }
 
-        return new $className($parameters);
+        $converter = new $className($parameters);
+        if (!$converter instanceof ConverterInterface) {
+            throw new RuntimeException(
+                sprintf('The class "%s" does not implement Smile\\GdprDump\\Converter\\ConverterInterface.', $className)
+            );
+        }
+
+        return $converter;
     }
 }

@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Dumper\Mysqldump;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use RuntimeException;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Database\TableDependencyResolver;
@@ -199,15 +200,24 @@ class TableFilterExtension implements ExtensionInterface
      *
      * @param QueryBuilder $queryBuilder
      * @param TableConfig $tableConfig
+     * @throws RuntimeException
      */
     private function applyTableConfigToQueryBuilder(QueryBuilder $queryBuilder, TableConfig $tableConfig): void
     {
         // Apply filters
         foreach ($tableConfig->getFilters() as $filter) {
             $value = $this->getFilterValue($filter);
+            $callable = [$queryBuilder->expr(), $filter->getOperator()];
+
+            // Filter operators must match the method names of the Doctrine expression builder
+            if (!is_callable($callable)) {
+                throw new RuntimeException(
+                    sprintf('The doctrine expression builder does not implement "%s".', $filter->getOperator())
+                );
+            }
 
             $whereExpr = call_user_func_array(
-                [$queryBuilder->expr(), $filter->getOperator()],
+                $callable,
                 [$this->connection->quoteIdentifier($filter->getColumn()), $value]
             );
 

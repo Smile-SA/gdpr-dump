@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Functional;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
+use RuntimeException;
 use Smile\GdprDump\AppKernel;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\Loader\ConfigLoader;
@@ -14,8 +15,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected static ?AppKernel $kernel = null;
-    protected static ?Database $database = null;
+    private static ?AppKernel $kernel = null;
+    private static ?Database $database = null;
 
     /**
      * Get the absolute path of the application.
@@ -45,30 +46,29 @@ abstract class TestCase extends BaseTestCase
      */
     protected static function getDatabase(): Database
     {
-        if (static::$database === null) {
+        if (self::$database === null) {
             // Parse the config file
             /** @var ConfigLoader $loader */
-            $loader = static::getContainer()->get('dumper.config_loader');
-            $loader->load(static::getResource('config/templates/test.yaml'));
+            $loader = self::getContainer()->get('dumper.config_loader');
+            $loader->load(self::getResource('config/templates/test.yaml'));
 
             /** @var Config $config */
-            $config = static::getContainer()->get('dumper.config');
+            $config = self::getContainer()->get('dumper.config');
             $config->compile();
 
             // Initialize the shared connection
             $connectionParams = $config->get('database');
             $connectionParams['dbname'] = $connectionParams['name'];
             unset($connectionParams['name']);
-            static::$database = new Database(new DatabaseConfig($connectionParams));
+            self::$database = new Database(new DatabaseConfig($connectionParams));
 
             // Create the tables
-            $connection = static::$database->getConnection();
-            $queries = file_get_contents(static::getResource('db/test.sql'));
-            $statement = $connection->prepare($queries);
+            $connection = self::$database->getConnection();
+            $statement = $connection->prepare(self::getDatabaseDump());
             $statement->execute();
         }
 
-        return static::$database;
+        return self::$database;
     }
 
     /**
@@ -78,11 +78,28 @@ abstract class TestCase extends BaseTestCase
      */
     protected static function getContainer(): ContainerInterface
     {
-        if (static::$kernel === null) {
-            static::$kernel = new AppKernel();
-            static::$kernel->boot();
+        if (self::$kernel === null) {
+            self::$kernel = new AppKernel();
+            self::$kernel->boot();
         }
 
-        return static::$kernel->getContainer();
+        return self::$kernel->getContainer();
+    }
+
+    /**
+     * Get the SQL queries that allow creating the test database.
+     *
+     * @return string
+     */
+    private static function getDatabaseDump(): string
+    {
+        $file = self::getResource('db/test.sql');
+        $sql = file_get_contents($file);
+
+        if ($sql === false) {
+            throw new RuntimeException(sprintf('Failed to open the file "%s".', $file));
+        }
+
+        return $sql;
     }
 }

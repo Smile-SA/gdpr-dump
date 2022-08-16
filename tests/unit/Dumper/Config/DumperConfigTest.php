@@ -143,7 +143,7 @@ class DumperConfigTest extends TestCase
 
         $settings = $config->getFakerSettings();
         $this->assertArrayHasKey('locale', $settings);
-        $this->assertSame(null, $settings['locale']);
+        $this->assertNull($settings['locale']);
     }
 
     /**

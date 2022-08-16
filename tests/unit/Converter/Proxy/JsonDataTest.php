@@ -28,10 +28,10 @@ class JsonDataTest extends TestCase
 
         // Values that can't be decoded are returned as-is
         $value = $converter->convert(null);
-        $this->assertSame(null, $value);
+        $this->assertNull($value);
 
         $value = $converter->convert($this->getJsonData());
-        $this->assertSame($this->getExpectedData(), $value);
+        $this->assertJson($this->getExpectedData(), $value);
     }
 
     /**
@@ -85,12 +85,16 @@ class JsonDataTest extends TestCase
      */
     private function getJsonData(): string
     {
-        return json_encode([
+        $data = json_encode([
             'customer' => [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
             ],
         ]);
+
+        $this->assertIsString($data);
+
+        return $data;
     }
 
     /**
@@ -100,11 +104,15 @@ class JsonDataTest extends TestCase
      */
     private function getExpectedData(): string
     {
-        return json_encode([
+        $data = json_encode([
             'customer' => [
                 'firstname' => 'test_John',
                 'lastname' => 'test_Doe',
             ],
         ]);
+
+        $this->assertIsString($data);
+
+        return $data;
     }
 }

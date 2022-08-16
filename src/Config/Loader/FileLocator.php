@@ -53,6 +53,8 @@ class FileLocator implements FileLocatorInterface
 
     /**
      * Locate the config templates.
+     *
+     * @throws FileNotFoundException
      */
     private function resolveTemplates(): void
     {
@@ -62,6 +64,9 @@ class FileLocator implements FileLocatorInterface
 
         // Can't use glob, doesn't work with phar
         $files = scandir($this->templatesDirectory);
+        if ($files === false) {
+            throw new FileNotFoundException(sprintf('Failed to scan the directory "%s".', $this->templatesDirectory));
+        }
 
         foreach ($files as $fileName) {
             if ($fileName === '.' || $fileName === '..') {

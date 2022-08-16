@@ -1,5 +1,5 @@
 parameters:
-    level: 6
+    level: 7
     paths:
         - bin
         - src
@@ -20,5 +20,9 @@ parameters:
             path: src/Converter/Proxy/Faker.php
         -
             # False positive
-            message: '#Unsafe access to private property [a-zA-Z\\]+::\$[a-zA-Z]+ through static#'
-            path: src
+            message: '#Cannot call method [a-zA-Z]+\(\) on Smile\\GdprDump\\Database\\Metadata\\Definition\\Constraint\\ForeignKey#'
+            path: tests/functional/Database/Metadata/MysqlMetadataTest.php
+
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon

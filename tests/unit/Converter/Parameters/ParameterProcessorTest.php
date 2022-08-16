@@ -27,7 +27,7 @@ class ParameterProcessorTest extends TestCase
         $input = $processor->process($values);
         $this->assertInstanceOf(InputParameters::class, $input);
         $this->assertSame('default', $input->get('string'));
-        $this->assertSame(null, $input->get('array'));
+        $this->assertNull($input->get('array'));
         $this->assertInstanceOf(stdClass::class, $input->get('object'));
 
         $values = [

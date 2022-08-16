@@ -28,7 +28,7 @@ class SerializedDataTest extends TestCase
 
         // Values that can't be decoded are returned as-is
         $value = $converter->convert(null);
-        $this->assertSame(null, $value);
+        $this->assertNull($value);
 
         $value = $converter->convert($this->getSerializedData());
         $this->assertSame($this->getExpectedData(), $value);

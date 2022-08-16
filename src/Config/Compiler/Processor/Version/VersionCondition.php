@@ -57,10 +57,10 @@ class VersionCondition
 
         $start = substr($condition, 0, 2);
 
-        if (in_array($start, static::$versionOperators, true)) {
+        if (in_array($start, self::$versionOperators, true)) {
             $operator = $start;
             $version = substr($condition, 2, strlen($condition) - 1);
-        } elseif (in_array($start[0], static::$versionOperators, true)) {
+        } elseif (in_array($start[0], self::$versionOperators, true)) {
             $operator = $start[0];
             $version = substr($condition, 1, strlen($condition) - 1);
         } else {

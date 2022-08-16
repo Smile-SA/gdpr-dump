@@ -35,10 +35,10 @@ class Cache implements ConverterInterface
      */
     public function convert($value, array $context = [])
     {
-        if (!isset(static::$values[$this->cacheKey][$value])) {
-            static::$values[$this->cacheKey][$value] = $this->converter->convert($value, $context);
+        if (!isset(self::$values[$this->cacheKey][$value])) {
+            self::$values[$this->cacheKey][$value] = $this->converter->convert($value, $context);
         }
 
-        return static::$values[$this->cacheKey][$value];
+        return self::$values[$this->cacheKey][$value];
     }
 }

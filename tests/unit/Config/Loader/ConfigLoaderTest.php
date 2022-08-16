@@ -21,7 +21,7 @@ class ConfigLoaderTest extends TestCase
     {
         $config = new Config(['version' => '2.0.0']);
         $configLoader = $this->createConfigLoader($config);
-        $configLoader->load(static::getResource('config/templates/test.yaml'));
+        $configLoader->load($this->getResource('config/templates/test.yaml'));
 
         $expectedSubset = ['output' => '%env(DUMP_OUTPUT)%'];
         $this->assertArraySubset($expectedSubset, $config->get('dump'));
@@ -67,7 +67,7 @@ class ConfigLoaderTest extends TestCase
         $configLoader = $this->createConfigLoader($config);
 
         $this->expectException(ParseException::class);
-        $configLoader->load(static::getResource('config/templates/invalid_data.yaml'));
+        $configLoader->load($this->getResource('config/templates/invalid_data.yaml'));
     }
 
     /**

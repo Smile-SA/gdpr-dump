@@ -72,14 +72,30 @@ class Compiler
         foreach ($this->getFinders() as $finder) {
             foreach ($finder as $file) {
                 $path = $this->getRelativeFilePath($file);
-                $phar->addFromString($path, $this->stripWhitespaces(file_get_contents($file->getRealPath())));
+                $phar->addFromString($path, $this->parseFile($file->getRealPath()));
             }
         }
 
         // Add binary file
-        $content = $this->stripWhitespaces(file_get_contents($this->basePath . '/bin/gdpr-dump'));
-        $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $content);
-        $phar->addFromString('bin/gdpr-dump', $content);
+        $contents = $this->parseFile($this->basePath . '/bin/gdpr-dump');
+        $contents = preg_replace('{^#!/usr/bin/env php\s*}', '', $contents);
+        $phar->addFromString('bin/gdpr-dump', $contents);
+    }
+
+    /**
+     * Read and minify the contents of a file.
+     *
+     * @param string $fileName
+     * @return string
+     */
+    private function parseFile(string $fileName): string
+    {
+        $contents = file_get_contents($fileName);
+        if ($contents === false) {
+            throw new RuntimeException(sprintf('Failed to open the file "%s".', $fileName));
+        }
+
+        return $this->stripWhitespaces($contents);
     }
 
     /**

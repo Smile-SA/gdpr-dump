@@ -64,7 +64,7 @@ class SqlDumperTest extends TestCase
         $this->assertFileExists($this->dumpFile);
 
         // Make sure the file contains the dump output
-        $output = file_get_contents($this->dumpFile);
+        $output = (string) file_get_contents($this->dumpFile);
         unlink($this->dumpFile);
         $this->assertNotEmpty($output);
 

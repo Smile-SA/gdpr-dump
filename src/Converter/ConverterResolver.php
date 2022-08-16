@@ -93,11 +93,15 @@ class ConverterResolver
      * @param string $baseDirectory
      * @return array
      * @throws ReflectionException
+     * @throws RuntimeException
      */
     private function findClassNames(string $namespace, string $directory, string $baseDirectory = ''): array
     {
         $result = [];
         $files = scandir($directory);
+        if ($files === false) {
+            throw new RuntimeException(sprintf('Failed to scan the directory "%s".', $directory));
+        }
 
         foreach ($files as $fileName) {
             if ($fileName === '.' || $fileName === '..') {
@@ -115,17 +119,19 @@ class ConverterResolver
                 // Remove the extension
                 $fileName = pathinfo($fileName, PATHINFO_FILENAME);
 
-                // Get the class name
+                // Deduct the class name from the file path
                 $className = $namespace;
                 $className .= $baseDirectory !== ''
                     ? str_replace('/', '\\', $baseDirectory) . '\\' . $fileName
                     : $fileName;
 
                 // Include only classes that implement the converter interface
-                $reflection = new ReflectionClass($className);
+                if (class_exists($className)) {
+                    $reflection = new ReflectionClass($className);
 
-                if ($reflection->isSubclassOf(ConverterInterface::class)) {
-                    $result[lcfirst($fileName)] = $className;
+                    if ($reflection->isSubclassOf(ConverterInterface::class)) {
+                        $result[lcfirst($fileName)] = $className;
+                    }
                 }
             }
         }

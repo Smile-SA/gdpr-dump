@@ -71,6 +71,10 @@ class AnonymizeDateTest extends TestCase
         $anonymizedDate = DateTime::createFromFormat($format, $anonymized);
         $actualDate = DateTime::createFromFormat($format, $actual);
 
+        // Make sure that PHP didn't fail to create the dates
+        $this->assertNotFalse($anonymizedDate);
+        $this->assertNotFalse($actualDate);
+
         // The year must not have changed
         $this->assertSame($anonymizedDate->format('Y'), $actualDate->format('Y'));
 
