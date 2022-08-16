@@ -74,9 +74,9 @@ class DumpCommand extends Command
                 return 1;
             }
 
-            // Prompt the password if required
-            $database = $this->config->get('database');
-            if (!isset($database['password'])) {
+            // Prompt for the password if not defined
+            $database = $this->config->get('database', []);
+            if (!array_key_exists('password', $database)) {
                 $database['password'] = $this->promptPassword($input, $output);
                 $this->config->set('database', $database);
             }

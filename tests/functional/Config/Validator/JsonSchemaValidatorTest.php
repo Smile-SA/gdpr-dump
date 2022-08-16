@@ -27,9 +27,9 @@ class JsonSchemaValidatorTest extends TestCase
      */
     public function testDatabaseSettings(): void
     {
-        $data = [
+        $data = $this->prepareData([
             'database' => [
-                'name' => 'mydatabase',
+                'name' => 'mydb',
                 'user' => 'myuser',
                 'password' => 'mypassword',
                 'host' => 'myhost',
@@ -40,20 +40,19 @@ class JsonSchemaValidatorTest extends TestCase
                     PDO::MYSQL_ATTR_LOCAL_INFILE => true,
                 ],
             ],
-        ];
-
+        ]);
         $this->assertDataIsValid($data);
 
         // Check if the validation fails when an invalid driver is used
-        $data = ['database' => ['driver' => 'not_exists']];
+        $data = $this->prepareData(['database' => ['driver' => 'not_exists']]);
         $this->assertDataIsNotValid($data);
 
         // Check if the validation fails when an unknown parameter is used
-        $data = ['database' => ['not_exists' => true]];
+        $data = $this->prepareData(['database' => ['not_exists' => true]]);
         $this->assertDataIsNotValid($data);
 
         // Check if the validation fails when a parameter has the wrong type
-        $data = ['database' => ['charset' => 1.5]];
+        $data = $this->prepareData(['database' => ['charset' => 1.5]]);
         $this->assertDataIsNotValid($data);
     }
 
@@ -62,7 +61,7 @@ class JsonSchemaValidatorTest extends TestCase
      */
     public function testDumpSettings(): void
     {
-        $data = [
+        $data = $this->prepareData([
             'dump' => [
                 'output' => 'my_dump_file-{Y-m-d H:i:s}.sql.gz',
                 'compress' => 'gzip',
@@ -90,20 +89,19 @@ class JsonSchemaValidatorTest extends TestCase
                 'skip_dump_date' => false,
                 'skip_definer' => false,
             ],
-        ];
-
+        ]);
         $this->assertDataIsValid($data);
 
         // Check if the validation fails when an invalid driver is used
-        $data = ['dump' => ['compress' => 'not_exists']];
+        $data = $this->prepareData(['dump' => ['compress' => 'not_exists']]);
         $this->assertDataIsNotValid($data);
 
         // Check if the validation fails when an unknown parameter is used
-        $data = ['dump' => ['not_exists' => true]];
+        $data = $this->prepareData(['dump' => ['not_exists' => true]]);
         $this->assertDataIsNotValid($data);
 
         // Check if the validation fails when a parameter has the wrong type
-        $data = ['dump' => ['output' => 1.5]];
+        $data = $this->prepareData(['dump' => ['output' => 1.5]]);
         $this->assertDataIsNotValid($data);
     }
 
@@ -112,9 +110,9 @@ class JsonSchemaValidatorTest extends TestCase
      */
     public function testTablesWhitelist(): void
     {
-        $data = [
+        $data = $this->prepareData([
             'tables_whitelist' => ['table1', 'table2'],
-        ];
+        ]);
 
         $this->assertDataIsValid($data);
     }
@@ -124,9 +122,9 @@ class JsonSchemaValidatorTest extends TestCase
      */
     public function testTablesBlacklist(): void
     {
-        $data = [
+        $data = $this->prepareData([
             'tables_blacklist' => ['table1', 'table2'],
-        ];
+        ]);
 
         $this->assertDataIsValid($data);
     }
@@ -136,7 +134,7 @@ class JsonSchemaValidatorTest extends TestCase
      */
     public function testDataConverters(): void
     {
-        $data = [
+        $data = $this->prepareData([
             'tables' => [
                 'table1' => [
                     'converters' => [
@@ -160,7 +158,7 @@ class JsonSchemaValidatorTest extends TestCase
                     ],
                 ],
             ],
-        ];
+        ]);
 
         $this->assertDataIsValid($data);
     }
@@ -170,7 +168,7 @@ class JsonSchemaValidatorTest extends TestCase
      */
     public function testDataFilters(): void
     {
-        $data = [
+        $data = $this->prepareData([
             'tables' => [
                 'table1' => [
                     'limit' => 100,
@@ -181,18 +179,9 @@ class JsonSchemaValidatorTest extends TestCase
                     ],
                 ],
             ],
-        ];
+        ]);
 
         $this->assertDataIsValid($data);
-    }
-
-    public function testInvalidSection(): void
-    {
-        $data = [
-            'not_exists' => ['table1'],
-        ];
-
-        $this->assertDataIsNotValid($data);
     }
 
     /**
@@ -200,9 +189,6 @@ class JsonSchemaValidatorTest extends TestCase
      */
     public function testEmptyData(): void
     {
-        $data = new stdClass();
-        $this->assertDataIsValid($data);
-
         $data = [
             'database' => new stdClass(),
             'dump' => new stdClass(),
@@ -211,6 +197,50 @@ class JsonSchemaValidatorTest extends TestCase
             'tables' => new stdClass(),
         ];
         $this->assertDataIsValid($data);
+    }
+
+    /**
+     * Test if the validation fails when the database parameter is not defined.
+     */
+    public function testDatabaseRequirement(): void
+    {
+        $this->assertDataIsNotValid(new stdClass());
+    }
+
+    /**
+     * Test if the validation fails when an invalid section is defined.
+     */
+    public function testInvalidSection(): void
+    {
+        $data = $this->prepareData([
+            'not_exists' => ['table1'],
+        ]);
+
+        $this->assertDataIsNotValid($data);
+    }
+
+    /**
+     * Test if the validation fails when the config is not an array.
+     */
+    public function testInvalidRootType(): void
+    {
+        $this->assertDataIsNotValid('not_an_object');
+    }
+
+    /**
+     * Add required data to the config params.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function prepareData(array $data): array
+    {
+        // Database object must be defined
+        if (!array_key_exists('database', $data)) {
+            $data['database'] = new stdClass();
+        }
+
+        return $data;
     }
 
     /**

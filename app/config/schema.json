@@ -71,6 +71,7 @@
         },
         "database": {
             "type": "object",
+            "required": true,
             "properties": {
                 "driver": {
                     "type": "string",
