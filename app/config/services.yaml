@@ -76,6 +76,6 @@ services:
 
     faker.service:
         class: 'Smile\GdprDump\Faker\FakerService'
-        public: true
+        public: true # used by functional tests
         arguments:
             - '%faker.locale%'
