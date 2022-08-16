@@ -11,14 +11,6 @@ use Smile\GdprDump\Tests\Functional\TestCase;
 class MysqlMetadataTest extends TestCase
 {
     /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass(): void
-    {
-        static::bootDatabase();
-    }
-
-    /**
      * Test the "getTableNames" method.
      */
     public function testTableNames(): void

@@ -11,14 +11,6 @@ use Smile\GdprDump\Tests\Functional\TestCase;
 class ConfigProcessorTest extends TestCase
 {
     /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass(): void
-    {
-        static::bootDatabase();
-    }
-
-    /**
      * Test the table name resolution.
      */
     public function testTableNameResolution(): void
