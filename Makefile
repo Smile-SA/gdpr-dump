@@ -21,8 +21,8 @@ ps: ## List active containers.
 	$(DOCKER_COMPOSE) ps
 
 ## GdprDump
-.PHONY: gdpr-dump
-gdpr-dump: .env vendor ## Run bin/gdpr-dump command. Example: "make gdpr-dump c=test.yaml"
+.PHONY: dump
+dump: .env vendor ## Run bin/gdpr-dump command. Example: "make dump c=test.yaml"
 	@$(eval c ?=)
 	$(PHP_CLI) bin/gdpr-dump $(c)
 
