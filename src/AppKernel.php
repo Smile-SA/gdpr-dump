@@ -21,7 +21,7 @@ class AppKernel
     /**
      * Run the application.
      *
-     * The console command is not lazy-loaded (cf. https://symfony.com/doc/5.4/console/lazy_commands.html)
+     * The console command is not lazy-loaded (cf. https://symfony.com/doc/6.2/console/lazy_commands.html)
      * because this feature is not useful in a single command application.
      *
      * @param string $command
@@ -88,6 +88,11 @@ class AppKernel
 
     /**
      * Build the service container.
+     *
+     * The container is not cached (cf. https://symfony.com/doc/6.2/components/dependency_injection/compilation.html#dumping-the-configuration-for-performance)
+     * because the cache file would contain hardcoded paths (e.g. app_root).
+     * It would prevent the phar file from working.
+     * As a consequence, for performance reasons, autowiring is also disabled.
      *
      * @return ContainerInterface
      */

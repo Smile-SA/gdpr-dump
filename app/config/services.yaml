@@ -6,9 +6,8 @@ parameters:
 
 services:
     _defaults:
-        autowire: false # not phar friendly
+        autowire: false # explained in AppKernel::buildContainer
         autoconfigure: false # not useful in this app
-        public: false
 
     command.compile:
         class: 'Smile\GdprDump\Console\Command\CompileCommand'
@@ -55,7 +54,6 @@ services:
 
     dumper.config:
         class: 'Smile\GdprDump\Config\Config'
-        public: true # used by functional tests
 
     dumper.config_loader:
         class: 'Smile\GdprDump\Config\Loader\ConfigLoader'
