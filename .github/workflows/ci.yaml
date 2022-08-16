@@ -7,6 +7,44 @@ on:
             - 'master'
 
 jobs:
+    static-analysis:
+        runs-on: 'ubuntu-latest'
+
+        steps:
+            - name: 'Checkout'
+              uses: 'actions/checkout@v3'
+
+            - name: 'Install PHP'
+              uses: 'shivammathur/setup-php@v2'
+              with:
+                  php-version: '7.4'
+                  coverage: 'none'
+                  extensions: 'mbstring'
+                  tools: 'composer:v2'
+
+            - name: 'Get composer cache directory'
+              id: 'composercache'
+              run: 'echo "::set-output name=dir::$(composer config cache-files-dir)"'
+
+            - name: 'Cache dependencies'
+              uses: 'actions/cache@v3'
+              with:
+                  path: '${{ steps.composercache.outputs.dir }}'
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+                  restore-keys: '${{ runner.os }}-composer-'
+
+            - name: 'Install dependencies'
+              run: 'composer install --prefer-dist'
+
+            - name: 'Run PHP Parallel Lint'
+              run: 'vendor/bin/parallel-lint src tests'
+
+            - name: 'Run PHP CodeSniffer'
+              run: 'vendor/bin/phpcs'
+
+            - name: 'Run PHPStan'
+              run: 'vendor/bin/phpstan analyse'
+
     tests:
         runs-on: 'ubuntu-latest'
 
@@ -55,15 +93,6 @@ jobs:
 
             - name: 'Install dependencies'
               run: 'composer install --prefer-dist'
-
-            - name: 'Run PHP Parallel Lint'
-              run: 'vendor/bin/parallel-lint src tests'
-
-            - name: 'Run PHP CodeSniffer'
-              run: 'vendor/bin/phpcs'
-
-            - name: 'Run PHPStan'
-              run: 'vendor/bin/phpstan analyse'
 
             - name: 'Run PHPUnit'
               env:
