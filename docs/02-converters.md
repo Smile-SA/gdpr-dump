@@ -172,7 +172,7 @@ Only non-empty values are processed.
 
 ### [randomizeText](../src/Converter/Randomizer/RandomizeText.php)
 
-Converts all alphanumeric characters to random alphanumeric characters.
+Converts all characters to random alphanumeric characters.
 
 For example, one of the possible convertions for "john_doe" is "vO7s2pJx".
 

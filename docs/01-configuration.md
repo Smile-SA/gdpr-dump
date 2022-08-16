@@ -425,8 +425,8 @@ Using variables in query filters:
 ```yaml
 tables:
     my_table:
-      filters:
-        - ['attribute_id', 'eq', 'expr: @firstname_attribute_id']
+        filters:
+            - ['attribute_id', 'eq', 'expr: @firstname_attribute_id']
 ```
 
 Using variables in converter conditions:
