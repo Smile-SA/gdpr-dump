@@ -24,6 +24,14 @@ Requirements:
 - PHP >= 7.4
 - MySQL or equivalent (MariaDB, Percona)
 
+PHP compatibility matrix:
+
+**GdprDump Version** | **PHP Requirement**
+---|---
+3.x (latest) | \>= 7.4
+2.x | \>= 7.3
+1.x | \>= 7.0
+
 ## Installation
 
 **Phar File (recommended)**
@@ -31,13 +39,13 @@ Requirements:
 A phar file is available for downloading in the [releases section](https://github.com/Smile-SA/gdpr-dump/releases).
 This is the recommended way to install this application.
 
-The following table lists the requirements of each major version:
+To fetch the latest version:
 
-**GdprDump Version** | **PHP Requirement**
----|---
-3.x (latest) | PHP >= 7.4
-2.x | PHP >= 7.3
-1.x | PHP >= 7.0
+```
+wget https://github.com/Smile-SA/gdpr-dump/releases/latest/download/gdpr-dump.phar
+chmod +x gdpr-dump.phar
+./gdpr-dump.phar --version
+```
 
 **With Composer**
 
