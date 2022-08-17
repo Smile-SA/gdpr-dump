@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Database;
 
 use PDO;
-use Smile\GdprDump\Database\Config;
+use Smile\GdprDump\Database\ParameterBag;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use UnexpectedValueException;
 
-class ConfigTest extends TestCase
+class ParameterBagTest extends TestCase
 {
     /**
      * Test the getter methods.
@@ -27,8 +27,8 @@ class ConfigTest extends TestCase
             'driverOptions' => [PDO::ATTR_TIMEOUT, 60],
         ];
 
-        $config = new Config($params);
-        $this->assertEquals($params, $config->getConnectionParams());
+        $bag = new ParameterBag($params);
+        $this->assertEquals($params, $bag->all());
     }
 
     /**
@@ -36,14 +36,14 @@ class ConfigTest extends TestCase
      */
     public function testDefaultValues(): void
     {
-        $config = new Config(['dbname' => 'test']);
+        $bag = new ParameterBag(['dbname' => 'test']);
 
-        $this->assertSame('pdo_mysql', $config->getConnectionParam('driver'));
-        $this->assertSame('test', $config->getConnectionParam('dbname'));
-        $this->assertSame('localhost', $config->getConnectionParam('host'));
-        $this->assertNull($config->getConnectionParam('port'));
-        $this->assertSame('root', $config->getConnectionParam('user'));
-        $this->assertNull($config->getConnectionParam('driverOptions'));
+        $this->assertSame('pdo_mysql', $bag->get('driver'));
+        $this->assertSame('test', $bag->get('dbname'));
+        $this->assertSame('localhost', $bag->get('host'));
+        $this->assertNull($bag->get('port'));
+        $this->assertSame('root', $bag->get('user'));
+        $this->assertNull($bag->get('driverOptions'));
     }
 
     /**
@@ -52,6 +52,6 @@ class ConfigTest extends TestCase
     public function testMissingDatabaseName(): void
     {
         $this->expectException(UnexpectedValueException::class);
-        new Config([]);
+        new ParameterBag([]);
     }
 }

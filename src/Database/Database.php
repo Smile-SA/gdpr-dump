@@ -22,27 +22,30 @@ use UnexpectedValueException;
  * We use a custom abstraction layer for database metadata, because the Doctrine schema manager
  * crashes when used with databases that use custom Doctrine types (e.g. OroCommerce).
  */
-class Database implements DatabaseInterface
+class Database
 {
+    public const DRIVER_MYSQL = 'pdo_mysql';
+
     private Connection $connection;
     private DriverInterface $driver;
     private MetadataInterface $metadata;
-    private ConfigInterface $config;
+    private ParameterBag $connectionParams;
 
     /**
-     * @param ConfigInterface $config
+     * @param array $connectionParams
      * @throws Exception
      * @throws UnexpectedValueException
      */
-    public function __construct(ConfigInterface $config)
+    public function __construct(array $connectionParams)
     {
-        $this->config = $config;
-        $this->connection = $this->createConnection($config);
-        $driver = $config->getConnectionParam('driver');
+        $this->connectionParams = new ParameterBag($connectionParams);
+        $this->connection = DriverManager::getConnection($this->connectionParams->all());
+
+        $driver = $this->connectionParams->get('driver');
 
         switch ($driver) {
-            case 'pdo_mysql':
-                $this->driver = new MysqlDriver($this->config);
+            case self::DRIVER_MYSQL:
+                $this->driver = new MysqlDriver($this->connectionParams);
                 $this->metadata = new MysqlMetadata($this->connection);
                 break;
 
@@ -60,7 +63,9 @@ class Database implements DatabaseInterface
     }
 
     /**
-     * @inheritdoc
+     * Get the doctrine connection.
+     *
+     * @return Connection
      */
     public function getConnection(): Connection
     {
@@ -68,7 +73,9 @@ class Database implements DatabaseInterface
     }
 
     /**
-     * @inheritdoc
+     * Get the database driver.
+     *
+     * @return DriverInterface
      */
     public function getDriver(): DriverInterface
     {
@@ -76,7 +83,9 @@ class Database implements DatabaseInterface
     }
 
     /**
-     * @inheritdoc
+     * Get the database metadata.
+     *
+     * @return MetadataInterface
      */
     public function getMetadata(): MetadataInterface
     {
@@ -84,31 +93,12 @@ class Database implements DatabaseInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public function getConfig(): ConfigInterface
-    {
-        return $this->config;
-    }
-
-    /**
-     * Create a Doctrine connection.
+     * Get the connection parameters (host, port, user...).
      *
-     * @param ConfigInterface $config
-     * @return Connection
-     * @throws Exception
+     * @return ParameterBag
      */
-    private function createConnection(ConfigInterface $config): Connection
+    public function getConnectionParams(): ParameterBag
     {
-        // Get the connection parameters from the config
-        $params = $config->getConnectionParams();
-
-        // Remove empty elements
-        $params = array_filter(
-            $params,
-            fn ($value) => $value !== null && $value !== '' && $value !== false
-        );
-
-        return DriverManager::getConnection($params);
+        return $this->connectionParams;
     }
 }

@@ -7,7 +7,6 @@ namespace Smile\GdprDump\Dumper;
 use Doctrine\DBAL\Exception as DBALException;
 use Ifsnop\Mysqldump\Mysqldump;
 use Smile\GdprDump\Config\ConfigInterface;
-use Smile\GdprDump\Database\Config as DatabaseConfig;
 use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
@@ -53,10 +52,10 @@ class MysqlDumper implements DumperInterface
         // Create the MySQLDump object
         $dumper = new Mysqldump(
             $database->getDriver()->getDsn(),
-            $database->getConfig()->getConnectionParam('user'),
-            $database->getConfig()->getConnectionParam('password'),
+            $database->getConnectionParams()->get('user'),
+            $database->getConnectionParams()->get('password'),
             $dumpSettings,
-            $database->getConfig()->getConnectionParam('driverOptions', [])
+            $database->getConnectionParams()->get('driverOptions', [])
         );
 
         // Register extensions
@@ -82,20 +81,20 @@ class MysqlDumper implements DumperInterface
      */
     private function getDatabase(ConfigInterface $config): Database
     {
-        $params = $config->get('database', []);
+        $connectionParams = $config->get('database', []);
 
         // Rename some keys (for compatibility with the Doctrine connection)
-        if (array_key_exists('name', $params)) {
-            $params['dbname'] = $params['name'];
-            unset($params['name']);
+        if (array_key_exists('name', $connectionParams)) {
+            $connectionParams['dbname'] = $connectionParams['name'];
+            unset($connectionParams['name']);
         }
 
-        if (array_key_exists('driver_options', $params)) {
-            $params['driverOptions'] = $params['driver_options'];
-            unset($params['driver_options']);
+        if (array_key_exists('driver_options', $connectionParams)) {
+            $connectionParams['driverOptions'] = $connectionParams['driver_options'];
+            unset($connectionParams['driver_options']);
         }
 
-        return new Database(new DatabaseConfig($params));
+        return new Database($connectionParams);
     }
 
     /**

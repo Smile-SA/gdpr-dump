@@ -9,7 +9,6 @@ use RuntimeException;
 use Smile\GdprDump\AppKernel;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\Loader\ConfigLoader;
-use Smile\GdprDump\Database\Config as DatabaseConfig;
 use Smile\GdprDump\Database\Database;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -60,7 +59,7 @@ abstract class TestCase extends BaseTestCase
             $connectionParams = $config->get('database');
             $connectionParams['dbname'] = $connectionParams['name'];
             unset($connectionParams['name']);
-            self::$database = new Database(new DatabaseConfig($connectionParams));
+            self::$database = new Database($connectionParams);
 
             // Create the tables
             $connection = self::$database->getConnection();
