@@ -11,10 +11,10 @@ use Smile\GdprDump\Database\Config as DatabaseConfig;
 use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
-use Smile\GdprDump\Dumper\Mysqldump\Context;
-use Smile\GdprDump\Dumper\Mysqldump\ExtensionInterface;
+use Smile\GdprDump\Dumper\Mysql\Context;
+use Smile\GdprDump\Dumper\Mysql\ExtensionInterface;
 
-class SqlDumper implements DumperInterface
+class MysqlDumper implements DumperInterface
 {
     /**
      * @var ExtensionInterface[]
@@ -47,8 +47,6 @@ class SqlDumper implements DumperInterface
         foreach ($config->getVarQueries() as $varName => $query) {
             $value = $connection->fetchOne($query);
             $context['vars'][$varName] = $value;
-
-            // This is only compatible with MySQL and will require refactoring to add compatibility with other drivers
             $dumpSettings['init_commands'][] = 'SET @' . $varName . ' = ' . $connection->quote($value);
         }
 

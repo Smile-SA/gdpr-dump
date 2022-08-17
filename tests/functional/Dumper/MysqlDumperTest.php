@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Functional\Dumper;
 
 use Smile\GdprDump\Config\Config;
-use Smile\GdprDump\Dumper\SqlDumper;
+use Smile\GdprDump\Dumper\MysqlDumper;
 use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
-class SqlDumperTest extends TestCase
+class MysqlDumperTest extends TestCase
 {
     private string $dumpFile;
 
@@ -148,11 +148,11 @@ class SqlDumperTest extends TestCase
     /**
      * Create a SQL dumper object.
      *
-     * @return SqlDumper
+     * @return MysqlDumper
      */
-    private function createDumper(): SqlDumper
+    private function createDumper(): MysqlDumper
     {
-        /** @var SqlDumper $dumper */
+        /** @var MysqlDumper $dumper */
         $dumper = $this->getContainer()->get('dumper');
 
         return $dumper;

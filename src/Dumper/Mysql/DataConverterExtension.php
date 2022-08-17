@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Mysqldump;
+namespace Smile\GdprDump\Dumper\Mysql;
 
 use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\Converter\ConverterInterface;

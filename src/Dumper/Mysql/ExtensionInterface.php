@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Mysqldump;
+namespace Smile\GdprDump\Dumper\Mysql;
 
 interface ExtensionInterface
 {
