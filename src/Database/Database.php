@@ -55,14 +55,6 @@ class Database
     }
 
     /**
-     * Destruct the database object.
-     */
-    public function __destruct()
-    {
-        $this->connection->close();
-    }
-
-    /**
      * Get the doctrine connection.
      *
      * @return Connection

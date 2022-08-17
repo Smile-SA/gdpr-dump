@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
+- Fix doctrine connection not being closed properly
 - Display an error message if the parameter `database` is not defined
 - Move the compiler binary to a Symfony command
 - Compatibility with Symfony 6 components

@@ -49,7 +49,7 @@ class MysqlDumper implements DumperInterface
             $dumpSettings['init_commands'][] = 'SET @' . $varName . ' = ' . $connection->quote($value);
         }
 
-        // Create the MySQLDump object
+        // Create the MySQLDump-PHP object
         $dumper = new Mysqldump(
             $database->getDriver()->getDsn(),
             $database->getConnectionParams()->get('user'),
@@ -64,8 +64,8 @@ class MysqlDumper implements DumperInterface
             $extension->register($extensionContext);
         }
 
-        // Unset the database object to close the database connection
-        unset($database);
+        // Close the Doctrine connection before proceeding to the dump creation (MySQLDump-PHP uses its own connection)
+        $database->getConnection()->close();
 
         // Create the dump
         $output = $config->getDumpOutput();
