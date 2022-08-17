@@ -79,12 +79,11 @@ class Config implements ConfigInterface
      */
     public function compile(): void
     {
-        $processors = [
+        $compiler = new Compiler([
             new EnvVarProcessor(),
             new VersionProcessor(),
-        ];
+        ]);
 
-        $compiler = new Compiler($processors);
         $compiler->compile($this);
     }
 
