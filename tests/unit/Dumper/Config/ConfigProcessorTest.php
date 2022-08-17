@@ -73,7 +73,8 @@ class ConfigProcessorTest extends TestCase
     private function createConfigProcessor(): ConfigProcessor
     {
         $metadataMock = $this->createMock(MysqlMetadata::class);
-        $metadataMock->method('getTableNames')
+        $metadataMock->expects($this->atMost(1))
+            ->method('getTableNames')
             ->willReturn(['table1', 'table2', 'table3']);
 
         return new ConfigProcessor($metadataMock);

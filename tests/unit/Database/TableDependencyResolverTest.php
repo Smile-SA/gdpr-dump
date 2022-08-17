@@ -178,13 +178,9 @@ class TableDependencyResolverTest extends TestCase
     private function createResolver(array $foreignKeyMap, array $ignoredForeignKeys = []): TableDependencyResolver
     {
         $metadataMock = $this->createMock(MysqlMetadata::class);
-
-        // Mock the "getTableNames" method
-        $tableNames = array_column($foreignKeyMap, 0);
-        $metadataMock->method('getTableNames')
-            ->willReturn($tableNames);
-
-        // Mock the "getForeignKeys" method
+        $metadataMock->expects($this->once())
+            ->method('getTableNames')
+            ->willReturn(array_column($foreignKeyMap, 0));
         $metadataMock->method('getTableForeignKeys')
             ->willReturnMap($foreignKeyMap);
 
