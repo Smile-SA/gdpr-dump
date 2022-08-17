@@ -52,10 +52,12 @@ class ConverterResolver
             return $name;
         }
 
-        try {
-            $this->resolveClassNames();
-        } catch (ReflectionException $e) {
-            throw new RuntimeException($e->getMessage(), 0, $e);
+        if ($this->resolved === null) {
+            try {
+                $this->resolved = $this->resolveClassNames();
+            } catch (ReflectionException $e) {
+                throw new RuntimeException($e->getMessage(), 0, $e);
+            }
         }
 
         if (!array_key_exists($name, $this->resolved)) {
@@ -68,20 +70,19 @@ class ConverterResolver
     /**
      * Initialize the converter name <-> class name array.
      *
+     * @return array
      * @throws ReflectionException
      */
-    private function resolveClassNames(): void
+    private function resolveClassNames(): array
     {
-        if ($this->resolved !== null) {
-            return;
-        }
-
-        $this->resolved = [];
+        $resolved = [];
         foreach ($this->pathsByNamespace as $namespace => $paths) {
             foreach ($paths as $path) {
-                $this->resolved = array_merge($this->resolved, $this->findClassNames($namespace, $path));
+                $resolved = array_merge($resolved, $this->findClassNames($namespace, $path));
             }
         }
+
+        return $resolved;
     }
 
     /**

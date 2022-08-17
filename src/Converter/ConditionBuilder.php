@@ -67,7 +67,7 @@ class ConditionBuilder
     private function sanitizeCondition(string $condition): string
     {
         // Remove line breaks
-        $condition = preg_replace('/[\r\n]+/', ' ', $condition);
+        $condition = (string) preg_replace('/[\r\n]+/', ' ', $condition);
 
         // Add instruction separator
         if (substr($condition, -1) !== ';') {

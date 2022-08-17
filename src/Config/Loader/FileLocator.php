@@ -26,7 +26,9 @@ class FileLocator implements FileLocatorInterface
      */
     public function locate(string $path, ?string $currentDirectory = null): string
     {
-        $this->resolveTemplates();
+        if ($this->templates === null) {
+            $this->templates = $this->getTemplates();
+        }
 
         // Check if it is a config template
         if (array_key_exists($path, $this->templates)) {
@@ -54,19 +56,18 @@ class FileLocator implements FileLocatorInterface
     /**
      * Locate the config templates.
      *
+     * @return array
      * @throws FileNotFoundException
      */
-    private function resolveTemplates(): void
+    private function getTemplates(): array
     {
-        if ($this->templates !== null) {
-            return;
-        }
-
         // Can't use glob, doesn't work with phar
         $files = scandir($this->templatesDirectory);
         if ($files === false) {
             throw new FileNotFoundException(sprintf('Failed to scan the directory "%s".', $this->templatesDirectory));
         }
+
+        $templates = [];
 
         foreach ($files as $fileName) {
             if ($fileName === '.' || $fileName === '..') {
@@ -74,8 +75,10 @@ class FileLocator implements FileLocatorInterface
             }
 
             $template = pathinfo($fileName, PATHINFO_FILENAME);
-            $this->templates[$template] = $this->templatesDirectory . '/' . $fileName;
+            $templates[$template] = $this->templatesDirectory . '/' . $fileName;
         }
+
+        return $templates;
     }
 
     /**

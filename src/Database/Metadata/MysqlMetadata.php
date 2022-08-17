@@ -20,7 +20,7 @@ class MysqlMetadata implements MetadataInterface
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
-        $this->schema = $connection->getDatabase();
+        $this->schema = (string) $connection->getDatabase();
     }
 
     /**

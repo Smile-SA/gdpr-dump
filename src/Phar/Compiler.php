@@ -78,7 +78,7 @@ class Compiler
 
         // Add binary file
         $contents = $this->parseFile($this->basePath . '/bin/gdpr-dump');
-        $contents = preg_replace('{^#!/usr/bin/env php\s*}', '', $contents);
+        $contents = (string) preg_replace('{^#!/usr/bin/env php\s*}', '', $contents);
         $phar->addFromString('bin/gdpr-dump', $contents);
     }
 
