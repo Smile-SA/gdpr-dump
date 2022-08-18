@@ -47,7 +47,7 @@ class DumpCommand extends Command
     /**
      * @inheritdoc
      */
-    public function configure()
+    public function configure(): void
     {
         $this->setName('gdpr-dump')
             ->setDescription('Create an anonymized dump')
@@ -61,7 +61,7 @@ class DumpCommand extends Command
     /**
      * @inheritdoc
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             // Load the config

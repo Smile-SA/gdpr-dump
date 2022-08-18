@@ -30,7 +30,7 @@ class CompileCommand extends Command
     /**
      * @inheritdoc
      */
-    public function configure()
+    public function configure(): void
     {
         $this->setName('compiler')
             ->setDescription('Create the phar file')
@@ -46,7 +46,7 @@ class CompileCommand extends Command
     /**
      * @inheritdoc
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $locales = $input->getOption('locale');
         if (!in_array($this->defaultLocale, $locales, true)) {
