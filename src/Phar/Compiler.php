@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Phar;
 
 use Phar;
 use RuntimeException;
+use Smile\GdprDump\Phar\Minify\MinifierInterface;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 use UnexpectedValueException;
@@ -15,23 +16,42 @@ class Compiler
     private string $basePath;
 
     /**
-     * @var string[]
+     * @var MinifierInterface[]
      */
-    private array $locales;
+    private iterable $minifiers;
 
     /**
-     * @param string[] $locales
+     * @var string[]
      */
-    public function __construct(array $locales)
-    {
-        $this->basePath = dirname(__DIR__, 2);
-        $this->locales = $locales;
+    private array $locales = [];
 
+    /**
+     * @param MinifierInterface[] $minifiers
+     */
+    public function __construct(iterable $minifiers = [])
+    {
+        $this->minifiers = $minifiers;
+        $this->basePath = dirname(__DIR__, 2);
+    }
+
+    /**
+     * Set the Faker locales to include.
+     *
+     * @param array $locales
+     * @return $this
+     * @throws UnexpectedValueException
+     */
+    public function setLocales(array $locales): self
+    {
         foreach ($locales as $locale) {
             if (!is_dir($this->basePath . '/vendor/fakerphp/faker/src/Faker/Provider/' . $locale)) {
                 throw new UnexpectedValueException(sprintf('Faker does not support the locale "%s".', $locale));
             }
         }
+
+        $this->locales = $locales;
+
+        return $this;
     }
 
     /**
@@ -77,61 +97,9 @@ class Compiler
         }
 
         // Add binary file
-        $contents = $this->parseFile($this->basePath . '/bin/gdpr-dump');
+        $contents = $this->parseFile($this->basePath . '/bin/gdpr-dump', 'php');
         $contents = (string) preg_replace('{^#!/usr/bin/env php\s*}', '', $contents);
         $phar->addFromString('bin/gdpr-dump', $contents);
-    }
-
-    /**
-     * Read and minify the contents of a file.
-     *
-     * @param string $fileName
-     * @return string
-     */
-    private function parseFile(string $fileName): string
-    {
-        $contents = file_get_contents($fileName);
-        if ($contents === false) {
-            throw new RuntimeException(sprintf('Failed to open the file "%s".', $fileName));
-        }
-
-        return $this->stripWhitespaces($contents);
-    }
-
-    /**
-     * Strip whitespaces from a PHP source.
-     * This function is used instead of php_strip_whitespace, because php_strip_whitespace removes PHP annotations
-     * if the version of the PHP runtime is < 8.
-     *
-     * TODO: use php_strip_whitespace again when the min PHP version of gdpr-dump becomes 8.0.
-     *
-     * @param string $source
-     * @return string
-     */
-    private function stripWhitespaces(string $source): string
-    {
-        $output = '';
-        $isWhitespace = false;
-
-        foreach (token_get_all($source) as $token) {
-            if (is_string($token)) {
-                $output .= $token;
-                $isWhitespace = false;
-            } elseif (in_array($token[0], [T_COMMENT, T_DOC_COMMENT])) {
-                // Remove all comments except PHP annotations
-                $output .= substr($token[1], 0, 2) === '#[' ? $token[1] : '';
-                $isWhitespace = true;
-            } elseif ($token[0] === T_WHITESPACE) {
-                // Replace everything with a single space (if previous char isn't already a space)
-                $output .= !$isWhitespace ? ' ' : '';
-                $isWhitespace = true;
-            } else {
-                $output .= $token[1];
-                $isWhitespace = false;
-            }
-        }
-
-        return $output;
     }
 
     /**
@@ -178,13 +146,77 @@ class Compiler
     }
 
     /**
+     * Read and minify the contents of a file.
+     *
+     * @param string $fileName
+     * @param string|null $extension
+     * @return string
+     */
+    private function parseFile(string $fileName, ?string $extension = null): string
+    {
+        $contents = file_get_contents($fileName);
+        if ($contents === false) {
+            throw new RuntimeException(sprintf('Failed to open the file "%s".', $fileName));
+        }
+
+        if ($extension === null) {
+            $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+        }
+
+        foreach ($this->minifiers as $minifier) {
+            if ($minifier->supports($extension)) {
+                $contents = $minifier->minify($contents);
+                break;
+            }
+        }
+
+        return $contents;
+    }
+
+    /**
+     * Strip whitespaces from a PHP source.
+     * This function is used instead of php_strip_whitespace, because php_strip_whitespace removes PHP annotations
+     * if the version of the PHP runtime is < 8.
+     *
+     * TODO: use php_strip_whitespace again when the min PHP version of gdpr-dump becomes 8.0.
+     *
+     * @param string $source
+     * @return string
+     */
+    private function stripWhitespaces(string $source): string
+    {
+        $result = '';
+        $isWhitespace = false;
+
+        foreach (token_get_all($source) as $token) {
+            if (is_string($token)) {
+                $result .= $token;
+                $isWhitespace = false;
+            } elseif (in_array($token[0], [T_COMMENT, T_DOC_COMMENT])) {
+                // Remove all comments except PHP annotations
+                $result .= substr($token[1], 0, 2) === '#[' ? $token[1] : '';
+                $isWhitespace = true;
+            } elseif ($token[0] === T_WHITESPACE) {
+                // Replace everything with a single space (if previous char isn't already a space)
+                $result .= !$isWhitespace ? ' ' : '';
+                $isWhitespace = true;
+            } else {
+                $result .= $token[1];
+                $isWhitespace = false;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Get the phar stub.
      *
      * @return string
      */
     private function getStub(): string
     {
-        return <<<EOF
+        return <<<'EOT'
 #!/usr/bin/env php
 <?php
 
@@ -192,6 +224,6 @@ Phar::interceptFileFuncs();
 Phar::mapPhar('gdpr-dump.phar');
 require 'phar://gdpr-dump.phar/bin/gdpr-dump';
 __HALT_COMPILER();
-EOF;
+EOT;
     }
 }

@@ -12,14 +12,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CompileCommand extends Command
 {
+    private Compiler $compiler;
     private string $defaultLocale;
 
     /**
+     * @param Compiler $compiler
      * @param string $defaultLocale
      * @param string|null $name
      */
-    public function __construct(string $defaultLocale, ?string $name = null)
+    public function __construct(Compiler $compiler, string $defaultLocale, ?string $name = null)
     {
+        $this->compiler = $compiler;
         $this->defaultLocale = $defaultLocale;
         parent::__construct($name);
     }
@@ -53,8 +56,8 @@ class CompileCommand extends Command
         $output->writeln('<comment>Creating the phar file, please wait...</comment>');
 
         $fileName = $this->getPharFileName();
-        $compiler = new Compiler($locales);
-        $compiler->compile($fileName);
+        $this->compiler->setLocales($locales)
+            ->compile($fileName);
 
         $output->writeln('');
         $output->writeln(sprintf('<info>The phar file was created in "%s".</info>', $fileName));

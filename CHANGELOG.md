@@ -4,10 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
+Bugfixes:
+
 - Fix doctrine connection not being closed properly
-- Display an error message if the parameter `database` is not defined
-- Move the compiler binary to a Symfony command
+
+Improvements:
+
 - Compatibility with Symfony 6 components
+- Better phar file compression (json files are now minified)
+- Display an error message if the parameter `database` is not defined
+
+Refactoring:
+
+- Move the compiler binary to a Symfony command
 - Rename SqlDumper class to MysqlDumper to avoid confusion
 
 ## [3.0.0] - 2022-07-28

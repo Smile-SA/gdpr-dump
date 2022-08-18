@@ -13,6 +13,7 @@ services:
         class: 'Smile\GdprDump\Console\Command\CompileCommand'
         public: true
         arguments:
+            - '@compiler'
             - '%faker.locale%'
 
     command.dump:
@@ -23,6 +24,19 @@ services:
             - '@dumper.config'
             - '@dumper.config_loader'
             - '@config.schema_validator'
+
+    compiler:
+        class: 'Smile\GdprDump\Phar\Compiler'
+        arguments:
+            - !tagged_iterator compiler.minifier
+
+    compiler.minify.json:
+        class: 'Smile\GdprDump\Phar\Minify\Json'
+        tags: ['compiler.minifier']
+
+    compiler.minify.php:
+        class: 'Smile\GdprDump\Phar\Minify\Php'
+        tags: ['compiler.minifier']
 
     config.file_locator:
         class: 'Smile\GdprDump\Config\Loader\FileLocator'
