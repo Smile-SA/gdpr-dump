@@ -46,8 +46,9 @@ class Foo
     /**
      * Comment.
      */
-    public function bar()
+    public function bar(int $value): int
     {
+        return $value ** $value;
     }
 }
 EOT;
@@ -62,7 +63,7 @@ EOT;
     {
         return <<<'EOT'
 <?php
- namespace Test; class Foo { public function bar() { } }
+ namespace Test; class Foo { public function bar(int $value): int { return $value ** $value; } }
 EOT;
     }
 }
