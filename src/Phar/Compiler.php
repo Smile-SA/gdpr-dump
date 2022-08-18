@@ -174,42 +174,6 @@ class Compiler
     }
 
     /**
-     * Strip whitespaces from a PHP source.
-     * This function is used instead of php_strip_whitespace, because php_strip_whitespace removes PHP annotations
-     * if the version of the PHP runtime is < 8.
-     *
-     * TODO: use php_strip_whitespace again when the min PHP version of gdpr-dump becomes 8.0.
-     *
-     * @param string $source
-     * @return string
-     */
-    private function stripWhitespaces(string $source): string
-    {
-        $result = '';
-        $isWhitespace = false;
-
-        foreach (token_get_all($source) as $token) {
-            if (is_string($token)) {
-                $result .= $token;
-                $isWhitespace = false;
-            } elseif (in_array($token[0], [T_COMMENT, T_DOC_COMMENT])) {
-                // Remove all comments except PHP annotations
-                $result .= substr($token[1], 0, 2) === '#[' ? $token[1] : '';
-                $isWhitespace = true;
-            } elseif ($token[0] === T_WHITESPACE) {
-                // Replace everything with a single space (if previous char isn't already a space)
-                $result .= !$isWhitespace ? ' ' : '';
-                $isWhitespace = true;
-            } else {
-                $result .= $token[1];
-                $isWhitespace = false;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * Get the phar stub.
      *
      * @return string
