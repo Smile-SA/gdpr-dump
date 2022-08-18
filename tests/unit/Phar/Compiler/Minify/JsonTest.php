@@ -45,8 +45,8 @@ class JsonTest extends TestCase
         "bool": true
     },
     "array": [1, 2],
-    "slashes": "/path/to/file",
-    "backslashes": "Smile\\GdprDump"
+    "slash": "/foo/bar",
+    "backslash": "Foo\\Bar"
 }
 EOT;
     }
@@ -58,9 +58,8 @@ EOT;
      */
     private function getExpectedMinifiedString(): string
     {
-        // phpcs:disable Generic.Files.LineLength.TooLong
         return <<<'EOT'
-{"object":{"unicode":"⚡🗲↯ϟ","int":2,"float":2.5,"bool":true},"array":[1,2],"slashes":"/path/to/file","backslashes":"Smile\\GdprDump"}
+{"object":{"unicode":"⚡🗲↯ϟ","int":2,"float":2.5,"bool":true},"array":[1,2],"slash":"/foo/bar","backslash":"Foo\\Bar"}
 EOT;
     }
 }
