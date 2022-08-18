@@ -9,6 +9,12 @@ services:
         autowire: false # explained in AppKernel::buildContainer
         autoconfigure: false # not useful in this app
 
+    _instanceof:
+        Smile\GdprDump\Phar\Minify\MinifierInterface:
+            tags: ['compiler.minifier']
+        Smile\GdprDump\Dumper\Mysql\ExtensionInterface:
+            tags: ['dumper.mysqldump_extension']
+
     command.compile:
         class: 'Smile\GdprDump\Console\Command\CompileCommand'
         public: true
@@ -32,11 +38,9 @@ services:
 
     compiler.minify.json:
         class: 'Smile\GdprDump\Phar\Minify\Json'
-        tags: ['compiler.minifier']
 
     compiler.minify.php:
         class: 'Smile\GdprDump\Phar\Minify\Php'
-        tags: ['compiler.minifier']
 
     config.file_locator:
         class: 'Smile\GdprDump\Config\Loader\FileLocator'
@@ -64,7 +68,7 @@ services:
         class: 'Smile\GdprDump\Dumper\MysqlDumper'
         public: true # used by functional tests
         arguments:
-            - ['@dumper.data_converter_extension', '@dumper.table_filter_extension']
+            - !tagged_iterator dumper.mysqldump_extension
 
     dumper.config:
         class: 'Smile\GdprDump\Config\Config'

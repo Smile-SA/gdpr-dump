@@ -18,12 +18,12 @@ class MysqlDumper implements DumperInterface
     /**
      * @var ExtensionInterface[]
      */
-    private array $extensions;
+    private iterable $extensions;
 
     /**
      * @param ExtensionInterface[] $extensions
      */
-    public function __construct(array $extensions = [])
+    public function __construct(iterable $extensions = [])
     {
         $this->extensions = $extensions;
     }
