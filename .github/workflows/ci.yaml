@@ -36,6 +36,9 @@ jobs:
             - name: 'Install dependencies'
               run: 'composer install --prefer-dist'
 
+            - name: 'Run composer audit'
+              run: 'composer audit --format=plain'
+
             - name: 'Run PHP Parallel Lint'
               run: 'vendor/bin/parallel-lint src tests'
 
