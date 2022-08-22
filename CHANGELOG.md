@@ -2,17 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
-
-Bugfixes:
-
-- Fix doctrine connection not being closed properly
+## [3.1.0] - 2022-08-22
+[3.1.0]: https://github.com/Smile-SA/gdpr-dump/compare/3.0.0...3.1.0
 
 Improvements:
 
 - Compatibility with Symfony 6 components
 - Better phar file compression (json files are now minified)
 - Display an error message if the parameter `database` is not defined
+
+Bugfixes:
+
+- Fix doctrine connection not being closed properly
 
 Refactoring:
 
