@@ -29,7 +29,7 @@ class MysqlDumper implements DumperInterface
     }
 
     /**
-     * @@inheritdoc
+     * @inheritdoc
      */
     public function dump(ConfigInterface $config): void
     {
