@@ -48,8 +48,6 @@ class ConfigTest extends TestCase
     public function testReset(): void
     {
         $config = new Config($this->data);
-        $this->assertNotEmpty($config->toArray());
-
         $config->reset();
         $this->assertEmpty($config->toArray());
 
