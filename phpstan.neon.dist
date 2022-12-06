@@ -8,10 +8,6 @@ parameters:
     ignoreErrors:
         -
             # False positive
-            message: '#Instanceof between object and string\|null results in an error#'
-            path: src/Converter/Parameters/ParameterProcessor.php
-        -
-            # False positive
             message: '#Cannot use array destructuring on callable#'
             path: src/Converter/Proxy/Faker.php
         -

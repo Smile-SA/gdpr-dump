@@ -14,12 +14,8 @@ class ParameterProcessor
     /**
      * Add a parameter.
      */
-    public function addParameter(
-        string $name,
-        ?string $type = null,
-        bool $required = false,
-        mixed $default = null
-    ): self {
+    public function addParameter(string $name, string $type, bool $required = false, mixed $default = null): self
+    {
         $this->parameters[] = new Parameter($name, $type, $required, $default);
 
         return $this;
@@ -64,12 +60,11 @@ class ParameterProcessor
             }
         }
 
-        $type = $parameter->getType();
-        if ($type !== null && $value !== null) {
+        if ($value !== null) {
             $this->validateType($parameter, $value);
 
             if ($parameter->isScalar()) {
-                settype($value, $type);
+                settype($value, $parameter->getType());
             }
         }
 
