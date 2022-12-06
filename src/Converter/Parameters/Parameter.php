@@ -14,7 +14,7 @@ class Parameter
 
     public function __construct(
         private string $name,
-        private ?string $type = null,
+        private string $type,
         private bool $required = false,
         private mixed $default = null
     ) {
@@ -31,7 +31,7 @@ class Parameter
     /**
      * Get the parameter type.
      */
-    public function getType(): ?string
+    public function getType(): string
     {
         return $this->type;
     }
@@ -73,6 +73,6 @@ class Parameter
      */
     public function isObject(): bool
     {
-        return $this->type !== null && !$this->isScalar() && !$this->isArray();
+        return !$this->isScalar() && !$this->isArray();
     }
 }
