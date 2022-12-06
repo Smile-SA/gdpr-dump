@@ -5,12 +5,13 @@
     <arg name="basepath" value="."/>
     <arg name="extensions" value="php"/>
     <arg name="colors"/>
-
-    <!-- Show progress of the run -->
     <arg value="p"/>
-
-    <!-- Show sniff codes -->
     <arg value="s"/>
+
+    <file>app</file>
+    <file>bin</file>
+    <file>src</file>
+    <file>tests</file>
 
     <!-- PSR-12 coding standard -->
     <rule ref="PSR12"/>
@@ -248,9 +249,4 @@
 
     <!-- Reports useless @var annotation for constants because the type of constant is always clear -->
     <rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint"/>
-
-    <file>app</file>
-    <file>bin</file>
-    <file>src</file>
-    <file>tests</file>
 </ruleset>
