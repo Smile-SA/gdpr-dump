@@ -18,9 +18,9 @@ class Php implements MinifierInterface
             if (is_string($token)) {
                 $result .= $token;
                 $isWhitespace = false;
-            } elseif (in_array($token[0], [T_COMMENT, T_DOC_COMMENT])) {
-                // Remove all comments except PHP annotations (TODO remove when min PHP version becomes 8.0)
-                $result .= substr($token[1], 0, 2) === '#[' ? $token[1] : '';
+            } elseif ($token[0] === T_COMMENT || $token[0] === T_DOC_COMMENT) {
+                // Remove all comments
+                $result .= '';
                 $isWhitespace = true;
             } elseif ($token[0] === T_WHITESPACE) {
                 // Replace everything with a single space (if previous char isn't already a space)
