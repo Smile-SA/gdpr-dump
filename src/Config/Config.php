@@ -4,17 +4,10 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config;
 
-use Smile\GdprDump\Config\Compiler\Compiler;
-use Smile\GdprDump\Config\Compiler\Processor\EnvVarProcessor;
-use Smile\GdprDump\Config\Compiler\Processor\VersionProcessor;
-
 class Config implements ConfigInterface
 {
-    private array $items;
-
-    public function __construct(array $data = [])
+    public function __construct(private array $items = [])
     {
-        $this->items = $data;
     }
 
     /**
@@ -69,19 +62,6 @@ class Config implements ConfigInterface
         $this->items = $this->mergeArray($this->items, $data);
 
         return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function compile(): void
-    {
-        $compiler = new Compiler([
-            new EnvVarProcessor(),
-            new VersionProcessor(),
-        ]);
-
-        $compiler->compile($this);
     }
 
     /**
