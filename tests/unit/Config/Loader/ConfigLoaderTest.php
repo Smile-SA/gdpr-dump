@@ -107,6 +107,9 @@ class ConfigLoaderTest extends TestCase
     {
         $templatesDirectory = $this->getResource('config/templates');
 
-        return new ConfigLoader($config, new YamlParser(), new FileLocator($templatesDirectory));
+        $configLoader = new ConfigLoader(new YamlParser(), new FileLocator($templatesDirectory));
+        $configLoader->setConfig($config);
+
+        return $configLoader;
     }
 }

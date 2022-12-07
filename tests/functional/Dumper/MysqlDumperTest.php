@@ -131,9 +131,7 @@ class MysqlDumperTest extends TestCase
      */
     private function createConfig(): ConfigInterface
     {
-        /** @var ConfigInterface $config */
-        $config = $this->getContainer()->get('config');
-
+        $config = $this->getConfig();
         $dumpParams = $config->get('dump');
         $dumpParams['output'] = $this->dumpFile;
         $config->set('dump', $dumpParams);

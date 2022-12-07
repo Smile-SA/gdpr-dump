@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Config\Loader;
 
 use Smile\GdprDump\Config\ConfigException;
+use Smile\GdprDump\Config\ConfigInterface;
 
 interface ConfigLoaderInterface
 {
@@ -14,4 +15,9 @@ interface ConfigLoaderInterface
      * @throws ConfigException
      */
     public function load(string $fileName): void;
+
+    /**
+     * Set the config object.
+     */
+    public function setConfig(ConfigInterface $config): self;
 }

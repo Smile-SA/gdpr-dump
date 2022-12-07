@@ -11,13 +11,14 @@ use Smile\GdprDump\Config\Parser\ParserInterface;
 
 class ConfigLoader implements ConfigLoaderInterface
 {
+    private ConfigInterface $config;
+
     /**
      * @var string[]
      */
     private array $loadedTemplates = [];
 
     public function __construct(
-        private ConfigInterface $config,
         private ParserInterface $parser,
         private FileLocatorInterface $fileLocator
     ) {
@@ -28,8 +29,22 @@ class ConfigLoader implements ConfigLoaderInterface
      */
     public function load(string $fileName): void
     {
+        if (!isset($this->config)) {
+            throw new ConfigException('The configuration object must be set.');
+        }
+
         $fileName = $this->fileLocator->locate($fileName);
         $this->loadFile($fileName);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setConfig(ConfigInterface $config): self
+    {
+        $this->config = $config;
+
+        return $this;
     }
 
     /**
