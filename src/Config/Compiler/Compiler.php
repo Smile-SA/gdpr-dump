@@ -7,12 +7,12 @@ namespace Smile\GdprDump\Config\Compiler;
 use Smile\GdprDump\Config\Compiler\Processor\ProcessorInterface;
 use Smile\GdprDump\Config\ConfigInterface;
 
-class Compiler
+class Compiler implements CompilerInterface
 {
     /**
      * @param ProcessorInterface[] $processors
      */
-    public function __construct(private array $processors = [])
+    public function __construct(private iterable $processors = [])
     {
     }
 

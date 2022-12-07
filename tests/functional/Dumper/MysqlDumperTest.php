@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Functional\Dumper;
 
-use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Dumper\MysqlDumper;
 use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Functional\TestCase;
@@ -129,10 +129,10 @@ class MysqlDumperTest extends TestCase
     /**
      * Create the config object.
      */
-    private function createConfig(): Config
+    private function createConfig(): ConfigInterface
     {
-        /** @var Config $config */
-        $config = $this->getContainer()->get('dumper.config');
+        /** @var ConfigInterface $config */
+        $config = $this->getContainer()->get('config');
 
         $dumpParams = $config->get('dump');
         $dumpParams['output'] = $this->dumpFile;

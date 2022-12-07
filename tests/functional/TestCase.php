@@ -7,8 +7,9 @@ namespace Smile\GdprDump\Tests\Functional;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use RuntimeException;
 use Smile\GdprDump\AppKernel;
-use Smile\GdprDump\Config\Config;
-use Smile\GdprDump\Config\Loader\ConfigLoader;
+use Smile\GdprDump\Config\Compiler\CompilerInterface;
+use Smile\GdprDump\Config\ConfigInterface;
+use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
 use Smile\GdprDump\Database\Database;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -34,19 +35,27 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
+     * Get the DI container.
+     */
+    protected static function getContainer(): ContainerInterface
+    {
+        if (self::$kernel === null) {
+            self::$kernel = new AppKernel();
+            self::$kernel->boot();
+            self::prepareContainer(self::$kernel->getContainer());
+        }
+
+        return self::$kernel->getContainer();
+    }
+
+    /**
      * Get the database wrapper.
      */
     protected static function getDatabase(): Database
     {
         if (self::$database === null) {
-            // Parse the config file
-            /** @var ConfigLoader $loader */
-            $loader = self::getContainer()->get('dumper.config_loader');
-            $loader->load(self::getResource('config/templates/test.yaml'));
-
-            /** @var Config $config */
-            $config = self::getContainer()->get('dumper.config');
-            $config->compile();
+            /** @var ConfigInterface $config */
+            $config = self::getContainer()->get('config');
 
             // Initialize the shared connection
             $connectionParams = $config->get('database');
@@ -64,16 +73,20 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * Get the DI container.
+     * Prepare the container.
      */
-    protected static function getContainer(): ContainerInterface
+    private static function prepareContainer(ContainerInterface $container): void
     {
-        if (self::$kernel === null) {
-            self::$kernel = new AppKernel();
-            self::$kernel->boot();
-        }
+        /** @var ConfigLoaderInterface $loader */
+        $loader = $container->get('config.loader');
+        $loader->load(self::getResource('config/templates/test.yaml'));
 
-        return self::$kernel->getContainer();
+        /** @var ConfigInterface $config */
+        $config = $container->get('config');
+
+        /** @var CompilerInterface $compiler */
+        $compiler = $container->get('config.compiler');
+        $compiler->compile($config);
     }
 
     /**

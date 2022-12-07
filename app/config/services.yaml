@@ -10,16 +10,18 @@ services:
         autoconfigure: false # not useful in this app
 
     _instanceof:
-        Smile\GdprDump\Phar\Minify\MinifierInterface:
-            tags: ['compiler.minifier']
+        Smile\GdprDump\Config\Compiler\Processor\ProcessorInterface:
+            tags: ['config.compiler_processor']
         Smile\GdprDump\Dumper\Mysql\ExtensionInterface:
             tags: ['dumper.mysqldump_extension']
+        Smile\GdprDump\Phar\Minify\MinifierInterface:
+            tags: ['compiler.minifier']
 
     command.compile:
         class: 'Smile\GdprDump\Console\Command\CompileCommand'
         public: true
         arguments:
-            - '@compiler'
+            - '@phar.compiler'
             - '%faker.locale%'
 
     command.dump:
@@ -27,20 +29,22 @@ services:
         public: true
         arguments:
             - '@dumper'
-            - '@dumper.config'
-            - '@dumper.config_loader'
+            - '@config'
+            - '@config.loader'
             - '@config.schema_validator'
+            - '@config.compiler'
 
-    compiler:
-        class: 'Smile\GdprDump\Phar\Compiler'
+    config:
+        class: 'Smile\GdprDump\Config\Config'
+        public: true # used by functional tests
+
+    config.loader:
+        class: 'Smile\GdprDump\Config\Loader\ConfigLoader'
+        public: true # used by functional tests
         arguments:
-            - !tagged_iterator compiler.minifier
-
-    compiler.minify.json:
-        class: 'Smile\GdprDump\Phar\Minify\Json'
-
-    compiler.minify.php:
-        class: 'Smile\GdprDump\Phar\Minify\Php'
+            - '@config'
+            - '@config.parser'
+            - '@config.file_locator'
 
     config.file_locator:
         class: 'Smile\GdprDump\Config\Loader\FileLocator'
@@ -54,6 +58,18 @@ services:
         class: 'Smile\GdprDump\Config\Validator\JsonSchemaValidator'
         arguments:
             - '%config.schema_file%'
+
+    config.compiler:
+        class: 'Smile\GdprDump\Config\Compiler\Compiler'
+        public: true # used by functional tests
+        arguments:
+            - !tagged_iterator config.compiler_processor
+
+    config.compiler.processor.env_var:
+        class: 'Smile\GdprDump\Config\Compiler\Processor\EnvVarProcessor'
+
+    config.compiler.processor.version:
+        class: 'Smile\GdprDump\Config\Compiler\Processor\VersionProcessor'
 
     converter.factory:
         class: 'Smile\GdprDump\Converter\ConverterFactory'
@@ -70,17 +86,6 @@ services:
         arguments:
             - !tagged_iterator dumper.mysqldump_extension
 
-    dumper.config:
-        class: 'Smile\GdprDump\Config\Config'
-
-    dumper.config_loader:
-        class: 'Smile\GdprDump\Config\Loader\ConfigLoader'
-        public: true # used by functional tests
-        arguments:
-            - '@dumper.config'
-            - '@config.parser'
-            - '@config.file_locator'
-
     dumper.data_converter_extension:
         class: 'Smile\GdprDump\Dumper\Mysql\DataConverterExtension'
         arguments:
@@ -95,3 +100,14 @@ services:
         public: true # used by functional tests
         arguments:
             - '%faker.locale%'
+
+    phar.compiler:
+        class: 'Smile\GdprDump\Phar\Compiler'
+        arguments:
+            - !tagged_iterator compiler.minifier
+
+    phar.compiler.minify.json:
+        class: 'Smile\GdprDump\Phar\Minify\Json'
+
+    phar.compiler.minify.php:
+        class: 'Smile\GdprDump\Phar\Minify\Php'
