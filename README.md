@@ -26,12 +26,12 @@ Requirements:
 
 PHP compatibility matrix:
 
-**GdprDump Version** | **PHP Requirement** | Maintained?
----|---
-4.x (latest) | \>= 8.1 | Yes
-3.x | \>= 7.4 | Bugfixes only
-2.x | \>= 7.3 | No
-1.x | \>= 7.0 | No
+| **GdprDump Version** | **PHP Requirement** | Maintained? |
+| --- | --- | --- |
+| 4.x (latest) | \>= 8.1 | Yes |
+| 3.x | \>= 7.4 | Bugfixes only |
+| 2.x | \>= 7.3 | No |
+| 1.x | \>= 7.0 | No |
 
 ## Installation
 
