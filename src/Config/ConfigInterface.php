@@ -35,9 +35,4 @@ interface ConfigInterface
      * Merge the config data with another set of items.
      */
     public function merge(array $data): self;
-
-    /**
-     * Compile the configuration.
-     */
-    public function compile(): void;
 }

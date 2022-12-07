@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Console\Command;
 
 use Exception;
+use Smile\GdprDump\Config\Compiler\CompilerInterface;
 use Smile\GdprDump\Config\ConfigException;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
@@ -25,7 +26,8 @@ class DumpCommand extends Command
         private DumperInterface $dumper,
         private ConfigInterface $config,
         private ConfigLoaderInterface $configLoader,
-        private ValidatorInterface $validator
+        private ValidatorInterface $validator,
+        private CompilerInterface $compiler
     ) {
         parent::__construct();
     }
@@ -94,7 +96,7 @@ class DumpCommand extends Command
             $this->configLoader->load($configFile);
         }
 
-        $this->config->compile();
+        $this->compiler->compile($this->config);
     }
 
     /**
