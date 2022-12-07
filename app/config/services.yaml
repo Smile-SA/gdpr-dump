@@ -29,20 +29,14 @@ services:
         public: true
         arguments:
             - '@dumper'
-            - '@config'
             - '@config.loader'
             - '@config.schema_validator'
             - '@config.compiler'
-
-    config:
-        class: 'Smile\GdprDump\Config\Config'
-        public: true # used by functional tests
 
     config.loader:
         class: 'Smile\GdprDump\Config\Loader\ConfigLoader'
         public: true # used by functional tests
         arguments:
-            - '@config'
             - '@config.parser'
             - '@config.file_locator'
 

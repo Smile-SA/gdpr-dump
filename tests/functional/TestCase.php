@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 use RuntimeException;
 use Smile\GdprDump\AppKernel;
 use Smile\GdprDump\Config\Compiler\CompilerInterface;
+use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
 use Smile\GdprDump\Database\Database;
@@ -17,6 +18,7 @@ abstract class TestCase extends BaseTestCase
 {
     private static ?AppKernel $kernel = null;
     private static ?Database $database = null;
+    private static ?Config $config = null;
 
     /**
      * Get the absolute path of the application.
@@ -42,10 +44,30 @@ abstract class TestCase extends BaseTestCase
         if (self::$kernel === null) {
             self::$kernel = new AppKernel();
             self::$kernel->boot();
-            self::prepareContainer(self::$kernel->getContainer());
         }
 
         return self::$kernel->getContainer();
+    }
+
+    /**
+     * Get the dumper config.
+     */
+    protected static function getConfig(): ConfigInterface
+    {
+        if (self::$config === null) {
+            self::$config = new Config();
+
+            /** @var ConfigLoaderInterface $loader */
+            $loader = self::getContainer()->get('config.loader');
+            $loader->setConfig(self::$config)
+                ->load(self::getResource('config/templates/test.yaml'));
+
+            /** @var CompilerInterface $compiler */
+            $compiler = self::getContainer()->get('config.compiler');
+            $compiler->compile(self::$config);
+        }
+
+        return self::$config;
     }
 
     /**
@@ -54,8 +76,7 @@ abstract class TestCase extends BaseTestCase
     protected static function getDatabase(): Database
     {
         if (self::$database === null) {
-            /** @var ConfigInterface $config */
-            $config = self::getContainer()->get('config');
+            $config = self::getConfig();
 
             // Initialize the shared connection
             $connectionParams = $config->get('database');
@@ -70,23 +91,6 @@ abstract class TestCase extends BaseTestCase
         }
 
         return self::$database;
-    }
-
-    /**
-     * Prepare the container.
-     */
-    private static function prepareContainer(ContainerInterface $container): void
-    {
-        /** @var ConfigLoaderInterface $loader */
-        $loader = $container->get('config.loader');
-        $loader->load(self::getResource('config/templates/test.yaml'));
-
-        /** @var ConfigInterface $config */
-        $config = $container->get('config');
-
-        /** @var CompilerInterface $compiler */
-        $compiler = $container->get('config.compiler');
-        $compiler->compile($config);
     }
 
     /**

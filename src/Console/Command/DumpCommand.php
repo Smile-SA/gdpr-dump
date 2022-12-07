@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Console\Command;
 
 use Exception;
 use Smile\GdprDump\Config\Compiler\CompilerInterface;
+use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigException;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
@@ -24,7 +25,6 @@ class DumpCommand extends Command
 {
     public function __construct(
         private DumperInterface $dumper,
-        private ConfigInterface $config,
         private ConfigLoaderInterface $configLoader,
         private ValidatorInterface $validator,
         private CompilerInterface $compiler
@@ -53,23 +53,23 @@ class DumpCommand extends Command
     {
         try {
             // Load the config
-            $this->loadConfig($input);
+            $config = $this->loadConfig($input);
 
             // Validate the config data
-            $result = $this->validator->validate($this->config->toArray());
+            $result = $this->validator->validate($config->toArray());
             if (!$result->isValid()) {
                 $this->outputValidationResult($result, $output);
                 return 1;
             }
 
             // Prompt for the password if not defined
-            $database = $this->config->get('database', []);
+            $database = $config->get('database', []);
             if (!array_key_exists('password', $database)) {
                 $database['password'] = $this->promptPassword($input, $output);
-                $this->config->set('database', $database);
+                $config->set('database', $database);
             }
 
-            $this->dumper->dump($this->config);
+            $this->dumper->dump($config);
         } catch (Exception $e) {
             if ($output->isVerbose()) {
                 throw $e;
@@ -87,16 +87,20 @@ class DumpCommand extends Command
      *
      * @throws ConfigException
      */
-    private function loadConfig(InputInterface $input): void
+    private function loadConfig(InputInterface $input): ConfigInterface
     {
-        // Load the config file(s)
-        $configFiles = $input->getArgument('config_file');
+        $config = new Config();
 
-        foreach ($configFiles as $configFile) {
+        // Load config files
+        $this->configLoader->setConfig($config);
+        foreach ($input->getArgument('config_file') as $configFile) {
             $this->configLoader->load($configFile);
         }
 
-        $this->compiler->compile($this->config);
+        // Compile the config
+        $this->compiler->compile($config);
+
+        return $config;
     }
 
     /**
