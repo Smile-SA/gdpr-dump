@@ -50,6 +50,7 @@ class Faker implements ConverterInterface
     {
         // Faster than calling the "format" method of the Faker generator
         // (the "format" method uses call_user_func_array, which is very slow)
+        // @phpstan-ignore-next-line getFormatter function always returns an array with 2 items
         [$provider, $method] = $this->faker->getFormatter($this->formatter);
 
         $arguments = $this->arguments;
