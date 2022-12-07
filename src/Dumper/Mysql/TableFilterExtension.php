@@ -263,6 +263,8 @@ class TableFilterExtension implements ExtensionInterface
 
     /**
      * Get a filter value.
+     *
+     * @throws UnexpectedValueException
      */
     private function getFilterValue(Filter $filter): mixed
     {
@@ -282,6 +284,8 @@ class TableFilterExtension implements ExtensionInterface
     /**
      * Quote a value so that it can be safely injected in a SQL query
      * (we can't use query params because Mysqldump library doesn't allow it).
+     *
+     * @throws UnexpectedValueException
      */
     private function quoteValue(mixed $value): mixed
     {
@@ -294,7 +298,7 @@ class TableFilterExtension implements ExtensionInterface
         }
 
         if (is_string($value)) {
-            return strpos($value, 'expr:') === 0 ? ltrim(substr($value, 5)) : $this->connection->quote($value);
+            return str_starts_with($value, 'expr:') ? ltrim(substr($value, 5)) : $this->connection->quote($value);
         }
 
         return $value;

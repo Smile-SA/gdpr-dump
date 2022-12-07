@@ -32,8 +32,7 @@ class Database
     private ParameterBag $connectionParams;
 
     /**
-     * @throws Exception
-     * @throws UnexpectedValueException
+     * @throws Exception|UnexpectedValueException
      */
     public function __construct(array $connectionParams)
     {

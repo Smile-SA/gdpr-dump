@@ -39,6 +39,9 @@ class Filter
         self::OPERATOR_NOT_IN,
     ];
 
+    /**
+     * @throws UnexpectedValueException
+     */
     public function __construct(private string $column, private string $operator, private mixed $value = null)
     {
         if (!in_array($operator, self::$operators, true)) {

@@ -74,6 +74,8 @@ class Compiler
 
     /**
      * Add files to the phar file.
+     *
+     * @throws RuntimeException
      */
     private function addFiles(Phar $phar): void
     {
@@ -133,6 +135,8 @@ class Compiler
 
     /**
      * Read and minify the contents of a file.
+     *
+     * @throws RuntimeException
      */
     private function parseFile(string $fileName, ?string $extension = null): string
     {

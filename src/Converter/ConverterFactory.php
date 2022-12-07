@@ -101,13 +101,13 @@ class ConverterFactory
     private function parseParameters(array $parameters): array
     {
         foreach ($parameters as $name => $value) {
-            if ($name === 'converters' || strpos($name, '_converters') !== false) {
+            if ($name === 'converters' || str_contains($name, '_converters')) {
                 // Param is an array of converter definitions (e.g. "converters" param of the "chain" converter)
                 $parameters[$name] = $this->parseConvertersParameter($name, $value);
                 continue;
             }
 
-            if ($name === 'converter' || strpos($name, '_converter') !== false) {
+            if ($name === 'converter' || str_contains($name, '_converter')) {
                 // Param is a converter definition (e.g. "converter" param of the "unique" converter
                 $parameters[$name] = $this->parseConverterParameter($name, $value);
             }

@@ -60,7 +60,7 @@ class EnvVarProcessor implements ProcessorInterface
      */
     private function processValue(mixed $value): mixed
     {
-        if (!is_string($value) || strpos($value, '%env(') !== 0 || substr($value, -2) !== ')%') {
+        if (!is_string($value) || !str_starts_with($value, '%env(') || !str_ends_with($value, ')%')) {
             return $value;
         }
 

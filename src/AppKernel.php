@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump;
 
 use ErrorException;
+use Exception;
 use RuntimeException;
 use Smile\GdprDump\Console\Application;
 use Symfony\Component\Config\FileLocator;
@@ -23,6 +24,8 @@ class AppKernel
      *
      * The console command is not lazy-loaded (cf. https://symfony.com/doc/6.2/console/lazy_commands.html)
      * because this feature is not useful in a single command application.
+     *
+     * @throws Exception
      */
     public function run(string $command = 'command.dump'): void
     {
@@ -38,6 +41,8 @@ class AppKernel
 
     /**
      * Boot the kernel.
+     *
+     * @throws Exception
      */
     public function boot(): void
     {
@@ -70,6 +75,8 @@ class AppKernel
 
     /**
      * Set the error handler.
+     *
+     * @throws ErrorException
      */
     private function initErrorHandler(): void
     {

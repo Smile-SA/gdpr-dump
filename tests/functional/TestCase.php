@@ -95,6 +95,8 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Get the SQL queries that allow creating the test database.
+     *
+     * @throws RuntimeException
      */
     private static function getDatabaseDump(): string
     {

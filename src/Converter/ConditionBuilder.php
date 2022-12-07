@@ -96,7 +96,7 @@ class ConditionBuilder
 
         // Prevent the use of some statements
         foreach ($this->statementBlacklist as $statement) {
-            if (strpos($condition, $statement) !== false) {
+            if (str_contains($condition, $statement)) {
                 $message = sprintf('The statement "%s" is not allowed in converter conditions.', $statement);
                 throw new RuntimeException($message);
             }

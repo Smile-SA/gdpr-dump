@@ -134,6 +134,8 @@ class TableConfig
 
     /**
      * Prepare the table sort order.
+     *
+     * @throws UnexpectedValueException
      */
     private function prepareSortOrder(array $tableData): void
     {
