@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Disallow phar file compilation when composer dev packages are installed
+
 ## [3.1.0] - 2022-08-22
 [3.1.0]: https://github.com/Smile-SA/gdpr-dump/compare/3.0.0...3.1.0
 

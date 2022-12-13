@@ -48,6 +48,11 @@ class CompileCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
+        if ($this->hasDevPackages()) {
+            $output->writeln('<error>Dev packages detected. Please run "composer install --no-dev".</error>');
+            return 1;
+        }
+
         $locales = $input->getOption('locale');
         if (!in_array($this->defaultLocale, $locales, true)) {
             $locales[] = $this->defaultLocale;
@@ -66,6 +71,14 @@ class CompileCommand extends Command
         );
 
         return 0;
+    }
+
+    /**
+     * Check whether composer dev packages are installed.
+     */
+    private function hasDevPackages(): bool
+    {
+        return is_dir(dirname(__DIR__, 3) . '/vendor/phpunit');
     }
 
     /**
