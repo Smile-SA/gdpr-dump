@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Config;
 
-use Ifsnop\Mysqldump\Mysqldump;
+use Druidfi\Mysqldump\Compress\CompressManagerFactory;
+use Druidfi\Mysqldump\DumpSettings;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Dumper\Config\Table\TableConfig;
 use Smile\GdprDump\Dumper\Config\Validation\QueryValidator;
@@ -49,31 +50,31 @@ class DumperConfig
 
     private array $dumpSettings = [
         'output' => 'php://stdout',
-        'compress' => Mysqldump::NONE,
-        'init_commands' => [],
-        'reset_auto_increment' => false,
         'add_drop_database' => false,
         'add_drop_table' => true, // false in MySQLDump-PHP
         'add_drop_trigger' => true,
         'add_locks' => true,
         'complete_insert' => false,
-        'default_character_set' => Mysqldump::UTF8,
+        'compress' => CompressManagerFactory::NONE,
+        'default_character_set' => DumpSettings::UTF8,
         'disable_keys' => true,
-        'extended_insert' => true,
         'events' => false,
+        'extended_insert' => true,
         'hex_blob' => false, // true in MySQLDump-PHP
+        'init_commands' => [],
         'insert_ignore' => false,
-        'net_buffer_length' => Mysqldump::MAXLINESIZE,
+        'lock_tables' => false, // true in MySQLDump-PHP
+        'net_buffer_length' => 1000000,
         'no_autocommit' => true,
         'no_create_info' => false,
-        'lock_tables' => false, // true in MySQLDump-PHP
+        'reset_auto_increment' => false,
         'routines' => false,
         'single_transaction' => true,
+        'skip_comments' => false,
+        'skip_definer' => false,
+        'skip_dump_date' => false,
         'skip_triggers' => false,
         'skip_tz_utc' => false,
-        'skip_comments' => false,
-        'skip_dump_date' => false,
-        'skip_definer' => false,
     ];
 
     private array $filterPropagationSettings = [

@@ -120,17 +120,6 @@
                     "type": ["string", "number"],
                     "minLength": 1
                 },
-                "compress": {
-                    "type": "string",
-                    "enum": ["none", "gzip", "bzip2"]
-                },
-                "init_commands": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "minLength": 1
-                    }
-                },
                 "add_drop_database": {
                     "type": "boolean"
                 },
@@ -146,6 +135,10 @@
                 "complete_insert": {
                     "type": "boolean"
                 },
+                "compress": {
+                    "type": "string",
+                    "enum": ["none", "gzip", "bzip2"]
+                },
                 "default_character_set": {
                     "type": "string",
                     "minLength": 1
@@ -153,16 +146,26 @@
                 "disable_keys": {
                     "type": "boolean"
                 },
-                "extended_insert": {
+                "events": {
                     "type": "boolean"
                 },
-                "events": {
+                "extended_insert": {
                     "type": "boolean"
                 },
                 "hex_blob": {
                     "type": "boolean"
                 },
+                "init_commands": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                },
                 "insert_ignore": {
+                    "type": "boolean"
+                },
+                "lock_tables": {
                     "type": "boolean"
                 },
                 "net_buffer_length": {
@@ -174,7 +177,7 @@
                 "no_create_info": {
                     "type": "boolean"
                 },
-                "lock_tables": {
+                "reset_auto_increment": {
                     "type": "boolean"
                 },
                 "routines": {
@@ -183,19 +186,19 @@
                 "single_transaction": {
                     "type": "boolean"
                 },
-                "skip_triggers": {
-                    "type": "boolean"
-                },
-                "skip_tz_utc": {
-                    "type": "boolean"
-                },
                 "skip_comments": {
+                    "type": "boolean"
+                },
+                "skip_definer": {
                     "type": "boolean"
                 },
                 "skip_dump_date": {
                     "type": "boolean"
                 },
-                "skip_definer": {
+                "skip_triggers": {
+                    "type": "boolean"
+                },
+                "skip_tz_utc": {
                     "type": "boolean"
                 }
             },

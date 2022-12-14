@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Mysql;
 
-use Ifsnop\Mysqldump\Mysqldump;
+use Druidfi\Mysqldump\Mysqldump;
 use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 
