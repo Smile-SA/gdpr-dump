@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Dumper;
 
 use Doctrine\DBAL\Exception as DBALException;
-use Ifsnop\Mysqldump\Mysqldump;
+use Druidfi\Mysqldump\Mysqldump;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
