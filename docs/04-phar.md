@@ -60,7 +60,7 @@ To add multiple locales to the phar file, you must compile it with the `--locale
 For example, to compile a phar file that includes "de_DE" and "fr_FR":
 
 ```
-docker compose run --rm app bin/compile --locale=de_DE --locale=fr_FR
+make compile c="--locale=fr_FR --locale=de_DE"
 ```
 
 The default locale can be omitted, it is automatically added to the phar file.

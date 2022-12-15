@@ -27,9 +27,9 @@ dump: .env vendor ## Run bin/gdpr-dump command. Example: "make dump c=test.yaml"
 	$(PHP_CLI) bin/gdpr-dump $(c)
 
 .PHONY: compile
-compile: .env vendor ## Run bin/compile command.
+compile: .env ## Run bin/compile command.
 	$(PHP_CLI) composer install --no-dev
-	$(PHP_CLI) bin/compile
+	$(PHP_CLI) bin/compile $(c)
 	$(PHP_CLI) composer install
 
 ## Composer
