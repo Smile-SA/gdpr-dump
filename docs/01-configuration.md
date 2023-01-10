@@ -114,30 +114,30 @@ Available settings:
 | Parameter | Default | Description |
 | --- | --- | --- |
 | **output** | `'php://stdout'` | Dump output. By default, the dump is outputted to the terminal.<br><br>If a relative path is specified, it is relative to the current working directory.<br><br>A date format can be specified using curly brackets, e.g. `{Y-m-d}`. |
-| **compress** | `'none'` | `none`, `gzip` (.gz file extension), `bzip2` (.bz2 file extension). |
-| **init_commands** | `[]` | Queries executed after the connection is established. |
 | **add_drop_database** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_add-drop-database) |
 | **add_drop_table** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_add-drop-table) |
 | **add_drop_trigger** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_add-drop-trigger) |
 | **add_locks** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_add-locks) |
 | **complete_insert** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_complete-insert) |
+| **compress** | `'none'` | `none`, `gzip` (.gz file extension), `bzip2` (.bz2 file extension). |
 | **default_character_set** | `'utf8'` | `utf8` (default, compatible option), `utf8mb4` (for full utf8 compliance). |
 | **disable_keys** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_disable-keys) |
-| **extended_insert** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_extended-insert) |
 | **events** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_events) |
+| **extended_insert** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_extended-insert) |
 | **hex_blob** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_hex-blob) |
+| **init_commands** | `[]` | Queries executed after the connection is established. |
 | **insert_ignore** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_insert-ignore) |
+| **lock_tables** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_lock-tables) |
 | **net_buffer_length** | `1000000` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_net-buffer-length) |
 | **no_autocommit** | `true` | Option to disable autocommit (faster inserts, no problems with index keys). |
 | **no_create_info** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_no-create-info) |
-| **lock_tables** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_lock-tables) |
 | **routines** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_routines) |
 | **single_transaction** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_single-transaction) |
+| **skip_comments** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_comments) |
+| **skip_definer** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqlpump.html#option_mysqlpump_skip-definer) |
+| **skip_dump_date** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_dump-date) |
 | **skip_triggers** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_triggers) |
 | **skip_tz_utc** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_tz-utc) |
-| **skip_comments** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_comments) |
-| **skip_dump_date** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_dump-date) |
-| **skip_definer** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqlpump.html#option_mysqlpump_skip-definer) |
 
 ### Table Whitelist
 

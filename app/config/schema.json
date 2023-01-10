@@ -177,9 +177,6 @@
                 "no_create_info": {
                     "type": "boolean"
                 },
-                "reset_auto_increment": {
-                    "type": "boolean"
-                },
                 "routines": {
                     "type": "boolean"
                 },

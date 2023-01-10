@@ -67,7 +67,6 @@ class DumperConfig
         'net_buffer_length' => 1000000,
         'no_autocommit' => true,
         'no_create_info' => false,
-        'reset_auto_increment' => false,
         'routines' => false,
         'single_transaction' => true,
         'skip_comments' => false,
