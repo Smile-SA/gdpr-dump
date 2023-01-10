@@ -1,15 +1,18 @@
 services:
     app:
-        build: 'docker/php-cli'
-        user: '${UID:-}:${GID:-}'
+        build:
+            context: 'docker/php-cli'
+            args:
+                APP_UID: '${UID}'
+                APP_GID: '${GID}'
         environment:
             COMPOSER_AUTH: '${COMPOSER_AUTH:-}'
             DB_HOST: 'db'
         depends_on:
             - 'db'
         volumes:
-            - '.:/var/www/html'
-            - 'composer-cache:/tmp/composer'
+            - '.:/var/www/html:rw,cached'
+            - 'composer:/home/www/.composer'
 
     db:
         image: 'mariadb:10.6'
@@ -25,5 +28,5 @@ services:
             - './docker/db-data:/docker-entrypoint-initdb.d'
 
 volumes:
-    composer-cache:
+    composer:
     db-data:

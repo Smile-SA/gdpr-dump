@@ -3,9 +3,11 @@ UNAME := $(shell uname)
 DOCKER_COMPOSE := docker compose
 PHP_CLI := $(DOCKER_COMPOSE) run --rm app
 
+include .env
+
 .PHONY: help
 help:
-	@grep -E '(^[a-zA-Z0-9_-]+:.*?##)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "; printf "Usage: make \033[32m<target>\033[0m\n"}{printf "\033[32m%-15s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m## /\n[33m/'
+	@grep -E '(^[a-zA-Z0-9_-]+:.*?##)|(^##)' $(firstword $(MAKEFILE_LIST)) | awk 'BEGIN {FS = ":.*?## "; printf "Usage: make \033[32m<target>\033[0m\n"}{printf "\033[32m%-20s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m## /\n[33m/'
 
 ## Docker
 .PHONY: up
@@ -20,14 +22,18 @@ down: ## Stop and remove containers.
 ps: ## List active containers.
 	$(DOCKER_COMPOSE) ps
 
+.PHONY: build
+build: ## Build images.
+	$(DOCKER_COMPOSE) build
+
 ## GdprDump
 .PHONY: dump
-dump: .env vendor ## Run bin/gdpr-dump command. Example: "make dump c=test.yaml"
+dump: vendor ## Run bin/gdpr-dump command. Example: "make dump c=test.yaml"
 	@$(eval c ?=)
 	$(PHP_CLI) bin/gdpr-dump $(c)
 
 .PHONY: compile
-compile: .env ## Run bin/compile command.
+compile: ## Run bin/compile command.
 	$(PHP_CLI) composer install --no-dev
 	$(PHP_CLI) bin/compile $(c)
 	$(PHP_CLI) composer install
@@ -39,20 +45,20 @@ composer: ## Run composer. Example: "make composer c=update"
 
 ## Code Quality
 .PHONY: analyse
-analyse: .env vendor ## Run code analysis tools (parallel-lint, phpcs, phpstan).
+analyse: vendor ## Run code analysis tools (parallel-lint, phpcs, phpstan).
 	$(PHP_CLI) composer audit
 	$(PHP_CLI) vendor/bin/parallel-lint app bin src tests
 	$(PHP_CLI) vendor/bin/phpcs
 	$(PHP_CLI) vendor/bin/phpstan analyse
 
 .PHONY: test
-test: .env vendor ## Run phpunit.
+test: vendor ## Run phpunit.
 	$(PHP_CLI) vendor/bin/phpunit
 
-vendor:
+vendor: composer.json
 	$(PHP_CLI) composer install
 
-.env:
+.env: | .env.dist
 	@cp .env.dist .env
 ifeq ($(UNAME), Linux)
 	@sed -i -e "s/^UID=.*/UID=$$(id -u)/" -e "s/^GID=.*/GID=$$(id -g)/" .env
