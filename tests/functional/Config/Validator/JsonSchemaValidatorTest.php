@@ -147,6 +147,7 @@ class JsonSchemaValidatorTest extends TestCase
                             'converter' => 'anonymizeText',
                         ],
                         'lastname' => [
+                            'converter' => 'anonymizeText',
                             'disabled' => true,
                         ],
                         'additional_info' => [

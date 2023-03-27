@@ -264,6 +264,7 @@
             "properties": {
                 "converter": {
                     "type": ["string"],
+                    "required": true,
                     "minLength": 1
                 },
                 "parameters": {
