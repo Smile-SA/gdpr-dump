@@ -263,7 +263,7 @@
             "type": ["object"],
             "properties": {
                 "converter": {
-                    "type": ["string"],
+                    "type": "string",
                     "required": true,
                     "minLength": 1
                 },
