@@ -2,11 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.0.1] - 2023-03-29
+[4.0.1]: https://github.com/Smile-SA/gdpr-dump/compare/4.0.0...4.0.1
+
+- Better error message when a converter is declared without a name ([#83](https://github.com/Smile-SA/gdpr-dump/issues/83))
+
 ## [4.0.0] - 2023-01-10
 [4.0.0]: https://github.com/Smile-SA/gdpr-dump/compare/3.1.1...4.0.0
 
 - Set minimum PHP version to 8.1
-- Replace `ifsnop/mysqldump-php` package with `druidfi/mysqldump-php`
+- Replace `ifsnop/mysqldump-php` package with `druidfi/mysqldump-php` ([#78](https://github.com/Smile-SA/gdpr-dump/issues/78))
 
 ## [3.1.1] - 2022-12-13
 [3.1.1]: https://github.com/Smile-SA/gdpr-dump/compare/3.1.0...3.1.1
