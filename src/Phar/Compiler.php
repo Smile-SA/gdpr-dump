@@ -106,7 +106,9 @@ class Compiler
             $finder($this->basePath . '/src')
                 ->name(['*.php']),
             $finder($this->basePath . '/vendor')
-                ->name(['*.php'])
+                // The directory "vendor/symfony/console/Resources" (which stores shell completion files) must exist,
+                // otherwise the generated phar fails to run
+                ->name(['*.php', 'completion.*'])
                 ->notPath(
                     [
                         'bin/',
