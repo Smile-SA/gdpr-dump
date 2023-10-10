@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [4.0.2] - 2023-10-10
+[4.0.2]: https://github.com/Smile-SA/gdpr-dump/compare/4.0.1...4.0.2
 
 - Fix phar file compilation error that appeared after the release of symfony/console v6.2.10
 - `requires_version` param was removed from base templates (except magento2)
