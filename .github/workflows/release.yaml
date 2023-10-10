@@ -38,7 +38,7 @@ jobs:
 
             - name: 'Get tag name'
               id: 'get-version'
-              run: 'echo ::set-output name=version::${GITHUB_REF#refs/tags/}'
+              run: 'echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT'
 
             # Cannot use ${{ github.ref }}, it isn't the tag name, but "/refs/tags/tag_name"
             - name: 'Replace application version'
