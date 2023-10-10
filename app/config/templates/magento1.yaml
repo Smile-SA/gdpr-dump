@@ -1,6 +1,4 @@
 ---
-requires_version: true
-
 variables:
     firstname_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "firstname" and entity_type_id = 1'
     middlename_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "middlename" and entity_type_id = 1'
@@ -11,55 +9,38 @@ variables:
 tables:
     api_session:
         truncate: true
-
     core_cache:
         truncate: true
-
     core_cache_tag:
         truncate: true
-
     core_session:
         truncate: true
-
     dataflow_batch:
         truncate: true
-
     dataflow_batch_export:
         truncate: true
-
     dataflow_batch_import:
         truncate: true
-
     dataflow_import_data:
         truncate: true
-
     dataflow_profile_history:
         truncate: true
-
     dataflow_session:
         truncate: true
-
     index_event:
         truncate: true
-
     persistent_session:
         truncate: true
-
     report_event:
         truncate: true
-
     ui_bookmark:
         truncate: true
-
     log_*:
         truncate: true
-
     '*_log':
         truncate: true
-
     '*_tmp':
         truncate: true
-
     '*_idx':
         truncate: true
 

@@ -1,49 +1,33 @@
 ---
-requires_version: true
-
 tables:
     oro_logger_log_entry:
         truncate: true
-
     acl_classes:
         truncate: true
-
     acl_entries:
         truncate: true
-
     acl_object_identities:
         truncate: true
-
     acl_object_identity_ancestors:
         truncate: true
-
     acl_security_identities:
         truncate: true
-
     oro_entity_config_index_value:
         truncate: true
-
     oro_search_index_datetime:
         truncate: true
-
     oro_search_index_decimal:
         truncate: true
-
     oro_search_index_integer:
         truncate: true
-
     oro_search_index_text:
         truncate: true
-
     oro_entity_config_log:
         truncate: true
-
     oro_entity_config_log_diff:
         truncate: true
-
     oro_workflow_transition_log:
         truncate: true
-
     orocrm_dm_change_field_log:
         truncate: true
 

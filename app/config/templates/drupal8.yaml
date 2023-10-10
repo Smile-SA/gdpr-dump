@@ -1,13 +1,9 @@
 ---
-requires_version: true
-
 tables:
     cache_*:
         truncate: true
-
     sessions:
         truncate: true
-
     commerce_payment_method*:
         truncate: true
 

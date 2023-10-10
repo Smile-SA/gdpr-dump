@@ -4,43 +4,30 @@ requires_version: true
 tables:
     admin_user_session:
         truncate: true
-
     admin_passwords:
         truncate: true
-
     cache:
         truncate: true
-
     cache_tag:
         truncate: true
-
     customer_visitor:
         truncate: true
-
     newsletter_queue:
         truncate: true
-
     password_reset_request_event:
         truncate: true
-
     persistent_session:
         truncate: true
-
     report_event:
         truncate: true
-
     session:
         truncate: true
-
     '*_log':
         truncate: true
-
     '*_tmp':
         truncate: true
-
     '*_idx':
         truncate: true
-
     '*_replica':
         truncate: true
 

@@ -1,13 +1,9 @@
 ---
-requires_version: true
-
 tables:
     cache:
         truncate: true
-
     cache_*:
         truncate: true
-
     sessions:
         truncate: true
 
