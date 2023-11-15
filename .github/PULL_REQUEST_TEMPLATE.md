@@ -2,7 +2,7 @@
 
 Please check if your pull request fulfills the following requirements:
 
-- [ ] The commit message follows our guidelines: https://github.com/Smile-SA/gdpr-dump/blob/master/CONTRIBUTING.md.
+- [ ] The commit message follows our guidelines: https://github.com/Smile-SA/gdpr-dump/blob/main/CONTRIBUTING.md.
 - [ ] Tests for the changes have been added (for bug fixes / features).
 - [ ] Docs have been added / updated (for bug fixes / features).
 
