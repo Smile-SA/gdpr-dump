@@ -2,12 +2,12 @@
 
 ## Table of Contents
 
+- [Database Settings](#database-settings)
+- [Dump Settings](#dump-settings)
 - [Templates](#templates)
     - [Default Templates](#default-templates)
     - [Custom Templates](#custom-templates)
-    - [Extending Multiple Files](#extending-multiple-files)
-- [Database Settings](#database-settings)
-- [Dump Settings](#dump-settings)
+    - [Using Multiple Templates](#using-multiple-templates)
 - [Table Whitelist](#table-whitelist)
 - [Table Blacklist](#table-blacklist)
 - [Table Filters](#table-filters)
@@ -24,53 +24,9 @@
     - [Unsetting Values Declared in Config Templates](#unsetting-values-declared-in-config-templates)
     - [Version-specific Configuration](#version-specific-configuration)
 
-## Templates
-
-### Default Templates
-
-The tool is bundled with predefined configuration templates.
-Each template provides anonymization rules for a specific framework.
-
-Available templates:
-
-- [drupal7](../app/config/templates/drupal7.yaml)
-- [drupal8](../app/config/templates/drupal8.yaml)
-- [magento1](../app/config/templates/magento1.yaml)
-- [magento2](../app/config/templates/magento2.yaml)
-- [oro4](../app/config/templates/oro4.yaml)
-
-To extend a configuration template, you must specify its name, and the version of your application.
-For example:
-
-```yaml
-extends: 'magento2'
-version: '2.4.3'
-```
-
-### Custom Templates
-
-The `extends` parameter can also be used with custom config files:
-
-```yaml
-extends: 'path/to/config.yaml'
-```
-
-The contents of this template will automatically be merged with the configuration file.
-The path to the file can be an absolute path, or relative to the current file.
-
-### Extending Multiple Files
-
-It is possible to override multiple config files:
-
-```yaml
-extends:
-    - 'path/to/config1.yaml'
-    - 'path/to/config2.yaml'
-```
-
 ## Database Settings
 
-The database information can be specified in the `database` object:
+The database connection parameters must be specified in the `database` object:
 
 ```yaml
 database:
@@ -109,11 +65,13 @@ dump:
     compress: 'gzip'
 ```
 
+If no output was provided, the dump is outputted to the default stdout.
+
 Available settings:
 
 | Parameter | Default | Description |
 | --- | --- | --- |
-| **output** | `'php://stdout'` | Dump output. By default, the dump is outputted to the terminal.<br><br>If a relative path is specified, it is relative to the current working directory.<br><br>A date format can be specified using curly brackets, e.g. `{Y-m-d}`. |
+| **output** | `'php://stdout'` | Dump output. If a relative path is specified, it is relative to the current working directory.<br><br>A date format can be specified using curly brackets, e.g. `{Y-m-d}`. |
 | **add_drop_database** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_add-drop-database) |
 | **add_drop_table** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_add-drop-table) |
 | **add_drop_trigger** | `true` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_add-drop-trigger) |
@@ -139,7 +97,52 @@ Available settings:
 | **skip_triggers** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_triggers) |
 | **skip_tz_utc** | `false` | [MySQL documentation](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_tz-utc) |
 
-### Table Whitelist
+## Templates
+
+### Default Templates
+
+The tool is bundled with predefined configuration templates.
+Each template provides anonymization rules for a specific framework.
+
+Available templates:
+
+- [drupal7](../app/config/templates/drupal7.yaml)
+- [drupal8](../app/config/templates/drupal8.yaml)
+- [magento1](../app/config/templates/magento1.yaml)
+- [magento2](../app/config/templates/magento2.yaml)
+- [oro4](../app/config/templates/oro4.yaml)
+
+To use one of these template, you must specify its name with the `extends` parameter.
+The magento2 template also requires to specify the version of your application.
+For example:
+
+```yaml
+extends: 'magento2'
+version: '2.4.6'
+```
+
+### Custom Templates
+
+The `extends` parameter can also be used with custom config files:
+
+```yaml
+extends: 'path/to/config.yaml'
+```
+
+The contents of this template will automatically be merged with the configuration file.
+The path to the file can be an absolute path, or relative to the current configuration file.
+
+### Using Multiple Templates
+
+It is possible to use multiple templates:
+
+```yaml
+extends:
+    - 'path/to/config1.yaml'
+    - 'path/to/config2.yaml'
+```
+
+## Table Whitelist
 
 You can specify a list of tables to include in the dump.
 If a whitelist is defined, only these tables will be dumped.
@@ -152,7 +155,7 @@ tables_whitelist:
 
 The wildcard character `*` can be used in table names (e.g. `cache_*`).
 
-### Table Blacklist
+## Table Blacklist
 
 You can specify a list of tables to exclude from the dump:
 
@@ -161,8 +164,6 @@ tables_blacklist:
     - 'table1'
     - 'table2'
 ```
-
-If a table is both blacklisted and whitelisted, it will not be included in the dump.
 
 The wildcard character `*` can be used in table names (e.g. `cache_*`).
 
