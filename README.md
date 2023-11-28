@@ -17,70 +17,9 @@ Features:
 - Dump options (compression, output type...).
 - Predefined configuration templates (Magento, Drupal, OroCommerce).
 
-## Prerequisites
-
-Requirements:
-
-- PHP >= 8.1
-- MySQL or equivalent (MariaDB, Percona)
-
-PHP compatibility matrix:
-
-| **GdprDump Version** | **PHP Requirement** | Maintained? |
-| --- | --- | --- |
-| 4.x (latest) | \>= 8.1 | Yes |
-| 3.x | \>= 7.4 | Bugfixes only |
-| 2.x | \>= 7.3 | No |
-| 1.x | \>= 7.0 | No |
-
-## Installation
-
-**Phar File (recommended)**
-
-A phar file is available for downloading in the [releases section](https://github.com/Smile-SA/gdpr-dump/releases).
-This is the recommended way to install this application.
-
-To fetch the latest version:
-
-```
-wget https://github.com/Smile-SA/gdpr-dump/releases/latest/download/gdpr-dump.phar
-chmod +x gdpr-dump.phar
-./gdpr-dump.phar --version
-```
-
-**With Composer**
-
-It can be installed with the following command:
-
-```
-composer create-project --no-dev --prefer-dist smile/gdpr-dump
-```
-
-## Getting Started
-
-Command:
-
-```
-./gdpr-dump.phar <config_file>...
-```
-
-Arguments:
-
-- config_file: path(s) to a [configuration file](docs/01-configuration.md).
-
-The complete list of options can be displayed with the `--help` option.
-
-Configuration file examples:
-
-- You can find a config file example in [app/config/example.yaml](app/config/example.yaml).
-- The YAML syntax is also used in the [configuration templates](app/config/templates).
-
 ## Documentation
 
-1. [Configuration](docs/01-configuration.md)
-2. [Data Converters](docs/02-converters.md)
-3. [Guidelines](docs/03-guidelines.md) (read this before deploying the tool to a production server!)
-4. [Phar File Compilation](docs/04-phar.md) (if you need to compile your own phar file in order to add converters, templates...)
+The documentation (including installation instructions) is available in the [wiki](https://github.com/Smile-SA/gdpr-dump/wiki).
 
 ## Community Templates
 
