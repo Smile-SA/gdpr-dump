@@ -12,7 +12,7 @@ help:
 ## Docker
 .PHONY: up
 up: ## Build and start containers.
-	$(DOCKER_COMPOSE) up -d --remove-orphans
+	$(DOCKER_COMPOSE) up -d --remove-orphans $(service)
 
 .PHONY: down
 down: ## Stop and remove containers.
@@ -54,6 +54,18 @@ analyse: vendor ## Run code analysis tools (parallel-lint, phpcs, phpstan).
 .PHONY: test
 test: vendor ## Run phpunit.
 	$(PHP_CLI) vendor/bin/phpunit
+
+## Database
+.PHONY: db
+db: service := --wait db
+db: up ## Connect to the database.
+	$(DOCKER_COMPOSE) exec db sh -c 'mysql --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD'
+
+.PHONY: db-import
+db-import: service := --wait db
+db-import: up ## Execute a SQL file. Pass the parameter "filename=" to set the filename (default: dump.sql).
+	$(eval filename ?= dump.sql)
+	$(DOCKER_COMPOSE) exec -T db sh -c 'mysql --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD' < $(filename)
 
 vendor: composer.json
 	$(PHP_CLI) composer install
