@@ -37,16 +37,12 @@ services:
         class: 'Smile\GdprDump\Config\Loader\ConfigLoader'
         public: true # used by functional tests
         arguments:
-            - '@config.parser'
             - '@config.file_locator'
 
     config.file_locator:
         class: 'Smile\GdprDump\Config\Loader\FileLocator'
         arguments:
             - '%config.templates_dir%'
-
-    config.parser:
-        class: 'Smile\GdprDump\Config\Parser\YamlParser'
 
     config.schema_validator:
         class: 'Smile\GdprDump\Config\Validator\JsonSchemaValidator'

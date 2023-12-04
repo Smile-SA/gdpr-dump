@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Loader;
 
+use Exception;
 use Smile\GdprDump\Config\ConfigException;
 use Smile\GdprDump\Config\ConfigInterface;
-use Smile\GdprDump\Config\Parser\ParseException;
-use Smile\GdprDump\Config\Parser\ParserInterface;
+use Symfony\Component\Yaml\Yaml;
 
 class ConfigLoader implements ConfigLoaderInterface
 {
@@ -18,10 +18,8 @@ class ConfigLoader implements ConfigLoaderInterface
      */
     private array $loadedTemplates = [];
 
-    public function __construct(
-        private ParserInterface $parser,
-        private FileLocatorInterface $fileLocator
-    ) {
+    public function __construct(private FileLocatorInterface $fileLocator)
+    {
     }
 
     /**
@@ -54,16 +52,17 @@ class ConfigLoader implements ConfigLoaderInterface
      */
     private function loadFile(string $fileName): void
     {
-        // Load the file contents
         $input = file_get_contents($fileName);
         if ($input === false) {
-            throw new ParseException(sprintf('The file "%s" is not readable.', $fileName));
+            throw new FileNotFoundException(sprintf('The file "%s" is not readable.', $fileName));
         }
 
-        // Parse the file
-        $data = $this->parser->parse($input);
+        try {
+            $data = Yaml::parse($input);
+        } catch (Exception $e) {
+            throw new ParseException('Unable to parse the YAML input.', $e);
+        }
 
-        // Make sure it was parsed into an array
         if (!is_array($data)) {
             throw new ParseException(sprintf('The file "%s" could not be parsed into an array.', $fileName));
         }

@@ -8,8 +8,7 @@ use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\Loader\ConfigLoader;
 use Smile\GdprDump\Config\Loader\FileLocator;
 use Smile\GdprDump\Config\Loader\FileNotFoundException;
-use Smile\GdprDump\Config\Parser\ParseException;
-use Smile\GdprDump\Config\Parser\YamlParser;
+use Smile\GdprDump\Config\Loader\ParseException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class ConfigLoaderTest extends TestCase
@@ -107,7 +106,7 @@ class ConfigLoaderTest extends TestCase
     {
         $templatesDirectory = $this->getResource('config/templates');
 
-        $configLoader = new ConfigLoader(new YamlParser(), new FileLocator($templatesDirectory));
+        $configLoader = new ConfigLoader(new FileLocator($templatesDirectory));
         $configLoader->setConfig($config);
 
         return $configLoader;
