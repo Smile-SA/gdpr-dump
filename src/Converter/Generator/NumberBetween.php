@@ -35,7 +35,7 @@ class NumberBetween implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert(mixed $value, array $context = []): mixed
+    public function convert(mixed $value, array $context = []): int
     {
         return mt_rand($this->min, $this->max);
     }

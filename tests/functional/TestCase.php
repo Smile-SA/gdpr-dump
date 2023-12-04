@@ -87,7 +87,7 @@ abstract class TestCase extends BaseTestCase
             // Create the tables
             $connection = self::$database->getConnection();
             $statement = $connection->prepare(self::getDatabaseDump());
-            $statement->execute();
+            $statement->executeQuery();
         }
 
         return self::$database;

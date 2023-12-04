@@ -36,7 +36,7 @@ class AnonymizeTextTest extends TestCase
     }
 
     /**
-     * Test the converter with an UTF-8 encoded value.
+     * Test the converter with a UTF-8 encoded value.
      */
     public function testEncoding(): void
     {

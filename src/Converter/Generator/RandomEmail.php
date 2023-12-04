@@ -35,7 +35,7 @@ class RandomEmail extends RandomText
     /**
      * @inheritdoc
      */
-    public function convert(mixed $value, array $context = []): mixed
+    public function convert(mixed $value, array $context = []): string
     {
         $domainIndex = mt_rand(0, $this->domainsCount - 1);
 

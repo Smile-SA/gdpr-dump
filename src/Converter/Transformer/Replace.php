@@ -31,12 +31,12 @@ class Replace implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert(mixed $value, array $context = []): mixed
+    public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;
 
         return $value !== ''
-            ? str_replace($this->search, $this->replacement, (string) $value)
+            ? str_replace($this->search, $this->replacement, $value)
             : $value;
     }
 }

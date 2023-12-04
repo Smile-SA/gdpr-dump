@@ -120,12 +120,6 @@ class TableDependencyResolver
      */
     private function isForeignKeyIgnored(ForeignKey $foreignKey): bool
     {
-        foreach ($this->config->getIgnoredForeignKeys() as $constraintName) {
-            if ($foreignKey->getConstraintName() === $constraintName) {
-                return true;
-            }
-        }
-
-        return false;
+        return in_array($foreignKey->getConstraintName(), $this->config->getIgnoredForeignKeys(), true);
     }
 }

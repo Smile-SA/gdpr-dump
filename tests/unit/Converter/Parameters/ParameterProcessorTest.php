@@ -17,7 +17,7 @@ class ParameterProcessorTest extends TestCase
     {
         $processor = new ParameterProcessor();
         $processor->addParameter('string', Parameter::TYPE_STRING, true, 'default');
-        $processor->addParameter('array', Parameter::TYPE_ARRAY, false);
+        $processor->addParameter('array', Parameter::TYPE_ARRAY);
         $processor->addParameter('object', stdClass::class, true);
 
         $values = [

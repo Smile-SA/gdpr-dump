@@ -33,7 +33,7 @@ class RandomizeText implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert(mixed $value, array $context = []): mixed
+    public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;
         if ($value === '') {

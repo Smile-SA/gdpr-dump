@@ -36,7 +36,7 @@ class RandomText implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert(mixed $value, array $context = []): mixed
+    public function convert(mixed $value, array $context = []): string
     {
         $result = '';
         $length = mt_rand($this->minLength, $this->maxLength);

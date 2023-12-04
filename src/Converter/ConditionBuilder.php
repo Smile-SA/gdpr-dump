@@ -65,12 +65,12 @@ class ConditionBuilder
         $condition = (string) preg_replace('/[\r\n]+/', ' ', $condition);
 
         // Add instruction separator
-        if (substr($condition, -1) !== ';') {
+        if (!str_ends_with($condition, ';')) {
             $condition .= ';';
         }
 
         // Add return statement
-        if (substr($condition, 0, 6) !== 'return') {
+        if (!str_starts_with($condition, 'return')) {
             $condition = 'return ' . $condition;
         }
 
