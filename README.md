@@ -47,7 +47,7 @@ Also, the schema manager of Doctrine can only manage tables.
 It does not handle triggers, procedures, views...
 
 As a consequence, we don't use Doctrine to generate the dump file.
-The dump file is generated with [MySQLDump-PHP](https://github.com/ifsnop/mysqldump-php) instead, which is only compatible with MySQL.
+The dump file is generated with [MySQLDump-PHP](https://github.com/druidfi/mysqldump-php) instead, which is only compatible with MySQL.
 
 ## Contributing
 
