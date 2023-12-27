@@ -24,6 +24,14 @@ services:
             - '@phar.compiler'
             - '%faker.locale%'
 
+    command.scan:
+        class: 'Smile\GdprDump\Console\Command\ScanCommand'
+        public: true
+        arguments:
+            - '@config.loader'
+            - '@config.schema_validator'
+            - '@config.compiler'
+
     command.dump:
         class: 'Smile\GdprDump\Console\Command\DumpCommand'
         public: true

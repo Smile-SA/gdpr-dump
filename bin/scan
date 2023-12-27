@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Smile\GdprDump\AppKernel;
+
+require dirname(__DIR__) . '/app/bootstrap.php';
+
+$application = new AppKernel();
+$application->run('command.scan');

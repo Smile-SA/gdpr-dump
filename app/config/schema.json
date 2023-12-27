@@ -53,6 +53,20 @@
                 "type": ["string", "number"],
                 "minLength": 1
             }
+        },
+        "scan_identifiers": {
+            "type": ["array"],
+            "items": {
+                "type": ["string"],
+                "minLength": 1
+            }
+        },
+        "magento2_core_columns": {
+            "type": ["array"],
+            "items": {
+                "type": ["string"],
+                "minLength": 1
+            }
         }
     },
     "additionalProperties": false,
