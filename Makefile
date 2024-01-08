@@ -59,13 +59,13 @@ test: vendor ## Run phpunit.
 .PHONY: db
 db: service := --wait db
 db: up ## Connect to the database.
-	$(DOCKER_COMPOSE) exec db sh -c 'mysql --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD'
+	$(DOCKER_COMPOSE) exec db sh -c 'mysql --password=$$MYSQL_ROOT_PASSWORD'
 
 .PHONY: db-import
 db-import: service := --wait db
 db-import: up ## Execute a SQL file. Pass the parameter "filename=" to set the filename (default: dump.sql).
 	$(eval filename ?= dump.sql)
-	$(DOCKER_COMPOSE) exec -T db sh -c 'mysql --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD' < $(filename)
+	$(DOCKER_COMPOSE) exec -T db sh -c 'mysql --password=$$MYSQL_ROOT_PASSWORD' < $(filename)
 
 vendor: composer.json
 	$(PHP_CLI) composer install
