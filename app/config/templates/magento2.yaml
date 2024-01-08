@@ -40,9 +40,9 @@ tables:
                 converter: 'randomizeText'
                 unique: true
             firstname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             lastname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             password:
                 converter: 'randomizeText'
             failures_num:
@@ -60,17 +60,11 @@ tables:
                 converter: 'randomizeEmail'
                 unique: true
             firstname:
-                converter: 'anonymizeText'
-                parameters:
-                    replacement: 'x'
+                converter: 'randomizeText'
             middlename:
-                converter: 'anonymizeText'
-                parameters:
-                    replacement: 'x'
+                converter: 'randomizeText'
             lastname:
-                converter: 'anonymizeText'
-                parameters:
-                    replacement: 'x'
+                converter: 'randomizeText'
             dob:
                 converter: 'anonymizeDate'
             password_hash:
@@ -87,48 +81,48 @@ tables:
     customer_address_entity:
         converters:
             firstname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             middlename:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             lastname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             street:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             postcode:
                 converter: 'randomizeNumber'
             city:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             telephone:
                 converter: 'randomizeNumber'
             fax:
                 converter: 'randomizeNumber'
             company:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     customer_grid_flat:
         converters:
             name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             email:
                 converter: 'randomizeEmail'
             dob:
                 converter: 'anonymizeDate'
             shipping_full:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_full:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_firstname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_lastname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_company:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_street:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_postcode:
                 converter: 'randomizeNumber'
             billing_city:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_telephone:
                 converter: 'randomizeNumber'
             billing_fax:
@@ -146,15 +140,15 @@ tables:
             customer_email:
                 converter: 'randomizeEmail'
             customer_firstname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             customer_middlename:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             customer_lastname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             customer_dob:
                 converter: 'anonymizeDateTime'
             customer_note:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             remote_ip:
                 converter: 'faker'
                 parameters:
@@ -167,32 +161,32 @@ tables:
             email:
                 converter: 'randomizeEmail'
             firstname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             middlename:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             lastname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             company:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             street:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             postcode:
                 converter: 'randomizeNumber'
             city:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             telephone:
                 converter: 'randomizeNumber'
             fax:
                 converter: 'randomizeNumber'
             customer_notes:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     quote_payment:
         converters:
             cc_owner:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             cc_number_enc:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             cc_last_4:
                 converter: 'anonymizeNumber'
             additional_information:
@@ -200,73 +194,73 @@ tables:
                 parameters:
                     converters:
                         CC_CN:
-                            converter: 'anonymizeText'
+                            converter: 'randomizeText'
 
     review_detail:
         converters:
             nickname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     sales_creditmemo:
         converters:
             customer_note:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     sales_creditmemo_comment:
         converters:
             comment:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     sales_creditmemo_grid:
         converters:
             customer_email:
                 converter: 'randomizeEmail'
             customer_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     sales_invoice:
         converters:
             customer_note:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     sales_invoice_comment:
         converters:
             comment:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     sales_invoice_grid:
         converters:
             customer_email:
                 converter: 'randomizeEmail'
             customer_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     sales_order:
         converters:
             customer_email:
                 converter: 'randomizeEmail'
             customer_firstname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             customer_middlename:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             customer_lastname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             customer_dob:
                 converter: 'anonymizeDateTime'
             customer_note:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             remote_ip:
                 converter: 'faker'
                 parameters:
@@ -277,19 +271,19 @@ tables:
             email:
                 converter: 'randomizeEmail'
             firstname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             middlename:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             lastname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             company:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             street:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             postcode:
                 converter: 'randomizeNumber'
             city:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             telephone:
                 converter: 'randomizeNumber'
             fax:
@@ -300,15 +294,15 @@ tables:
             customer_email:
                 converter: 'randomizeEmail'
             customer_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     sales_order_payment:
         converters:
@@ -317,61 +311,61 @@ tables:
             cc_trans_id:
                 converter: 'anonymizeNumber'
             cc_owner:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             cc_approval:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             cc_number_enc:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             cc_last_4:
                 converter: 'anonymizeNumber'
             cc_debug_request_body:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             cc_debug_response_body:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             cc_debug_response_serialized:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             echeck_account_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             echeck_bank_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             additional_information:
                 converter: 'jsonData'
                 parameters:
                     converters:
                         CC_CN:
-                            converter: 'anonymizeText'
+                            converter: 'randomizeText'
                         method_title:
-                            converter: 'anonymizeText'
+                            converter: 'randomizeText'
 
     sales_shipment:
         converters:
             customer_note:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     sales_shipment_comment:
         converters:
             comment:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     sales_shipment_grid:
         converters:
             customer_email:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             customer_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     sales_shipment_track:
         converters:
             track_number:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     # --- Commerce tables ---
 
@@ -387,27 +381,27 @@ tables:
     magento_giftregistry_entity:
         converters:
             title:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             message:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_address:
                 converter: 'jsonData'
                 parameters:
                     converters:
                         firstname:
-                            converter: 'anonymizeText'
+                            converter: 'randomizeText'
                         middlename:
-                            converter: 'anonymizeText'
+                            converter: 'randomizeText'
                         lastname:
-                            converter: 'anonymizeText'
+                            converter: 'randomizeText'
                         company:
-                            converter: 'anonymizeText'
+                            converter: 'randomizeText'
                         street:
-                            converter: 'anonymizeText'
+                            converter: 'randomizeText'
                         postcode:
                             converter: 'randomizeNumber'
                         city:
-                            converter: 'anonymizeText'
+                            converter: 'randomizeText'
                         telephone:
                             converter: 'randomizeNumber'
                         fax:
@@ -418,16 +412,16 @@ tables:
             email:
                 converter: 'randomizeEmail'
             firstname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             lastname:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     magento_invitation:
         converters:
             email:
                 converter: 'randomizeEmail'
             message:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     magento_rma:
         converters:
@@ -437,76 +431,76 @@ tables:
     magento_rma_shipping_label:
         converters:
             track_number:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     magento_rma_status_history:
         converters:
             comment:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     magento_sales_creditmemo_grid_archive:
         converters:
             customer_email:
                 converter: 'randomizeEmail'
             customer_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_information:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     magento_sales_invoice_grid_archive:
         converters:
             customer_email:
                 converter: 'randomizeEmail'
             customer_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_information:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     magento_sales_order_grid_archive:
         converters:
             customer_email:
                 converter: 'randomizeEmail'
             customer_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_information:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     magento_sales_shipment_grid_archive:
         converters:
             customer_email:
                 converter: 'randomizeEmail'
             customer_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             billing_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_address:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             shipping_information:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     # --- B2B tables ---
 
@@ -515,21 +509,21 @@ tables:
             company_email:
                 converter: 'randomizeEmail'
             company_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             legal_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             comment:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             street:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             city:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             postcode:
                 converter: 'randomizeNumber'
             telephone:
                 converter: 'randomizeNumber'
             reject_reason:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     company_advanced_customer_entity:
         converters:
@@ -539,24 +533,24 @@ tables:
     company_credit_history:
         converters:
             comment:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     company_order_entity:
         converters:
             company_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     negotiable_quote_comment:
         converters:
             comment:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
     negotiable_quote_grid:
         converters:
             company_name:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
             sales_rep:
-                converter: 'anonymizeText'
+                converter: 'randomizeText'
 
 if_version:
     '>=2.2':
@@ -594,9 +588,9 @@ if_version:
                     phone_number:
                         converter: 'randomizeNumber'
                     content:
-                        converter: 'anonymizeText'
+                        converter: 'randomizeText'
                     message:
-                        converter: 'anonymizeText'
+                        converter: 'randomizeText'
 
     '<2.2':
         tables:
