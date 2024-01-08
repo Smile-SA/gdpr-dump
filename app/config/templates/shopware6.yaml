@@ -1,0 +1,167 @@
+---
+dump:
+    hex_blob: true
+
+tables:
+    cart:
+        truncate: true
+    customer_recovery:
+        truncate: true
+    dead_recovery:
+        truncate: true
+    enqueue:
+        truncate: true
+    google_shopping_account:
+        truncate: true
+    google_shopping_merchant_account:
+        truncate: true
+    integration:
+        truncate: true
+    log_entry:
+        truncate: true
+    message_queue_stats:
+        truncate: true
+    refresh_token:
+        truncate: true
+    scheduled_task:
+        truncate: true
+    user_recovery:
+        truncate: true
+    version:
+        truncate: true
+    version_commit:
+        truncate: true
+    version_commit_data:
+        truncate: true
+
+    customer:
+        converters:
+            first_name:
+                converter: 'randomizeText'
+            last_name:
+                converter: 'randomizeText'
+            title:
+                converter: 'setNull'
+            company:
+                converter: 'randomizeText'
+            password:
+                converter: 'randomizeText'
+            legacy_password:
+                converter: 'randomizeText'
+            email:
+                converter: 'randomizeEmail'
+                unique: true
+            birthday:
+                converter: 'anonymizeDate'
+            remote_address:
+                converter: 'setNull'
+
+    customer_address:
+        converters:
+            company:
+                converter: 'randomizeText'
+            department:
+                converter: 'randomizeText'
+            title:
+                converter: 'setNull'
+            first_name:
+                converter: 'randomizeText'
+            last_name:
+                converter: 'randomizeText'
+            street:
+                converter: 'randomizeText'
+            zipcode:
+                converter: 'randomizeNumber'
+            city:
+                converter: 'randomizeText'
+            vat_id:
+                converter: 'randomizeNumber'
+            phone_number:
+                converter: 'randomizeNumber'
+            additional_address_line1:
+                converter: 'setNull'
+            additional_address_line2:
+                converter: 'setNull'
+
+    newsletter_recipient:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+            title:
+                converter: 'setNull'
+            first_name:
+                converter: 'randomizeText'
+            last_name:
+                converter: 'randomizeText'
+            zip_code:
+                converter: 'randomizeNumber'
+            city:
+                converter: 'randomizeText'
+            street:
+                converter: 'randomizeText'
+
+    order_address:
+        converters:
+            company:
+                converter: 'randomizeText'
+            department:
+                converter: 'randomizeText'
+            title:
+                converter: 'setNull'
+            first_name:
+                converter: 'randomizeText'
+            last_name:
+                converter: 'randomizeText'
+            street:
+                converter: 'randomizeText'
+            zipcode:
+                converter: 'randomizeNumber'
+            city:
+                converter: 'randomizeText'
+            vat_id:
+                converter: 'randomizeNumber'
+            phone_number:
+                converter: 'randomizeNumber'
+            additional_address_line1:
+                converter: 'setNull'
+            additional_address_line2:
+                converter: 'setNull'
+
+    order_customer:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+            first_name:
+                converter: 'randomizeText'
+            last_name:
+                converter: 'randomizeText'
+            title:
+                converter: 'setNull'
+            company:
+                converter: 'randomizeText'
+            remote_address:
+                converter: 'setNull'
+
+    product_review:
+        converters:
+            external_user:
+                converter: 'randomizeText'
+            external_email:
+                converter: 'randomizeEmail'
+
+    user:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+                unique: true
+            username:
+                converter: 'randomizeText'
+                unique: true
+            first_name:
+                converter: 'randomizeText'
+            last_name:
+                converter: 'randomizeText'
+            title:
+                converter: 'setNull'
+            password:
+                converter: 'randomizeText'
