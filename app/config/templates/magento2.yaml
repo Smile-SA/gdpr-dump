@@ -128,6 +128,11 @@ tables:
             billing_fax:
                 converter: 'randomizeNumber'
 
+    integration:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+
     newsletter_subscriber:
         converters:
             subscriber_email:
@@ -195,6 +200,17 @@ tables:
                     converters:
                         CC_CN:
                             converter: 'randomizeText'
+
+    rating_option_vote:
+        converters:
+            remote_ip:
+                converter: 'setValue'
+                parameters:
+                    value: ''
+            remote_ip_long:
+                converter: 'setValue'
+                parameters:
+                    value: 0
 
     review_detail:
         converters:
@@ -368,6 +384,8 @@ tables:
                 converter: 'randomizeText'
 
     # --- Commerce tables ---
+    magento_login_as_customer_log:
+        truncate: true
 
     magento_logging_event:
         truncate: true
