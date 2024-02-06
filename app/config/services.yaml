@@ -70,10 +70,14 @@ services:
     converter.resolver:
         class: 'Smile\GdprDump\Converter\ConverterResolver'
 
+    database.factory:
+        class: 'Smile\GdprDump\Database\DatabaseFactory'
+
     dumper:
         class: 'Smile\GdprDump\Dumper\MysqlDumper'
         public: true # used by functional tests
         arguments:
+            - '@database.factory'
             - !tagged_iterator dumper.mysqldump_extension
 
     dumper.data_converter_extension:

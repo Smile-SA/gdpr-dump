@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper;
 
-use Doctrine\DBAL\Exception as DBALException;
 use Druidfi\Mysqldump\Mysqldump;
 use Smile\GdprDump\Config\ConfigInterface;
-use Smile\GdprDump\Database\Database;
+use Smile\GdprDump\Database\DatabaseFactory;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Mysql\Context;
@@ -18,7 +17,7 @@ class MysqlDumper implements DumperInterface
     /**
      * @param ExtensionInterface[] $extensions
      */
-    public function __construct(private iterable $extensions = [])
+    public function __construct(private DatabaseFactory $databaseFactory, private iterable $extensions = [])
     {
     }
 
@@ -27,8 +26,9 @@ class MysqlDumper implements DumperInterface
      */
     public function dump(ConfigInterface $config): void
     {
+        $database = $this->databaseFactory->create($config);
+
         // Process the configuration
-        $database = $this->getDatabase($config);
         $processor = new ConfigProcessor($database->getMetadata());
         $config = $processor->process($config);
 
@@ -64,29 +64,6 @@ class MysqlDumper implements DumperInterface
         // Create the dump
         $output = $config->getDumpOutput();
         $dumper->start($output);
-    }
-
-    /**
-     * Create a database object.
-     *
-     * @throws DBALException
-     */
-    private function getDatabase(ConfigInterface $config): Database
-    {
-        $connectionParams = $config->get('database', []);
-
-        // Rename some keys (for compatibility with the Doctrine connection)
-        if (array_key_exists('name', $connectionParams)) {
-            $connectionParams['dbname'] = $connectionParams['name'];
-            unset($connectionParams['name']);
-        }
-
-        if (array_key_exists('driver_options', $connectionParams)) {
-            $connectionParams['driverOptions'] = $connectionParams['driver_options'];
-            unset($connectionParams['driver_options']);
-        }
-
-        return new Database($connectionParams);
     }
 
     /**
