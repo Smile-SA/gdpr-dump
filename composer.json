@@ -13,6 +13,7 @@
         "php": "^8.1",
         "ext-json": "*",
         "ext-pdo": "*",
+        "composer-runtime-api": "^2.0",
         "doctrine/dbal": "^3.1",
         "druidfi/mysqldump-php": "^1.0",
         "fakerphp/faker": "^1.17",

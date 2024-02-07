@@ -7,6 +7,9 @@ RUN docker-php-ext-install pdo_mysql
 RUN ln -s $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 COPY ./config/php.ini $PHP_INI_DIR/conf.d/gdpr-dump.ini
 
+# Install git (for application version detection during compilation)
+RUN apk add --no-cache git
+
 # Install composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
