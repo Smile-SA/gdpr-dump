@@ -22,12 +22,12 @@ tables:
         filters:
             - ['created_at', 'gt', 'expr: date_sub(now(), interval 60 day)']
 
-    # Dump only recent orders
+    # Dump only recent orders or orders with specific emails (this example shows how to implement OR conditions)
     sales_order:
         filters:
-            - ['created_at', 'gt', 'expr: date_sub(now(), interval 60 day)']
+            - ['entity_id', 'in', 'expr: select entity_id from sales_order where updated_at > date_sub(now(), interval 60 day) or email like "%@acme.fr"']
 
-    # Dump only CMS pages without "FAQ" in their meta title
+    # Dump only CMS pages without "FAQ" in their meta title (COALESCE keeps null values)
     cms_page:
         filters:
             - ["expr: COALESCE(meta_title, '')", 'notLike', '%FAQ%']
