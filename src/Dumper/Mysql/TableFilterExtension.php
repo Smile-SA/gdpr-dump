@@ -205,7 +205,7 @@ class TableFilterExtension implements ExtensionInterface
 
             $whereExpr = call_user_func_array(
                 $callable,
-                [$this->connection->quoteIdentifier($filter->getColumn()), $value]
+                [$this->getFilterColumn($filter), $value]
             );
 
             $queryBuilder->andWhere($whereExpr);
@@ -302,5 +302,17 @@ class TableFilterExtension implements ExtensionInterface
         }
 
         return $value;
+    }
+
+    /**
+     * Get a filter column so it can be safely injected in SQL query
+     * Extracts a possible expression to use instead of a real column name.
+     */
+    private function getFilterColumn(Filter $filter): mixed
+    {
+        $column = $filter->getColumn();
+
+        return str_starts_with($column, 'expr:') ?
+            ltrim(substr($column, 5)) : $this->connection->quoteIdentifier($column);
     }
 }
