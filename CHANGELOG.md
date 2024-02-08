@@ -2,13 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Add support for SQL expressions as column filter ([#97](https://github.com/Smile-SA/gdpr-dump/pull/97))
+
 ## [4.0.3] - 2024-01-09
 [4.0.3]: https://github.com/Smile-SA/gdpr-dump/compare/4.0.2...4.0.3
 
-- Added shopware6 template
+- Added shopware6 template ([#92](https://github.com/Smile-SA/gdpr-dump/pull/92))
+- Replaced "randomizeText" converter with "anonymizeText" in config templates ([#93](https://github.com/Smile-SA/gdpr-dump/pull/93))
 - Updated magento2 template (tables added: "integration", "rating_option_vote", "magento_login_as_customer_log")
-- Replaced "randomizeText" converter with "anonymizeText" in config templates
-- Replaced "substr" function with "str_starts_with" and "str_ends_with"
 
 ## [4.0.2] - 2023-10-10
 [4.0.2]: https://github.com/Smile-SA/gdpr-dump/compare/4.0.1...4.0.2
