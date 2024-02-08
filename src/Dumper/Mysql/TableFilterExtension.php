@@ -205,7 +205,7 @@ class TableFilterExtension implements ExtensionInterface
 
             $whereExpr = call_user_func_array(
                 $callable,
-                [$this->connection->quoteIdentifier($filter->getColumn()), $value]
+                [$this->getFilterColumn($filter), $value]
             );
 
             $queryBuilder->andWhere($whereExpr);
@@ -262,7 +262,20 @@ class TableFilterExtension implements ExtensionInterface
     }
 
     /**
+     * Get a filter column.
+     * If it was prefixed with `expr:`, returns the raw SQL statement instead of a quoted identifier.
+     */
+    private function getFilterColumn(Filter $filter): string
+    {
+        $column = $filter->getColumn();
+
+        return str_starts_with($column, 'expr:') ?
+            ltrim(substr($column, 5)) : $this->connection->quoteIdentifier($column);
+    }
+
+    /**
      * Get a filter value.
+     * If it was prefixed with `expr:`, returns the raw SQL statement instead of a quoted value.
      *
      * @throws UnexpectedValueException
      */
