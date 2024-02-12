@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Proxy\Chain;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class ChainTest extends TestCase
 {
@@ -16,14 +16,12 @@ class ChainTest extends TestCase
      */
     public function testConverter(): void
     {
-        $parameters = [
+        $converter = $this->createConverter(Chain::class, [
             'converters' => [
                 new ConverterMock(),
                 new ConverterMock(),
             ],
-        ];
-
-        $converter = new Chain($parameters);
+        ]);
 
         $value = $converter->convert('notAnonymized');
         $this->assertSame('test_test_notAnonymized', $value);
@@ -35,7 +33,7 @@ class ChainTest extends TestCase
     public function testConvertersNotSet(): void
     {
         $this->expectException(ValidationException::class);
-        new Chain([]);
+        $this->createConverter(Chain::class);
     }
 
     /**
@@ -44,6 +42,6 @@ class ChainTest extends TestCase
     public function testInvalidConverters(): void
     {
         $this->expectException(ValidationException::class);
-        new Chain(['converters' => 'notAnArray']);
+        $this->createConverter(Chain::class, ['converters' => 'notAnArray']);
     }
 }

@@ -12,6 +12,14 @@ class ConverterMock implements ConverterInterface
 
     public function __construct(array $parameters = [])
     {
+        $this->setParameters($parameters);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setParameters(array $parameters): void
+    {
         if (array_key_exists('prefix', $parameters)) {
             $this->prefix = (string) $parameters['prefix'];
         }

@@ -8,7 +8,7 @@ use Faker\Generator;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Faker\FakerService;
 
 class Faker implements ConverterInterface
 {
@@ -21,18 +21,21 @@ class Faker implements ConverterInterface
      */
     private array $placeholders = [];
 
+    public function __construct(FakerService $faker)
+    {
+        $this->faker = $faker->getGenerator();
+    }
+
     /**
-     * @throws ValidationException
+     * @inheritdoc
      */
-    public function __construct(array $parameters)
+    public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
-            ->addParameter('faker', Generator::class, true)
             ->addParameter('formatter', Parameter::TYPE_STRING, true)
             ->addParameter('arguments', Parameter::TYPE_ARRAY, false, [])
             ->process($parameters);
 
-        $this->faker = $input->get('faker');
         $this->formatter = $input->get('formatter');
         $this->arguments = $input->get('arguments') ?? [];
 

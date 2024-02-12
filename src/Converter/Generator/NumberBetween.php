@@ -15,9 +15,9 @@ class NumberBetween implements ConverterInterface
     private int $max;
 
     /**
-     * @throws ValidationException
+     * @inheritdoc
      */
-    public function __construct(array $parameters = [])
+    public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
             ->addParameter('min', Parameter::TYPE_INT, true)

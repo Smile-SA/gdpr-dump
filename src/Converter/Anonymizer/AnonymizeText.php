@@ -7,7 +7,6 @@ namespace Smile\GdprDump\Converter\Anonymizer;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class AnonymizeText implements ConverterInterface
 {
@@ -20,10 +19,16 @@ class AnonymizeText implements ConverterInterface
     private int $minWordLength;
     private bool $multiByteEnabled;
 
+    public function __construct()
+    {
+        // Call the extension_loaded function only once (few seconds gain when converting millions of values)
+        $this->multiByteEnabled = extension_loaded('mbstring');
+    }
+
     /**
-     * @throws ValidationException
+     * @inheritdoc
      */
-    public function __construct(array $parameters = [])
+    public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
             ->addParameter('delimiters', Parameter::TYPE_ARRAY, false, [' ', '_', '-', '.'])
@@ -37,9 +42,6 @@ class AnonymizeText implements ConverterInterface
 
         // Flip separators array for increased performance
         $this->delimiters = array_flip($this->delimiters);
-
-        // Call the extension_loaded function only once (few seconds gain when converting millions of values)
-        $this->multiByteEnabled = extension_loaded('mbstring');
     }
 
     /**

@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeNumber;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class AnonymizeNumberTest extends TestCase
 {
@@ -15,7 +15,7 @@ class AnonymizeNumberTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new AnonymizeNumber();
+        $converter = $this->createConverter(AnonymizeNumber::class);
 
         $value = $converter->convert(null);
         $this->assertSame('', $value);
@@ -41,7 +41,7 @@ class AnonymizeNumberTest extends TestCase
      */
     public function testEncoding(): void
     {
-        $converter = new AnonymizeNumber();
+        $converter = $this->createConverter(AnonymizeNumber::class);
 
         $value = $converter->convert('àà10 éé20 èè30 üü40 øø50');
         $this->assertSame('àà1* éé2* èè3* üü4* øø5*', $value);
@@ -55,7 +55,7 @@ class AnonymizeNumberTest extends TestCase
      */
     public function testMinNumberLength(): void
     {
-        $converter = new AnonymizeNumber(['min_number_length' => 4]);
+        $converter = $this->createConverter(AnonymizeNumber::class, ['min_number_length' => 4]);
 
         foreach (['1', '12', '123', '1234'] as $value) {
             $this->assertSame('1***', $converter->convert($value));
@@ -71,7 +71,7 @@ class AnonymizeNumberTest extends TestCase
     public function testEmptyMinNumberLength(): void
     {
         $this->expectException(ValidationException::class);
-        new AnonymizeNumber(['min_number_length' => null]);
+        $this->createConverter(AnonymizeNumber::class, ['min_number_length' => null]);
     }
 
     /**
@@ -79,7 +79,7 @@ class AnonymizeNumberTest extends TestCase
      */
     public function testCustomReplacement(): void
     {
-        $converter = new AnonymizeNumber(['replacement' => 'x']);
+        $converter = $this->createConverter(AnonymizeNumber::class, ['replacement' => 'x']);
 
         $value = $converter->convert('123-456');
         $this->assertSame('1xx-4xx', $value);
@@ -91,6 +91,6 @@ class AnonymizeNumberTest extends TestCase
     public function testEmptyReplacement(): void
     {
         $this->expectException(ValidationException::class);
-        new AnonymizeNumber(['replacement' => '']);
+        $this->createConverter(AnonymizeNumber::class, ['replacement' => '']);
     }
 }

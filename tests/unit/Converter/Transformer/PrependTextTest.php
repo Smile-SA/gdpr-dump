@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Transformer;
 
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Transformer\PrependText;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class PrependTextTest extends TestCase
 {
@@ -15,7 +15,7 @@ class PrependTextTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new PrependText(['value' => 'test_']);
+        $converter = $this->createConverter(PrependText::class, ['value' => 'test_']);
 
         $value = $converter->convert(null);
         $this->assertSame('', $value);
@@ -30,6 +30,6 @@ class PrependTextTest extends TestCase
     public function testEmptyPrefix(): void
     {
         $this->expectException(ValidationException::class);
-        new PrependText(['value' => '']);
+        $this->createConverter(PrependText::class, ['prefix' => '']);
     }
 }

@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeEmail;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class AnonymizeEmailTest extends TestCase
 {
@@ -15,7 +15,7 @@ class AnonymizeEmailTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new AnonymizeEmail(['domains' => ['example.org']]);
+        $converter = $this->createConverter(AnonymizeEmail::class, ['domains' => ['example.org']]);
 
         $value = $converter->convert(null);
         $this->assertSame('', $value);
@@ -41,7 +41,7 @@ class AnonymizeEmailTest extends TestCase
      */
     public function testEncoding(): void
     {
-        $converter = new AnonymizeEmail(['domains' => ['example.org']]);
+        $converter = $this->createConverter(AnonymizeEmail::class, ['domains' => ['example.org']]);
 
         $value = $converter->convert('àà.éé.èè.üü.øø@gmail.com');
         $this->assertSame('à**.é**.è**.ü**.ø**@example.org', $value);
@@ -55,7 +55,10 @@ class AnonymizeEmailTest extends TestCase
      */
     public function testMinWordLength(): void
     {
-        $converter = new AnonymizeEmail(['domains' => ['example.org'], 'min_word_length' => 4]);
+        $converter = $this->createConverter(AnonymizeEmail::class, [
+            'domains' => ['example.org'],
+            'min_word_length' => 4,
+        ]);
 
         $value = $converter->convert('john.doe@gmail.com');
         $this->assertSame('j***.d***@example.org', $value);
@@ -67,7 +70,7 @@ class AnonymizeEmailTest extends TestCase
     public function testEmptyMinWordLength(): void
     {
         $this->expectException(ValidationException::class);
-        new AnonymizeEmail(['min_word_length' => null]);
+        $this->createConverter(AnonymizeEmail::class, ['min_word_length' => null]);
     }
 
     /**
@@ -75,7 +78,10 @@ class AnonymizeEmailTest extends TestCase
      */
     public function testCustomReplacement(): void
     {
-        $converter = new AnonymizeEmail(['domains' => ['example.org'], 'replacement' => 'x']);
+        $converter = $this->createConverter(AnonymizeEmail::class, [
+            'domains' => ['example.org'],
+            'replacement' => 'x',
+        ]);
 
         $value = $converter->convert('john.doe@gmail.com');
         $this->assertSame('jxxx.dxx@example.org', $value);
@@ -87,7 +93,7 @@ class AnonymizeEmailTest extends TestCase
     public function testEmptyReplacement(): void
     {
         $this->expectException(ValidationException::class);
-        new AnonymizeEmail(['replacement' => '']);
+        $this->createConverter(AnonymizeEmail::class, ['replacement' => '']);
     }
 
     /**
@@ -95,7 +101,10 @@ class AnonymizeEmailTest extends TestCase
      */
     public function testCustomDelimiters(): void
     {
-        $converter = new AnonymizeEmail(['domains' => ['example.org'], 'delimiters' => ['%', '/']]);
+        $converter = $this->createConverter(AnonymizeEmail::class, [
+            'domains' => ['example.org'],
+            'delimiters' => ['%', '/'],
+        ]);
 
         $value = $converter->convert('john.doe@gmail.com');
         $this->assertSame('j*******@example.org', $value);
@@ -112,7 +121,10 @@ class AnonymizeEmailTest extends TestCase
      */
     public function testEmptyDelimiters(): void
     {
-        $converter = new AnonymizeEmail(['domains' => ['example.org'], 'delimiters' => []]);
+        $converter = $this->createConverter(AnonymizeEmail::class, [
+            'domains' => ['example.org'],
+            'delimiters' => [],
+        ]);
 
         $value = $converter->convert('john.doe@gmail.com');
         $this->assertSame('j*******@example.org', $value);
@@ -124,7 +136,7 @@ class AnonymizeEmailTest extends TestCase
     public function testInvalidDelimiters(): void
     {
         $this->expectException(ValidationException::class);
-        new AnonymizeEmail(['delimiters' => 'invalid']);
+        $this->createConverter(AnonymizeEmail::class, ['delimiters' => 'invalid']);
     }
 
     /**
@@ -133,7 +145,7 @@ class AnonymizeEmailTest extends TestCase
     public function testEmptyDomains(): void
     {
         $this->expectException(ValidationException::class);
-        new AnonymizeEmail(['domains' => []]);
+        $this->createConverter(AnonymizeEmail::class, ['domains' => []]);
     }
 
     /**
@@ -142,6 +154,6 @@ class AnonymizeEmailTest extends TestCase
     public function testInvalidDomains(): void
     {
         $this->expectException(ValidationException::class);
-        new AnonymizeEmail(['domains' => 'invalid']);
+        $this->createConverter(AnonymizeEmail::class, ['domains' => 'invalid']);
     }
 }

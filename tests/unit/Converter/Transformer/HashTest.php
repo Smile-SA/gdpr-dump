@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Transformer;
 
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Transformer\Hash;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class HashTest extends TestCase
 {
@@ -15,7 +15,7 @@ class HashTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new Hash();
+        $converter = $this->createConverter(Hash::class);
 
         // Empty value: value converted to an empty string
         $value = $converter->convert(null);
@@ -30,7 +30,7 @@ class HashTest extends TestCase
      */
     public function testCustomAlgorithm(): void
     {
-        $converter = new Hash(['algorithm' => 'sha256']);
+        $converter = $this->createConverter(Hash::class, ['algorithm' => 'sha256']);
 
         $value = $converter->convert('user1');
         $this->assertSame(64, strlen($value));
@@ -42,6 +42,6 @@ class HashTest extends TestCase
     public function testInvalidAlgorithm(): void
     {
         $this->expectException(ValidationException::class);
-        new Hash(['algorithm' => 'invalid']);
+        $this->createConverter(Hash::class, ['algorithm' => 'invalid']);
     }
 }

@@ -8,6 +8,7 @@ use ErrorException;
 use Exception;
 use RuntimeException;
 use Smile\GdprDump\Console\Application;
+use Smile\GdprDump\DependencyInjection\Compiler\ConverterAliasPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -107,6 +108,7 @@ class AppKernel
         $loader->load('services.yaml');
 
         $container->setParameter('app_root', $basePath);
+        $container->addCompilerPass(new ConverterAliasPass());
         $container->compile();
 
         return $container;

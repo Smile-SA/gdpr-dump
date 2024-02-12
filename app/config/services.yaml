@@ -12,10 +12,21 @@ services:
     _instanceof:
         Smile\GdprDump\Config\Compiler\Processor\ProcessorInterface:
             tags: ['config.compiler_processor']
+        Smile\GdprDump\Converter\ConverterInterface:
+            public: true # fetched with `$container->get` by the converter factory
+            shared: false
+            tags: ['converter']
         Smile\GdprDump\Dumper\Mysql\ExtensionInterface:
             tags: ['dumper.mysqldump_extension']
         Smile\GdprDump\Phar\Minify\MinifierInterface:
             tags: ['compiler.minifier']
+
+    Smile\GdprDump\Converter\:
+        resource: '../../src/Converter'
+
+    Smile\GdprDump\Converter\Proxy\Faker:
+        arguments:
+            - '@faker.service'
 
     command.compile:
         class: 'Smile\GdprDump\Console\Command\CompileCommand'
@@ -64,11 +75,7 @@ services:
     converter.factory:
         class: 'Smile\GdprDump\Converter\ConverterFactory'
         arguments:
-            - '@converter.resolver'
-            - '@faker.service'
-
-    converter.resolver:
-        class: 'Smile\GdprDump\Converter\ConverterResolver'
+            - '@service_container'
 
     database.factory:
         class: 'Smile\GdprDump\Database\DatabaseFactory'

@@ -7,7 +7,6 @@ namespace Smile\GdprDump\Converter\Proxy;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Util\ArrayHelper;
 
 class FromContext implements ConverterInterface
@@ -15,9 +14,9 @@ class FromContext implements ConverterInterface
     private string $key;
 
     /**
-     * @throws ValidationException
+     * @inheritdoc
      */
-    public function __construct(array $parameters = [])
+    public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
             ->addParameter('key', Parameter::TYPE_STRING, true)

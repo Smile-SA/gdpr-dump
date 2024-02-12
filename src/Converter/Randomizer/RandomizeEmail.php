@@ -6,7 +6,6 @@ namespace Smile\GdprDump\Converter\Randomizer;
 
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class RandomizeEmail extends RandomizeText
 {
@@ -18,11 +17,11 @@ class RandomizeEmail extends RandomizeText
     private int $domainsCount;
 
     /**
-     * @throws ValidationException
+     * @inheritdoc
      */
-    public function __construct(array $parameters = [])
+    public function setParameters(array $parameters): void
     {
-        parent::__construct($parameters);
+        parent::setParameters($parameters);
 
         $input = (new ParameterProcessor())
             ->addParameter('domains', Parameter::TYPE_ARRAY, true, ['example.com', 'example.net', 'example.org'])

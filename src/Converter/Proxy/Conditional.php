@@ -17,9 +17,9 @@ class Conditional implements ConverterInterface
     private ?ConverterInterface $ifFalseConverter = null;
 
     /**
-     * @throws ValidationException
+     * @inheritdoc
      */
-    public function __construct(array $parameters)
+    public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
             ->addParameter('condition', Parameter::TYPE_STRING, true)

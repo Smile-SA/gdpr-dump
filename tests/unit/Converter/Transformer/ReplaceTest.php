@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Transformer;
 
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Transformer\Replace;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class ReplaceTest extends TestCase
 {
@@ -15,7 +15,10 @@ class ReplaceTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new Replace(['search' => 'bar', 'replacement' => 'baz']);
+        $converter = $this->createConverter(Replace::class, [
+            'search' => 'bar',
+            'replacement' => 'baz',
+        ]);
 
         $value = $converter->convert(null);
         $this->assertSame('', $value);
@@ -39,6 +42,9 @@ class ReplaceTest extends TestCase
     public function testEmptySearch(): void
     {
         $this->expectException(ValidationException::class);
-        new Replace(['search' => null, 'replacement' => 'baz']);
+        $this->createConverter(Replace::class, [
+            'search' => null,
+            'replacement' => 'baz',
+        ]);
     }
 }

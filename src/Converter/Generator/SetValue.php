@@ -12,9 +12,9 @@ class SetValue implements ConverterInterface
     private mixed $value;
 
     /**
-     * @throws ValidationException
+     * @inheritdoc
      */
-    public function __construct(array $parameters)
+    public function setParameters(array $parameters): void
     {
         // The parameter must be specified, but accepts empty values
         if (!array_key_exists('value', $parameters)) {

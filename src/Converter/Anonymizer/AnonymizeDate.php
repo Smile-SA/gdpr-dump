@@ -8,18 +8,17 @@ use DateTime;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
 use UnexpectedValueException;
 
 class AnonymizeDate implements ConverterInterface
 {
     protected string $defaultFormat = 'Y-m-d';
-    private string $format;
+    private string $format = 'Y-m-d';
 
     /**
-     * @throws ValidationException
+     * @inheritdoc
      */
-    public function __construct(array $parameters = [])
+    public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
             ->addParameter('format', Parameter::TYPE_STRING, true, $this->defaultFormat)

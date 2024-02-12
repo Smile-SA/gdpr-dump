@@ -6,7 +6,6 @@ namespace Smile\GdprDump\Tests\Unit\Converter;
 
 use RuntimeException;
 use Smile\GdprDump\Converter\ConverterFactory;
-use Smile\GdprDump\Converter\ConverterResolver;
 use Smile\GdprDump\Converter\Proxy\Cache;
 use Smile\GdprDump\Converter\Proxy\Chain;
 use Smile\GdprDump\Converter\Proxy\Conditional;
@@ -14,7 +13,8 @@ use Smile\GdprDump\Converter\Proxy\Faker;
 use Smile\GdprDump\Converter\Proxy\Unique;
 use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use UnexpectedValueException;
 
 class ConverterFactoryTest extends TestCase
@@ -26,7 +26,12 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
 
-        $converter = $factory->create(['converter' => ConverterMock::class, 'parameters' => ['prefix' => '']]);
+        $converter = $factory->create([
+            'converter' => 'mock',
+            'parameters' => [
+                'prefix' => '',
+            ],
+        ]);
         $this->assertInstanceOf(ConverterMock::class, $converter);
     }
 
@@ -37,7 +42,12 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
 
-        $converter = $factory->create(['converter' => 'faker', 'parameters' => ['formatter' => 'safeEmail']]);
+        $converter = $factory->create([
+            'converter' => 'faker',
+            'parameters' => [
+                'formatter' => 'safeEmail',
+            ],
+        ]);
         $this->assertInstanceOf(Faker::class, $converter);
     }
 
@@ -48,10 +58,16 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
 
-        $converter = $factory->create(['converter' => ConverterMock::class, 'unique' => true]);
+        $converter = $factory->create([
+            'converter' => 'mock',
+            'unique' => true,
+        ]);
         $this->assertInstanceOf(Unique::class, $converter);
 
-        $converter = $factory->create(['converter' => ConverterMock::class, 'unique' => false]);
+        $converter = $factory->create([
+            'converter' => 'mock',
+            'unique' => false,
+        ]);
         $this->assertInstanceOf(ConverterMock::class, $converter);
     }
 
@@ -62,7 +78,10 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
 
-        $converter = $factory->create(['converter' => ConverterMock::class, 'condition' => '{{id}} === 1']);
+        $converter = $factory->create([
+            'converter' => 'mock',
+            'condition' => '{{id}} === 1',
+        ]);
         $this->assertInstanceOf(Conditional::class, $converter);
     }
 
@@ -73,7 +92,10 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
 
-        $converter = $factory->create(['converter' => ConverterMock::class, 'cache_key' => 'test']);
+        $converter = $factory->create([
+            'converter' => 'mock',
+            'cache_key' => 'test',
+        ]);
         $this->assertInstanceOf(Cache::class, $converter);
     }
 
@@ -85,11 +107,11 @@ class ConverterFactoryTest extends TestCase
         $factory = $this->createFactory();
 
         $converter = $factory->create([
-            'converter' => Chain::class,
+            'converter' => 'chain',
             'parameters' => [
                 'converters' => [
-                    ['converter' => ConverterMock::class],
-                    ['converter' => ConverterMock::class],
+                    ['converter' => 'mock'],
+                    ['converter' => 'mock'],
                 ],
             ],
         ]);
@@ -133,7 +155,10 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
         $this->expectException(UnexpectedValueException::class);
-        $factory->create(['converter' => ConverterMock::class, 'parameters' => '']);
+        $factory->create([
+            'converter' => 'mock',
+            'parameters' => '',
+        ]);
     }
 
     /**
@@ -144,7 +169,12 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
         $this->expectException(UnexpectedValueException::class);
-        $factory->create(['converter' => ConverterMock::class, 'parameters' => ['converter' => null]]);
+        $factory->create([
+            'converter' => 'mock',
+            'parameters' => [
+                'converter' => null,
+            ],
+        ]);
     }
 
     /**
@@ -155,7 +185,12 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
         $this->expectException(UnexpectedValueException::class);
-        $factory->create(['converter' => ConverterMock::class, 'parameters' => ['converters' => null]]);
+        $factory->create([
+            'converter' => 'mock',
+            'parameters' => [
+                'converters' => null,
+            ],
+        ]);
     }
 
     /**
@@ -166,7 +201,12 @@ class ConverterFactoryTest extends TestCase
     {
         $factory = $this->createFactory();
         $this->expectException(UnexpectedValueException::class);
-        $factory->create(['converter' => ConverterMock::class, 'parameters' => ['converters' => [null]]]);
+        $factory->create([
+            'converter' => 'mock',
+            'parameters' => [
+                'converters' => [null],
+            ],
+        ]);
     }
 
     /**
@@ -174,9 +214,27 @@ class ConverterFactoryTest extends TestCase
      */
     private function createFactory(): ConverterFactory
     {
-        $resolver = new ConverterResolver();
-        $resolver->addPath('Smile\\GdprDump\\Converter\\', dirname(__DIR__, 3) . '/src/Converter');
+        $containerMock = $this->createMock(Container::class);
+        $containerMock
+            ->method('get')
+            ->will(
+                $this->returnCallback(
+                    fn (string $value) => match ($value) {
+                        // Converters used in the context of this unit test
+                        'cache' => new Cache(),
+                        'chain' => new Chain(),
+                        'conditional' => new Conditional(),
+                        'faker' => new Faker(new FakerService()),
+                        'mock' => new ConverterMock(),
+                        'notExists' => throw new ServiceNotFoundException($value),
+                        'unique' => new Unique(),
+                        default => throw new UnexpectedValueException(
+                            sprintf('The converter "%s" was not expected in this unit case.', $value)
+                        ),
+                    }
+                )
+            );
 
-        return new ConverterFactory($resolver, new FakerService());
+        return new ConverterFactory($containerMock);
     }
 }

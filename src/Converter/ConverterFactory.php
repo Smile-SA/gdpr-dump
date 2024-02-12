@@ -4,25 +4,19 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter;
 
+use Psr\Container\ContainerInterface;
 use RuntimeException;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
-use Smile\GdprDump\Converter\Proxy\Cache;
-use Smile\GdprDump\Converter\Proxy\Conditional;
-use Smile\GdprDump\Converter\Proxy\Faker;
-use Smile\GdprDump\Converter\Proxy\Unique;
-use Smile\GdprDump\Faker\FakerService;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use UnexpectedValueException;
 
 class ConverterFactory
 {
-    public function __construct(private ConverterResolver $converterResolver, private FakerService $faker)
+    public function __construct(private ContainerInterface $container)
     {
     }
 
     /**
      * Create a converter from a definition array.
-     *
-     * @throws ValidationException
      */
     public function create(array $definition): ConverterInterface
     {
@@ -37,19 +31,22 @@ class ConverterFactory
 
         // Generate only unique values
         if ($definition['unique']) {
-            $converter = new Unique(['converter' => $converter]);
+            $converter = $this->createConverter('unique', ['converter' => $converter]);
         }
 
         if ($definition['cache_key'] !== '') {
-            $converter = new Cache(['converter' => $converter, 'cache_key' => $definition['cache_key']]);
+            $converter = $this->createConverter(
+                'cache',
+                ['converter' => $converter, 'cache_key' => $definition['cache_key']]
+            );
         }
 
         // Convert data only if it matches the specified condition
         if ($definition['condition'] !== '') {
-            $converter = new Conditional([
-                'condition' => $definition['condition'],
-                'if_true_converter' => $converter,
-            ]);
+            $converter = $this->createConverter(
+                'conditional',
+                ['condition' => $definition['condition'], 'if_true_converter' => $converter]
+            );
         }
 
         return $converter;
@@ -151,24 +148,17 @@ class ConverterFactory
 
     /**
      * Create a converter object from its name and parameters.
-     *
-     * @throws RuntimeException
      */
     private function createConverter(string $name, array $parameters = []): ConverterInterface
     {
-        $className = $this->converterResolver->getClassName($name);
-
-        // Faker parameter
-        if (($className === Faker::class || is_subclass_of($className, Faker::class)) && !isset($parameters['faker'])) {
-            $parameters['faker'] = $this->faker->getGenerator();
+        try {
+            /** @var ConverterInterface $converter */
+            $converter = $this->container->get($name);
+        } catch (ServiceNotFoundException) {
+            throw new RuntimeException(sprintf('The converter "%s" is not defined.', $name));
         }
 
-        $converter = new $className($parameters);
-        if (!$converter instanceof ConverterInterface) {
-            throw new RuntimeException(
-                sprintf('The class "%s" does not implement Smile\\GdprDump\\Converter\\ConverterInterface.', $className)
-            );
-        }
+        $converter->setParameters($parameters);
 
         return $converter;
     }

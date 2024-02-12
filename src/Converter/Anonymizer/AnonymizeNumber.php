@@ -7,7 +7,6 @@ namespace Smile\GdprDump\Converter\Anonymizer;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class AnonymizeNumber implements ConverterInterface
 {
@@ -15,10 +14,16 @@ class AnonymizeNumber implements ConverterInterface
     private int $minNumberLength;
     private bool $multiByteEnabled;
 
+    public function __construct()
+    {
+        // Call the extension_loaded function only once (few seconds gain when converting millions of values)
+        $this->multiByteEnabled = extension_loaded('mbstring');
+    }
+
     /**
-     * @throws ValidationException
+     * @inheritdoc
      */
-    public function __construct(array $parameters = [])
+    public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
             ->addParameter('replacement', Parameter::TYPE_STRING, true, '*')
@@ -27,9 +32,6 @@ class AnonymizeNumber implements ConverterInterface
 
         $this->replacement = $input->get('replacement');
         $this->minNumberLength = $input->get('min_number_length');
-
-        // Call the extension_loaded function only once (few seconds gain when converting millions of values)
-        $this->multiByteEnabled = extension_loaded('mbstring');
     }
 
     /**

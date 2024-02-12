@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 
 use Smile\GdprDump\Converter\Generator\RandomText;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class RandomTextTest extends TestCase
 {
@@ -15,7 +15,7 @@ class RandomTextTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new RandomText();
+        $converter = $this->createConverter(RandomText::class);
 
         $value = $converter->convert(null);
         $this->assertNotNUll($value);
@@ -30,7 +30,11 @@ class RandomTextTest extends TestCase
      */
     public function testCustomLength(): void
     {
-        $converter = new RandomText(['min_length' => 20, 'max_length' => 20]);
+
+        $converter = $this->createConverter(RandomText::class, [
+            'min_length' => 20,
+            'max_length' => 20,
+        ]);
 
         $value = $converter->convert('user1');
         $this->assertSame(20, strlen($value));
@@ -41,7 +45,11 @@ class RandomTextTest extends TestCase
      */
     public function testCustomCharacters(): void
     {
-        $converter = new RandomText(['characters' => 'a', 'min_length' => 5, 'max_length' => 5]);
+        $converter = $this->createConverter(RandomText::class, [
+            'characters' => 'a',
+            'min_length' => 5,
+            'max_length' => 5,
+        ]);
 
         $value = $converter->convert('user1');
         $this->assertSame('aaaaa', $value);
@@ -53,6 +61,6 @@ class RandomTextTest extends TestCase
     public function testEmptyCharacters(): void
     {
         $this->expectException(ValidationException::class);
-        new RandomText(['characters' => '']);
+        $this->createConverter(RandomText::class, ['characters' => '']);
     }
 }
