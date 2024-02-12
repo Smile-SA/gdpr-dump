@@ -18,8 +18,8 @@ class ChainTest extends TestCase
     {
         $converter = $this->createConverter(Chain::class, [
             'converters' => [
-                new ConverterMock(),
-                new ConverterMock(),
+                $this->createConverter(ConverterMock::class),
+                $this->createConverter(ConverterMock::class),
             ],
         ]);
 

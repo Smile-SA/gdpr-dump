@@ -10,11 +10,6 @@ class ConverterMock implements ConverterInterface
 {
     private string $prefix = 'test_';
 
-    public function __construct(array $parameters = [])
-    {
-        $this->setParameters($parameters);
-    }
-
     /**
      * @inheritdoc
      */

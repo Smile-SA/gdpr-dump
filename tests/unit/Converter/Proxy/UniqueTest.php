@@ -19,7 +19,9 @@ class UniqueTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = $this->createConverter(Unique::class, ['converter' => new ConverterMock()]);
+        $converter = $this->createConverter(Unique::class, [
+            'converter' => $this->createConverter(ConverterMock::class),
+        ]);
         $value = $converter->convert('1');
         $this->assertSame('test_1', $value);
     }
@@ -45,7 +47,9 @@ class UniqueTest extends TestCase
      */
     public function testFailedUniqueValue(): void
     {
-        $converter = $this->createConverter(Unique::class, ['converter' => new ConverterMock()]);
+        $converter = $this->createConverter(Unique::class, [
+            'converter' => $this->createConverter(ConverterMock::class),
+        ]);
         $converter->convert('1');
         $this->expectException(OverflowException::class);
         $converter->convert('1');

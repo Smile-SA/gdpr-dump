@@ -86,21 +86,17 @@ class ConditionalTest extends TestCase
 
     /**
      * Create a test converter for conditions that evaluate to true.
-     *
-     * @return ConverterMock
      */
     private function createIfTrueConverter(): ConverterInterface
     {
-        return new ConverterMock(['prefix' => 'success_']);
+        return $this->createConverter(ConverterMock::class, ['prefix' => 'success_']);
     }
 
     /**
      * Create a test converter for conditions that evaluate to false.
-     *
-     * @return ConverterMock
      */
     private function createIfFalseConverter(): ConverterInterface
     {
-        return new ConverterMock(['prefix' => 'failure_']);
+        return $this->createConverter(ConverterMock::class, ['prefix' => 'failure_']);
     }
 }

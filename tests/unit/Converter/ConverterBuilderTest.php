@@ -12,7 +12,6 @@ use Smile\GdprDump\Converter\Proxy\Chain;
 use Smile\GdprDump\Converter\Proxy\Conditional;
 use Smile\GdprDump\Converter\Proxy\Faker;
 use Smile\GdprDump\Converter\Proxy\Unique;
-use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use UnexpectedValueException;
 

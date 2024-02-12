@@ -18,11 +18,11 @@ class CacheTest extends TestCase
     public function testConverter(): void
     {
         $converter1 = $this->createConverter(Cache::class, [
-            'converter' => new ConverterMock(['prefix' => '1_']),
+            'converter' => $this->createConverter(ConverterMock::class, ['prefix' => '1_']),
             'cache_key' => 'key1',
         ]);
         $converter2 = $this->createConverter(Cache::class, [
-            'converter' => new ConverterMock(['prefix' => '2_']),
+            'converter' => $this->createConverter(ConverterMock::class, ['prefix' => '2_']),
             'cache_key' => 'key2',
         ]);
 
@@ -62,7 +62,9 @@ class CacheTest extends TestCase
     public function testCacheKeyNotSet(): void
     {
         $this->expectException(ValidationException::class);
-        $this->createConverter(Cache::class, ['converter' => new ConverterMock()]);
+        $this->createConverter(Cache::class, [
+            'converter' => $this->createConverter(ConverterMock::class),
+        ]);
     }
 
     /**
@@ -72,7 +74,7 @@ class CacheTest extends TestCase
     {
         $this->expectException(ValidationException::class);
         $this->createConverter(Cache::class, [
-            'converter' => new ConverterMock(),
+            'converter' => $this->createConverter(ConverterMock::class),
             'cache_key' => '',
         ]);
     }

@@ -18,9 +18,9 @@ class JsonDataTest extends TestCase
     {
         $converter = $this->createConverter(JsonData::class, [
             'converters' => [
-                'customer.firstname' => new ConverterMock(),
-                'customer.lastname' => new ConverterMock(),
-                'customer.not_exists' => new ConverterMock(), // should not trigger an exception
+                'customer.firstname' => $this->createConverter(ConverterMock::class),
+                'customer.lastname' => $this->createConverter(ConverterMock::class),
+                'customer.not_exists' => $this->createConverter(ConverterMock::class), // must not trigger an exception
             ],
         ]);
 
@@ -41,7 +41,7 @@ class JsonDataTest extends TestCase
 
         $converter = $this->createConverter(JsonData::class, [
             'converters' => [
-                'address' => new ConverterMock(),
+                'address' => $this->createConverter(ConverterMock::class),
             ],
         ]);
 
