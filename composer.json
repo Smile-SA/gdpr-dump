@@ -21,6 +21,7 @@
         "symfony/config": "^6.1",
         "symfony/console": "^6.1",
         "symfony/dependency-injection": "^6.1",
+        "symfony/event-dispatcher": "^6.1",
         "symfony/finder": "^6.1",
         "symfony/yaml": "^6.1",
         "theseer/tokenizer": "^1.2"

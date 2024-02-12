@@ -14,6 +14,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class AppKernel
 {
@@ -107,8 +109,11 @@ class AppKernel
         $loader = new YamlFileLoader($container, new FileLocator($basePath . '/app/config'));
         $loader->load('services.yaml');
 
-        $container->setParameter('app_root', $basePath);
+        $container->addCompilerPass(new RegisterListenersPass());
         $container->addCompilerPass(new ConverterAliasPass());
+
+        $container->setParameter('app_root', $basePath);
+        $container->register('event_dispatcher', EventDispatcher::class);
         $container->compile();
 
         return $container;

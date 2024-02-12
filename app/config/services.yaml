@@ -16,8 +16,6 @@ services:
             public: true # fetched with `$container->get` by the converter factory
             shared: false
             tags: ['converter']
-        Smile\GdprDump\Dumper\Mysql\ExtensionInterface:
-            tags: ['dumper.mysqldump_extension']
         Smile\GdprDump\Phar\Minify\MinifierInterface:
             tags: ['compiler.minifier']
 
@@ -85,16 +83,18 @@ services:
         public: true # used by functional tests
         arguments:
             - '@database.factory'
-            - !tagged_iterator dumper.mysqldump_extension
+            - '@event_dispatcher'
 
-    dumper.data_converter_extension:
-        class: 'Smile\GdprDump\Dumper\Mysql\DataConverterExtension'
+    dumper.listener.data_converter:
+        class: 'Smile\GdprDump\Dumper\Listener\DataConverterListener'
+        tags: ['kernel.event_listener']
         arguments:
             - '@converter.factory'
             - '@faker.service'
 
-    dumper.table_filter_extension:
-        class: 'Smile\GdprDump\Dumper\Mysql\TableFilterExtension'
+    dumper.listener.table_filter:
+        class: 'Smile\GdprDump\Dumper\Listener\TableFilterListener'
+        tags: ['kernel.event_listener']
 
     faker.service:
         class: 'Smile\GdprDump\Faker\FakerService'

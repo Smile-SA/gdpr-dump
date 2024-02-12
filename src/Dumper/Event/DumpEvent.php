@@ -2,19 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Mysql;
+namespace Smile\GdprDump\Dumper\Event;
 
 use Druidfi\Mysqldump\Mysqldump;
 use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 
-class Context
+/**
+ * Event dispatched before the dump creation.
+ */
+class DumpEvent
 {
     public function __construct(
         private Mysqldump $dumper,
         private Database $database,
         private DumperConfig $config,
-        private array $dumperContext
+        private array $context
     ) {
     }
 
@@ -43,10 +46,10 @@ class Context
     }
 
     /**
-     * Get the dumper context.
+     * Get the context.
      */
-    public function getDumperContext(): array
+    public function getContext(): array
     {
-        return $this->dumperContext;
+        return $this->context;
     }
 }

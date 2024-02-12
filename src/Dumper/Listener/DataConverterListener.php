@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Mysql;
+namespace Smile\GdprDump\Dumper\Listener;
 
 use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
+use Smile\GdprDump\Dumper\Event\DumpEvent;
 use Smile\GdprDump\Faker\FakerService;
 
-class DataConverterExtension implements ExtensionInterface
+class DataConverterListener
 {
     private array $context = [];
 
@@ -18,25 +19,25 @@ class DataConverterExtension implements ExtensionInterface
      */
     private array $converters = [];
 
-    /**
-     * @var string[]
-     */
-    private array $skipConditions = [];
-
     public function __construct(private ConverterFactory $converterFactory, private FakerService $faker)
     {
     }
 
     /**
-     * @inheritdoc
+     * @var string[]
      */
-    public function register(Context $context): void
-    {
-        $this->context = $context->getDumperContext();
+    private array $skipConditions = [];
 
-        $this->prepareFaker($context->getConfig());
-        $this->prepareConverters($context->getConfig());
-        $context->getDumper()->setTransformTableRowHook($this->getHook());
+    /**
+     * Create the data conversion hook that will be applied during dump creation.
+     */
+    public function __invoke(DumpEvent $event): void
+    {
+        $this->prepareFakerLocale($event->getConfig());
+        $this->prepareConverters($event->getConfig());
+
+        $this->context = $event->getContext();
+        $event->getDumper()->setTransformTableRowHook($this->getHook());
     }
 
     /**
@@ -80,7 +81,7 @@ class DataConverterExtension implements ExtensionInterface
     /**
      * Configure the Faker service.
      */
-    private function prepareFaker(DumperConfig $config): void
+    private function prepareFakerLocale(DumperConfig $config): void
     {
         $locale = (string) ($config->getFakerSettings()['locale'] ?? '');
         if ($locale !== '') {
