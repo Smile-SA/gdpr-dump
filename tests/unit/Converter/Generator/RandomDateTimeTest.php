@@ -15,7 +15,7 @@ class RandomDateTimeTest extends RandomDateTest
      */
     public function testConverter(): void
     {
-        $converter = new RandomDateTime();
+        $converter = $this->createConverter(RandomDateTime::class);
 
         $value = $converter->convert(null);
         $this->assertNotNull($value);
@@ -31,7 +31,7 @@ class RandomDateTimeTest extends RandomDateTest
     public function testFormatParameter(): void
     {
         $format = 'd/m/Y H:i:s';
-        $converter = new RandomDateTime(['format' => $format]);
+        $converter = $this->createConverter(RandomDateTime::class, ['format' => $format]);
 
         $date = '31/12/1990 12:05:41';
         $randomizedDate = $converter->convert($date);
@@ -43,7 +43,10 @@ class RandomDateTimeTest extends RandomDateTest
      */
     public function testYearParameters(): void
     {
-        $converter = new RandomDateTime(['min_year' => 1970, 'max_year' => 2020]);
+        $converter = $this->createConverter(RandomDateTime::class, [
+            'min_year' => 1970,
+            'max_year' => 2020,
+        ]);
 
         $date = '1990-12-31 12:05:41';
         $randomizedDate = $converter->convert($date);
@@ -55,7 +58,10 @@ class RandomDateTimeTest extends RandomDateTest
      */
     public function testNullYears(): void
     {
-        $converter = new RandomDateTime(['min_year' => null, 'max_year' => null]);
+        $converter = $this->createConverter(RandomDateTime::class, [
+            'min_year' => null,
+            'max_year' => null,
+        ]);
 
         $date = '1990-12-31 12:05:41';
         $randomizedDate = $converter->convert($date);
@@ -71,7 +77,7 @@ class RandomDateTimeTest extends RandomDateTest
     public function testEmptyFormat(): void
     {
         $this->expectException(ValidationException::class);
-        new RandomDateTime(['format' => '']);
+        $this->createConverter(RandomDateTime::class, ['format' => '']);
     }
 
     /**
@@ -80,6 +86,9 @@ class RandomDateTimeTest extends RandomDateTest
     public function testYearConflict(): void
     {
         $this->expectException(ValidationException::class);
-        new RandomDateTime(['min_year' => 2020, 'max_year' => 2019]);
+        $this->createConverter(RandomDateTime::class, [
+            'min_year' => 2020,
+            'max_year' => 2019,
+        ]);
     }
 }

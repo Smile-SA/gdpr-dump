@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
 
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Randomizer\RandomizeEmail;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class RandomizeEmailTest extends TestCase
 {
@@ -15,7 +15,7 @@ class RandomizeEmailTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new RandomizeEmail(['domains' => ['example.org']]);
+        $converter = $this->createConverter(RandomizeEmail::class, ['domains' => ['example.org']]);
 
         $value = $converter->convert(null);
         $this->assertSame('', $value);
@@ -31,7 +31,10 @@ class RandomizeEmailTest extends TestCase
      */
     public function testCustomLength(): void
     {
-        $converter = new RandomizeEmail(['domains' => ['example.org'], 'min_length' => 10]);
+        $converter = $this->createConverter(RandomizeEmail::class, [
+            'domains' => ['example.org'],
+            'min_length' => 10,
+        ]);
 
         $value = $converter->convert('user1@example.org');
         $this->assertStringEndsWith('@example.org', $value);
@@ -45,7 +48,10 @@ class RandomizeEmailTest extends TestCase
      */
     public function testCustomReplacements(): void
     {
-        $converter = new RandomizeEmail(['domains' => ['example.org'], 'replacements' => 'a']);
+        $converter = $this->createConverter(RandomizeEmail::class, [
+            'domains' => ['example.org'],
+            'replacements' => 'a',
+        ]);
 
         $value = $converter->convert('user1@example.org');
         $this->assertSame('aaaaa@example.org', $value);
@@ -57,7 +63,7 @@ class RandomizeEmailTest extends TestCase
     public function testEmptyDomains(): void
     {
         $this->expectException(ValidationException::class);
-        new RandomizeEmail(['domains' => []]);
+        $this->createConverter(RandomizeEmail::class, ['domains' => []]);
     }
 
     /**
@@ -66,6 +72,6 @@ class RandomizeEmailTest extends TestCase
     public function testInvalidDomains(): void
     {
         $this->expectException(ValidationException::class);
-        new RandomizeEmail(['domains' => 'invalid']);
+        $this->createConverter(RandomizeEmail::class, ['domains' => 'invalid']);
     }
 }

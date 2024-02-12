@@ -7,7 +7,6 @@ namespace Smile\GdprDump\Converter\Proxy;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class Cache implements ConverterInterface
 {
@@ -16,9 +15,9 @@ class Cache implements ConverterInterface
     private string $cacheKey;
 
     /**
-     * @throws ValidationException
+     * @inheritdoc
      */
-    public function __construct(array $parameters)
+    public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
             ->addParameter('converter', ConverterInterface::class, true)

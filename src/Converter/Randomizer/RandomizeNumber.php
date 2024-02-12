@@ -19,6 +19,14 @@ class RandomizeNumber implements ConverterInterface
     /**
      * @inheritdoc
      */
+    public function setParameters(array $parameters): void
+    {
+        // No parameters
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;

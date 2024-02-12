@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Proxy\JsonData;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class JsonDataTest extends TestCase
 {
@@ -16,15 +16,13 @@ class JsonDataTest extends TestCase
      */
     public function testConverter(): void
     {
-        $parameters = [
+        $converter = $this->createConverter(JsonData::class, [
             'converters' => [
                 'customer.firstname' => new ConverterMock(),
                 'customer.lastname' => new ConverterMock(),
                 'customer.not_exists' => new ConverterMock(), // should not trigger an exception
             ],
-        ];
-
-        $converter = new JsonData($parameters);
+        ]);
 
         // Values that can't be decoded are returned as-is
         $value = $converter->convert(null);
@@ -41,11 +39,11 @@ class JsonDataTest extends TestCase
     {
         $jsonData = json_encode('stringValue');
 
-        $parameters = [
-            'converters' => ['address' => new ConverterMock()],
-        ];
-
-        $converter = new JsonData($parameters);
+        $converter = $this->createConverter(JsonData::class, [
+            'converters' => [
+                'address' => new ConverterMock(),
+            ],
+        ]);
 
         $value = $converter->convert($jsonData);
         $this->assertSame($jsonData, $value);
@@ -57,7 +55,7 @@ class JsonDataTest extends TestCase
     public function testConvertersNotSet(): void
     {
         $this->expectException(ValidationException::class);
-        new JsonData([]);
+        $this->createConverter(JsonData::class);
     }
 
     /**
@@ -66,7 +64,7 @@ class JsonDataTest extends TestCase
     public function testEmptyConverters(): void
     {
         $this->expectException(ValidationException::class);
-        new JsonData(['converters' => []]);
+        $this->createConverter(JsonData::class, ['converters' => []]);
     }
 
     /**
@@ -75,7 +73,7 @@ class JsonDataTest extends TestCase
     public function testInvalidConverters(): void
     {
         $this->expectException(ValidationException::class);
-        new JsonData(['converters' => 'notAnArray']);
+        $this->createConverter(JsonData::class, ['converters' => 'notAnArray']);
     }
 
     /**

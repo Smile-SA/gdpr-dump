@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Proxy\FromContext;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class FromContextTest extends TestCase
 {
@@ -15,7 +15,7 @@ class FromContextTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new FromContext(['key' => 'row_data.email']);
+        $converter = $this->createConverter(FromContext::class, ['key' => 'row_data.email']);
         $context = ['row_data' => ['email' => 'test@example.org']];
 
         $value = $converter->convert('value', $context);
@@ -28,7 +28,7 @@ class FromContextTest extends TestCase
     public function testKeyNotSet(): void
     {
         $this->expectException(ValidationException::class);
-        new FromContext([]);
+        $this->createConverter(FromContext::class);
     }
 
     /**
@@ -37,6 +37,6 @@ class FromContextTest extends TestCase
     public function testEmptyKey(): void
     {
         $this->expectException(ValidationException::class);
-        new FromContext(['key' => '']);
+        $this->createConverter(FromContext::class, ['key' => '']);
     }
 }

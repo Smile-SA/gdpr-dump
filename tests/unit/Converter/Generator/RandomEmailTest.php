@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 
 use Smile\GdprDump\Converter\Generator\RandomEmail;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class RandomEmailTest extends TestCase
 {
@@ -15,7 +15,7 @@ class RandomEmailTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new RandomEmail(['domains' => ['example.org']]);
+        $converter = $this->createConverter(RandomEmail::class, ['domains' => ['example.org']]);
 
         $value = $converter->convert(null);
         $this->assertNotNull($value);
@@ -31,7 +31,11 @@ class RandomEmailTest extends TestCase
      */
     public function testCustomLength(): void
     {
-        $converter = new RandomEmail(['min_length' => 10, 'max_length' => 10, 'domains' => ['example.org']]);
+        $converter = $this->createConverter(RandomEmail::class, [
+            'min_length' => 10,
+            'max_length' => 10,
+            'domains' => ['example.org'],
+        ]);
 
         $value = $converter->convert('user1@example.org');
         $this->assertStringEndsWith('@example.org', $value);
@@ -45,7 +49,11 @@ class RandomEmailTest extends TestCase
      */
     public function testCustomCharacters(): void
     {
-        $converter = new RandomEmail(['characters' => 'a', 'max_length' => 3, 'domains' => ['example.org']]);
+        $converter = $this->createConverter(RandomEmail::class, [
+            'characters' => 'a',
+            'max_length' => 3,
+            'domains' => ['example.org'],
+        ]);
 
         $value = $converter->convert('user1@example.org');
         $this->assertSame('aaa@example.org', $value);
@@ -57,7 +65,7 @@ class RandomEmailTest extends TestCase
     public function testEmptyCharacters(): void
     {
         $this->expectException(ValidationException::class);
-        new RandomEmail(['characters' => '']);
+        $this->createConverter(RandomEmail::class, ['characters' => '']);
     }
 
     /**
@@ -66,7 +74,7 @@ class RandomEmailTest extends TestCase
     public function testEmptyDomains(): void
     {
         $this->expectException(ValidationException::class);
-        new RandomEmail(['domains' => []]);
+        $this->createConverter(RandomEmail::class, ['domains' => []]);
     }
 
     /**
@@ -75,6 +83,6 @@ class RandomEmailTest extends TestCase
     public function testInvalidDomains(): void
     {
         $this->expectException(ValidationException::class);
-        new RandomEmail(['domains' => 'invalid']);
+        $this->createConverter(RandomEmail::class, ['domains' => 'invalid']);
     }
 }

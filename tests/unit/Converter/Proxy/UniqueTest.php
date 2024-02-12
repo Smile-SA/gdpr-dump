@@ -9,7 +9,7 @@ use Smile\GdprDump\Converter\Generator\SetNull;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Proxy\Unique;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 use stdClass;
 
 class UniqueTest extends TestCase
@@ -19,11 +19,7 @@ class UniqueTest extends TestCase
      */
     public function testConverter(): void
     {
-        $parameters = [
-            'converter' => new ConverterMock(),
-        ];
-
-        $converter = new Unique($parameters);
+        $converter = $this->createConverter(Unique::class, ['converter' => new ConverterMock()]);
         $value = $converter->convert('1');
         $this->assertSame('test_1', $value);
     }
@@ -33,12 +29,9 @@ class UniqueTest extends TestCase
      */
     public function testNullValuesIgnored(): void
     {
-        $parameters = [
-            'converter' => new SetNull(),
-        ];
-
-        $converter = new Unique($parameters);
-
+        $converter = $this->createConverter(Unique::class, [
+            'converter' => $this->createConverter(SetNull::class),
+        ]);
         $value = $converter->convert('1');
         $this->assertNull($value);
 
@@ -52,11 +45,7 @@ class UniqueTest extends TestCase
      */
     public function testFailedUniqueValue(): void
     {
-        $parameters = [
-            'converter' => new ConverterMock(),
-        ];
-
-        $converter = new Unique($parameters);
+        $converter = $this->createConverter(Unique::class, ['converter' => new ConverterMock()]);
         $converter->convert('1');
         $this->expectException(OverflowException::class);
         $converter->convert('1');
@@ -68,7 +57,7 @@ class UniqueTest extends TestCase
     public function testConverterNotSet(): void
     {
         $this->expectException(ValidationException::class);
-        new Unique([]);
+        $this->createConverter(Unique::class);
     }
 
     /**
@@ -77,6 +66,6 @@ class UniqueTest extends TestCase
     public function testConverterNotValid(): void
     {
         $this->expectException(ValidationException::class);
-        new Unique(['converter' => new stdClass()]);
+        $this->createConverter(Unique::class, ['converter' => new stdClass()]);
     }
 }

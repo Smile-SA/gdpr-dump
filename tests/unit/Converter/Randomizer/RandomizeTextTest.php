@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
 
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Randomizer\RandomizeText;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class RandomizeTextTest extends TestCase
 {
@@ -15,7 +15,7 @@ class RandomizeTextTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new RandomizeText();
+        $converter = $this->createConverter(RandomizeText::class);
 
         $value = $converter->convert(null);
         $this->assertSame('', $value);
@@ -29,7 +29,7 @@ class RandomizeTextTest extends TestCase
      */
     public function testCustomLength(): void
     {
-        $converter = new RandomizeText(['min_length' => 10]);
+        $converter = $this->createConverter(RandomizeText::class, ['min_length' => 10]);
 
         $value = $converter->convert('user1');
         $this->assertSame(10, strlen($value));
@@ -40,7 +40,7 @@ class RandomizeTextTest extends TestCase
      */
     public function testCustomReplacements(): void
     {
-        $converter = new RandomizeText(['replacements' => 'a']);
+        $converter = $this->createConverter(RandomizeText::class, ['replacements' => 'a']);
 
         $value = $converter->convert('user1');
         $this->assertSame('aaaaa', $value);
@@ -52,6 +52,6 @@ class RandomizeTextTest extends TestCase
     public function testEmptyReplacements(): void
     {
         $this->expectException(ValidationException::class);
-        new RandomizeText(['replacements' => '']);
+        $this->createConverter(RandomizeText::class, ['replacements' => '']);
     }
 }

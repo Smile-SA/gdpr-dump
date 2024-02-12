@@ -15,7 +15,7 @@ class AnonymizeDateTimeTest extends AnonymizeDateTest
      */
     public function testConverter(): void
     {
-        $converter = new AnonymizeDateTime();
+        $converter = $this->createConverter(AnonymizeDateTime::class);
 
         $date = '1990-12-31 12:05:41';
         $value = $converter->convert($date);
@@ -28,7 +28,7 @@ class AnonymizeDateTimeTest extends AnonymizeDateTest
     public function testFormatParameter(): void
     {
         $format = 'd/m/Y H:i:s';
-        $converter = new AnonymizeDateTime(['format' => $format]);
+        $converter = $this->createConverter(AnonymizeDateTime::class, ['format' => $format]);
 
         $date = '31/12/1990 12:05:41';
         $value = $converter->convert($date);
@@ -41,7 +41,7 @@ class AnonymizeDateTimeTest extends AnonymizeDateTest
     public function testEmptyFormat(): void
     {
         $this->expectException(ValidationException::class);
-        new AnonymizeDateTime(['format' => '']);
+        $this->createConverter(AnonymizeDateTime::class, ['format' => '']);
     }
 
     /**
@@ -49,7 +49,7 @@ class AnonymizeDateTimeTest extends AnonymizeDateTest
      */
     public function testInvalidDateFormat(): void
     {
-        $converter = new AnonymizeDateTime();
+        $converter = $this->createConverter(AnonymizeDateTime::class);
         $this->expectException(UnexpectedValueException::class);
         $converter->convert('invalidFormat');
     }

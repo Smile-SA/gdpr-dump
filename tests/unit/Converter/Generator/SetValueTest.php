@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 
 use Smile\GdprDump\Converter\Generator\SetValue;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class SetValueTest extends TestCase
 {
@@ -35,7 +35,7 @@ class SetValueTest extends TestCase
     public function testValueNotSet(): void
     {
         $this->expectException(ValidationException::class);
-        new SetValue([]);
+        $this->createConverter(SetValue::class);
     }
 
     /**
@@ -44,7 +44,7 @@ class SetValueTest extends TestCase
     public function testValueNotScalar(): void
     {
         $this->expectException(ValidationException::class);
-        new SetValue(['value' => ['1']]);
+        $this->createConverter(SetValue::class, ['value' => ['1']]);
     }
 
     /**
@@ -52,7 +52,7 @@ class SetValueTest extends TestCase
      */
     private function assertValueIsSet(mixed $value): void
     {
-        $converter = new SetValue(['value' => $value]);
+        $converter = $this->createConverter(SetValue::class, ['value' => $value]);
         $this->assertSame($value, $converter->convert($value));
     }
 }

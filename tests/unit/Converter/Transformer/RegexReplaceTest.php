@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Transformer;
 
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Transformer\RegexReplace;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class RegexReplaceTest extends TestCase
 {
@@ -15,7 +15,10 @@ class RegexReplaceTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new RegexReplace(['pattern' => '/[0-9]+/', 'replacement' => 'bar']);
+        $converter = $this->createConverter(RegexReplace::class, [
+            'pattern' => '/[0-9]+/',
+            'replacement' => 'bar',
+        ]);
 
         $value = $converter->convert(null);
         $this->assertSame('', $value);
@@ -35,7 +38,11 @@ class RegexReplaceTest extends TestCase
      */
     public function testLimitParameter(): void
     {
-        $converter = new RegexReplace(['pattern' => '/[0-9]+/', 'replacement' => 'bar', 'limit' => 1]);
+        $converter = $this->createConverter(RegexReplace::class, [
+            'pattern' => '/[0-9]+/',
+            'replacement' => 'bar',
+            'limit' => 1,
+        ]);
 
         $value = $converter->convert('foo1020baz3040baz');
         $this->assertSame('foobarbaz3040baz', $value);
@@ -47,6 +54,9 @@ class RegexReplaceTest extends TestCase
     public function testEmptyPattern(): void
     {
         $this->expectException(ValidationException::class);
-        new RegexReplace(['pattern' => null, 'replacement' => 'baz']);
+        $this->createConverter(RegexReplace::class, [
+            'pattern' => null,
+            'replacement' => 'baz',
+        ]);
     }
 }

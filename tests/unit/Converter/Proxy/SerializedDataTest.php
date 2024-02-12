@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Proxy\SerializedData;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class SerializedDataTest extends TestCase
 {
@@ -16,15 +16,13 @@ class SerializedDataTest extends TestCase
      */
     public function testConverter(): void
     {
-        $parameters = [
+        $converter = $this->createConverter(SerializedData::class, [
             'converters' => [
                 'customer.firstname' => new ConverterMock(),
                 'customer.lastname' => new ConverterMock(),
                 'customer.not_exists' => new ConverterMock(), // should not trigger an exception
             ],
-        ];
-
-        $converter = new SerializedData($parameters);
+        ]);
 
         // Values that can't be decoded are returned as-is
         $value = $converter->convert(null);
@@ -41,11 +39,11 @@ class SerializedDataTest extends TestCase
     {
         $serializedData = serialize('stringValue');
 
-        $parameters = [
-            'converters' => ['address' => new ConverterMock()],
-        ];
-
-        $converter = new SerializedData($parameters);
+        $converter = $this->createConverter(SerializedData::class, [
+            'converters' => [
+                'address' => new ConverterMock(),
+            ],
+        ]);
 
         $value = $converter->convert($serializedData);
         $this->assertSame($serializedData, $value);
@@ -57,7 +55,7 @@ class SerializedDataTest extends TestCase
     public function testConvertersNotSet(): void
     {
         $this->expectException(ValidationException::class);
-        new SerializedData([]);
+        $this->createConverter(SerializedData::class);
     }
 
     /**
@@ -66,7 +64,7 @@ class SerializedDataTest extends TestCase
     public function testEmptyConverters(): void
     {
         $this->expectException(ValidationException::class);
-        new SerializedData(['converters' => []]);
+        $this->createConverter(SerializedData::class, ['converters' => []]);
     }
 
     /**
@@ -75,7 +73,7 @@ class SerializedDataTest extends TestCase
     public function testInvalidConverters(): void
     {
         $this->expectException(ValidationException::class);
-        new SerializedData(['converters' => 'notAnArray']);
+        $this->createConverter(SerializedData::class, ['converters' => 'notAnArray']);
     }
 
     /**

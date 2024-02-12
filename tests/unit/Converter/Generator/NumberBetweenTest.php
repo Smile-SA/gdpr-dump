@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 
 use Smile\GdprDump\Converter\Generator\NumberBetween;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class NumberBetweenTest extends TestCase
 {
@@ -15,7 +15,7 @@ class NumberBetweenTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new NumberBetween(['min' => 0, 'max' => 100]);
+        $converter = $this->createConverter(NumberBetween::class, ['min' => 0, 'max' => 100]);
 
         $value = $converter->convert(null);
         $this->assertGreaterThanOrEqual(0, $value);
@@ -32,7 +32,7 @@ class NumberBetweenTest extends TestCase
     public function testMinNotSet(): void
     {
         $this->expectException(ValidationException::class);
-        new NumberBetween(['max' => 0]);
+        $this->createConverter(NumberBetween::class, ['max' => 0]);
     }
 
     /**
@@ -41,7 +41,7 @@ class NumberBetweenTest extends TestCase
     public function testMaxNotSet(): void
     {
         $this->expectException(ValidationException::class);
-        new NumberBetween(['min' => 0]);
+        $this->createConverter(NumberBetween::class, ['min' => 0]);
     }
 
     /**
@@ -50,6 +50,6 @@ class NumberBetweenTest extends TestCase
     public function testMinGreaterThanMax(): void
     {
         $this->expectException(ValidationException::class);
-        new NumberBetween(['min' => 100, 'max' => 0]);
+        $this->createConverter(NumberBetween::class, ['min' => 100, 'max' => 0]);
     }
 }

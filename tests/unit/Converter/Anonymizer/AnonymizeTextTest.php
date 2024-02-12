@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeText;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class AnonymizeTextTest extends TestCase
 {
@@ -15,7 +15,7 @@ class AnonymizeTextTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new AnonymizeText();
+        $converter = $this->createConverter(AnonymizeText::class);
 
         $value = $converter->convert(null);
         $this->assertSame('', $value);
@@ -40,7 +40,7 @@ class AnonymizeTextTest extends TestCase
      */
     public function testEncoding(): void
     {
-        $converter = new AnonymizeText();
+        $converter = $this->createConverter(AnonymizeText::class);
 
         $value = $converter->convert('àà éé èè üü øø');
         $this->assertSame('à** é** è** ü** ø**', $value);
@@ -54,7 +54,7 @@ class AnonymizeTextTest extends TestCase
      */
     public function testMinWordLength(): void
     {
-        $converter = new AnonymizeText(['min_word_length' => 4]);
+        $converter = $this->createConverter(AnonymizeText::class, ['min_word_length' => 4]);
 
         $value = $converter->convert('John Doe');
         $this->assertSame('J*** D***', $value);
@@ -69,7 +69,7 @@ class AnonymizeTextTest extends TestCase
     public function testEmptyMinWordLength(): void
     {
         $this->expectException(ValidationException::class);
-        new AnonymizeText(['min_word_length' => null]);
+        $this->createConverter(AnonymizeText::class, ['min_word_length' => null]);
     }
 
     /**
@@ -77,7 +77,7 @@ class AnonymizeTextTest extends TestCase
      */
     public function testCustomReplacement(): void
     {
-        $converter = new AnonymizeText(['replacement' => 'x']);
+        $converter = $this->createConverter(AnonymizeText::class, ['replacement' => 'x']);
 
         $value = $converter->convert('John Doe');
         $this->assertSame('Jxxx Dxx', $value);
@@ -89,7 +89,7 @@ class AnonymizeTextTest extends TestCase
     public function testEmptyReplacement(): void
     {
         $this->expectException(ValidationException::class);
-        new AnonymizeText(['replacement' => '']);
+        $this->createConverter(AnonymizeText::class, ['replacement' => '']);
     }
 
     /**
@@ -97,7 +97,7 @@ class AnonymizeTextTest extends TestCase
      */
     public function testCustomDelimiters(): void
     {
-        $converter = new AnonymizeText(['delimiters' => ['%', '/']]);
+        $converter = $this->createConverter(AnonymizeText::class, ['delimiters' => ['%', '/']]);
 
         $value = $converter->convert('John Doe');
         $this->assertSame('J*******', $value);
@@ -114,7 +114,7 @@ class AnonymizeTextTest extends TestCase
      */
     public function testEmptyDelimiters(): void
     {
-        $converter = new AnonymizeText(['delimiters' => []]);
+        $converter = $this->createConverter(AnonymizeText::class, ['delimiters' => []]);
 
         foreach (['John Doe', 'John_Doe', 'John.Doe'] as $value) {
             $this->assertSame('J*******', $converter->convert($value));
@@ -127,6 +127,6 @@ class AnonymizeTextTest extends TestCase
     public function testInvalidDelimiters(): void
     {
         $this->expectException(ValidationException::class);
-        new AnonymizeText(['delimiters' => 'invalid']);
+        $this->createConverter(AnonymizeText::class, ['delimiters' => 'invalid']);
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 
 use Smile\GdprDump\Converter\Generator\SetNull;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class SetNullTest extends TestCase
 {
@@ -14,7 +14,7 @@ class SetNullTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new SetNull();
+        $converter = $this->createConverter(SetNull::class);
 
         $value = $converter->convert(null);
         $this->assertNull($value);

@@ -8,7 +8,6 @@ use RuntimeException;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class RegexReplace implements ConverterInterface
 {
@@ -17,9 +16,9 @@ class RegexReplace implements ConverterInterface
     private int $limit;
 
     /**
-     * @throws ValidationException
+     * @inheritdoc
      */
-    public function __construct(array $parameters)
+    public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
             ->addParameter('pattern', Parameter::TYPE_STRING, true)

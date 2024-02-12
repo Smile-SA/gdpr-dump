@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
 
 use Smile\GdprDump\Converter\Randomizer\RandomizeNumber;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 class RandomizeNumberTest extends TestCase
 {
@@ -14,7 +14,7 @@ class RandomizeNumberTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = new RandomizeNumber();
+        $converter = $this->createConverter(RandomizeNumber::class);
 
         $value = $converter->convert(null);
         $this->assertSame('', $value);

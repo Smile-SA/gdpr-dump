@@ -6,8 +6,8 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Proxy\Cache;
-use Smile\GdprDump\Converter\Randomizer\RandomizeText;
-use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 use stdClass;
 
 class CacheTest extends TestCase
@@ -17,8 +17,14 @@ class CacheTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter1 = new Cache(['converter' => new RandomizeText(), 'cache_key' => 'key1']);
-        $converter2 = new Cache(['converter' => new RandomizeText(), 'cache_key' => 'key2']);
+        $converter1 = $this->createConverter(Cache::class, [
+            'converter' => new ConverterMock(['prefix' => '1_']),
+            'cache_key' => 'key1',
+        ]);
+        $converter2 = $this->createConverter(Cache::class, [
+            'converter' => new ConverterMock(['prefix' => '2_']),
+            'cache_key' => 'key2',
+        ]);
 
         $value = 'textToAnonymize';
         $value1 = $converter1->convert($value);
@@ -35,7 +41,7 @@ class CacheTest extends TestCase
     public function testConverterNotSet(): void
     {
         $this->expectException(ValidationException::class);
-        new Cache(['cache_key' => 'username']);
+        $this->createConverter(Cache::class, ['cache_key' => 'username']);
     }
 
     /**
@@ -44,7 +50,10 @@ class CacheTest extends TestCase
     public function testConverterNotValid(): void
     {
         $this->expectException(ValidationException::class);
-        new Cache(['converter' => new stdClass()]);
+        $this->createConverter(Cache::class, [
+            'converter' => new stdClass(),
+            'cache_key' => 'username',
+        ]);
     }
 
     /**
@@ -53,7 +62,7 @@ class CacheTest extends TestCase
     public function testCacheKeyNotSet(): void
     {
         $this->expectException(ValidationException::class);
-        new Cache(['converter' => new RandomizeText()]);
+        $this->createConverter(Cache::class, ['converter' => new ConverterMock()]);
     }
 
     /**
@@ -62,6 +71,9 @@ class CacheTest extends TestCase
     public function testEmptyCacheKey(): void
     {
         $this->expectException(ValidationException::class);
-        new Cache(['converter' => new RandomizeText(), 'cache_key' => '']);
+        $this->createConverter(Cache::class, [
+            'converter' => new ConverterMock(),
+            'cache_key' => '',
+        ]);
     }
 }

@@ -7,7 +7,6 @@ namespace Smile\GdprDump\Converter\Proxy;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Util\ArrayHelper;
 
 class JsonData implements ConverterInterface
@@ -18,9 +17,9 @@ class JsonData implements ConverterInterface
     private array $converters;
 
     /**
-     * @throws ValidationException
+     * @inheritdoc
      */
-    public function __construct(array $parameters)
+    public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
             ->addParameter('converters', Parameter::TYPE_ARRAY, true)

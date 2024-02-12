@@ -18,13 +18,13 @@ class RandomDate implements ConverterInterface
     private int $minYear;
     private int $maxYear;
 
-    /**
-     * @throws ValidationException
-     */
-    public function __construct(array $parameters = [])
+    public function __construct()
     {
         $this->date = new DateTime();
+    }
 
+    public function setParameters(array $parameters): void
+    {
         $input = (new ParameterProcessor())
             ->addParameter('format', Parameter::TYPE_STRING, true, $this->defaultFormat)
             ->addParameter('min_year', Parameter::TYPE_INT, false, 1900)
