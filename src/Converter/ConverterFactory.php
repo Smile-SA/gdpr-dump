@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter;
 
-use Psr\Container\ContainerInterface;
 use RuntimeException;
+use Smile\GdprDump\DependencyInjection\Compiler\ConverterAliasPass;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use UnexpectedValueException;
 
@@ -153,7 +154,7 @@ class ConverterFactory
     {
         try {
             /** @var ConverterInterface $converter */
-            $converter = $this->container->get($name);
+            $converter = $this->container->get(ConverterAliasPass::ALIAS_PREFIX . $name);
         } catch (ServiceNotFoundException) {
             throw new RuntimeException(sprintf('The converter "%s" is not defined.', $name));
         }

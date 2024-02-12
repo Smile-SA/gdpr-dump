@@ -11,8 +11,13 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class ConverterAliasPass implements CompilerPassInterface
 {
+    public const ALIAS_PREFIX = 'converter.';
+
     /**
-     * @inheritdoc
+     * Replace the default service id of converters (class names) by an alias.
+     *
+     * Using an alias as the service id allows the converter factory to fetch a converter
+     * with the alias specified in the config file (e.g. "randomizeText").
      */
     public function process(ContainerBuilder $container): void
     {
@@ -37,6 +42,7 @@ class ConverterAliasPass implements CompilerPassInterface
 
         $parts = explode('\\', $className);
 
-        return lcfirst(array_pop($parts));
+        // Add a prefix to prevent any conflict with other services
+        return self::ALIAS_PREFIX . lcfirst(array_pop($parts));
     }
 }

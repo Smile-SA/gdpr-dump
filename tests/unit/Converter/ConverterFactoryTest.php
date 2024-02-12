@@ -11,6 +11,7 @@ use Smile\GdprDump\Converter\Proxy\Chain;
 use Smile\GdprDump\Converter\Proxy\Conditional;
 use Smile\GdprDump\Converter\Proxy\Faker;
 use Smile\GdprDump\Converter\Proxy\Unique;
+use Smile\GdprDump\DependencyInjection\Compiler\ConverterAliasPass;
 use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Symfony\Component\DependencyInjection\Container;
@@ -221,13 +222,13 @@ class ConverterFactoryTest extends TestCase
                 $this->returnCallback(
                     fn (string $value) => match ($value) {
                         // Converters used in the context of this unit test
-                        'cache' => new Cache(),
-                        'chain' => new Chain(),
-                        'conditional' => new Conditional(),
-                        'faker' => new Faker(new FakerService()),
-                        'mock' => new ConverterMock(),
-                        'notExists' => throw new ServiceNotFoundException($value),
-                        'unique' => new Unique(),
+                        $this->getServiceId('cache') => new Cache(),
+                        $this->getServiceId('chain') => new Chain(),
+                        $this->getServiceId('conditional') => new Conditional(),
+                        $this->getServiceId('faker') => new Faker(new FakerService()),
+                        $this->getServiceId('mock') => new ConverterMock(),
+                        $this->getServiceId('notExists') => throw new ServiceNotFoundException($value),
+                        $this->getServiceId('unique') => new Unique(),
                         default => throw new UnexpectedValueException(
                             sprintf('The converter "%s" was not expected in this unit case.', $value)
                         ),
@@ -236,5 +237,13 @@ class ConverterFactoryTest extends TestCase
             );
 
         return new ConverterFactory($containerMock);
+    }
+
+    /**
+     * Get the service id from a container name.
+     */
+    private function getServiceId(string $name): string
+    {
+        return ConverterAliasPass::ALIAS_PREFIX . $name;
     }
 }
