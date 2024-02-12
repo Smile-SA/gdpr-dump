@@ -1,3 +1,4 @@
+/.fleet
 /.idea
 /build
 /docker/db-data
