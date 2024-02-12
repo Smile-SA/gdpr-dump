@@ -19,6 +19,7 @@ services:
         Smile\GdprDump\Phar\Minify\MinifierInterface:
             tags: ['compiler.minifier']
 
+    # Service id will be replaced by an alias during ConverterAliasPass
     Smile\GdprDump\Converter\:
         resource: '../../src/Converter'
 
