@@ -7,11 +7,12 @@ namespace Smile\GdprDump\Dumper\Event;
 use Druidfi\Mysqldump\Mysqldump;
 use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Event dispatched before the dump creation.
  */
-class DumpEvent
+class DumpEvent extends Event
 {
     public function __construct(
         private Mysqldump $dumper,
