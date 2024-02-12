@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Mysql;
+namespace Smile\GdprDump\Dumper\Listener;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -13,24 +13,25 @@ use Smile\GdprDump\Database\TableDependencyResolver;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Config\Table\Filter\Filter;
 use Smile\GdprDump\Dumper\Config\Table\TableConfig;
+use Smile\GdprDump\Dumper\Event\DumpEvent;
 use UnexpectedValueException;
 
-class TableFilterExtension implements ExtensionInterface
+class TableFilterListener
 {
     private Connection $connection;
     private MetadataInterface $metadata;
     private DumperConfig $config;
 
     /**
-     * @inheritdoc
+     * Define the filters to apply on the tables.
      */
-    public function register(Context $context): void
+    public function __invoke(DumpEvent $event): void
     {
-        $this->connection = $context->getDatabase()->getConnection();
-        $this->metadata = $context->getDatabase()->getMetadata();
-        $this->config = $context->getConfig();
+        $this->connection = $event->getDatabase()->getConnection();
+        $this->metadata = $event->getDatabase()->getMetadata();
+        $this->config = $event->getConfig();
 
-        $context->getDumper()->setTableWheres($this->buildTablesWhere());
+        $event->getDumper()->setTableWheres($this->buildTablesWhere());
     }
 
     /**
