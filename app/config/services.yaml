@@ -71,6 +71,11 @@ services:
     config.compiler.processor.version:
         class: 'Smile\GdprDump\Config\Compiler\Processor\VersionProcessor'
 
+    converter.builder:
+        class: 'Smile\GdprDump\Converter\ConverterBuilder'
+        arguments:
+            - '@converter.factory'
+
     converter.factory:
         class: 'Smile\GdprDump\Converter\ConverterFactory'
         arguments:
@@ -90,7 +95,7 @@ services:
         class: 'Smile\GdprDump\Dumper\Listener\DataConverterListener'
         tags: ['kernel.event_listener']
         arguments:
-            - '@converter.factory'
+            - '@converter.builder'
             - '@faker.service'
 
     dumper.listener.table_filter:

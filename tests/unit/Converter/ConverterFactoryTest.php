@@ -6,137 +6,22 @@ namespace Smile\GdprDump\Tests\Unit\Converter;
 
 use RuntimeException;
 use Smile\GdprDump\Converter\ConverterFactory;
-use Smile\GdprDump\Converter\Proxy\Cache;
-use Smile\GdprDump\Converter\Proxy\Chain;
-use Smile\GdprDump\Converter\Proxy\Conditional;
-use Smile\GdprDump\Converter\Proxy\Faker;
-use Smile\GdprDump\Converter\Proxy\Unique;
 use Smile\GdprDump\DependencyInjection\Compiler\ConverterAliasPass;
-use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
-use UnexpectedValueException;
 
 class ConverterFactoryTest extends TestCase
 {
     /**
-     * Test the converter creation from an array definition.
+     * Test the converter factory.
      */
     public function testConverterCreation(): void
     {
-        $factory = $this->createFactory();
+        $converter = $this->createFactory()
+            ->create('test');
 
-        $converter = $factory->create([
-            'converter' => 'mock',
-            'parameters' => [
-                'prefix' => '',
-            ],
-        ]);
         $this->assertInstanceOf(ConverterMock::class, $converter);
-    }
-
-    /**
-     * Test the creation of a Faker converter.
-     */
-    public function testFakerConverter(): void
-    {
-        $factory = $this->createFactory();
-
-        $converter = $factory->create([
-            'converter' => 'faker',
-            'parameters' => [
-                'formatter' => 'safeEmail',
-            ],
-        ]);
-        $this->assertInstanceOf(Faker::class, $converter);
-    }
-
-    /**
-     * Test the creation of a unique converter.
-     */
-    public function testUniqueConverter(): void
-    {
-        $factory = $this->createFactory();
-
-        $converter = $factory->create([
-            'converter' => 'mock',
-            'unique' => true,
-        ]);
-        $this->assertInstanceOf(Unique::class, $converter);
-
-        $converter = $factory->create([
-            'converter' => 'mock',
-            'unique' => false,
-        ]);
-        $this->assertInstanceOf(ConverterMock::class, $converter);
-    }
-
-    /**
-     * Test the creation of a conditional converter.
-     */
-    public function testConditionConverter(): void
-    {
-        $factory = $this->createFactory();
-
-        $converter = $factory->create([
-            'converter' => 'mock',
-            'condition' => '{{id}} === 1',
-        ]);
-        $this->assertInstanceOf(Conditional::class, $converter);
-    }
-
-    /**
-     * Test the creation of a cache converter.
-     */
-    public function testCacheConverter(): void
-    {
-        $factory = $this->createFactory();
-
-        $converter = $factory->create([
-            'converter' => 'mock',
-            'cache_key' => 'test',
-        ]);
-        $this->assertInstanceOf(Cache::class, $converter);
-    }
-
-    /**
-     * Test the creation of nested converters.
-     */
-    public function testNestedConverters(): void
-    {
-        $factory = $this->createFactory();
-
-        $converter = $factory->create([
-            'converter' => 'chain',
-            'parameters' => [
-                'converters' => [
-                    ['converter' => 'mock'],
-                    ['converter' => 'mock'],
-                ],
-            ],
-        ]);
-        $this->assertInstanceOf(Chain::class, $converter);
-    }
-
-    /**
-     * Assert that an exception is thrown when the converter is set but empty.
-     */
-    public function testEmptyConverter(): void
-    {
-        $factory = $this->createFactory();
-        $this->expectException(UnexpectedValueException::class);
-        $factory->create(['converter' => null]);
-    }
-
-    /**
-     * Assert that an exception is thrown when the converter is not set.
-     */
-    public function testConverterNotSet(): void
-    {
-        $factory = $this->createFactory();
-        $this->expectException(UnexpectedValueException::class);
-        $factory->create([]);
     }
 
     /**
@@ -144,75 +29,14 @@ class ConverterFactoryTest extends TestCase
      */
     public function testConverterNotDefined(): void
     {
-        $factory = $this->createFactory();
         $this->expectException(RuntimeException::class);
-        $factory->create(['converter' => 'notExists']);
-    }
-
-    /**
-     * Assert that an exception is thrown when the parameter "parameters" is not an array.
-     */
-    public function testParametersNotAnArray(): void
-    {
-        $factory = $this->createFactory();
-        $this->expectException(UnexpectedValueException::class);
-        $factory->create([
-            'converter' => 'mock',
-            'parameters' => '',
-        ]);
-    }
-
-    /**
-     * Assert that an exception is thrown when the parameter "converter" is used,
-     * but the value is not a converter definition.
-     */
-    public function testConverterParameterMalformed(): void
-    {
-        $factory = $this->createFactory();
-        $this->expectException(UnexpectedValueException::class);
-        $factory->create([
-            'converter' => 'mock',
-            'parameters' => [
-                'converter' => null,
-            ],
-        ]);
-    }
-
-    /**
-     * Assert that an exception is thrown when the parameter "converters" is used,
-     * but the value is not an array.
-     */
-    public function testConvertersParameterNotAnArray(): void
-    {
-        $factory = $this->createFactory();
-        $this->expectException(UnexpectedValueException::class);
-        $factory->create([
-            'converter' => 'mock',
-            'parameters' => [
-                'converters' => null,
-            ],
-        ]);
-    }
-
-    /**
-     * Assert that an exception is thrown when the parameter "converters" is used,
-     * but the value is not an array of converter definition.
-     */
-    public function testConvertersParameterMalformed(): void
-    {
-        $factory = $this->createFactory();
-        $this->expectException(UnexpectedValueException::class);
-        $factory->create([
-            'converter' => 'mock',
-            'parameters' => [
-                'converters' => [null],
-            ],
-        ]);
+        $this->createFactory()
+            ->create('notExists');
     }
 
     /**
      * Create a converter factory object.
-     */
+         */
     private function createFactory(): ConverterFactory
     {
         $containerMock = $this->createMock(Container::class);
@@ -221,29 +45,12 @@ class ConverterFactoryTest extends TestCase
             ->will(
                 $this->returnCallback(
                     fn (string $value) => match ($value) {
-                        // Converters used in the context of this unit test
-                        $this->getServiceId('cache') => new Cache(),
-                        $this->getServiceId('chain') => new Chain(),
-                        $this->getServiceId('conditional') => new Conditional(),
-                        $this->getServiceId('faker') => new Faker(new FakerService()),
-                        $this->getServiceId('mock') => new ConverterMock(),
-                        $this->getServiceId('notExists') => throw new ServiceNotFoundException($value),
-                        $this->getServiceId('unique') => new Unique(),
-                        default => throw new UnexpectedValueException(
-                            sprintf('The converter "%s" was not expected in this unit case.', $value)
-                        ),
+                        ConverterAliasPass::ALIAS_PREFIX . 'test' => new ConverterMock(),
+                        default => throw new ServiceNotFoundException(ConverterAliasPass::ALIAS_PREFIX . $value),
                     }
                 )
             );
 
         return new ConverterFactory($containerMock);
-    }
-
-    /**
-     * Get the service id from a container name.
-     */
-    private function getServiceId(string $name): string
-    {
-        return ConverterAliasPass::ALIAS_PREFIX . $name;
     }
 }

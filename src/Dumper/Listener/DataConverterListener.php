@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Listener;
 
-use Smile\GdprDump\Converter\ConverterFactory;
+use Smile\GdprDump\Converter\ConverterBuilder;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
@@ -19,7 +19,7 @@ class DataConverterListener
      */
     private array $converters = [];
 
-    public function __construct(private ConverterFactory $converterFactory, private FakerService $faker)
+    public function __construct(private ConverterBuilder $converterBuilder, private FakerService $faker)
     {
     }
 
@@ -99,7 +99,7 @@ class DataConverterListener
 
         foreach ($config->getTablesConfig() as $tableName => $tableConfig) {
             foreach ($tableConfig->getConverters() as $columnName => $definition) {
-                $this->converters[$tableName][$columnName] = $this->converterFactory->create($definition);
+                $this->converters[$tableName][$columnName] = $this->converterBuilder->build($definition);
             }
 
             $skipCondition = $tableConfig->getSkipCondition();
