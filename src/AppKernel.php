@@ -99,7 +99,6 @@ class AppKernel
      * The container is not cached (cf. https://symfony.com/doc/6.2/components/dependency_injection/compilation.html#dumping-the-configuration-for-performance)
      * because the cache file would contain hardcoded paths (e.g. app_root).
      * It would prevent the phar file from working.
-     * As a consequence, for performance reasons, autowiring is also disabled.
      */
     private function buildContainer(): ContainerInterface
     {
