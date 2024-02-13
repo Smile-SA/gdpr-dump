@@ -8,7 +8,6 @@ use Smile\GdprDump\Converter\ConverterBuilder;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
-use Smile\GdprDump\Faker\FakerService;
 
 class DataConverterListener
 {
@@ -19,22 +18,21 @@ class DataConverterListener
      */
     private array $converters = [];
 
-    public function __construct(private ConverterBuilder $converterBuilder, private FakerService $faker)
-    {
-    }
-
     /**
      * @var string[]
      */
     private array $skipConditions = [];
+
+    public function __construct(private ConverterBuilder $converterBuilder)
+    {
+    }
 
     /**
      * Create the data conversion hook that will be applied during dump creation.
      */
     public function __invoke(DumpEvent $event): void
     {
-        $this->prepareFakerLocale($event->getConfig());
-        $this->prepareConverters($event->getConfig());
+        $this->buildConverters($event->getConfig());
 
         $this->context = $event->getContext();
         $event->getDumper()->setTransformTableRowHook($this->getHook());
@@ -79,20 +77,9 @@ class DataConverterListener
     }
 
     /**
-     * Configure the Faker service.
-     */
-    private function prepareFakerLocale(DumperConfig $config): void
-    {
-        $locale = (string) ($config->getFakerSettings()['locale'] ?? '');
-        if ($locale !== '') {
-            $this->faker->setLocale($locale);
-        }
-    }
-
-    /**
      * Create the converters, grouped by table.
      */
-    private function prepareConverters(DumperConfig $config): void
+    private function buildConverters(DumperConfig $config): void
     {
         $this->converters = [];
         $this->skipConditions = [];
