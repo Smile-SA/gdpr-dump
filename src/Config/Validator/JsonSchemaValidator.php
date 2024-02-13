@@ -10,9 +10,8 @@ use JsonSchema\Validator;
 class JsonSchemaValidator implements ValidatorInterface
 {
     private ?Validator $schemaValidator = null;
-    private string $schemaFile;
 
-    public function __construct(string $schemaFile)
+    public function __construct(private string $schemaFile)
     {
         // Prefix the file name by the schema
         if (!str_contains($schemaFile, 'phar://')) {
