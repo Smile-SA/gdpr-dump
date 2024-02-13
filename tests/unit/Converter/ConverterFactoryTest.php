@@ -36,7 +36,7 @@ class ConverterFactoryTest extends TestCase
 
     /**
      * Create a converter factory object.
-         */
+     */
     private function createFactory(): ConverterFactory
     {
         $containerMock = $this->createMock(Container::class);
