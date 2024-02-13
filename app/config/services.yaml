@@ -85,12 +85,17 @@ services:
             - '@database.factory'
             - '@event_dispatcher'
 
+    dumper.listener.faker_locale:
+        class: 'Smile\GdprDump\Dumper\Listener\FakerLocaleListener'
+        tags: [{name: 'kernel.event_listener', priority: 10}] # must be triggered before data converter listener
+        arguments:
+            - '@faker.service'
+
     dumper.listener.data_converter:
         class: 'Smile\GdprDump\Dumper\Listener\DataConverterListener'
         tags: ['kernel.event_listener']
         arguments:
             - '@converter.builder'
-            - '@faker.service'
 
     dumper.listener.table_filter:
         class: 'Smile\GdprDump\Dumper\Listener\TableFilterListener'
