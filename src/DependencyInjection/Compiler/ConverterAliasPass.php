@@ -5,41 +5,52 @@ declare(strict_types=1);
 namespace Smile\GdprDump\DependencyInjection\Compiler;
 
 use RuntimeException;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 
 class ConverterAliasPass implements CompilerPassInterface
 {
     public const ALIAS_PREFIX = 'converter.';
 
     /**
-     * Replace the default service id of converters (class names) by an alias.
+     * Add an alias for data converters (e.g. "converter.randomizeText").
      *
-     * Using an alias as the service id allows the converter factory to fetch a converter
-     * with the alias specified in the config file (e.g. "randomizeText").
+     * This allows the converter factory to create containers from the name
+     * specified in the config file (e.g. "randomizeText").
+     *
+     * @throws RuntimeException
      */
     public function process(ContainerBuilder $container): void
     {
         foreach (array_keys($container->findTaggedServiceIds('converter')) as $serviceId) {
             $definition = $container->getDefinition($serviceId);
-            $name = $this->getConverterAlias($definition);
-            $container->setDefinition($name, $definition);
+            $className = $definition->getClass();
+            if ($className === null) {
+                throw new RuntimeException(
+                    sprintf('Failed to find the class name of the service "%s".', $serviceId)
+                );
+            }
+
+            $aliasName = $this->getAliasName($className);
+            if ($container->hasDefinition($aliasName)) {
+                throw new RuntimeException(
+                    sprintf('The alias "%s" conflicts with an existing service.', $aliasName)
+                );
+            }
+
+            $alias = new Alias($className, true);
+            $container->setAlias($aliasName, $alias);
         }
     }
 
     /**
-     * Get converter alias (class name with first letter in lower caps).
+     * Get a converter alias name (class name with first letter in lower caps).
      *
-     * @throws RuntimeException
+     * The alias name contains a prefix to prevent any conflict with other services.
      */
-    private function getConverterAlias(Definition $definition): string
+    private function getAliasName(string $className): string
     {
-        $className = $definition->getClass();
-        if ($className === null) {
-            throw new RuntimeException('Invalid service definition.');
-        }
-
         $parts = explode('\\', $className);
 
         // Add a prefix to prevent any conflict with other services

@@ -13,13 +13,12 @@ services:
         Smile\GdprDump\Config\Compiler\Processor\ProcessorInterface:
             tags: ['config.compiler_processor']
         Smile\GdprDump\Converter\ConverterInterface:
-            public: true # fetched with `$container->get` by the converter factory
             shared: false
             tags: ['converter']
         Smile\GdprDump\Phar\Minify\MinifierInterface:
             tags: ['compiler.minifier']
 
-    # Service id will be replaced by an alias during ConverterAliasPass
+    # The pass "ConverterAliasPass" will create an alias for each converter, to allow getting them by name
     Smile\GdprDump\Converter\:
         resource: '../../src/Converter'
 
