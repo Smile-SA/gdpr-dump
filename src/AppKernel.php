@@ -11,6 +11,7 @@ use Smile\GdprDump\Console\Application;
 use Smile\GdprDump\DependencyInjection\Compiler\ConverterAliasPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -108,7 +109,7 @@ class AppKernel
         $loader = new YamlFileLoader($container, new FileLocator($basePath . '/app/config'));
         $loader->load('services.yaml');
 
-        $container->addCompilerPass(new RegisterListenersPass());
+        $container->addCompilerPass(new RegisterListenersPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->addCompilerPass(new ConverterAliasPass());
 
         $container->setParameter('app_root', $basePath);
