@@ -221,7 +221,7 @@ class ConverterBuilderTest extends TestCase
                         // Converters used in the context of this unit test
                         'cache' => $this->createConverter(Cache::class, $parameters),
                         'chain' => $this->createConverter(Chain::class, $parameters),
-                        'conditional' => $this->createConverter(Conditional::class, $parameters),
+                        'conditional' => $this->createConditionalConverter($parameters),
                         'faker' => $this->createFakerConverter($parameters),
                         'mock' => $this->createConverter(ConverterMock::class, $parameters),
                         'notExists' => throw new RuntimeException($value),

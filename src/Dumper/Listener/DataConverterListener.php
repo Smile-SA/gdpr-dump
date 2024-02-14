@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Listener;
 
+use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Converter\ConverterBuilder;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
@@ -23,8 +24,10 @@ class DataConverterListener
      */
     private array $skipConditions = [];
 
-    public function __construct(private ConverterBuilder $converterBuilder)
-    {
+    public function __construct(
+        private ConverterBuilder $converterBuilder,
+        private ConditionBuilder $conditionBuilder
+    ) {
     }
 
     /**
@@ -85,13 +88,15 @@ class DataConverterListener
         $this->skipConditions = [];
 
         foreach ($config->getTablesConfig() as $tableName => $tableConfig) {
+            // Build data converters
             foreach ($tableConfig->getConverters() as $columnName => $definition) {
                 $this->converters[$tableName][$columnName] = $this->converterBuilder->build($definition);
             }
 
+            // Build conversion skip conditions
             $skipCondition = $tableConfig->getSkipCondition();
             if ($skipCondition !== '') {
-                $this->skipConditions[$tableName] = $skipCondition;
+                $this->skipConditions[$tableName] = $this->conditionBuilder->build($skipCondition);
             }
         }
     }

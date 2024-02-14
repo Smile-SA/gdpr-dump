@@ -16,6 +16,10 @@ class Conditional implements ConverterInterface
     private ?ConverterInterface $ifTrueConverter = null;
     private ?ConverterInterface $ifFalseConverter = null;
 
+    public function __construct(private ConditionBuilder $conditionBuilder)
+    {
+    }
+
     /**
      * @inheritdoc
      */
@@ -33,8 +37,7 @@ class Conditional implements ConverterInterface
             );
         }
 
-        $conditionBuilder = new ConditionBuilder();
-        $this->condition = $conditionBuilder->build($input->get('condition'));
+        $this->condition = $this->conditionBuilder->build($input->get('condition'));
         $this->ifTrueConverter = $input->get('if_true_converter');
         $this->ifFalseConverter = $input->get('if_false_converter');
     }
