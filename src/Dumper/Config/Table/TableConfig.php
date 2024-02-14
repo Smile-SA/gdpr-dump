@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Config\Table;
 
-use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Dumper\Config\Table\Filter\Filter;
 use Smile\GdprDump\Dumper\Config\Table\Filter\SortOrder;
 use UnexpectedValueException;
@@ -194,8 +193,7 @@ class TableConfig
 
         $skipCondition = (string) ($tableData['skip_conversion_if'] ?? '');
         if ($skipCondition !== '') {
-            $conditionBuilder = new ConditionBuilder();
-            $this->skipCondition = $conditionBuilder->build($skipCondition);
+            $this->skipCondition = $skipCondition;
         }
     }
 }

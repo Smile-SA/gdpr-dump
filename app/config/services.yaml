@@ -19,6 +19,10 @@ services:
     Smile\GdprDump\Converter\:
         resource: '../../src/Converter'
 
+    Smile\GdprDump\Converter\Proxy\Conditional:
+        arguments:
+            - '@converter.condition_builder'
+
     Smile\GdprDump\Converter\Proxy\Faker:
         arguments:
             - '@faker.service'
@@ -75,6 +79,9 @@ services:
         arguments:
             - '@service_container'
 
+    converter.condition_builder:
+        class: 'Smile\GdprDump\Converter\ConditionBuilder'
+
     database.factory:
         class: 'Smile\GdprDump\Database\DatabaseFactory'
 
@@ -96,6 +103,7 @@ services:
         tags: ['kernel.event_listener']
         arguments:
             - '@converter.builder'
+            - '@converter.condition_builder'
 
     dumper.listener.table_filter:
         class: 'Smile\GdprDump\Dumper\Listener\TableFilterListener'

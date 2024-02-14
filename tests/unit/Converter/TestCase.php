@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter;
 
 use RuntimeException;
+use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Proxy\Conditional;
 use Smile\GdprDump\Converter\Proxy\Faker;
 use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Unit\TestCase as UnitTestCase;
@@ -24,6 +26,17 @@ class TestCase extends UnitTestCase
         }
 
         $converter = new $className();
+        $converter->setParameters($parameters);
+
+        return $converter;
+    }
+
+    /**
+     * Create a conditional converter.
+     */
+    public function createConditionalConverter(array $parameters = []): ConverterInterface
+    {
+        $converter = new Conditional(new ConditionBuilder());
         $converter->setParameters($parameters);
 
         return $converter;

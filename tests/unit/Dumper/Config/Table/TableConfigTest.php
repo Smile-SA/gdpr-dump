@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Dumper\Config\Table;
 
-use RuntimeException;
 use Smile\GdprDump\Dumper\Config\Table\Filter\Filter;
 use Smile\GdprDump\Dumper\Config\Table\TableConfig;
 use Smile\GdprDump\Tests\Unit\TestCase;
@@ -72,7 +71,7 @@ class TableConfigTest extends TestCase
             'skip_conversion_if' => $condition,
         ]);
 
-        $this->assertStringContainsString('$context[\'row_data\'][\'column1\']', $config->getSkipCondition());
+        $this->assertSame($condition, $config->getSkipCondition());
     }
 
     /**
@@ -124,14 +123,5 @@ class TableConfigTest extends TestCase
     {
         $this->expectException(UnexpectedValueException::class);
         new TableConfig('table1', ['order_by' => 'this is not a valid sort order']);
-    }
-
-    /**
-     * Assert that an exception is thrown when condition for skipping data conversion is invalid.
-     */
-    public function testInvalidCondition(): void
-    {
-        $this->expectException(RuntimeException::class);
-        new TableConfig('table1', ['skip_conversion_if' => 'sleep(100)']);
     }
 }
