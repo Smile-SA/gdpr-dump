@@ -30,7 +30,7 @@ class ConfigProcessor
     }
 
     /**
-     * Process the tables whitelist and the tables blacklist.
+     * Remote tables that don't exist and resolve patterns (e.g. "log_*") for the table whitelist/blacklist.
      */
     private function processTableLists(ConfigInterface $config): void
     {
@@ -47,7 +47,7 @@ class ConfigProcessor
     }
 
     /**
-     * Process the tables data.
+     * Remove tables that don't exist from the "tables" parameter.
      */
     private function processTablesData(ConfigInterface $config): void
     {
@@ -98,7 +98,7 @@ class ConfigProcessor
     }
 
     /**
-     * Get the table names that match a pattern.
+     * Get the table names that match a pattern (e.g. "log_*").
      *
      * @return string[]
      */
