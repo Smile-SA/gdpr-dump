@@ -45,4 +45,16 @@ class FakerTest extends TestCase
         $this->expectException(ValidationException::class);
         $this->createFakerConverter();
     }
+
+    /**
+     * Test creation of a converter with invalid formatter throws
+     */
+    public function testInvalidFormatter(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->createFakerConverter([
+            'formatter' => 'doesNotExist',
+            'arguments' => [1, 1],
+        ]);
+    }
 }
