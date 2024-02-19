@@ -13,7 +13,8 @@ use Smile\GdprDump\Faker\FakerService;
 class Faker implements ConverterInterface
 {
     private Generator $faker;
-    private string $formatter;
+    private object $provider;
+    private string $method;
     private array $arguments;
 
     /**
@@ -36,7 +37,7 @@ class Faker implements ConverterInterface
             ->addParameter('arguments', Parameter::TYPE_ARRAY, false, [])
             ->process($parameters);
 
-        $this->formatter = $input->get('formatter');
+        $formatter = $input->get('formatter');
         $this->arguments = $input->get('arguments') ?? [];
 
         foreach ($this->arguments as $name => $value) {
@@ -44,6 +45,11 @@ class Faker implements ConverterInterface
                 $this->placeholders[] = $name;
             }
         }
+
+        // Faster than calling the "format" method of the Faker generator
+        // (the "format" method uses call_user_func_array, which is very slow)
+        // @phpstan-ignore-next-line getFormatter function always returns an array with 2 items
+        [$this->provider, $this->method] = $this->faker->getFormatter($formatter);
     }
 
     /**
@@ -51,11 +57,6 @@ class Faker implements ConverterInterface
      */
     public function convert(mixed $value, array $context = []): mixed
     {
-        // Faster than calling the "format" method of the Faker generator
-        // (the "format" method uses call_user_func_array, which is very slow)
-        // @phpstan-ignore-next-line getFormatter function always returns an array with 2 items
-        [$provider, $method] = $this->faker->getFormatter($this->formatter);
-
         $arguments = $this->arguments;
 
         // Replace all occurrences of "{{value}}" by $value
@@ -63,6 +64,6 @@ class Faker implements ConverterInterface
             $arguments[$name] = $value;
         }
 
-        return $provider->$method(...$arguments);
+        return $this->provider->{$this->method}(...$arguments);
     }
 }
