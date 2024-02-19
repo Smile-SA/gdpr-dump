@@ -18,7 +18,7 @@ class RandomTextTest extends TestCase
         $converter = $this->createConverter(RandomText::class);
 
         $value = $converter->convert(null);
-        $this->assertNotNUll($value);
+        $this->assertNotNull($value);
 
         $value = $converter->convert('user1');
         $this->assertStringNotContainsString('user1', $value);
