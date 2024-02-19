@@ -11,8 +11,6 @@ use Symfony\Component\Yaml\Yaml;
 
 class ConfigLoader implements ConfigLoaderInterface
 {
-    private ConfigInterface $config;
-
     /**
      * @var string[]
      */
@@ -25,24 +23,10 @@ class ConfigLoader implements ConfigLoaderInterface
     /**
      * @inheritdoc
      */
-    public function load(string $fileName): void
+    public function load(string $fileName, ConfigInterface $config): void
     {
-        if (!isset($this->config)) {
-            throw new ConfigException('The configuration object must be set.');
-        }
-
         $fileName = $this->fileLocator->locate($fileName);
-        $this->loadFile($fileName);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setConfig(ConfigInterface $config): self
-    {
-        $this->config = $config;
-
-        return $this;
+        $this->loadFile($fileName, $config);
     }
 
     /**
@@ -50,7 +34,7 @@ class ConfigLoader implements ConfigLoaderInterface
      *
      * @throws ConfigException
      */
-    private function loadFile(string $fileName): void
+    private function loadFile(string $fileName, ConfigInterface $config): void
     {
         $input = file_get_contents($fileName);
         if ($input === false) {
@@ -71,11 +55,11 @@ class ConfigLoader implements ConfigLoaderInterface
         if (isset($data['extends'])) {
             $fileNames = (array) $data['extends'];
             $currentDirectory = dirname($fileName);
-            $this->loadParentFiles($fileNames, $currentDirectory);
+            $this->loadParentFiles($fileNames, $config, $currentDirectory);
             unset($data['extends']);
         }
 
-        $this->config->merge($data);
+        $config->merge($data);
     }
 
     /**
@@ -84,14 +68,14 @@ class ConfigLoader implements ConfigLoaderInterface
      * @param string[] $fileNames
      * @throws ConfigException
      */
-    private function loadParentFiles(array $fileNames, string $currentDirectory): void
+    private function loadParentFiles(array $fileNames, ConfigInterface $config, string $currentDirectory): void
     {
         foreach ($fileNames as $fileName) {
             $fileName = $this->fileLocator->locate($fileName, $currentDirectory);
 
             // Load the parent file if it was not already loaded
             if (!in_array($fileName, $this->loadedTemplates, true)) {
-                $this->loadFile($fileName);
+                $this->loadFile($fileName, $config);
                 $this->loadedTemplates[] = $fileName;
             }
         }

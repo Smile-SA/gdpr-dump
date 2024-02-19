@@ -92,9 +92,8 @@ class DumpCommand extends Command
         $config = new Config();
 
         // Load config files
-        $this->configLoader->setConfig($config);
         foreach ($input->getArgument('config_file') as $configFile) {
-            $this->configLoader->load($configFile);
+            $this->configLoader->load($configFile, $config);
         }
 
         // Compile the config

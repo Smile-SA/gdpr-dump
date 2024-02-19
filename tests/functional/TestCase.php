@@ -59,8 +59,7 @@ abstract class TestCase extends BaseTestCase
 
             /** @var ConfigLoaderInterface $loader */
             $loader = self::getContainer()->get('config.loader');
-            $loader->setConfig(self::$config)
-                ->load(self::getResource('config/templates/test.yaml'));
+            $loader->load(self::getResource('config/templates/test.yaml'), self::$config);
 
             /** @var CompilerInterface $compiler */
             $compiler = self::getContainer()->get('config.compiler');

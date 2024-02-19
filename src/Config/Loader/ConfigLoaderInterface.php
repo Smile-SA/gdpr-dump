@@ -14,10 +14,5 @@ interface ConfigLoaderInterface
      *
      * @throws ConfigException
      */
-    public function load(string $fileName): void;
-
-    /**
-     * Set the config object.
-     */
-    public function setConfig(ConfigInterface $config): self;
+    public function load(string $fileName, ConfigInterface $config): void;
 }
