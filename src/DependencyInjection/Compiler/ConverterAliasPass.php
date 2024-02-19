@@ -16,7 +16,7 @@ class ConverterAliasPass implements CompilerPassInterface
     /**
      * Add an alias for data converters (e.g. "converter.randomizeText").
      *
-     * This allows the converter factory to create containers from the name
+     * This allows the converter factory to create converters with the name
      * specified in the config file (e.g. "randomizeText").
      *
      * @throws RuntimeException
