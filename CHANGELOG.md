@@ -2,9 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [4.1.0] - 2024-02-19
+[4.1.0]: https://github.com/Smile-SA/gdpr-dump/compare/4.0.3...4.1.0
 
-- Add support for SQL expressions as column filter ([#97](https://github.com/Smile-SA/gdpr-dump/pull/97))
+- Added support for SQL expressions as column filter ([#97](https://github.com/Smile-SA/gdpr-dump/pull/97))
+- GdprDump now uses composer to determine the application version
 
 ## [4.0.3] - 2024-01-09
 [4.0.3]: https://github.com/Smile-SA/gdpr-dump/compare/4.0.2...4.0.3
