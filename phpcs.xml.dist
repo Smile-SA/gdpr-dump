@@ -47,6 +47,9 @@
     <!-- Disallows implicit array creation -->
     <rule ref="SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation"/>
 
+    <!-- Array must have keys specified for either all or none of the values -->
+    <rule ref="SlevomatCodingStandard.Arrays.DisallowPartiallyKeyed"/>
+
     <!-- Enforces reasonable end bracket placement for multi-line arrays -->
     <rule ref="SlevomatCodingStandard.Arrays.MultiLineArrayEndBracketPlacement"/>
 
@@ -190,6 +193,9 @@
     <!-- Looks for useless semicolons -->
     <rule ref="SlevomatCodingStandard.PHP.UselessSemicolon"/>
 
+    <!-- Disallows using loose `==` and `!=` comparison operators. Use `===` and `!==` instead -->
+    <rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators"/>
+
     <!-- Disallows spaces after negation operator -->
     <rule ref="SlevomatCodingStandard.Operators.NegationOperatorSpacing"/>
 
@@ -249,4 +255,7 @@
 
     <!-- Reports useless @var annotation for constants because the type of constant is always clear -->
     <rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint"/>
+
+    <!-- Checks duplicate spaces anywhere because there aren't sniffs for every part of code to check formatting -->
+    <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>
 </ruleset>
