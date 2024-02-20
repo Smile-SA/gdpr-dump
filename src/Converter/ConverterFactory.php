@@ -16,7 +16,7 @@ class ConverterFactory
     }
 
     /**
-     * Create a container from a name (e.g. "randomizeText").
+     * Create a converter from a name (e.g. "randomizeText").
      */
     public function create(string $name, array $parameters = []): ConverterInterface
     {
