@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Listener;
 
+use Exception;
+use RuntimeException;
 use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Converter\ConverterBuilder;
 use Smile\GdprDump\Converter\ConverterInterface;
@@ -71,8 +73,16 @@ class DataConverterListener
                 }
 
                 // Convert the value
-                $row[$column] = $converter->convert($row[$column], $context);
-                $context['processed_data'][$column] = $row[$column];
+                try {
+                    $row[$column] = $converter->convert($row[$column], $context);
+                    $context['processed_data'][$column] = $row[$column];
+                } catch (Exception $exception) {
+                    throw new RuntimeException(
+                        $table . '.' . $column . ': ' . $exception->getMessage(),
+                        $exception->getCode(),
+                        $exception
+                    );
+                }
             }
 
             return $row;
