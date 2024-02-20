@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
+use InvalidArgumentException;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
@@ -47,11 +48,11 @@ class FakerTest extends TestCase
     }
 
     /**
-     * Test creation of a converter with invalid formatter throws
+     * Assert that an exception is thrown when the Faker formatter is not defined.
      */
     public function testInvalidFormatter(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->createFakerConverter([
             'formatter' => 'doesNotExist',
             'arguments' => [1, 1],
