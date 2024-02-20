@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Listener;
 
+use Exception;
+use RuntimeException;
 use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Converter\ConverterBuilder;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
-use Exception;
-use RuntimeException;
 
 class DataConverterListener
 {
