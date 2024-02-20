@@ -38,8 +38,8 @@ class Faker implements ConverterInterface
 
         // Create the formatter now to ensure that errors related to undefined formatters
         // are triggered before the start of the dump process
+        $formatter = $input->get('formatter');
         try {
-            $formatter = $input->get('formatter');
             // @phpstan-ignore-next-line getFormatter function always returns an array with 2 items
             [$this->provider, $this->method] = $this->fakerService
                 ->getGenerator()
