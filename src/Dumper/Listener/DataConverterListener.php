@@ -71,8 +71,16 @@ class DataConverterListener
                 }
 
                 // Convert the value
-                $row[$column] = $converter->convert($row[$column], $context);
-                $context['processed_data'][$column] = $row[$column];
+                try {
+                    $row[$column] = $converter->convert($row[$column], $context);
+                    $context['processed_data'][$column] = $row[$column];
+                } catch (\OverflowException $overflowException) {
+                    throw new \RuntimeException(
+                        $table.'.'.$column .': '.$overflowException->getMessage(),
+                        $overflowException->getCode(),
+                        $overflowException
+                    );
+                }
             }
 
             return $row;
