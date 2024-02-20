@@ -9,6 +9,8 @@ use Smile\GdprDump\Converter\ConverterBuilder;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
+use Exception;
+use RuntimeException;
 
 class DataConverterListener
 {
@@ -74,8 +76,8 @@ class DataConverterListener
                 try {
                     $row[$column] = $converter->convert($row[$column], $context);
                     $context['processed_data'][$column] = $row[$column];
-                } catch (\OverflowException $overflowException) {
-                    throw new \RuntimeException(
+                } catch (Exception $overflowException) {
+                    throw new RuntimeException(
                         $table . '.' . $column . ': ' . $overflowException->getMessage(),
                         $overflowException->getCode(),
                         $overflowException
