@@ -76,11 +76,11 @@ class DataConverterListener
                 try {
                     $row[$column] = $converter->convert($row[$column], $context);
                     $context['processed_data'][$column] = $row[$column];
-                } catch (Exception $overflowException) {
+                } catch (Exception $exception) {
                     throw new RuntimeException(
-                        $table . '.' . $column . ': ' . $overflowException->getMessage(),
-                        $overflowException->getCode(),
-                        $overflowException
+                        $table . '.' . $column . ': ' . $exception->getMessage(),
+                        $exception->getCode(),
+                        $exception
                     );
                 }
             }
