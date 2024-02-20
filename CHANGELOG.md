@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [4.1.1] - 2024-02-20
+[4.1.1]: https://github.com/Smile-SA/gdpr-dump/compare/4.1.0...4.1.1
 
 - Display the table/column names when a data converter throws an exception ([#110](https://github.com/Smile-SA/gdpr-dump/pull/110))
 - Resolve Faker formatters before dump creation ([#108](https://github.com/Smile-SA/gdpr-dump/pull/108))
