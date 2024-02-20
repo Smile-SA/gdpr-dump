@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Proxy;
 
+use Exception;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Faker\FakerService;
 
 class Faker implements ConverterInterface
@@ -36,11 +38,16 @@ class Faker implements ConverterInterface
 
         // Create the formatter now to ensure that errors related to undefined formatters
         // are triggered before the start of the dump process
-        $formatter = $input->get('formatter');
-        // @phpstan-ignore-next-line getFormatter function always returns an array with 2 items
-        [$this->provider, $this->method] = $this->fakerService
-            ->getGenerator()
-            ->getFormatter($formatter);
+        try {
+            $formatter = $input->get('formatter');
+            // @phpstan-ignore-next-line getFormatter function always returns an array with 2 items
+            [$this->provider, $this->method] = $this->fakerService
+                ->getGenerator()
+                ->getFormatter($formatter);
+        } catch (Exception $e) {
+            // Wrap the original exception to make it more clear that the error is due to a faker formatter
+            throw new ValidationException(sprintf('Faker formatter error: %s', $e->getMessage()), $e);
+        }
 
         $this->arguments = $input->get('arguments') ?? [];
         foreach ($this->arguments as $name => $value) {
