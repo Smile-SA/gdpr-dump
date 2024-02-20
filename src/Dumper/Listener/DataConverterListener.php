@@ -76,12 +76,8 @@ class DataConverterListener
                 try {
                     $row[$column] = $converter->convert($row[$column], $context);
                     $context['processed_data'][$column] = $row[$column];
-                } catch (Exception $exception) {
-                    throw new RuntimeException(
-                        $table . '.' . $column . ': ' . $exception->getMessage(),
-                        $exception->getCode(),
-                        $exception
-                    );
+                } catch (Exception $e) {
+                    throw new RuntimeException(sprintf('[%s.%s] %s', $table, $column, $e->getMessage()), 0, $e);
                 }
             }
 
