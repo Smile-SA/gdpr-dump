@@ -9,7 +9,7 @@ use Smile\GdprDump\Faker\FakerService;
 
 class FakerLocaleListener
 {
-    public function __construct(private FakerService $faker)
+    public function __construct(private FakerService $fakerService)
     {
     }
 
@@ -20,7 +20,7 @@ class FakerLocaleListener
     {
         $locale = (string) ($event->getConfig()->getFakerSettings()['locale'] ?? '');
         if ($locale !== '') {
-            $this->faker->setLocale($locale);
+            $this->fakerService->setLocale($locale);
         }
     }
 }
