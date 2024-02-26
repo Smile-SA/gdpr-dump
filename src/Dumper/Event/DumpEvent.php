@@ -39,7 +39,7 @@ class DumpEvent extends Event
     }
 
     /**
-     * Get the dump context.
+     * Get the dumper.
      */
     public function getDumper(): Mysqldump
     {
@@ -47,7 +47,7 @@ class DumpEvent extends Event
     }
 
     /**
-     * Get the context.
+     * Get the dump context.
      */
     public function getContext(): array
     {

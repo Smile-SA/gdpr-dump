@@ -10,12 +10,15 @@ use Smile\GdprDump\Database\DatabaseFactory;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Smile\GdprDump\Dumper\Event\DumpFinishedEvent;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class MysqlDumper implements DumperInterface
 {
-    public function __construct(private DatabaseFactory $databaseFactory, private EventDispatcher $eventDispatcher)
-    {
+    public function __construct(
+        private DatabaseFactory $databaseFactory,
+        private EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     /**
@@ -49,8 +52,7 @@ class MysqlDumper implements DumperInterface
             $database->getConnectionParams()->get('driverOptions', [])
         );
 
-        $event = new DumpEvent($dumper, $database, $config, $context);
-        $this->eventDispatcher->dispatch($event);
+        $this->eventDispatcher->dispatch(new DumpEvent($dumper, $database, $config, $context));
 
         // Close the Doctrine connection before proceeding to the dump creation (MySQLDump-PHP uses its own connection)
         $database->getConnection()->close();
@@ -58,6 +60,7 @@ class MysqlDumper implements DumperInterface
         // Create the dump
         $output = $config->getDumpOutput();
         $dumper->start($output);
+        $this->eventDispatcher->dispatch(new DumpFinishedEvent($config));
     }
 
     /**
