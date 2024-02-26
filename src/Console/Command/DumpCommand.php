@@ -12,6 +12,7 @@ use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
 use Smile\GdprDump\Config\Validator\ValidationResultInterface;
 use Smile\GdprDump\Config\Validator\ValidatorInterface;
+use Smile\GdprDump\Console\Helper\DumpInfo;
 use Smile\GdprDump\Dumper\DumperInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -27,7 +28,8 @@ class DumpCommand extends Command
         private DumperInterface $dumper,
         private ConfigLoaderInterface $configLoader,
         private ValidatorInterface $validator,
-        private CompilerInterface $compiler
+        private CompilerInterface $compiler,
+        private DumpInfo $dumpInfo
     ) {
         parent::__construct();
     }
@@ -67,6 +69,10 @@ class DumpCommand extends Command
             if (!array_key_exists('password', $database)) {
                 $database['password'] = $this->promptPassword($input, $output);
                 $config->set('database', $database);
+            }
+
+            if ($output->isVerbose()) {
+                $this->dumpInfo->setOutput($output);
             }
 
             $this->dumper->dump($config);
