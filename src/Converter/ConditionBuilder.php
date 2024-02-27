@@ -6,16 +6,12 @@ namespace Smile\GdprDump\Converter;
 
 use RuntimeException;
 use TheSeer\Tokenizer\Token;
+use TheSeer\Tokenizer\TokenCollection;
 use TheSeer\Tokenizer\Tokenizer;
 
 class ConditionBuilder
 {
     private Tokenizer $tokenizer;
-
-    /**
-     * @var string[]
-     */
-    private array $statementBlacklist = ['<?php', '<?', '?>'];
 
     /**
      * @var string[]
@@ -49,9 +45,6 @@ class ConditionBuilder
         // Sanitize the condition
         $condition = $this->sanitizeCondition($condition);
 
-        // Validate the condition
-        $this->validateCondition($this->removeQuotedValues($condition));
-
         // Parse the condition and return the result
         return $this->parseCondition($condition);
     }
@@ -78,47 +71,6 @@ class ConditionBuilder
     }
 
     /**
-     * Validate the condition.
-     *
-     * @throws RuntimeException
-     */
-    private function validateCondition(string $condition): void
-    {
-        // Prevent usage of "=" operator
-        if (preg_match('/[^=!]=[^=]/', $condition)) {
-            throw new RuntimeException('The operator "=" is not allowed in converter conditions.');
-        }
-
-        // Prevent usage of "$" character
-        if (preg_match('/\$/', $condition)) {
-            throw new RuntimeException('The character "$" is not allowed in converter conditions.');
-        }
-
-        // Prevent the use of some statements
-        foreach ($this->statementBlacklist as $statement) {
-            if (str_contains($condition, $statement)) {
-                $message = sprintf('The statement "%s" is not allowed in converter conditions.', $statement);
-                throw new RuntimeException($message);
-            }
-        }
-
-        // Prevent the use of static functions
-        if (preg_match('/::(\w+) *\(/', $condition)) {
-            throw new RuntimeException('Static functions are not allowed in converter conditions.');
-        }
-
-        // Allow only specific functions
-        if (preg_match_all('/(\w+) *\(/', $condition, $matches)) {
-            foreach ($matches[1] as $function) {
-                if (!$this->isFunctionAllowed($function)) {
-                    $message = sprintf('The function "%s" is not allowed in converter conditions.', $function);
-                    throw new RuntimeException($message);
-                }
-            }
-        }
-    }
-
-    /**
      * Parse the tokens that represent the condition, and return the parsed condition.
      */
     private function parseCondition(string $condition): string
@@ -131,6 +83,8 @@ class ConditionBuilder
 
         foreach ($tokens as $token) {
             ++$index;
+
+            $this->validateToken($token, $tokens, $index, $tokenCount);
 
             // Skip characters representing a variable
             if ($this->isVariableToken($token)) {
@@ -164,24 +118,6 @@ class ConditionBuilder
     }
 
     /**
-     * Remove quoted values from a variable,
-     * e.g. `$s = 'value'` is converted to `$s = ''`.
-     */
-    private function removeQuotedValues(string $input): string
-    {
-        // Split the condition into PHP tokens
-        $tokens = $this->tokenizer->parse('<?php ' . $input . ' ?>');
-        $result = '';
-
-        foreach ($tokens as $token) {
-            // Remove quoted values
-            $result .= $token->getName() === 'T_CONSTANT_ENCAPSED_STRING' ? "''" : $token->getValue();
-        }
-
-        return $this->removePhpTags($result);
-    }
-
-    /**
      * Remove opening and closing PHP tags from a string.
      */
     private function removePhpTags(string $input): string
@@ -190,13 +126,57 @@ class ConditionBuilder
     }
 
     /**
-     * Check if the token represents a variable.
+     * Assert that the token is allowed.
+     *
+     * @throws RuntimeException
      */
-    private function isVariableToken(Token $token): bool
+    private function validateToken(Token $token, TokenCollection $tokens, int $index, int $tokenCount): void
     {
-        $name = $token->getName();
+        if ($index > 0 && $token->getName() === 'T_OPEN_TAG') {
+            throw new RuntimeException('PHP opening tags are not allowed in converter conditions.');
+        }
 
-        return $name === 'T_OPEN_CURLY' || $name === 'T_CLOSE_CURLY' || $name === 'T_AT';
+        if ($index < $tokenCount - 1 && $token->getName() === 'T_CLOSE_TAG') {
+            throw new RuntimeException('PHP closing tags are not allowed in converter conditions.');
+        }
+
+        if ($token->getName() === 'T_EQUAL') {
+            throw new RuntimeException('The operator "=" is not allowed in converter conditions.');
+        }
+
+        if ($token->getName() === 'T_VARIABLE') {
+            throw new RuntimeException('The character "$" is not allowed in converter conditions.');
+        }
+
+        if ($token->getName() === 'T_OPEN_BRACKET') {
+            // Search for forbidden functions and static calls
+            $previousTokenPos = $this->getPreviousTokenPos($tokens, $index);
+            if ($previousTokenPos !== null) {
+                $previousToken = $tokens[$previousTokenPos];
+
+                if (
+                    $previousToken->getName() === 'T_STRING' // `die()`
+                    || $previousToken->getName() === 'T_CONSTANT_ENCAPSED_STRING' // `'die'()`
+                    || $previousToken->getName() === 'T_VARIABLE' // `$func()`
+                ) {
+                    // Function detected, check if it is allowed
+                    $function = $previousToken->getValue();
+                    if (!$this->isFunctionAllowed($function)) {
+                        $message = sprintf('The function "%s" is not allowed in converter conditions.', $function);
+                        throw new RuntimeException($message);
+                    }
+
+                    // If the previous token is `::`, then it's a static call
+                    $previousTokenPos = $this->getPreviousTokenPos($tokens, $previousTokenPos);
+                    if ($previousTokenPos !== null) {
+                        $previousToken = $tokens[$previousTokenPos];
+                        if ($previousToken->getName() === 'T_DOUBLE_COLON') {
+                            throw new RuntimeException('Static functions are not allowed in converter conditions.');
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -214,5 +194,31 @@ class ConditionBuilder
         }
 
         return $allowed;
+    }
+
+    /**
+     * Search for the previous non-whitespace token.
+     */
+    private function getPreviousTokenPos(TokenCollection $tokens, int $currentIndex): ?int
+    {
+        --$currentIndex;
+        while ($currentIndex > 0) {
+            if ($tokens[$currentIndex]->getName() !== 'T_WHITESPACE') {
+                return $currentIndex;
+            }
+            --$currentIndex;
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if the token represents a variable.
+     */
+    private function isVariableToken(Token $token): bool
+    {
+        $name = $token->getName();
+
+        return $name === 'T_OPEN_CURLY' || $name === 'T_CLOSE_CURLY' || $name === 'T_AT';
     }
 }
