@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Event;
 
-use Druidfi\Mysqldump\Mysqldump;
 use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
+use Spatie\DbDumper\DbDumper;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
@@ -15,10 +15,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 class DumpEvent extends Event
 {
     public function __construct(
-        private Mysqldump $dumper,
-        private Database $database,
-        private DumperConfig $config,
-        private array $context
+        private readonly DbDumper $dumper,
+        private readonly Database $database,
+        private readonly DumperConfig $config,
+        private readonly array $context
     ) {
     }
 
@@ -41,7 +41,7 @@ class DumpEvent extends Event
     /**
      * Get the dump context.
      */
-    public function getDumper(): Mysqldump
+    public function getDumper(): DbDumper
     {
         return $this->dumper;
     }

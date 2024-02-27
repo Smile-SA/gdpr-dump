@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Database;
 
+use Smile\GdprDump\Enum\DriversEnum;
 use UnexpectedValueException;
 
 class ParameterBag
 {
     private array $params;
     private array $defaults = [
-        Database::DRIVER_MYSQL => ['host' => 'localhost', 'user' => 'root'],
+        DriversEnum::DRIVER_MYSQL->value => ['host' => 'localhost', 'user' => 'root'],
+        DriversEnum::DRIVER_PGSQL->value => ['host' => 'localhost', 'user' => 'root'],
     ];
 
     /**
@@ -50,9 +52,9 @@ class ParameterBag
             throw new UnexpectedValueException('Missing database name.');
         }
 
-        // Set the driver
+        // test if driver is set
         if (!isset($params['driver'])) {
-            $params['driver'] = Database::DRIVER_MYSQL;
+            throw new UnexpectedValueException('Missing database driver.');
         }
 
         if (isset($this->defaults[$params['driver']])) {
@@ -62,7 +64,7 @@ class ParameterBag
         // Remove empty elements
         return array_filter(
             $params,
-            fn ($value) => $value !== null && $value !== '' && $value !== false
+            static fn ($value) => $value !== null && $value !== '' && $value !== false
         );
     }
 }

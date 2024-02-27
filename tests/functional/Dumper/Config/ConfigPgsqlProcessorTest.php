@@ -1,0 +1,71 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Smile\GdprDump\Tests\Functional\Dumper\Config;
+
+use Doctrine\DBAL\Exception;
+use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Dumper\Config\ConfigProcessor;
+use Smile\GdprDump\Enum\DriversEnum;
+use Smile\GdprDump\Tests\Functional\TestCase;
+
+class ConfigPgsqlProcessorTest extends TestCase
+{
+    /**
+     * Test the table name resolution.
+     *
+     * @throws Exception
+     */
+    public function testTableNameResolution(): void
+    {
+        $data = [
+            'tables_whitelist' => ['cust*', 'notExist*'],
+            'tables_blacklist' => ['stor*', 'notExist*'],
+            'tables' => [
+                'cust*' => [],
+                'notExist*' => [],
+            ],
+        ];
+
+        // Process the configuration
+        $processor = $this->createConfigProcessor();
+        $config = $processor->process(new Config($data));
+
+        // Check if the table names were resolved
+        $this->assertSame(['customers'], $config->getTablesWhitelist());
+        $this->assertSame(['stores'], $config->getTablesBlacklist());
+        $this->assertArrayHasKey('customers', $config->getTablesConfig());
+        $this->assertArrayNotHasKey('cust*', $config->getTablesConfig());
+        $this->assertArrayNotHasKey('notExist*', $config->getTablesConfig());
+    }
+
+    /**
+     * Test the config processor behavior with an empty configuration.
+     *
+     * @throws Exception
+     */
+    public function testWithEmptyConfig(): void
+    {
+        // Create the config processor
+        $processor = $this->createConfigProcessor();
+
+        // Process the configuration
+        $config = $processor->process(new Config([]));
+        $this->assertEmpty($config->getTablesBlacklist());
+        $this->assertEmpty($config->getTablesWhitelist());
+        $this->assertEmpty($config->getTablesConfig());
+    }
+
+    /**
+     * Create a config processor object.
+     *
+     * @throws Exception
+     */
+    private function createConfigProcessor(): ConfigProcessor
+    {
+        $metadata = $this->getDatabase(DriversEnum::DRIVER_PGSQL)->getMetadata();
+
+        return new ConfigProcessor($metadata);
+    }
+}

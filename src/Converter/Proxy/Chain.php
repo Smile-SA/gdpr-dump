@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Converter\Proxy;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class Chain implements ConverterInterface
 {
@@ -17,6 +18,7 @@ class Chain implements ConverterInterface
 
     /**
      * @inheritdoc
+     * @throws ValidationException
      */
     public function setParameters(array $parameters): void
     {

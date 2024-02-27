@@ -3,7 +3,7 @@
 [![Latest Stable Version](https://poser.pugx.org/smile/gdpr-dump/v/stable)](https://packagist.org/packages/smile/gdpr-dump)
 ![Build Status](https://github.com/Smile-SA/gdpr-dump/workflows/Tests/badge.svg)
 
-This tool provides a command that dumps the contents of a MySQL database.
+This tool provides a command that dumps the contents of a MySQL and PostgresSql databases.
 
 It is the equivalent of mysqldump, with additional features, at the cost of performance (PHP implementation).
 The main purpose of this tool is to create anonymized dumps, in order to comply with GDPR regulations.

@@ -9,8 +9,11 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Exception;
 use Smile\GdprDump\Database\Driver\DriverInterface;
 use Smile\GdprDump\Database\Driver\MysqlDriver;
+use Smile\GdprDump\Database\Driver\PostgresqlDriver;
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Database\Metadata\MysqlMetadata;
+use Smile\GdprDump\Database\Metadata\PgsqlMetadata;
+use Smile\GdprDump\Enum\DriversEnum;
 use UnexpectedValueException;
 
 /**
@@ -24,8 +27,6 @@ use UnexpectedValueException;
  */
 class Database
 {
-    public const DRIVER_MYSQL = 'pdo_mysql';
-
     private Connection $connection;
     private DriverInterface $driver;
     private MetadataInterface $metadata;
@@ -42,11 +43,14 @@ class Database
         $driver = $this->connectionParams->get('driver');
 
         switch ($driver) {
-            case self::DRIVER_MYSQL:
+            case DriversEnum::DRIVER_MYSQL->value:
                 $this->driver = new MysqlDriver($this->connectionParams);
                 $this->metadata = new MysqlMetadata($this->connection);
                 break;
-
+            case DriversEnum::DRIVER_PGSQL->value:
+                $this->driver = new PostgresqlDriver($this->connectionParams);
+                $this->metadata = new PgsqlMetadata($this->connection);
+                break;
             default:
                 throw new UnexpectedValueException(sprintf('The database driver "%s" is not supported.', $driver));
         }

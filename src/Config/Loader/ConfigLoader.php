@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Config\Loader;
 use Exception;
 use Smile\GdprDump\Config\ConfigException;
 use Smile\GdprDump\Config\ConfigInterface;
+use Smile\GdprDump\Enum\DriversEnum;
 use Symfony\Component\Yaml\Yaml;
 
 class ConfigLoader implements ConfigLoaderInterface
@@ -16,7 +17,7 @@ class ConfigLoader implements ConfigLoaderInterface
      */
     private array $loadedTemplates = [];
 
-    public function __construct(private FileLocatorInterface $fileLocator)
+    public function __construct(private readonly FileLocatorInterface $fileLocator)
     {
     }
 

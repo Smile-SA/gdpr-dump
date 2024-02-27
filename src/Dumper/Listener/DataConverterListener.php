@@ -27,8 +27,8 @@ class DataConverterListener
     private array $skipConditions = [];
 
     public function __construct(
-        private ConverterBuilder $converterBuilder,
-        private ConditionBuilder $conditionBuilder
+        private readonly ConverterBuilder $converterBuilder,
+        private readonly ConditionBuilder $conditionBuilder
     ) {
     }
 
@@ -40,7 +40,7 @@ class DataConverterListener
         $this->buildConverters($event->getConfig());
 
         $this->context = $event->getContext();
-        $event->getDumper()->setTransformTableRowHook($this->getHook());
+        $event->getDumper() ->setTransformTableRowHook($this->getHook());
     }
 
     /**

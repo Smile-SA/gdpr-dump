@@ -1,7 +1,12 @@
-FROM php:8.1-cli-alpine
+FROM php:8.2-cli-alpine
 
 # Install required PHP extensions
 RUN docker-php-ext-install pdo_mysql
+RUN set -ex \
+  && apk --no-cache add \
+    postgresql-dev
+
+RUN docker-php-ext-install pdo pdo_pgsql
 
 # PHP configuration
 RUN ln -s $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini

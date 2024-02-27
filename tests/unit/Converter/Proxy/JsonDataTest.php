@@ -26,6 +26,7 @@ class JsonDataTest extends TestCase
 
         // Values that can't be decoded are returned as-is
         $value = $converter->convert(null);
+
         $this->assertNull($value);
 
         $value = $converter->convert($this->getJsonData());

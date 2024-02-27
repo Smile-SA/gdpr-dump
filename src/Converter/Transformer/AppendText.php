@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Converter\Transformer;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class AppendText implements ConverterInterface
 {
@@ -14,6 +15,7 @@ class AppendText implements ConverterInterface
 
     /**
      * @inheritdoc
+     * @throws ValidationException
      */
     public function setParameters(array $parameters): void
     {

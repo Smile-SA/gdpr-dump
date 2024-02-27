@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Generator;
 
+use Random\RandomException;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class RandomText implements ConverterInterface
 {
@@ -17,6 +19,7 @@ class RandomText implements ConverterInterface
 
     /**
      * @inheritdoc
+     * @throws ValidationException
      */
     public function setParameters(array $parameters): void
     {
@@ -34,14 +37,15 @@ class RandomText implements ConverterInterface
 
     /**
      * @inheritdoc
+     * @throws RandomException
      */
     public function convert(mixed $value, array $context = []): string
     {
         $result = '';
-        $length = mt_rand($this->minLength, $this->maxLength);
+        $length = random_int($this->minLength, $this->maxLength);
 
         for ($index = 0; $index < $length; $index++) {
-            $characterIndex = mt_rand(0, $this->charactersCount - 1);
+            $characterIndex = random_int(0, $this->charactersCount - 1);
             $result .= $this->characters[$characterIndex];
         }
 

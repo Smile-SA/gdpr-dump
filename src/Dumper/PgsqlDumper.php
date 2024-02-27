@@ -10,10 +10,10 @@ use Smile\GdprDump\Dumper\Config\ConfigProcessor;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
 use Smile\GdprDump\Enum\DriversEnum;
-use Spatie\DbDumper\Databases\MySql;
+use Spatie\DbDumper\Databases\PostgreSql;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-readonly class MysqlDumper implements DumperInterface
+readonly class PgsqlDumper implements DumperInterface
 {
     public function __construct(
         private DatabaseFactory $databaseFactory,
@@ -26,7 +26,7 @@ readonly class MysqlDumper implements DumperInterface
      */
     public function dump(ConfigInterface $config): void
     {
-        $database = $this->databaseFactory->create($config, DriversEnum::DRIVER_MYSQL->value);
+        $database = $this->databaseFactory->create($config, DriversEnum::DRIVER_PGSQL->value);
 
         // Process the configuration
         $processor = new ConfigProcessor($database->getMetadata());
@@ -44,12 +44,12 @@ readonly class MysqlDumper implements DumperInterface
         }
 
         // Create the MySQLDump-PHP object
-        $dumper = (new MySql())->setDatabaseUrl($database->getDriver()->getDsn());
+        $dumper = (new PostgreSql())->setDatabaseUrl($database->getDriver()->getDsn());
 
         $event = new DumpEvent($dumper, $database, $config, $context);
         $this->eventDispatcher->dispatch($event);
 
-        // Close the Doctrine connection before proceeding to the dump creation (MySQLDump-PHP uses its own connection)
+        // Close the Doctrine connection before proceeding to the dump creation (PgDump-PHP uses its own connection)
         $database->getConnection()->close();
 
         // Create the dump
@@ -67,7 +67,7 @@ readonly class MysqlDumper implements DumperInterface
         // Output setting is only used by our app
         unset($settings['output']);
 
-        // MySQLDump-PHP uses the '-' word separator for most settings
+        // PgSQLDump-PHP uses the '-' word separator for most settings
         foreach ($settings as $key => $value) {
             if ($key !== 'init_commands' && $key !== 'net_buffer_length') {
                 $newKey = str_replace('_', '-', $key);

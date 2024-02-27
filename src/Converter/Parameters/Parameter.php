@@ -13,10 +13,10 @@ class Parameter
     public const TYPE_ARRAY = 'array';
 
     public function __construct(
-        private string $name,
-        private string $type,
-        private bool $required = false,
-        private mixed $default = null
+        private readonly string $name,
+        private readonly string $type,
+        private readonly bool $required = false,
+        private readonly mixed $default = null
     ) {
     }
 

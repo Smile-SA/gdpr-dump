@@ -15,6 +15,7 @@ class Hash implements ConverterInterface
 
     /**
      * @inheritdoc
+     * @throws ValidationException
      */
     public function setParameters(array $parameters): void
     {

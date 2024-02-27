@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Database\Metadata\Definition\Constraint;
 
-class ForeignKey
+readonly class ForeignKey
 {
     /**
      * @param string[] $localColumns

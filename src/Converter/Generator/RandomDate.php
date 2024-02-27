@@ -23,6 +23,9 @@ class RandomDate implements ConverterInterface
         $this->date = new DateTime();
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -57,9 +60,9 @@ class RandomDate implements ConverterInterface
     {
         // Randomize the year, month and day
         $this->date->setDate(
-            mt_rand($this->minYear, $this->maxYear),
-            mt_rand(1, 12),
-            mt_rand(1, 31)
+            random_int($this->minYear, $this->maxYear),
+            random_int(1, 12),
+            random_int(1, 31)
         );
     }
 }

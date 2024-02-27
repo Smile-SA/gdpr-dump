@@ -22,12 +22,13 @@ class Faker implements ConverterInterface
      */
     private array $placeholders = [];
 
-    public function __construct(private FakerService $fakerService)
+    public function __construct(private readonly FakerService $fakerService)
     {
     }
 
     /**
      * @inheritdoc
+     * @throws ValidationException
      */
     public function setParameters(array $parameters): void
     {

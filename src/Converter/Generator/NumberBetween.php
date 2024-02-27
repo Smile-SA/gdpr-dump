@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Generator;
 
+use Random\RandomException;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
@@ -16,6 +17,7 @@ class NumberBetween implements ConverterInterface
 
     /**
      * @inheritdoc
+     * @throws ValidationException
      */
     public function setParameters(array $parameters): void
     {
@@ -34,9 +36,10 @@ class NumberBetween implements ConverterInterface
 
     /**
      * @inheritdoc
+     * @throws RandomException
      */
     public function convert(mixed $value, array $context = []): int
     {
-        return mt_rand($this->min, $this->max);
+        return random_int($this->min, $this->max);
     }
 }

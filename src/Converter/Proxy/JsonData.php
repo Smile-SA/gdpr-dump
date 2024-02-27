@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Converter\Proxy;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Util\ArrayHelper;
 
 class JsonData implements ConverterInterface
@@ -18,6 +19,7 @@ class JsonData implements ConverterInterface
 
     /**
      * @inheritdoc
+     * @throws ValidationException
      */
     public function setParameters(array $parameters): void
     {
@@ -33,8 +35,8 @@ class JsonData implements ConverterInterface
      */
     public function convert(mixed $value, array $context = []): mixed
     {
-        $decoded = json_decode((string) $value, true);
-        if (!is_array($decoded)) {
+        $decoded = \json_decode((string) $value, true);
+        if (is_array($decoded) === false) {
             return $value;
         }
 
@@ -52,6 +54,6 @@ class JsonData implements ConverterInterface
             ArrayHelper::setPath($decoded, $path, $nestedValue);
         }
 
-        return json_encode($decoded);
+        return \json_encode($decoded);
     }
 }

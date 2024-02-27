@@ -24,10 +24,10 @@ use Symfony\Component\Console\Question\Question;
 class DumpCommand extends Command
 {
     public function __construct(
-        private DumperInterface $dumper,
-        private ConfigLoaderInterface $configLoader,
-        private ValidatorInterface $validator,
-        private CompilerInterface $compiler
+        private readonly DumperInterface $dumper,
+        private readonly ConfigLoaderInterface $configLoader,
+        private readonly ValidatorInterface $validator,
+        private readonly CompilerInterface $compiler
     ) {
         parent::__construct();
     }

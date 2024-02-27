@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Functional;
 
+use Doctrine\DBAL\Exception;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use RuntimeException;
 use Smile\GdprDump\AppKernel;
+use Smile\GdprDump\Config\Compiler\CompileException;
 use Smile\GdprDump\Config\Compiler\CompilerInterface;
 use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Config\ConfigException;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
 use Smile\GdprDump\Database\Database;
+use Smile\GdprDump\Enum\DriversEnum;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class TestCase extends BaseTestCase
@@ -38,6 +42,8 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Get the DI container.
+     *
+     * @throws \Exception
      */
     protected static function getContainer(): ContainerInterface
     {
@@ -51,6 +57,9 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Get the dumper config.
+     *
+     * @throws CompileException|ConfigException
+     * @throws \Exception
      */
     protected static function getConfig(): ConfigInterface
     {
@@ -71,14 +80,17 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Get the database wrapper.
+     *
+     * @throws Exception
      */
-    protected static function getDatabase(): Database
+    protected static function getDatabase(DriversEnum $driverName): Database
     {
         if (self::$database === null) {
             $config = self::getConfig();
 
             // Initialize the shared connection
             $connectionParams = $config->get('database');
+            $connectionParams['driver'] = $driverName->value;
             $connectionParams['dbname'] = $connectionParams['name'];
             unset($connectionParams['name']);
             self::$database = new Database($connectionParams);

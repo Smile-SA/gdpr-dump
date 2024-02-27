@@ -84,7 +84,7 @@ class AppKernel
      */
     private function initErrorHandler(): void
     {
-        set_error_handler(function (int $severity, string $message, string $file, int $line): bool {
+        set_error_handler(static function (int $severity, string $message, string $file, int $line): bool {
             // Error was suppressed with the "@" operator
             if (error_reporting() === 0) {
                 return false;
@@ -100,6 +100,8 @@ class AppKernel
      * The container is not cached (cf. https://symfony.com/doc/6.2/components/dependency_injection/compilation.html#dumping-the-configuration-for-performance)
      * because the cache file would contain hardcoded paths (e.g. app_root).
      * It would prevent the phar file from working.
+     *
+     * @throws Exception
      */
     private function buildContainer(): ContainerInterface
     {

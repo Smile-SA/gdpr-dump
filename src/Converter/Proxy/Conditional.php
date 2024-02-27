@@ -16,12 +16,13 @@ class Conditional implements ConverterInterface
     private ?ConverterInterface $ifTrueConverter = null;
     private ?ConverterInterface $ifFalseConverter = null;
 
-    public function __construct(private ConditionBuilder $conditionBuilder)
+    public function __construct(private readonly ConditionBuilder $conditionBuilder)
     {
     }
 
     /**
      * @inheritdoc
+     * @throws ValidationException
      */
     public function setParameters(array $parameters): void
     {

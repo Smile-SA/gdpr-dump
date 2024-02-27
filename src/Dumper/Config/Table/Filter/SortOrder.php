@@ -16,7 +16,7 @@ class SortOrder
     /**
      * @throws UnexpectedValueException
      */
-    public function __construct(private string $column, string $direction = self::DIRECTION_ASC)
+    public function __construct(private readonly string $column, string $direction = self::DIRECTION_ASC)
     {
         $direction = strtoupper($direction);
 

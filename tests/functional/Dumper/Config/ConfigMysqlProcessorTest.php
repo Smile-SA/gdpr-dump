@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Functional\Dumper\Config;
 
+use Doctrine\DBAL\Exception;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
+use Smile\GdprDump\Enum\DriversEnum;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
-class ConfigProcessorTest extends TestCase
+class ConfigMysqlProcessorTest extends TestCase
 {
     /**
      * Test the table name resolution.
+     *
+     * @throws Exception
      */
     public function testTableNameResolution(): void
     {
@@ -38,6 +42,8 @@ class ConfigProcessorTest extends TestCase
 
     /**
      * Test the config processor behavior with an empty configuration.
+     *
+     * @throws Exception
      */
     public function testWithEmptyConfig(): void
     {
@@ -53,10 +59,12 @@ class ConfigProcessorTest extends TestCase
 
     /**
      * Create a config processor object.
+     *
+     * @throws Exception
      */
     private function createConfigProcessor(): ConfigProcessor
     {
-        $metadata = $this->getDatabase()->getMetadata();
+        $metadata = $this->getDatabase(DriversEnum::DRIVER_MYSQL)->getMetadata();
 
         return new ConfigProcessor($metadata);
     }

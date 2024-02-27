@@ -12,8 +12,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CompileCommand extends Command
 {
-    public function __construct(private Compiler $compiler, private string $defaultLocale)
-    {
+    public function __construct(
+        private readonly Compiler $compiler,
+        private readonly string $defaultLocale,
+    ) {
         parent::__construct();
     }
 

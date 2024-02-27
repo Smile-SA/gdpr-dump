@@ -30,7 +30,7 @@ class JsonSchemaValidator implements ValidatorInterface
 
         // Automatically convert associative arrays to stdClass (required for object validation)
         if (is_array($data)) {
-            $data = json_decode((string) json_encode($data));
+            $data = \json_decode((string) \json_encode($data));
         }
 
         // Validate the data against the schema file

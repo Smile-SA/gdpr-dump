@@ -25,7 +25,7 @@ class JsonSchemaValidatorTest extends TestCase
     /**
      * Test the database settings.
      */
-    public function testDatabaseSettings(): void
+    public function tesMysqltDatabaseSettings(): void
     {
         $data = $this->prepareData([
             'database' => [
@@ -35,6 +35,37 @@ class JsonSchemaValidatorTest extends TestCase
                 'host' => 'myhost',
                 'port' => '3306',
                 'driver' => 'pdo_mysql',
+                'charset' => 'utf8mb',
+                'driver_options' => [
+                    PDO::MYSQL_ATTR_LOCAL_INFILE => true,
+                ],
+            ],
+        ]);
+        $this->assertDataIsValid($data);
+
+        // Check if the validation fails when an invalid driver is used
+        $data = $this->prepareData(['database' => ['driver' => 'not_exists']]);
+        $this->assertDataIsNotValid($data);
+
+        // Check if the validation fails when an unknown parameter is used
+        $data = $this->prepareData(['database' => ['not_exists' => true]]);
+        $this->assertDataIsNotValid($data);
+
+        // Check if the validation fails when a parameter has the wrong type
+        $data = $this->prepareData(['database' => ['charset' => 1.5]]);
+        $this->assertDataIsNotValid($data);
+    }
+
+    public function testPgSqlDatabaseSettings(): void
+    {
+        $data = $this->prepareData([
+            'database' => [
+                'name' => 'mydb',
+                'user' => 'myuser',
+                'password' => 'mypassword',
+                'host' => 'myhost',
+                'port' => '3306',
+                'driver' => 'pdo_pgsql',
                 'charset' => 'utf8mb',
                 'driver_options' => [
                     PDO::MYSQL_ATTR_LOCAL_INFILE => true,

@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Converter\Anonymizer;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class AnonymizeNumber implements ConverterInterface
 {
@@ -22,6 +23,7 @@ class AnonymizeNumber implements ConverterInterface
 
     /**
      * @inheritdoc
+     * @throws ValidationException
      */
     public function setParameters(array $parameters): void
     {

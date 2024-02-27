@@ -36,14 +36,21 @@ class ParameterBagTest extends TestCase
      */
     public function testDefaultValues(): void
     {
-        $bag = new ParameterBag(['dbname' => 'test']);
-
-        $this->assertSame('pdo_mysql', $bag->get('driver'));
+        $bag = new ParameterBag(['dbname' => 'test', 'driver' => 'pdo_mysql']);
         $this->assertSame('test', $bag->get('dbname'));
         $this->assertSame('localhost', $bag->get('host'));
         $this->assertNull($bag->get('port'));
         $this->assertSame('root', $bag->get('user'));
         $this->assertNull($bag->get('driverOptions'));
+    }
+
+    /**
+     * Test the default values of the database config.
+     */
+    public function testDriverIsMissing(): void
+    {
+        $this->expectException(UnexpectedValueException::class);
+         new ParameterBag(['dbname' => 'test']);
     }
 
     /**

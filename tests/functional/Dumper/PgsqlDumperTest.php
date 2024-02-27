@@ -6,11 +6,11 @@ namespace Smile\GdprDump\Tests\Functional\Dumper;
 
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Dumper\DumperInterface;
-use Smile\GdprDump\Dumper\MysqlDumper;
+use Smile\GdprDump\Dumper\PgsqlDumper;
 use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
-class MysqlDumperTest extends TestCase
+class PgsqlDumperTest extends TestCase
 {
     private string $dumpFile;
 
@@ -68,10 +68,10 @@ class MysqlDumperTest extends TestCase
         $this->assertNotEmpty($output);
 
         // Assert that only whitelisted tables are included in the dump
-        $this->assertStringContainsString('CREATE TABLE `customers`', $output);
-        $this->assertStringContainsString('CREATE TABLE `stores`', $output);
-        $this->assertStringContainsString('CREATE TABLE `addresses`', $output);
-        $this->assertStringNotContainsString('CREATE TABLE `config`', $output);
+        $this->assertStringContainsString('CREATE TABLE customers', $output);
+        $this->assertStringContainsString('CREATE TABLE  stores', $output);
+        $this->assertStringContainsString('CREATE TABLE addresses', $output);
+        $this->assertStringNotContainsString('CREATE TABLE config', $output);
 
         // store3 must not be included in the dump
         $this->assertStringContainsString('store1', $output);
@@ -147,7 +147,7 @@ class MysqlDumperTest extends TestCase
      */
     private function createDumper(): DumperInterface
     {
-        /** @var MysqlDumper $dumper */
+        /** @var PgsqlDumper $dumper */
         $dumper = $this->getContainer()->get('dumper');
 
         return $dumper;

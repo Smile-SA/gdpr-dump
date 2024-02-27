@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Converter\Randomizer;
 
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class RandomizeEmail extends RandomizeText
 {
@@ -18,6 +19,7 @@ class RandomizeEmail extends RandomizeText
 
     /**
      * @inheritdoc
+     * @throws ValidationException
      */
     public function setParameters(array $parameters): void
     {
@@ -50,7 +52,7 @@ class RandomizeEmail extends RandomizeText
         }
 
         // Replace the email domain
-        $index = mt_rand(0, $this->domainsCount - 1);
+        $index = random_int(0, $this->domainsCount - 1);
         $value .= '@' . $this->domains[$index];
 
         return $value;

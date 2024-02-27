@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Functional\Database\Metadata;
 
+use Doctrine\DBAL\Exception;
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Database\Metadata\MysqlMetadata;
 use Smile\GdprDump\Enum\DriversEnum;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
-class MysqlMetadataTest extends TestCase
+class PgsqlMetadataTest extends TestCase
 {
     /**
      * Test the "getTableNames" method.
+     *
+     * @throws Exception
      */
     public function testTableNames(): void
     {
@@ -22,6 +25,8 @@ class MysqlMetadataTest extends TestCase
 
     /**
      * Test the "getForeignKeys" method.
+     *
+     * @throws Exception
      */
     public function testForeignKeys(): void
     {
@@ -96,10 +101,12 @@ class MysqlMetadataTest extends TestCase
 
     /**
      * Get the metadata object.
+     *
+     * @throws Exception
      */
     private function getMetadata(): MysqlMetadata
     {
-        $connection = self::getDatabase(DriversEnum::DRIVER_MYSQL)->getConnection();
+        $connection = self::getDatabase(DriversEnum::DRIVER_PGSQL)->getConnection();
 
         return new MysqlMetadata($connection);
     }

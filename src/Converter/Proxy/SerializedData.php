@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Converter\Proxy;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Util\ArrayHelper;
 
 class SerializedData implements ConverterInterface
@@ -18,6 +19,7 @@ class SerializedData implements ConverterInterface
 
     /**
      * @inheritdoc
+     * @throws ValidationException
      */
     public function setParameters(array $parameters): void
     {

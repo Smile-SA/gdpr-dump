@@ -9,7 +9,7 @@ use Smile\GdprDump\Faker\FakerService;
 
 class FakerLocaleListener
 {
-    public function __construct(private FakerService $fakerService)
+    public function __construct(private readonly FakerService $fakerService)
     {
     }
 

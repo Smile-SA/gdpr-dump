@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter\Anonymizer;
 
 use DateTime;
+use Random\RandomException;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use UnexpectedValueException;
 
 class AnonymizeDate implements ConverterInterface
@@ -17,6 +19,7 @@ class AnonymizeDate implements ConverterInterface
 
     /**
      * @inheritdoc
+     * @throws ValidationException
      */
     public function setParameters(array $parameters): void
     {
@@ -50,6 +53,8 @@ class AnonymizeDate implements ConverterInterface
 
     /**
      * Anonymize the date.
+     *
+     * @throws RandomException
      */
     private function anonymizeDate(DateTime $date): void
     {
@@ -60,8 +65,8 @@ class AnonymizeDate implements ConverterInterface
 
         // Randomize the month and day
         do {
-            $randomMonth = mt_rand(1, 12);
-            $randomDay = mt_rand(1, 31);
+            $randomMonth = random_int(1, 12);
+            $randomDay = random_int(1, 31);
         } while ($randomMonth === $month && $randomDay === $day);
 
         // Replace the values

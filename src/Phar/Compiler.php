@@ -23,7 +23,7 @@ class Compiler
     /**
      * @param MinifierInterface[] $minifiers
      */
-    public function __construct(private iterable $minifiers = [])
+    public function __construct(private readonly iterable $minifiers = [])
     {
         $this->basePath = dirname(__DIR__, 2);
     }
@@ -132,7 +132,7 @@ class Compiler
         $pos = strpos($realPath, $pathPrefix);
         $relativePath = $pos !== false ? substr_replace($realPath, '', $pos, strlen($pathPrefix)) : $realPath;
 
-        return strtr($relativePath, '\\', '/');
+        return str_replace('\\', '/', $relativePath);
     }
 
     /**

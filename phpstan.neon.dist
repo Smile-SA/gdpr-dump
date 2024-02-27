@@ -11,6 +11,9 @@ parameters:
             # False positive
             message: '#Cannot call method [a-zA-Z]+\(\) on Smile\\GdprDump\\Database\\Metadata\\Definition\\Constraint\\ForeignKey#'
             path: tests/functional/Database/Metadata/MysqlMetadataTest.php
+        - # False positive
+            message: '#Cannot call method [a-zA-Z]+\(\) on Smile\\GdprDump\\Database\\Metadata\\Definition\\Constraint\\ForeignKey#'
+            path: tests/functional/Database/Metadata/PgsqlMetadataTest.php
 
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon

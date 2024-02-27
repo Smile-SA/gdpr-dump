@@ -69,9 +69,9 @@ class TableFilterListener
 
             // Add where conditions on the parent tables that also have active filters
             if (
-                $this->config->isFilterPropagationEnabled()
+                array_key_exists($tableName, $dependencies)
+                && $this->config->isFilterPropagationEnabled()
                 && $queryBuilder->getMaxResults() !== 0
-                && array_key_exists($tableName, $dependencies)
             ) {
                 $this->addDependentFilter($tableName, $queryBuilder, $dependencies);
             }

@@ -7,14 +7,15 @@ services:
                 APP_GID: '${GID}'
         environment:
             COMPOSER_AUTH: '${COMPOSER_AUTH:-}'
-            DB_HOST: 'db'
+            DB_HOST: 'mysql'
         depends_on:
-            - 'db'
+            - 'mysql'
+            - 'postgres'
         volumes:
             - '.:/var/www/html:rw,cached'
             - 'composer:/home/www/.composer'
 
-    db:
+    mysql:
         image: 'mariadb:10.6'
         ports:
             - 3306
@@ -26,7 +27,16 @@ services:
         volumes:
             - 'db-data:/var/lib/mysql'
             - './docker/db-data:/docker-entrypoint-initdb.d'
-
+    postgres:
+        image: 'postgres:16-alpine'
+        ports:
+            - '5432:5432'
+        volumes:
+            - ~/apps/postgres:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_PASSWORD=tests
+            - POSTGRES_USER=tests
+            - POSTGRES_DB=tests
 volumes:
     composer:
     db-data:

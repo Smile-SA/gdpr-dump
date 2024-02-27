@@ -13,7 +13,7 @@ class RandomizeNumber implements ConverterInterface
 
     public function __construct()
     {
-        $this->replaceCallback = fn () => (string) mt_rand(0, 9);
+        $this->replaceCallback = static fn () => (string) random_int(0, 9);
     }
 
     /**

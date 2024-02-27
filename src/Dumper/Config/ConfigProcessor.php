@@ -68,11 +68,18 @@ class ConfigProcessor
         foreach ($tableNames as $tableName) {
             $matches = $this->findTablesByName((string) $tableName);
             if (!empty($matches)) {
-                $resolved = array_merge($resolved, $matches);
+                $resolved[] = $matches;
             }
         }
 
-        return array_unique($resolved);
+        $merged = [];
+        foreach ($resolved as $matches) {
+            foreach ($matches as $match) {
+                $merged[] = $match;
+            }
+        }
+
+        return array_unique($merged);
     }
 
     /**

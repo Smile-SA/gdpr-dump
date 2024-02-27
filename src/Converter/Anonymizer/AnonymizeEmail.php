@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 
 class AnonymizeEmail extends AnonymizeText
 {
@@ -18,6 +19,7 @@ class AnonymizeEmail extends AnonymizeText
 
     /**
      * @inheritdoc
+     * @throws ValidationException
      */
     public function setParameters(array $parameters): void
     {

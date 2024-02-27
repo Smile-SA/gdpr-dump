@@ -8,6 +8,7 @@ class Json implements MinifierInterface
 {
     /**
      * @inheritdoc
+     * @throws \JsonException
      */
     public function minify(string $contents): string
     {
