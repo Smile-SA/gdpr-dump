@@ -27,6 +27,16 @@ class ConditionBuilderTest extends TestCase
     }
 
     /**
+     * Assert that using an allowed function does not result in a thrown exception.
+     */
+    public function testAllowedFunctions(): void
+    {
+        $this->expectNotToPerformAssertions();
+        $builder = new ConditionBuilder();
+        $builder->build('strpos({{email}}, "@acme.fr") !== false');
+    }
+
+    /**
      * Assert that an exception is thrown when an empty condition is specified.
      */
     public function testErrorOnEmptyCondition(): void
@@ -67,6 +77,26 @@ class ConditionBuilderTest extends TestCase
     }
 
     /**
+     * Assert that an exception is thrown when the condition contains a forbidden function.
+     */
+    public function testErrorOnForbiddenFunction(): void
+    {
+        $builder = new ConditionBuilder();
+        $this->expectException(RuntimeException::class);
+        $builder->build('usleep(1000)');
+    }
+
+    /**
+     * Assert that an exception is thrown when the condition contains a forbidden function enclosed in quotes.
+     */
+    public function testErrorOnForbiddenStringFunction(): void
+    {
+        $builder = new ConditionBuilder();
+        $this->expectException(RuntimeException::class);
+        $builder->build('\'usleep\'(1000)');
+    }
+
+    /**
      * Assert that an exception is thrown when the condition contains a static function call.
      */
     public function testErrorOnStaticFunction(): void
@@ -77,12 +107,12 @@ class ConditionBuilderTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when the condition contains a forbidden function.
+     * Assert that an exception is thrown when the condition contains a static function call enclosed in quotes.
      */
-    public function testErrorOnBlacklistedFunction(): void
+    public function testErrorOnStringStaticFunction(): void
     {
         $builder = new ConditionBuilder();
         $this->expectException(RuntimeException::class);
-        $builder->build('usleep(1000)');
+        $builder->build('\'ArrayHelper\'::getPath(\'id\') === 1');
     }
 }
