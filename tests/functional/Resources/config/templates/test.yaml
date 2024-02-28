@@ -26,9 +26,7 @@ tables:
             - ['store_id', 'in', [1, 2]]
 
     customers:
-        filters:
-            - ['email', 'like', '%@test.org']
-            - ['created_at', 'gt', 'expr: date_sub(now(), interval 55 day)']
+        where: 'email like "%@test.org" and created_at > date_sub(now(), interval 55 day)'
         converters:
             email:
                 converter: 'prependText'

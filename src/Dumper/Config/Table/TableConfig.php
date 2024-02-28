@@ -6,16 +6,20 @@ namespace Smile\GdprDump\Dumper\Config\Table;
 
 use Smile\GdprDump\Dumper\Config\Table\Filter\Filter;
 use Smile\GdprDump\Dumper\Config\Table\Filter\SortOrder;
+use Smile\GdprDump\Dumper\Config\Validation\WhereExprValidator;
 use UnexpectedValueException;
 
 class TableConfig
 {
+    private WhereExprValidator $whereExprValidator;
     private string $name;
+    private ?string $where = null;
     private ?int $limit = null;
     private array $converters = [];
     private string $skipCondition = '';
 
     /**
+     * @deprecated
      * @var Filter[]
      */
     private array $filters = [];
@@ -27,6 +31,7 @@ class TableConfig
 
     public function __construct(string $tableName, array $tableConfig)
     {
+        $this->whereExprValidator = new WhereExprValidator();
         $this->name = $tableName;
         $this->prepareConfig($tableConfig);
     }
@@ -42,11 +47,20 @@ class TableConfig
     /**
      * Get the filters.
      *
+     * @deprecated
      * @return Filter[]
      */
     public function getFilters(): array
     {
         return $this->filters;
+    }
+
+    /**
+     * Get the where condition.
+     */
+    public function getWhereCondition(): ?string
+    {
+        return $this->where;
     }
 
     /**
@@ -77,10 +91,20 @@ class TableConfig
 
     /**
      * Check if there is data to filter.
+     *
+     * @deprecated
      */
     public function hasFilter(): bool
     {
         return !empty($this->filters);
+    }
+
+    /**
+     * Check if there is data to filter (with `where` param).
+     */
+    public function hasWhereCondition(): bool
+    {
+        return $this->where !== null;
     }
 
     /**
@@ -124,10 +148,18 @@ class TableConfig
      */
     private function prepareFilters(array $tableData): void
     {
+        // Old way of declaring table filters (`filters` parameter)
         if (isset($tableData['filters'])) {
             foreach ($tableData['filters'] as $filter) {
                 $this->filters[] = new Filter((string) $filter[0], (string) $filter[1], $filter[2] ?? null);
             }
+        }
+
+        // New way of declaring table filters (`where` parameter)
+        if (isset($tableData['where'])) {
+            $whereCondition = (string) $tableData['where'];
+            $this->whereExprValidator->validate($whereCondition);
+            $this->where = $whereCondition;
         }
     }
 

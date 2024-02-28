@@ -6,6 +6,9 @@ namespace Smile\GdprDump\Dumper\Config\Table\Filter;
 
 use UnexpectedValueException;
 
+/**
+ * @deprecated
+ */
 class Filter
 {
     public const OPERATOR_EQ = 'eq';

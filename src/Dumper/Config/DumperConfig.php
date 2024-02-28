@@ -13,6 +13,9 @@ use UnexpectedValueException;
 
 class DumperConfig
 {
+    private QueryValidator $selectQueryValidator;
+    private QueryValidator $initCommandQueryValidator;
+
     /**
      * @var TableConfig[]
      */
@@ -90,6 +93,8 @@ class DumperConfig
      */
     public function __construct(ConfigInterface $config)
     {
+        $this->selectQueryValidator = new QueryValidator(['select']);
+        $this->initCommandQueryValidator = new QueryValidator(['set']);
         $this->prepareConfig($config);
     }
 
@@ -260,6 +265,11 @@ class DumperConfig
             $this->dumpSettings[$param] = $value;
         }
 
+        // Validate init_commands
+        foreach ($this->dumpSettings['init_commands'] as $query) {
+            $this->initCommandQueryValidator->validate($query);
+        }
+
         // Replace {...} by the current date in dump output
         $this->dumpSettings['output'] = preg_replace_callback(
             '/{([^}]+)}/',
@@ -327,7 +337,7 @@ class DumperConfig
                 $this->tablesToSort[] = $tableConfig->getName();
             }
 
-            if ($tableConfig->hasFilter() || $tableConfig->hasLimit()) {
+            if ($tableConfig->hasWhereCondition() || $tableConfig->hasFilter() || $tableConfig->hasLimit()) {
                 $this->tablesToFilter[] = $tableConfig->getName();
             }
         }
@@ -338,11 +348,10 @@ class DumperConfig
      */
     private function prepareVarQueries(ConfigInterface $config): void
     {
-        $queryValidator = new QueryValidator();
         $this->varQueries = $config->get('variables', []);
 
         foreach ($this->varQueries as $index => $query) {
-            $queryValidator->validate($query);
+            $this->selectQueryValidator->validate($query);
             $this->varQueries[$index] = (string) $query;
         }
     }
