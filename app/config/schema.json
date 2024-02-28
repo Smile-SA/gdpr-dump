@@ -239,6 +239,9 @@
                 "skip_conversion_if": {
                     "type": ["string", "number"]
                 },
+                "where": {
+                    "type": ["string"]
+                },
                 "filters": {
                     "type": "array",
                     "items": {

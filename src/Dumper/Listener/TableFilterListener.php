@@ -176,40 +176,17 @@ class TableFilterListener
         $queryBuilder->select('*')
             ->from($this->connection->quoteIdentifier($tableName));
 
-        // Get the table configuration
         $tableConfig = $this->config->getTableConfig($tableName);
-        if ($tableConfig !== null) {
-            $this->applyTableConfigToQueryBuilder($queryBuilder, $tableConfig);
+        if ($tableConfig === null) {
+            return $queryBuilder;
         }
 
-        return $queryBuilder;
-    }
+        // Apply where condition (old deprecated syntax with `filters` parameter)
+        $this->applyFiltersToQueryBuilder($queryBuilder, $tableConfig);
 
-    /**
-     * Apply a table configuration to a query builder.
-     *
-     * @throws RuntimeException
-     */
-    private function applyTableConfigToQueryBuilder(QueryBuilder $queryBuilder, TableConfig $tableConfig): void
-    {
-        // Apply filters
-        foreach ($tableConfig->getFilters() as $filter) {
-            $value = $this->getFilterValue($filter);
-            $callable = [$queryBuilder->expr(), $filter->getOperator()];
-
-            // Filter operators must match the method names of the Doctrine expression builder
-            if (!is_callable($callable)) {
-                throw new RuntimeException(
-                    sprintf('The doctrine expression builder does not implement "%s".', $filter->getOperator())
-                );
-            }
-
-            $whereExpr = call_user_func_array(
-                $callable,
-                [$this->getFilterColumn($filter), $value]
-            );
-
-            $queryBuilder->andWhere($whereExpr);
+        // Apply where condition (wrap the condition with brackets to prevent SQL injection)
+        if ($tableConfig->hasWhereCondition()) {
+            $queryBuilder->andWhere(sprintf('(%s)', $tableConfig->getWhereCondition()));
         }
 
         // Apply sort orders
@@ -221,9 +198,35 @@ class TableFilterListener
         }
 
         // Apply limit
-        $limit = $tableConfig->getLimit();
-        if ($limit !== null) {
-            $queryBuilder->setMaxResults($limit);
+        if ($tableConfig->hasLimit()) {
+            $queryBuilder->setMaxResults($tableConfig->getLimit());
+        }
+
+        return $queryBuilder;
+    }
+
+    /**
+     * Apply filters to a query builder.
+     *
+     * @deprecated
+     * @throws RuntimeException
+     */
+    private function applyFiltersToQueryBuilder(QueryBuilder $queryBuilder, TableConfig $tableConfig): void
+    {
+        // Apply filters (deprecated)
+        foreach ($tableConfig->getFilters() as $filter) {
+            $value = $this->getFilterValue($filter);
+            $callable = [$queryBuilder->expr(), $filter->getOperator()];
+
+            // Filter operators must match the method names of the Doctrine expression builder
+            if (!is_callable($callable)) {
+                throw new RuntimeException(
+                    sprintf('The doctrine expression builder does not implement "%s".', $filter->getOperator())
+                );
+            }
+
+            $whereExpr = call_user_func_array($callable, [$this->getFilterColumn($filter), $value]);
+            $queryBuilder->andWhere($whereExpr);
         }
     }
 
@@ -249,10 +252,9 @@ class TableFilterListener
     /**
      * Get the query as SQL, starting from the WHERE clause.
      */
-    public function getWhereSql(QueryBuilder $queryBuilder): string
+    private function getWhereSql(QueryBuilder $queryBuilder): string
     {
         $wherePart = $queryBuilder->getQueryPart('where');
-
         if (empty($wherePart)) {
             $queryBuilder->where(1);
         }
@@ -265,6 +267,8 @@ class TableFilterListener
     /**
      * Get a filter column.
      * If it was prefixed with `expr:`, returns the raw SQL statement instead of a quoted identifier.
+     *
+     * @deprecated
      */
     private function getFilterColumn(Filter $filter): string
     {
@@ -278,6 +282,7 @@ class TableFilterListener
      * Get a filter value.
      * If it was prefixed with `expr:`, returns the raw SQL statement instead of a quoted value.
      *
+     * @deprecated
      * @throws UnexpectedValueException
      */
     private function getFilterValue(Filter $filter): mixed
@@ -299,6 +304,7 @@ class TableFilterListener
      * Quote a value so that it can be safely injected in a SQL query
      * (we can't use query params because Mysqldump library doesn't allow it).
      *
+     * @deprecated
      * @throws UnexpectedValueException
      */
     private function quoteValue(mixed $value): mixed

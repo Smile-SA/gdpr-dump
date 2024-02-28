@@ -105,15 +105,8 @@
             <property name="linesCountBetweenDescriptionAndAnnotations" value="1"/>
             <property name="linesCountBetweenAnnotationsGroups" value="1"/>
             <property name="annotationsGroups" type="array">
-                <element value="
-                        @internal,
-                        @deprecated,
-                    "/>
-                <element value="
-                        @param\,
-                        @return\,
-                        @throws\,
-                    "/>
+                <element value="@inheritdoc"/>
+                <element value="@internal,@deprecated,@var,@param,@return,@throws"/>
             </property>
         </properties>
     </rule>

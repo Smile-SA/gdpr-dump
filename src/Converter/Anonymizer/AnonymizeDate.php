@@ -29,6 +29,7 @@ class AnonymizeDate implements ConverterInterface
 
     /**
      * @inheritdoc
+     *
      * @throws UnexpectedValueException
      */
     public function convert(mixed $value, array $context = []): string

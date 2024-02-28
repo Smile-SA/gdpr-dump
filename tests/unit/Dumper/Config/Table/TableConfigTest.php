@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Dumper\Config\Table;
 
 use Smile\GdprDump\Dumper\Config\Table\Filter\Filter;
 use Smile\GdprDump\Dumper\Config\Table\TableConfig;
+use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use UnexpectedValueException;
 
@@ -75,7 +76,45 @@ class TableConfigTest extends TestCase
     }
 
     /**
-     * Test the "filter" parameter.
+     * Test the "where" parameter.
+     */
+    public function testWhereCondition(): void
+    {
+        $condition = 'customer_id = 1';
+        $config = new TableConfig('table1', [
+            'where' => $condition,
+        ]);
+
+        $this->assertSame($condition, $config->getWhereCondition());
+        $this->assertTrue($config->hasWhereCondition());
+    }
+
+    /**
+     * Assert that an exception is thrown when a where condition contains disallowed statements.
+     */
+    public function testWhereConditionWithDisallowedStatement(): void
+    {
+        $this->expectException(ValidationException::class);
+        new TableConfig('table1', [
+            'where' => 'drop database example',
+        ]);
+    }
+
+    /**
+     * Assert that an exception is thrown when a where condition is terminated early.
+     */
+    public function testWhereConditionWithUnmatchedClosingBracket(): void
+    {
+        $this->expectException(ValidationException::class);
+        new TableConfig('table1', [
+            'where' => '1); select * from customer where (1',
+        ]);
+    }
+
+    /**
+     * Test the "filters" parameter.
+     *
+     * @deprecated
      */
     public function testFilter(): void
     {
