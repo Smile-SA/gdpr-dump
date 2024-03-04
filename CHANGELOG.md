@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Write dump information and dump progress bar to stderr when verbose mode is enabled ([#113](https://github.com/Smile-SA/gdpr-dump/pull/113))
+- Better converter condition validation by using a php tokenizer ([#114](https://github.com/Smile-SA/gdpr-dump/pull/114))
+
 ## [4.1.1] - 2024-02-20
 [4.1.1]: https://github.com/Smile-SA/gdpr-dump/compare/4.1.0...4.1.1
 
