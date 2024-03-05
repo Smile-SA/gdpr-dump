@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Use a readonly connection to create the dump ([#121](https://github.com/Smile-SA/gdpr-dump/pull/121))
+
 ## [4.2.0] - 2024-03-05
 [4.2.0]: https://github.com/Smile-SA/gdpr-dump/compare/4.1.1...4.2.0
 
