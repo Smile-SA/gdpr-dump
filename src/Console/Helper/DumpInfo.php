@@ -176,6 +176,8 @@ class DumpInfo
      */
     private function formatRowCount(int $rowCount): string
     {
-        return $rowCount > 1 ? sprintf('%d rows', $rowCount) : sprintf('%d row', $rowCount);
+        $formatted = number_format($rowCount, 0, '.', ' ');
+
+        return $rowCount > 1 ? $formatted . ' rows' : $formatted . ' row';
     }
 }
