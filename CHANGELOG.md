@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [4.2.0] - 2024-03-05
+[4.2.0]: https://github.com/Smile-SA/gdpr-dump/compare/4.1.1...4.2.0
 
 - Drastically improved dump performance ([#117](https://github.com/Smile-SA/gdpr-dump/pull/117))
 - Added `where` parameter and deprecated `filters` parameter ([#116](https://github.com/Smile-SA/gdpr-dump/pull/116))
@@ -11,7 +12,7 @@ All notable changes to this project will be documented in this file.
 
 **WARNING**: the `filters` parameter is now **deprecated**.
 It will be removed in the next major version.
-Use the parameter `where` instead to apply table filters.
+Use the `where` parameter instead to apply table filters.
 
 ## [4.1.1] - 2024-02-20
 [4.1.1]: https://github.com/Smile-SA/gdpr-dump/compare/4.1.0...4.1.1
