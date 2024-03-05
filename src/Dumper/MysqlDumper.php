@@ -90,6 +90,9 @@ class MysqlDumper implements DumperInterface
         $settings['exclude-tables'] = $config->getTablesBlacklist();
         $settings['no-data'] = $config->getTablesToTruncate();
 
+        // Set readonly session
+        $settings['init_commands'][] = 'SET SESSION TRANSACTION READ ONLY';
+
         return $settings;
     }
 }
