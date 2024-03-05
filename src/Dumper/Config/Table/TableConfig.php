@@ -156,8 +156,8 @@ class TableConfig
         }
 
         // New way of declaring table filters (`where` parameter)
-        if (isset($tableData['where'])) {
-            $whereCondition = (string) $tableData['where'];
+        $whereCondition = (string) ($tableData['where'] ?? '');
+        if ($whereCondition !== '') {
             $this->whereExprValidator->validate($whereCondition);
             $this->where = $whereCondition;
         }
