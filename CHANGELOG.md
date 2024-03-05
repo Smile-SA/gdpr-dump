@@ -4,10 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
+- Drastically improved dump performance ([#117](https://github.com/Smile-SA/gdpr-dump/pull/117))
+- Added `where` parameter and deprecated `filters` parameter ([#116](https://github.com/Smile-SA/gdpr-dump/pull/116))
 - Write dump information and dump progress bar to stderr when verbose mode is enabled ([#113](https://github.com/Smile-SA/gdpr-dump/pull/113))
 - Better converter condition validation by using a php tokenizer ([#114](https://github.com/Smile-SA/gdpr-dump/pull/114))
-- Upgraded druidfi/mysqldump-php version from `^1.0` to `^1.1` ([#117](https://github.com/Smile-SA/gdpr-dump/pull/117)) because the value returned by `setInfoHook` has changed.
-  The version 1.1.0 also drastically improve dump performance (more than x2 in most situations)
+
+**WARNING**: the `filters` parameter is now **deprecated**.
+It will be removed in the next major version.
+Use the parameter `where` instead to apply table filters.
 
 ## [4.1.1] - 2024-02-20
 [4.1.1]: https://github.com/Smile-SA/gdpr-dump/compare/4.1.0...4.1.1
