@@ -31,9 +31,11 @@ class ConfigProcessorTest extends TestCase
         // Check if the table names were resolved
         $this->assertSame(['customers'], $config->getTablesWhitelist());
         $this->assertSame(['stores'], $config->getTablesBlacklist());
-        $this->assertArrayHasKey('customers', $config->getTablesConfig());
-        $this->assertArrayNotHasKey('cust*', $config->getTablesConfig());
-        $this->assertArrayNotHasKey('notExist*', $config->getTablesConfig());
+
+        $tablesConfig = $config->getTablesConfig()->all();
+        $this->assertArrayHasKey('customers', $tablesConfig);
+        $this->assertArrayNotHasKey('cust*', $tablesConfig);
+        $this->assertArrayNotHasKey('notExist*', $tablesConfig);
     }
 
     /**
@@ -48,7 +50,7 @@ class ConfigProcessorTest extends TestCase
         $config = $processor->process(new Config([]));
         $this->assertEmpty($config->getTablesBlacklist());
         $this->assertEmpty($config->getTablesWhitelist());
-        $this->assertEmpty($config->getTablesConfig());
+        $this->assertEmpty($config->getTablesConfig()->all());
     }
 
     /**

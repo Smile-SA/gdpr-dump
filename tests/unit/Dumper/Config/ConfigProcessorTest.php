@@ -28,7 +28,7 @@ class ConfigProcessorTest extends TestCase
 
         $this->assertSame(['table1'], $config->getTablesBlacklist());
         $this->assertSame(['table2'], $config->getTablesWhitelist());
-        $this->assertSame(['table3'], array_keys($config->getTablesConfig()));
+        $this->assertSame(['table3'], array_keys($config->getTablesConfig()->all()));
     }
 
     /**
@@ -48,7 +48,7 @@ class ConfigProcessorTest extends TestCase
 
         $this->assertSame(['table1', 'table2', 'table3'], $config->getTablesBlacklist());
         $this->assertSame(['table1', 'table2', 'table3'], $config->getTablesWhitelist());
-        $this->assertSame(['table1', 'table2', 'table3'], array_keys($config->getTablesConfig()));
+        $this->assertSame(['table1', 'table2', 'table3'], array_keys($config->getTablesConfig()->all()));
     }
 
     /**
@@ -62,7 +62,7 @@ class ConfigProcessorTest extends TestCase
 
         $this->assertSame([], $config->getTablesBlacklist());
         $this->assertSame([], $config->getTablesWhitelist());
-        $this->assertSame([], $config->getTablesConfig());
+        $this->assertSame([], $config->getTablesConfig()->all());
     }
 
     /**

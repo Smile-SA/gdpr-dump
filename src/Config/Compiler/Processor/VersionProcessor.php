@@ -11,7 +11,7 @@ use Smile\GdprDump\Config\ConfigInterface;
 class VersionProcessor implements ProcessorInterface
 {
     /**
-     * @inheritdoc
+     * Process the "if_version" parameter.
      */
     public function process(ConfigInterface $config): void
     {

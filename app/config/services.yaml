@@ -69,6 +69,9 @@ services:
         arguments:
             - !tagged_iterator config.compiler_processor
 
+    config.compiler.dump_output:
+        class: 'Smile\GdprDump\Config\Compiler\Processor\DumpOutputProcessor'
+
     config.compiler.processor.env_var:
         class: 'Smile\GdprDump\Config\Compiler\Processor\EnvVarProcessor'
 

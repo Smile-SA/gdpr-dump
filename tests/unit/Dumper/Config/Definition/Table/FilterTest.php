@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Dumper\Config\Table\Filter;
+namespace Smile\GdprDump\Tests\Unit\Dumper\Config\Definition\Table;
 
-use Smile\GdprDump\Dumper\Config\Table\Filter\Filter;
+use Smile\GdprDump\Dumper\Config\Definition\Table\Filter;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use UnexpectedValueException;
 

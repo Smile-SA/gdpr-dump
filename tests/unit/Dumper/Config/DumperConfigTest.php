@@ -6,10 +6,8 @@ namespace Smile\GdprDump\Tests\Unit\Dumper\Config;
 
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
-use Smile\GdprDump\Dumper\Config\Table\TableConfig;
 use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use UnexpectedValueException;
 
 class DumperConfigTest extends TestCase
 {
@@ -52,8 +50,8 @@ class DumperConfigTest extends TestCase
         $this->assertSame(['table1'], $config->getTablesToTruncate());
         $this->assertSame(['table1', 'table2'], $config->getTablesToFilter());
         $this->assertSame(['table3'], $config->getTablesToSort());
-        $this->assertCount(4, $config->getTablesConfig());
-        $this->assertInstanceOf(TableConfig::class, $config->getTableConfig('table1'));
+        $this->assertCount(4, $config->getTablesConfig()->all());
+        $this->assertSame(['table1', 'table2', 'table3', 'table4'], array_keys($config->getTablesConfig()->all()));
     }
 
     /**
@@ -86,8 +84,11 @@ class DumperConfigTest extends TestCase
 
         $config = $this->createConfig($data);
 
-        $this->assertSame($data['filter_propagation']['enabled'], $config->isFilterPropagationEnabled());
-        $this->assertSame($data['filter_propagation']['ignored_foreign_keys'], $config->getIgnoredForeignKeys());
+        $this->assertSame($data['filter_propagation']['enabled'], $config->getFilterPropagationSettings()->isEnabled());
+        $this->assertSame(
+            $data['filter_propagation']['ignored_foreign_keys'],
+            $config->getFilterPropagationSettings()->getIgnoredForeignKeys()
+        );
     }
 
     /**
@@ -96,10 +97,7 @@ class DumperConfigTest extends TestCase
     public function testFakerSettings(): void
     {
         $config = $this->createConfig(['faker' => ['locale' => 'en_US']]);
-
-        $settings = $config->getFakerSettings();
-        $this->assertArrayHasKey('locale', $settings);
-        $this->assertSame('en_US', $settings['locale']);
+        $this->assertSame('en_US', $config->getFakerSettings()->getLocale());
     }
 
     /**
@@ -127,10 +125,10 @@ class DumperConfigTest extends TestCase
         $this->assertSame([], $config->getTablesToSort());
         $this->assertSame([], $config->getTablesToFilter());
         $this->assertSame([], $config->getTablesToTruncate());
-        $this->assertSame([], $config->getTablesConfig());
+        $this->assertSame([], $config->getTablesConfig()->all());
         $this->assertSame('php://stdout', $config->getDumpOutput());
-        $this->assertTrue($config->isFilterPropagationEnabled());
-        $this->assertSame([], $config->getIgnoredForeignKeys());
+        $this->assertTrue($config->getFilterPropagationSettings()->isEnabled());
+        $this->assertSame([], $config->getFilterPropagationSettings()->getIgnoredForeignKeys());
 
         // Test these values because they differ from MySQLDump-PHP
         $settings = $config->getDumpSettings();
@@ -141,9 +139,7 @@ class DumperConfigTest extends TestCase
         $this->assertArrayHasKey('lock_tables', $settings);
         $this->assertFalse($settings['lock_tables']);
 
-        $settings = $config->getFakerSettings();
-        $this->assertArrayHasKey('locale', $settings);
-        $this->assertNull($settings['locale']);
+        $this->assertSame('', $config->getFakerSettings()->getLocale());
     }
 
     /**
@@ -151,7 +147,7 @@ class DumperConfigTest extends TestCase
      */
     public function testInvalidDumpParameter(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(ValidationException::class);
         $this->createConfig(['dump' => ['not_exists' => true]]);
     }
 

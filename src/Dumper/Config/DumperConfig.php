@@ -7,50 +7,18 @@ namespace Smile\GdprDump\Dumper\Config;
 use Druidfi\Mysqldump\Compress\CompressManagerFactory;
 use Druidfi\Mysqldump\DumpSettings;
 use Smile\GdprDump\Config\ConfigInterface;
-use Smile\GdprDump\Dumper\Config\Table\TableConfig;
+use Smile\GdprDump\Dumper\Config\Definition\FakerSettings;
+use Smile\GdprDump\Dumper\Config\Definition\FilterPropagationSettings;
+use Smile\GdprDump\Dumper\Config\Definition\TableConfig;
+use Smile\GdprDump\Dumper\Config\Definition\TableConfigCollection;
 use Smile\GdprDump\Dumper\Config\Validation\QueryValidator;
-use UnexpectedValueException;
+use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 
 class DumperConfig
 {
-    private QueryValidator $selectQueryValidator;
-    private QueryValidator $initCommandQueryValidator;
-
-    /**
-     * @var TableConfig[]
-     */
-    private array $tablesConfig = [];
-
-    /**
-     * @var string[]
-     */
-    private array $varQueries = [];
-
-    /**
-     * @var string[]
-     */
-    private array $tablesWhitelist = [];
-
-    /**
-     * @var string[]
-     */
-    private array $tablesBlacklist = [];
-
-    /**
-     * @var string[]
-     */
-    private array $tablesToTruncate = [];
-
-    /**
-     * @var string[]
-     */
-    private array $tablesToFilter = [];
-
-    /**
-     * @var string[]
-     */
-    private array $tablesToSort = [];
-
+    private FakerSettings $fakerSettings;
+    private FilterPropagationSettings $filterPropagationSettings;
+    private TableConfigCollection $tablesConfig;
     private array $dumpSettings = [
         'output' => 'php://stdout',
         'add_drop_database' => false,
@@ -79,23 +47,46 @@ class DumperConfig
         'skip_tz_utc' => false,
     ];
 
-    private array $filterPropagationSettings = [
-        'enabled' => true,
-        'ignored_foreign_keys' => [],
-    ];
-
-    private array $fakerSettings = [
-        'locale' => null,
-    ];
+    /**
+     * @var string[]
+     */
+    private array $tablesWhitelist = [];
 
     /**
-     * @throws UnexpectedValueException
+     * @var string[]
+     */
+    private array $tablesBlacklist = [];
+
+    /**
+     * @var string[]
+     */
+    private array $varQueries = [];
+
+    /**
+     * @var string[]
+     */
+    private array $tablesToTruncate = [];
+
+    /**
+     * @var string[]
+     */
+    private array $tablesToFilter = [];
+
+    /**
+     * @var string[]
+     */
+    private array $tablesToSort = [];
+
+    /**
+     * @throws ValidationException
      */
     public function __construct(ConfigInterface $config)
     {
-        $this->selectQueryValidator = new QueryValidator(['select']);
-        $this->initCommandQueryValidator = new QueryValidator(['set']);
-        $this->prepareConfig($config);
+        $this->prepareVarQueries($config);
+        $this->prepareDumpSettings($config);
+        $this->prepareFakerSettings($config);
+        $this->prepareFilterPropagationSettings($config);
+        $this->prepareTableSettings($config);
     }
 
     /**
@@ -103,7 +94,7 @@ class DumperConfig
      */
     public function getDumpOutput(): string
     {
-        return $this->dumpSettings['output'];
+        return $this->getDumpSettings()['output'];
     }
 
     /**
@@ -115,45 +106,27 @@ class DumperConfig
     }
 
     /**
-     * Check whether to apply table filters recursively to table dependencies (by following foreign keys).
-     */
-    public function isFilterPropagationEnabled(): bool
-    {
-        return $this->filterPropagationSettings['enabled'];
-    }
-
-    /**
-     * Get the foreign keys to exclude from the table filter propagation.
-     */
-    public function getIgnoredForeignKeys(): array
-    {
-        return $this->filterPropagationSettings['ignored_foreign_keys'];
-    }
-
-    /**
      * Get faker settings.
      */
-    public function getFakerSettings(): array
+    public function getFakerSettings(): FakerSettings
     {
         return $this->fakerSettings;
     }
 
     /**
-     * Get the tables configuration (filters, orders, limits).
-     *
-     * @return TableConfig[]
+     * Get filter propagation settings.
      */
-    public function getTablesConfig(): array
+    public function getFilterPropagationSettings(): FilterPropagationSettings
     {
-        return $this->tablesConfig;
+        return $this->filterPropagationSettings;
     }
 
     /**
-     * Get the configuration of a table.
+     * Get the tables configuration (filters, orders, limits).
      */
-    public function getTableConfig(string $tableName): ?TableConfig
+    public function getTablesConfig(): TableConfigCollection
     {
-        return $this->tablesConfig[$tableName] ?? null;
+        return $this->tablesConfig;
     }
 
     /**
@@ -220,38 +193,25 @@ class DumperConfig
     }
 
     /**
-     * Prepare the config.
+     * Prepare SQL variable queries.
      *
-     * @throws UnexpectedValueException
+     * @throws ValidationException
      */
-    private function prepareConfig(ConfigInterface $config): void
+    private function prepareVarQueries(ConfigInterface $config): void
     {
-        // Dump settings
-        $this->prepareDumpSettings($config);
+        $this->varQueries = $config->get('variables', []);
 
-        // Filter propagation settings
-        $this->prepareFilterPropagationSettings($config);
-
-        // Faker settings
-        $this->prepareFakerSettings($config);
-
-        // Tables config
-        $this->prepareTablesConfig($config);
-
-        // Queries to run
-        $this->prepareVarQueries($config);
-
-        // Tables whitelist
-        $this->prepareTablesWhitelist($config);
-
-        // Tables blacklist
-        $this->prepareTablesBlacklist($config);
+        // Allow only "select" statements in queries
+        $selectQueryValidator = new QueryValidator(['select']);
+        foreach ($this->varQueries as $query) {
+            $selectQueryValidator->validate($query);
+        }
     }
 
     /**
      * Prepare dump settings.
      *
-     * @throws UnexpectedValueException
+     * @throws ValidationException
      */
     private function prepareDumpSettings(ConfigInterface $config): void
     {
@@ -259,75 +219,53 @@ class DumperConfig
 
         foreach ($settings as $param => $value) {
             if (!array_key_exists($param, $this->dumpSettings)) {
-                throw new UnexpectedValueException(sprintf('Invalid dump setting "%s".', $param));
+                throw new ValidationException(sprintf('Invalid dump setting "%s".', $param));
             }
 
             $this->dumpSettings[$param] = $value;
         }
 
-        // Validate init_commands
+        // Allow only "set" statements in init commands
+        $initCommandQueryValidator = new QueryValidator(['set']);
         foreach ($this->dumpSettings['init_commands'] as $query) {
-            $this->initCommandQueryValidator->validate($query);
-        }
-
-        // Replace {...} by the current date in dump output
-        $this->dumpSettings['output'] = preg_replace_callback(
-            '/{([^}]+)}/',
-            fn (array $matches) => date($matches[1]),
-            $this->dumpSettings['output']
-        );
-    }
-
-    /**
-     * Prepare table filter propagation settings.
-     *
-     * @throws UnexpectedValueException
-     */
-    private function prepareFilterPropagationSettings(ConfigInterface $config): void
-    {
-        $settings = $config->get('filter_propagation', []);
-
-        foreach ($settings as $param => $value) {
-            if (!array_key_exists($param, $this->filterPropagationSettings)) {
-                throw new UnexpectedValueException(sprintf('Invalid filter propagation setting "%s".', $param));
-            }
-
-            $this->filterPropagationSettings[$param] = $value;
+            $initCommandQueryValidator->validate($query);
         }
     }
 
     /**
      * Prepare faker settings.
-     *
-     * @throws UnexpectedValueException
      */
     private function prepareFakerSettings(ConfigInterface $config): void
     {
         $settings = $config->get('faker', []);
-
-        foreach ($settings as $param => $value) {
-            if (!array_key_exists($param, $this->fakerSettings)) {
-                throw new UnexpectedValueException(sprintf('Invalid faker setting "%s".', $param));
-            }
-
-            $this->fakerSettings[$param] = $value;
-        }
+        $this->fakerSettings = new FakerSettings((string) ($settings['locale'] ?? ''));
     }
 
     /**
-     * Prepare the tables configuration.
-     *
-     * @throws UnexpectedValueException
+     * Prepare filter propagation settings.
      */
-    private function prepareTablesConfig(ConfigInterface $config): void
+    private function prepareFilterPropagationSettings(ConfigInterface $config): void
     {
-        $tablesData = $config->get('tables', []);
+        $settings = $config->get('filter_propagation', []);
 
-        foreach ($tablesData as $tableName => $tableData) {
-            $tableName = (string) $tableName;
+        $this->filterPropagationSettings = new FilterPropagationSettings(
+            $settings['enabled'] ?? true,
+            $settings['ignored_foreign_keys'] ?? []
+        );
+    }
 
-            $tableConfig = new TableConfig($tableName, $tableData);
-            $this->tablesConfig[$tableName] = $tableConfig;
+    /**
+     * Prepare table settings.
+     */
+    private function prepareTableSettings(ConfigInterface $config): void
+    {
+        $this->tablesWhitelist = $config->get('tables_whitelist', []);
+        $this->tablesBlacklist = $config->get('tables_blacklist', []);
+        $this->tablesConfig = new TableConfigCollection();
+
+        foreach ($config->get('tables', []) as $tableName => $tableData) {
+            $tableConfig = new TableConfig((string) $tableName, $tableData);
+            $this->tablesConfig->add($tableConfig);
 
             if ($tableConfig->getLimit() === 0) {
                 $this->tablesToTruncate[] = $tableConfig->getName();
@@ -340,43 +278,6 @@ class DumperConfig
             if ($tableConfig->hasWhereCondition() || $tableConfig->hasFilter() || $tableConfig->hasLimit()) {
                 $this->tablesToFilter[] = $tableConfig->getName();
             }
-        }
-    }
-
-    /**
-     * Prepare the SQL queries to run.
-     */
-    private function prepareVarQueries(ConfigInterface $config): void
-    {
-        $this->varQueries = $config->get('variables', []);
-
-        foreach ($this->varQueries as $index => $query) {
-            $this->selectQueryValidator->validate($query);
-            $this->varQueries[$index] = (string) $query;
-        }
-    }
-
-    /**
-     * Prepare the tables whitelist.
-     */
-    private function prepareTablesWhitelist(ConfigInterface $config): void
-    {
-        $this->tablesWhitelist = $config->get('tables_whitelist', []);
-
-        foreach ($this->tablesWhitelist as $index => $tableName) {
-            $this->tablesWhitelist[$index] = (string) $tableName;
-        }
-    }
-
-    /**
-     * Prepare the tables blacklist.
-     */
-    private function prepareTablesBlacklist(ConfigInterface $config): void
-    {
-        $this->tablesBlacklist = $config->get('tables_blacklist', []);
-
-        foreach ($this->tablesBlacklist as $index => $tableName) {
-            $this->tablesBlacklist[$index] = (string) $tableName;
         }
     }
 }

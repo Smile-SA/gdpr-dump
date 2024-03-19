@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Config\Table;
+namespace Smile\GdprDump\Dumper\Config\Definition;
 
-use Smile\GdprDump\Dumper\Config\Table\Filter\Filter;
-use Smile\GdprDump\Dumper\Config\Table\Filter\SortOrder;
+use Smile\GdprDump\Dumper\Config\Definition\Table\Filter;
+use Smile\GdprDump\Dumper\Config\Definition\Table\SortOrder;
+use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 use Smile\GdprDump\Dumper\Config\Validation\WhereExprValidator;
 use UnexpectedValueException;
 
 class TableConfig
 {
-    private WhereExprValidator $whereExprValidator;
     private string $name;
     private ?string $where = null;
     private ?int $limit = null;
@@ -31,7 +31,6 @@ class TableConfig
 
     public function __construct(string $tableName, array $tableConfig)
     {
-        $this->whereExprValidator = new WhereExprValidator();
         $this->name = $tableName;
         $this->prepareConfig($tableConfig);
     }
@@ -145,6 +144,8 @@ class TableConfig
 
     /**
      * Prepare the table filters.
+     *
+     * @throws ValidationException
      */
     private function prepareFilters(array $tableData): void
     {
@@ -158,7 +159,8 @@ class TableConfig
         // New way of declaring table filters (`where` parameter)
         $whereCondition = (string) ($tableData['where'] ?? '');
         if ($whereCondition !== '') {
-            $this->whereExprValidator->validate($whereCondition);
+            $whereExprValidator = new WhereExprValidator();
+            $whereExprValidator->validate($whereCondition);
             $this->where = $whereCondition;
         }
     }

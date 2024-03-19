@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Database;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 use Smile\GdprDump\Database\Metadata\MysqlMetadata;
 use Smile\GdprDump\Database\TableDependencyResolver;
+use Smile\GdprDump\Dumper\Config\Definition\FilterPropagationSettings;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
@@ -181,8 +182,8 @@ class TableDependencyResolverTest extends TestCase
             ->willReturnMap($foreignKeyMap);
 
         $configMock = $this->createMock(DumperConfig::class);
-        $configMock->method('getIgnoredForeignKeys')
-            ->willReturn($ignoredForeignKeys);
+        $configMock->method('getFilterPropagationSettings')
+            ->willReturn(new FilterPropagationSettings(true, $ignoredForeignKeys));
 
         return new TableDependencyResolver($metadataMock, $configMock);
     }

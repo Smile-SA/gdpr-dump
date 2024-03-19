@@ -26,7 +26,7 @@ class EnvVarProcessor implements ProcessorInterface
     ];
 
     /**
-     * @inheritdoc
+     * Replace environment variable placeholders (e.g. "%env(DB_HOST)%")
      */
     public function process(ConfigInterface $config): void
     {

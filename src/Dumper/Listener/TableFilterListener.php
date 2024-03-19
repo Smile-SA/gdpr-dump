@@ -10,9 +10,9 @@ use RuntimeException;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Database\TableDependencyResolver;
+use Smile\GdprDump\Dumper\Config\Definition\Table\Filter;
+use Smile\GdprDump\Dumper\Config\Definition\TableConfig;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
-use Smile\GdprDump\Dumper\Config\Table\Filter\Filter;
-use Smile\GdprDump\Dumper\Config\Table\TableConfig;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
 use UnexpectedValueException;
 
@@ -53,7 +53,7 @@ class TableFilterListener
 
         // If recursive filters are enabled, tables to query must contain
         // all tables that depend on the tables that have filters/sort order
-        if ($this->config->isFilterPropagationEnabled()) {
+        if ($this->config->getFilterPropagationSettings()->isEnabled()) {
             $dependencyResolver = new TableDependencyResolver($this->metadata, $this->config);
             $dependencies = $dependencyResolver->getDependencies($tablesToFilter);
         }
@@ -69,7 +69,7 @@ class TableFilterListener
 
             // Add where conditions on the parent tables that also have active filters
             if (
-                $this->config->isFilterPropagationEnabled()
+                $this->config->getFilterPropagationSettings()->isEnabled()
                 && $queryBuilder->getMaxResults() !== 0
                 && array_key_exists($tableName, $dependencies)
             ) {
@@ -176,8 +176,10 @@ class TableFilterListener
         $queryBuilder->select('*')
             ->from($this->connection->quoteIdentifier($tableName));
 
-        $tableConfig = $this->config->getTableConfig($tableName);
-        if ($tableConfig === null) {
+        try {
+            $tableConfig = $this->config->getTablesConfig()->get($tableName);
+        } catch (UnexpectedValueException) {
+            // Table doesn't exist, skip
             return $queryBuilder;
         }
 

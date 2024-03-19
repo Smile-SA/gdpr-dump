@@ -48,6 +48,7 @@ class MysqlDumperTest extends TestCase
         // Same tests but with filter propagation disabled
         $config = $this->createConfig();
         $config->set('filter_propagation', ['enabled' => false]);
+
         $dumper = $this->createDumper();
         $dumper->dump($config);
         $this->assertDumpIsValid(false);
