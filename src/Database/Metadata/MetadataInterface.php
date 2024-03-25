@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Database\Metadata;
 
+use RuntimeException;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 
 interface MetadataInterface
@@ -14,6 +15,13 @@ interface MetadataInterface
      * @return string[]
      */
     public function getTableNames(): array;
+
+    /**
+     * Get the columns of the specified table.
+     *
+     * @throws RuntimeException
+     */
+    public function getColumnNames(string $tableName): array;
 
     /**
      * Get all foreign keys.

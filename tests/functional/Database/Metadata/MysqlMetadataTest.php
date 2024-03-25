@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Functional\Database\Metadata;
 
+use RuntimeException;
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Database\Metadata\MysqlMetadata;
 use Smile\GdprDump\Tests\Functional\TestCase;
@@ -17,6 +18,24 @@ class MysqlMetadataTest extends TestCase
     {
         $metadata = $this->getMetadata();
         $this->assertEqualsCanonicalizing(['stores', 'customers', 'addresses', 'config'], $metadata->getTableNames());
+    }
+
+    /**
+     * Test the "getColumnNames" method.
+     */
+    public function testColumnNames(): void
+    {
+        $columns = $this->getMetadata()->getColumnNames('stores');
+        $this->assertEqualsCanonicalizing(['code', 'store_id', 'parent_store_id'], $columns);
+    }
+
+    /**
+     * Assert that an exception is thrown when fetching the columns of an undefined table.
+     */
+    public function testErrorOnInvalidTableName(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->getMetadata()->getColumnNames('undefined');
     }
 
     /**
