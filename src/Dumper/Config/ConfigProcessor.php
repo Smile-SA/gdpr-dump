@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Dumper\Config;
 
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
+use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 
 class ConfigProcessor
 {
@@ -47,7 +48,8 @@ class ConfigProcessor
     }
 
     /**
-     * Remove tables that don't exist from the "tables" parameter.
+     * Remove tables that don't exist from the "tables" parameter,
+     * and raise an exception if the remaining tables have converters that reference invalid columns.
      */
     private function processTablesData(ConfigInterface $config): void
     {
@@ -86,6 +88,10 @@ class ConfigProcessor
             $matches = $this->findTablesByName((string) $tableName);
 
             foreach ($matches as $match) {
+                // Throw an exception if a converter refers to a column that does not exist
+                $this->validateTableColumns($tableName, $tableData);
+
+                // Merge table configuration
                 if (!array_key_exists($match, $resolved)) {
                     $resolved[$match] = [];
                 }
@@ -117,5 +123,26 @@ class ConfigProcessor
         }
 
         return $matches;
+    }
+
+    /**
+     * Raise an exception if the table data contains a converter that references an undefined column.
+     */
+    private function validateTableColumns(string $tableName, array $tableData): void
+    {
+        if (!array_key_exists('converters', $tableData) || empty($tableData['converters'])) {
+            return;
+        }
+
+        $columns = $this->metadata->getColumnNames($tableName);
+
+        foreach ($tableData['converters'] as $columnName => $converterData) {
+            $disabled = $converterData['disabled'] ?? false;
+
+            if (!$disabled && !in_array($columnName, $columns)) {
+                $message = 'The table "%s" uses a converter on an undefined column "%s".';
+                throw new ValidationException(sprintf($message, $tableName, $columnName));
+            }
+        }
     }
 }

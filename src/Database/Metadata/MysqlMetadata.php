@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Database\Metadata;
 
 use Doctrine\DBAL\Connection;
+use RuntimeException;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 
 class MysqlMetadata implements MetadataInterface
 {
     private string $schema;
     private ?array $tableNames = null;
+    private ?array $columnNames = null;
     private ?array $foreignKeys = null;
 
     public function __construct(private Connection $connection)
@@ -36,6 +38,31 @@ class MysqlMetadata implements MetadataInterface
         $this->tableNames = $statement->executeQuery([$this->schema])->fetchFirstColumn();
 
         return $this->tableNames;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getColumnNames(string $tableName): array
+    {
+        if ($this->columnNames === null) {
+            $query = 'SELECT TABLE_NAME, COLUMN_NAME '
+                . 'FROM INFORMATION_SCHEMA.COLUMNS '
+                . 'WHERE TABLE_SCHEMA=?'
+                . 'ORDER BY COLUMN_NAME ASC';
+
+            $statement = $this->connection->prepare($query);
+            $result = $statement->executeQuery([$this->schema]);
+
+            $this->columnNames = [];
+
+            while ($row = $result->fetchAssociative()) {
+                $this->columnNames[$row['TABLE_NAME']][] = $row['COLUMN_NAME'];
+            }
+        }
+
+        return $this->columnNames[$tableName]
+            ?? throw new RuntimeException(sprintf('The table "%s" is not defined.', $tableName));
     }
 
     /**
