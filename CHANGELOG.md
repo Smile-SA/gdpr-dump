@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 5.0.0 (WIP)
+
+- Added table column validation. GdprDump now throws an exception if a config file contains an undefined column ([#125](https://github.com/Smile-SA/gdpr-dump/pull/125))
+- Removed support of the `filters` parameter. Use the `where` parameter instead ([#128](https://github.com/Smile-SA/gdpr-dump/pull/128))
+
 ## [4.2.2] - 2024-03-26
 [4.2.2]: https://github.com/Smile-SA/gdpr-dump/compare/4.2.1...4.2.2
 
