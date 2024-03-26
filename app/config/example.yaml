@@ -8,31 +8,20 @@ database:
     password: '%env(DB_PASSWORD)%'
     name: '%env(DB_NAME)%'
 
-dump:
-    output: 'magento2-{Y-m-d H:i:s}.sql.bz2'
-    compress: 'bzip2'
-
 tables:
-    # Don't anonymize accounts belonging to the "Acme" company
+    # Don't anonymize admin accounts belonging to the "Acme" company
     admin_user:
         skip_conversion_if: 'strpos({{email}}, "@acme.fr") !== false'
 
     # Dump only recent quotes
     quote:
-        filters:
-            - ['created_at', 'gt', 'expr: date_sub(now(), interval 60 day)']
+        where: 'created_at > date_sub(now(), interval 60 day)'
 
-    # Dump only recent orders or orders with specific emails (this example shows how to implement OR conditions)
+    # Dump only recent orders
     sales_order:
-        filters:
-            - ['entity_id', 'in', 'expr: select entity_id from sales_order where updated_at > date_sub(now(), interval 60 day) or email like "%@acme.fr"']
+        where: 'created_at > date_sub(now(), interval 60 day)'
 
-    # Dump only CMS pages without "FAQ" in their meta title (COALESCE keeps null values)
-    cms_page:
-        filters:
-            - ["expr: COALESCE(meta_title, '')", 'notLike', '%FAQ%']
-
-    # Anonymize a table named "my_custom_table"
+    # Anonymize a custom table named "my_custom_table"
     my_custom_table:
         converters:
             email:
