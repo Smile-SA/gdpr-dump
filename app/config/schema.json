@@ -8,7 +8,7 @@
             "type": "boolean"
         },
         "version": {
-            "type":  ["string", "number"]
+            "type": "string"
         },
         "if_version": {
             "type": "object",
@@ -43,14 +43,14 @@
         "tables_whitelist": {
             "type": "array",
             "items": {
-                "type": ["string", "number"],
+                "type": "string",
                 "minLength": 1
             }
         },
         "tables_blacklist": {
             "type": "array",
             "items": {
-                "type": ["string", "number"],
+                "type": "string",
                 "minLength": 1
             }
         }
@@ -84,7 +84,7 @@
                     }
                 },
                 "host": {
-                    "type": ["string", "number"],
+                    "type": "string",
                     "minLength": 1
                 },
                 "port": {
@@ -92,22 +92,22 @@
                     "minLength": 1
                 },
                 "user": {
-                    "type": ["string", "number"],
+                    "type": "string",
                     "minLength": 1
                 },
                 "password": {
-                    "type": ["string", "number"]
+                    "type": "string"
                 },
                 "name": {
-                    "type": ["string", "number"],
+                    "type": "string",
                     "minLength": 1
                 },
                 "charset": {
-                    "type": ["string", "number"],
+                    "type": "string",
                     "minLength": 1
                 },
                 "unix_socket": {
-                    "type": ["string", "number"],
+                    "type": "string",
                     "minLength": 1
                 }
             },
@@ -117,7 +117,7 @@
             "type": "object",
             "properties": {
                 "output": {
-                    "type": ["string", "number"],
+                    "type": "string",
                     "minLength": 1
                 },
                 "add_drop_database": {
@@ -237,16 +237,16 @@
                     }
                 },
                 "skip_conversion_if": {
-                    "type": ["string", "number"]
+                    "type": "string"
                 },
                 "where": {
-                    "type": ["string"]
+                    "type": "string"
                 },
                 "filters": {
                     "deprecated": true
                 },
                 "order_by": {
-                    "type": ["string", "number"]
+                    "type": "string"
                 },
                 "limit": {
                     "type": ["integer", "null"]
@@ -255,7 +255,7 @@
             "additionalProperties": false
         },
         "converter": {
-            "type": ["object"],
+            "type": "object",
             "properties": {
                 "converter": {
                     "type": "string",
@@ -292,13 +292,13 @@
                     }
                 },
                 "condition": {
-                    "type": ["string", "number"]
+                    "type": "string"
                 },
                 "unique": {
                     "type": "boolean"
                 },
                 "cache_key": {
-                    "type": ["string", "number"]
+                    "type": "string"
                 },
                 "disabled": {
                     "type": "boolean"
