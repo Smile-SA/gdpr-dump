@@ -253,9 +253,6 @@
                 "order_by": {
                     "type": ["string", "number"]
                 },
-                "orderBy": {
-                    "type": ["string", "number"]
-                },
                 "limit": {
                     "type": ["integer", "null"]
                 }
