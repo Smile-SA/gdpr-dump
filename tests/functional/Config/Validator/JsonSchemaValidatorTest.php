@@ -33,7 +33,7 @@ class JsonSchemaValidatorTest extends TestCase
                 'user' => 'myuser',
                 'password' => 'mypassword',
                 'host' => 'myhost',
-                'port' => '3306',
+                'port' => 3306,
                 'driver' => 'pdo_mysql',
                 'charset' => 'utf8mb',
                 'driver_options' => [
