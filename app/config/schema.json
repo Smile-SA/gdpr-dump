@@ -257,7 +257,7 @@
                     "type": ["string", "number"]
                 },
                 "limit": {
-                    "type": "integer"
+                    "type": ["integer", "null"]
                 }
             },
             "additionalProperties": false
