@@ -275,7 +275,7 @@ class DumperConfig
                 $this->tablesToSort[] = $tableConfig->getName();
             }
 
-            if ($tableConfig->hasWhereCondition() || $tableConfig->hasFilter() || $tableConfig->hasLimit()) {
+            if ($tableConfig->hasWhereCondition() || $tableConfig->hasLimit()) {
                 $this->tablesToFilter[] = $tableConfig->getName();
             }
         }

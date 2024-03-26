@@ -6,12 +6,9 @@ namespace Smile\GdprDump\Dumper\Listener;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use RuntimeException;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Database\TableDependencyResolver;
-use Smile\GdprDump\Dumper\Config\Definition\Table\Filter;
-use Smile\GdprDump\Dumper\Config\Definition\TableConfig;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
 use UnexpectedValueException;
@@ -183,9 +180,6 @@ class TableFilterListener
             return $queryBuilder;
         }
 
-        // Apply where condition (old deprecated syntax with `filters` parameter)
-        $this->applyFiltersToQueryBuilder($queryBuilder, $tableConfig);
-
         // Apply where condition (wrap the condition with brackets to prevent SQL injection)
         if ($tableConfig->hasWhereCondition()) {
             $queryBuilder->andWhere(sprintf('(%s)', $tableConfig->getWhereCondition()));
@@ -205,31 +199,6 @@ class TableFilterListener
         }
 
         return $queryBuilder;
-    }
-
-    /**
-     * Apply filters to a query builder.
-     *
-     * @deprecated
-     * @throws RuntimeException
-     */
-    private function applyFiltersToQueryBuilder(QueryBuilder $queryBuilder, TableConfig $tableConfig): void
-    {
-        // Apply filters (deprecated)
-        foreach ($tableConfig->getFilters() as $filter) {
-            $value = $this->getFilterValue($filter);
-            $callable = [$queryBuilder->expr(), $filter->getOperator()];
-
-            // Filter operators must match the method names of the Doctrine expression builder
-            if (!is_callable($callable)) {
-                throw new RuntimeException(
-                    sprintf('The doctrine expression builder does not implement "%s".', $filter->getOperator())
-                );
-            }
-
-            $whereExpr = call_user_func_array($callable, [$this->getFilterColumn($filter), $value]);
-            $queryBuilder->andWhere($whereExpr);
-        }
     }
 
     /**
@@ -264,65 +233,5 @@ class TableFilterListener
         $sql = $queryBuilder->getSQL();
 
         return substr($sql, strpos($sql, ' WHERE ') + 7);
-    }
-
-    /**
-     * Get a filter column.
-     * If it was prefixed with `expr:`, returns the raw SQL statement instead of a quoted identifier.
-     *
-     * @deprecated
-     */
-    private function getFilterColumn(Filter $filter): string
-    {
-        $column = $filter->getColumn();
-
-        return str_starts_with($column, 'expr:') ?
-            ltrim(substr($column, 5)) : $this->connection->quoteIdentifier($column);
-    }
-
-    /**
-     * Get a filter value.
-     * If it was prefixed with `expr:`, returns the raw SQL statement instead of a quoted value.
-     *
-     * @deprecated
-     * @throws UnexpectedValueException
-     */
-    private function getFilterValue(Filter $filter): mixed
-    {
-        $value = $filter->getValue();
-
-        if (is_array($value)) {
-            foreach ($value as $k => $v) {
-                $value[$k] = $this->quoteValue($v);
-            }
-
-            return $value;
-        }
-
-        return $this->quoteValue($value);
-    }
-
-    /**
-     * Quote a value so that it can be safely injected in a SQL query
-     * (we can't use query params because Mysqldump library doesn't allow it).
-     *
-     * @deprecated
-     * @throws UnexpectedValueException
-     */
-    private function quoteValue(mixed $value): mixed
-    {
-        if ($value !== null && !is_scalar($value)) {
-            throw new UnexpectedValueException('Non-scalar values can not be used in filters.');
-        }
-
-        if (is_bool($value)) {
-            return (int) $value;
-        }
-
-        if (is_string($value)) {
-            return str_starts_with($value, 'expr:') ? ltrim(substr($value, 5)) : $this->connection->quote($value);
-        }
-
-        return $value;
     }
 }

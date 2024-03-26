@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Config\Definition;
 
-use Smile\GdprDump\Dumper\Config\Definition\Table\Filter;
 use Smile\GdprDump\Dumper\Config\Definition\Table\SortOrder;
 use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 use Smile\GdprDump\Dumper\Config\Validation\WhereExprValidator;
@@ -17,12 +16,6 @@ class TableConfig
     private ?int $limit = null;
     private array $converters = [];
     private string $skipCondition = '';
-
-    /**
-     * @deprecated
-     * @var Filter[]
-     */
-    private array $filters = [];
 
     /**
      * @var SortOrder[]
@@ -41,17 +34,6 @@ class TableConfig
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * Get the filters.
-     *
-     * @deprecated
-     * @return Filter[]
-     */
-    public function getFilters(): array
-    {
-        return $this->filters;
     }
 
     /**
@@ -86,16 +68,6 @@ class TableConfig
     public function getConverters(): array
     {
         return $this->converters;
-    }
-
-    /**
-     * Check if there is data to filter.
-     *
-     * @deprecated
-     */
-    public function hasFilter(): bool
-    {
-        return !empty($this->filters);
     }
 
     /**
@@ -149,14 +121,12 @@ class TableConfig
      */
     private function prepareFilters(array $tableData): void
     {
-        // Old way of declaring table filters (`filters` parameter)
-        if (isset($tableData['filters'])) {
-            foreach ($tableData['filters'] as $filter) {
-                $this->filters[] = new Filter((string) $filter[0], (string) $filter[1], $filter[2] ?? null);
-            }
+        if (array_key_exists('filters', $tableData)) {
+            throw new ValidationException(
+                'The property "filters" is no longer supported. Use "where" instead.'
+            );
         }
 
-        // New way of declaring table filters (`where` parameter)
         $whereCondition = (string) ($tableData['where'] ?? '');
         if ($whereCondition !== '') {
             $whereExprValidator = new WhereExprValidator();

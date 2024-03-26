@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Dumper\Config\Definition;
 
-use Smile\GdprDump\Dumper\Config\Definition\Table\Filter;
 use Smile\GdprDump\Dumper\Config\Definition\TableConfig;
 use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
@@ -23,11 +22,9 @@ class TableConfigTest extends TestCase
         $this->assertEmpty($config->getConverters());
 
         $this->assertFalse($config->hasLimit());
-        $this->assertFalse($config->hasFilter());
         $this->assertFalse($config->hasSortOrder());
 
         $this->assertNull($config->getLimit());
-        $this->assertEmpty($config->getFilters());
         $this->assertEmpty($config->getSortOrders());
     }
 
@@ -109,24 +106,6 @@ class TableConfigTest extends TestCase
         new TableConfig('table1', [
             'where' => '1); select * from customer where (1',
         ]);
-    }
-
-    /**
-     * Test the "filters" parameter.
-     *
-     * @deprecated
-     */
-    public function testFilter(): void
-    {
-        $config = new TableConfig('table1', [
-            'filters' => [
-                ['column1', Filter::OPERATOR_IS_NULL],
-                ['column2', Filter::OPERATOR_EQ, 'value'],
-            ],
-        ]);
-
-        $this->assertCount(2, $config->getFilters());
-        $this->assertTrue($config->hasFilter());
     }
 
     /**
