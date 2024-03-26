@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.2.2] - 2024-03-26
+[4.2.2]: https://github.com/Smile-SA/gdpr-dump/compare/4.2.1...4.2.2
+
+- Changed `limit` parameter type from `int` to `int|null` ([#126](https://github.com/Smile-SA/gdpr-dump/pull/126))
+- Removed `orderBy` param from schema.json ([#127](https://github.com/Smile-SA/gdpr-dump/pull/127))
+
 ## [4.2.1] - 2024-03-07
 [4.2.1]: https://github.com/Smile-SA/gdpr-dump/compare/4.2.0...4.2.1
 
