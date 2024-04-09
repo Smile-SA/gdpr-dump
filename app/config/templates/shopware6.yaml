@@ -74,8 +74,6 @@ tables:
                 converter: 'randomizeNumber'
             city:
                 converter: 'randomizeText'
-            vat_id:
-                converter: 'randomizeNumber'
             phone_number:
                 converter: 'randomizeNumber'
             additional_address_line1:
