@@ -18,6 +18,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
@@ -45,7 +46,12 @@ class DumpCommand extends Command
                 'config_file',
                 InputArgument::IS_ARRAY | InputArgument::REQUIRED,
                 'Dump configuration file(s)'
-            );
+            )
+            ->addOption('host', null, InputOption::VALUE_REQUIRED, 'Database host')
+            ->addOption('port', null, InputOption::VALUE_REQUIRED, 'Database port')
+            ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Database user')
+            ->addOption('password', null, InputOption::VALUE_REQUIRED, 'Database password')
+            ->addOption('database', null, InputOption::VALUE_REQUIRED, 'Database name');
     }
 
     /**
@@ -102,10 +108,50 @@ class DumpCommand extends Command
             $this->configLoader->load($configFile, $config);
         }
 
+        // Add database config from input options
+        $this->addInputOptionsToConfig($config, $input);
+
         // Compile the config
         $this->compiler->compile($config);
 
         return $config;
+    }
+
+    /**
+     * Add input option values to the config.
+     *
+     * @throws ConfigException
+     */
+    private function addInputOptionsToConfig(ConfigInterface $config, InputInterface $input): void
+    {
+        $databaseConfig = $config->get('database', []);
+
+        foreach (['host', 'port', 'user', 'password', 'database'] as $option) {
+            $value = $input->getOption($option);
+            if ($value === null) {
+                // Option was not provided
+                continue;
+            }
+
+            if ($value === '' && $option !== 'password') {
+                // Option must have a value (except the "password" option)
+                throw new ConfigException(sprintf('Please provide a value for the option "%s".', $option));
+            }
+
+            $configKey = $option === 'database' ? 'name' : $option;
+            if ($value === '') {
+                // Remove the password from the config if an empty value was provided
+                unset($databaseConfig[$configKey]);
+                continue;
+            }
+
+            // Override the config value with the provided option value
+            $databaseConfig[$configKey] = $value;
+        }
+
+        if (!empty($databaseConfig)) {
+            $config->set('database', $databaseConfig);
+        }
     }
 
     /**

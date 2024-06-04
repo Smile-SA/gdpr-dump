@@ -4,9 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## 5.0.0 (WIP)
 
+New features:
+
+- Added command-line options for database credentials (`--host`, `--port`, `--user`, `--password`, `--database`)
+
 Breaking changes:
 
-- Added table column validation. GdprDump now throws an exception if a config file contains an undefined column ([#125](https://github.com/Smile-SA/gdpr-dump/pull/125))
+- GdprDump now throws an exception if a config file contains an undefined column ([#125](https://github.com/Smile-SA/gdpr-dump/pull/125))
 - Removed support of the `filters` parameter. Use the `where` parameter instead ([#128](https://github.com/Smile-SA/gdpr-dump/pull/128))
 - Removed undefined column customer_address.vat_id from shopware6 template ([#132](https://github.com/Smile-SA/gdpr-dump/pull/132))
 - Stricter config file validation: string parameters don't accept integer values anymore ([#129](https://github.com/Smile-SA/gdpr-dump/pull/129))
