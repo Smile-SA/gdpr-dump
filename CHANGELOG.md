@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 New features:
 
-- Added command-line options for database credentials (`--host`, `--port`, `--user`, `--password`, `--database`)
+- Added command-line options for database credentials: `--host`, `--port`, `--user`, `--password`, `--database` ([#135](https://github.com/Smile-SA/gdpr-dump/pull/135))
 
 Breaking changes:
 
