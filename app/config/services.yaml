@@ -42,10 +42,16 @@ services:
         class: 'Smile\GdprDump\Console\Command\DumpCommand'
         arguments:
             - '@dumper'
+            - '@config.builder'
             - '@config.loader'
             - '@config.schema_validator'
             - '@config.compiler'
             - '@console.dump_info'
+
+    config.builder:
+        class: 'Smile\GdprDump\Config\Builder\ConfigBuilder'
+        arguments:
+            - '@config.schema_validator'
 
     config.loader:
         class: 'Smile\GdprDump\Config\Loader\ConfigLoader'
