@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Console\Command;
 
 use Exception;
+use Smile\GdprDump\Config\Builder\ConfigBuilderInterface;
 use Smile\GdprDump\Config\Compiler\CompilerInterface;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigException;
@@ -27,6 +28,7 @@ class DumpCommand extends Command
 {
     public function __construct(
         private DumperInterface $dumper,
+        private ConfigBuilderInterface $configBuilder,
         private ConfigLoaderInterface $configLoader,
         private ValidatorInterface $validator,
         private CompilerInterface $compiler,
@@ -40,18 +42,23 @@ class DumpCommand extends Command
      */
     public function configure(): void
     {
+        $configHint = ' (can also be specified in the configuration file)';
+
+        // phpcs:disable Generic.Files.LineLength.TooLong
         $this->setName('gdpr-dump')
             ->setDescription('Create an anonymized dump')
             ->addArgument(
                 'config_file',
                 InputArgument::IS_ARRAY | InputArgument::REQUIRED,
-                'Dump configuration file(s)'
+                'Dump configuration (YAML file or raw json input)'
             )
-            ->addOption('host', null, InputOption::VALUE_REQUIRED, 'Database host')
-            ->addOption('port', null, InputOption::VALUE_REQUIRED, 'Database port')
-            ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Database user')
-            ->addOption('password', null, InputOption::VALUE_REQUIRED, 'Database password')
-            ->addOption('database', null, InputOption::VALUE_REQUIRED, 'Database name');
+            ->addOption('init-config', null, InputOption::VALUE_REQUIRED, 'Create a configuration file with the specified data (json format)')
+            ->addOption('host', null, InputOption::VALUE_REQUIRED, 'Database host' . $configHint)
+            ->addOption('port', null, InputOption::VALUE_REQUIRED, 'Database port' . $configHint)
+            ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Database user' . $configHint)
+            ->addOption('password', null, InputOption::VALUE_REQUIRED, 'Database password' . $configHint)
+            ->addOption('database', null, InputOption::VALUE_REQUIRED, 'Database name' . $configHint);
+        // phpcs:enable Generic.Files.LineLength.TooLong
     }
 
     /**
@@ -60,7 +67,13 @@ class DumpCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            // Load the config
+            if ($input->getOption('init-config') !== null) {
+                // Create the config file(s)
+                $this->initConfig($input, $output);
+                return 0;
+            }
+
+            // Load the config file(s)
             $config = $this->loadConfig($input);
 
             // Validate the config data
@@ -92,6 +105,24 @@ class DumpCommand extends Command
         }
 
         return 0;
+    }
+
+    /**
+     * Create config file(s).
+     *
+     * @throws ConfigException
+     */
+    private function initConfig(InputInterface $input, OutputInterface $output): void
+    {
+        $data = json_decode($input->getOption('init-config'), true);
+        if (!is_array($data)) {
+            throw new ConfigException('The configuration data must be a json-encoded object.');
+        }
+
+        foreach ($input->getArgument('config_file') as $fileName) {
+            $this->configBuilder->build($fileName, $data);
+            $output->writeln(sprintf('<info>The configuration file "%s" was successfully created.</info>', $fileName));
+        }
     }
 
     /**
