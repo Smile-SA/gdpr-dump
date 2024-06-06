@@ -24,7 +24,7 @@ class MysqlDumper implements DumperInterface
     /**
      * @inheritdoc
      */
-    public function dump(ConfigInterface $config): void
+    public function dump(ConfigInterface $config, bool $dryRun = false): void
     {
         $database = $this->databaseFactory->create($config);
 
@@ -57,9 +57,11 @@ class MysqlDumper implements DumperInterface
         // Close the Doctrine connection before proceeding to the dump creation (MySQLDump-PHP uses its own connection)
         $database->getConnection()->close();
 
-        // Create the dump
-        $output = $config->getDumpOutput();
-        $dumper->start($output);
+        if (!$dryRun) {
+            // Create the dump
+            $dumper->start($config->getDumpOutput());
+        }
+
         $this->eventDispatcher->dispatch(new DumpFinishedEvent($config));
     }
 
