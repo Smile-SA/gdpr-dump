@@ -57,7 +57,8 @@ class DumpCommand extends Command
             ->addOption('port', null, InputOption::VALUE_REQUIRED, 'Database port' . $configHint)
             ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Database user' . $configHint)
             ->addOption('password', null, InputOption::VALUE_REQUIRED, 'Database password' . $configHint)
-            ->addOption('database', null, InputOption::VALUE_REQUIRED, 'Database name' . $configHint);
+            ->addOption('database', null, InputOption::VALUE_REQUIRED, 'Database name' . $configHint)
+            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'The command will validate the configuration file, but won\'t actually perform the dump');
         // phpcs:enable Generic.Files.LineLength.TooLong
     }
 
@@ -94,7 +95,7 @@ class DumpCommand extends Command
                 $this->dumpInfo->setOutput($output);
             }
 
-            $this->dumper->dump($config);
+            $this->dumper->dump($config, $input->getOption('dry-run'));
         } catch (Exception $e) {
             if ($output->isVerbose()) {
                 throw $e;

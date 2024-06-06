@@ -11,5 +11,5 @@ interface DumperInterface
     /**
      * Create a dump according to the configuration.
      */
-    public function dump(ConfigInterface $config): void;
+    public function dump(ConfigInterface $config, bool $dryRun = false): void;
 }
