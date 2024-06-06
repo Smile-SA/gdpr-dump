@@ -18,7 +18,7 @@ class MysqlDumperTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->dumpFile = $this->getResource('db/dump.sql');
+        $this->dumpFile = $this->getResource('var/dump.sql');
     }
 
     /**
