@@ -18,7 +18,7 @@ class MysqlDumperTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->dumpFile = $this->getResource('db/dump.sql');
+        $this->dumpFile = $this->getResource('var/dump.sql');
     }
 
     /**
@@ -52,6 +52,23 @@ class MysqlDumperTest extends TestCase
         $dumper = $this->createDumper();
         $dumper->dump($config);
         $this->assertDumpIsValid(false);
+    }
+
+    /**
+     * Assert that the dry run mode works properly.
+     */
+    public function testDryRun(): void
+    {
+        $config = $this->createConfig();
+        $dumper = $this->createDumper();
+
+        // Make sure the dump file does not exist
+        if (file_exists($this->dumpFile)) {
+            unlink($this->dumpFile);
+        }
+
+        $dumper->dump($config, true);
+        $this->assertFileDoesNotExist($this->dumpFile);
     }
 
     /**

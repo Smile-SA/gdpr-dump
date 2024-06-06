@@ -2,6 +2,7 @@
 /.idea
 /build
 /docker/db-data
+/tests/functional/Resources/var
 /vendor
 /.env
 /.phpunit.result.cache
