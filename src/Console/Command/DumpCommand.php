@@ -40,6 +40,8 @@ class DumpCommand extends Command
      */
     public function configure(): void
     {
+        $configHint = ' (can also be specified in the configuration file)';
+
         $this->setName('gdpr-dump')
             ->setDescription('Create an anonymized dump')
             ->addArgument(
@@ -47,11 +49,11 @@ class DumpCommand extends Command
                 InputArgument::IS_ARRAY | InputArgument::REQUIRED,
                 'Dump configuration file(s)'
             )
-            ->addOption('host', null, InputOption::VALUE_REQUIRED, 'Database host')
-            ->addOption('port', null, InputOption::VALUE_REQUIRED, 'Database port')
-            ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Database user')
-            ->addOption('password', null, InputOption::VALUE_REQUIRED, 'Database password')
-            ->addOption('database', null, InputOption::VALUE_REQUIRED, 'Database name');
+            ->addOption('host', null, InputOption::VALUE_REQUIRED, 'Database host' . $configHint)
+            ->addOption('port', null, InputOption::VALUE_REQUIRED, 'Database port' . $configHint)
+            ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Database user' . $configHint)
+            ->addOption('password', null, InputOption::VALUE_REQUIRED, 'Database password' . $configHint)
+            ->addOption('database', null, InputOption::VALUE_REQUIRED, 'Database name' . $configHint);
     }
 
     /**
@@ -60,7 +62,7 @@ class DumpCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            // Load the config
+            // Load the config file(s)
             $config = $this->loadConfig($input);
 
             // Validate the config data
@@ -133,19 +135,19 @@ class DumpCommand extends Command
                 continue;
             }
 
-            if ($value === '' && $option !== 'password') {
-                // Option must have a value (except the "password" option)
+            if ($value === '') {
+                if ($option === 'password') {
+                    // Remove the password from the config if an empty value was provided
+                    unset($databaseConfig['password']);
+                    continue;
+                }
+
+                // Option must have a value
                 throw new ConfigException(sprintf('Please provide a value for the option "%s".', $option));
             }
 
-            $configKey = $option === 'database' ? 'name' : $option;
-            if ($value === '') {
-                // Remove the password from the config if an empty value was provided
-                unset($databaseConfig[$configKey]);
-                continue;
-            }
-
             // Override the config value with the provided option value
+            $configKey = $option === 'database' ? 'name' : $option;
             $databaseConfig[$configKey] = $value;
         }
 
