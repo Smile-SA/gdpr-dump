@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 
 New features:
 
-- Added command-line options for database credentials: `--host`, `--port`, `--user`, `--password`, `--database` ([#135](https://github.com/Smile-SA/gdpr-dump/pull/135))
+- Added command-line options to specify database credentials: `--host`, `--port`, `--user`, `--password`, `--database` ([#135](https://github.com/Smile-SA/gdpr-dump/pull/135))
+- Added command-line option to perform a dry-run: `--dry-run` ([#137](https://github.com/Smile-SA/gdpr-dump/pull/137))
 
 Breaking changes:
 
