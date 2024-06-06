@@ -165,19 +165,19 @@ class DumpCommand extends Command
                 continue;
             }
 
-            if ($value === '' && $option !== 'password') {
-                // Option must have a value (except the "password" option)
+            if ($value === '') {
+                if ($option === 'password') {
+                    // Remove the password from the config if an empty value was provided
+                    unset($databaseConfig['password']);
+                    continue;
+                }
+
+                // Option must have a value
                 throw new ConfigException(sprintf('Please provide a value for the option "%s".', $option));
             }
 
-            $configKey = $option === 'database' ? 'name' : $option;
-            if ($value === '') {
-                // Remove the password from the config if an empty value was provided
-                unset($databaseConfig[$configKey]);
-                continue;
-            }
-
             // Override the config value with the provided option value
+            $configKey = $option === 'database' ? 'name' : $option;
             $databaseConfig[$configKey] = $value;
         }
 
