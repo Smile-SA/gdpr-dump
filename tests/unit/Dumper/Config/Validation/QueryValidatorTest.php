@@ -33,7 +33,7 @@ class QueryValidatorTest extends TestCase
     }
 
     /**
-     * Assert that the query validator is case insensitive.
+     * Assert that the query validator is case-insensitive.
      */
     public function testIsCaseInsensitive(): void
     {

@@ -37,7 +37,7 @@ class CacheTest extends TestCase
     }
 
     /**
-     * Assert that that the cache storage is shared between converter instances.
+     * Assert that the cache storage is shared between converter instances.
      */
     public function testCacheIsSharedBetweenInstances(): void
     {
