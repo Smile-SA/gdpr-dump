@@ -215,22 +215,20 @@ class ConverterBuilderTest extends TestCase
         $containerMock = $this->createMock(ConverterFactory::class);
         $containerMock
             ->method('create')
-            ->will(
-                $this->returnCallback(
-                    fn (string $value, array $parameters) => match ($value) {
-                        // Converters used in the context of this unit test
-                        'cache' => $this->createConverter(Cache::class, $parameters),
-                        'chain' => $this->createConverter(Chain::class, $parameters),
-                        'conditional' => $this->createConditionalConverter($parameters),
-                        'faker' => $this->createFakerConverter($parameters),
-                        'mock' => $this->createConverter(ConverterMock::class, $parameters),
-                        'notExists' => throw new RuntimeException($value),
-                        'unique' => $this->createConverter(Unique::class, $parameters),
-                        default => throw new UnexpectedValueException(
-                            sprintf('The converter "%s" was not expected in this unit case.', $value)
-                        ),
-                    }
-                )
+            ->willReturnCallback(
+                fn (string $value, array $parameters) => match ($value) {
+                    // Converters used in the context of this unit test
+                    'cache' => $this->createConverter(Cache::class, $parameters),
+                    'chain' => $this->createConverter(Chain::class, $parameters),
+                    'conditional' => $this->createConditionalConverter($parameters),
+                    'faker' => $this->createFakerConverter($parameters),
+                    'mock' => $this->createConverter(ConverterMock::class, $parameters),
+                    'notExists' => throw new RuntimeException($value),
+                    'unique' => $this->createConverter(Unique::class, $parameters),
+                    default => throw new UnexpectedValueException(
+                        sprintf('The converter "%s" was not expected in this unit case.', $value)
+                    ),
+                }
             );
 
         return new ConverterBuilder($containerMock);
