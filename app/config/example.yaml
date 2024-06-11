@@ -1,6 +1,6 @@
 ---
 extends: 'magento2'
-version: '2.4.6'
+version: '2.4.7'
 
 database:
     host: '%env(DB_HOST)%'
