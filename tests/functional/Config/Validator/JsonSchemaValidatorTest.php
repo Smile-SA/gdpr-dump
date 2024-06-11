@@ -106,7 +106,7 @@ class JsonSchemaValidatorTest extends TestCase
     }
 
     /**
-     * Test the tables whitelist.
+     * Test the "tables_whitelist" parameter.
      */
     public function testTablesWhitelist(): void
     {
@@ -118,7 +118,7 @@ class JsonSchemaValidatorTest extends TestCase
     }
 
     /**
-     * Test the tables blacklist.
+     * Test the "tables_blacklist" parameter.
      */
     public function testTablesBlacklist(): void
     {

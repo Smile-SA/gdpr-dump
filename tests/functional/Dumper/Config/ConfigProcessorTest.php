@@ -29,8 +29,8 @@ class ConfigProcessorTest extends TestCase
         $config = $processor->process(new Config($data));
 
         // Check if the table names were resolved
-        $this->assertSame(['customers'], $config->getTablesWhitelist());
-        $this->assertSame(['stores'], $config->getTablesBlacklist());
+        $this->assertSame(['customers'], $config->getIncludedTables());
+        $this->assertSame(['stores'], $config->getExcludedTables());
 
         $tablesConfig = $config->getTablesConfig()->all();
         $this->assertArrayHasKey('customers', $tablesConfig);
@@ -48,8 +48,8 @@ class ConfigProcessorTest extends TestCase
 
         // Process the configuration
         $config = $processor->process(new Config([]));
-        $this->assertEmpty($config->getTablesBlacklist());
-        $this->assertEmpty($config->getTablesWhitelist());
+        $this->assertEmpty($config->getExcludedTables());
+        $this->assertEmpty($config->getIncludedTables());
         $this->assertEmpty($config->getTablesConfig()->all());
     }
 

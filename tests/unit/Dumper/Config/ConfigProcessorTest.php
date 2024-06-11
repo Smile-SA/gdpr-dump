@@ -26,8 +26,8 @@ class ConfigProcessorTest extends TestCase
         $processor = $this->createConfigProcessor();
         $config = $processor->process($config);
 
-        $this->assertSame(['table1'], $config->getTablesBlacklist());
-        $this->assertSame(['table2'], $config->getTablesWhitelist());
+        $this->assertSame(['table1'], $config->getExcludedTables());
+        $this->assertSame(['table2'], $config->getIncludedTables());
         $this->assertSame(['table3'], array_keys($config->getTablesConfig()->all()));
     }
 
@@ -46,8 +46,8 @@ class ConfigProcessorTest extends TestCase
         $processor = $this->createConfigProcessor();
         $config = $processor->process($config);
 
-        $this->assertSame(['table1', 'table2', 'table3'], $config->getTablesBlacklist());
-        $this->assertSame(['table1', 'table2', 'table3'], $config->getTablesWhitelist());
+        $this->assertSame(['table1', 'table2', 'table3'], $config->getExcludedTables());
+        $this->assertSame(['table1', 'table2', 'table3'], $config->getIncludedTables());
         $this->assertSame(['table1', 'table2', 'table3'], array_keys($config->getTablesConfig()->all()));
     }
 
@@ -60,8 +60,8 @@ class ConfigProcessorTest extends TestCase
         $processor = $this->createConfigProcessor();
         $config = $processor->process($config);
 
-        $this->assertSame([], $config->getTablesBlacklist());
-        $this->assertSame([], $config->getTablesWhitelist());
+        $this->assertSame([], $config->getExcludedTables());
+        $this->assertSame([], $config->getIncludedTables());
         $this->assertSame([], $config->getTablesConfig()->all());
     }
 

@@ -84,7 +84,7 @@ class MysqlDumperTest extends TestCase
         unlink($this->dumpFile);
         $this->assertNotEmpty($output);
 
-        // Assert that only whitelisted tables are included in the dump
+        // Assert that the dump only includes allowed tables
         $this->assertStringContainsString('CREATE TABLE `customers`', $output);
         $this->assertStringContainsString('CREATE TABLE `stores`', $output);
         $this->assertStringContainsString('CREATE TABLE `addresses`', $output);

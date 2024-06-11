@@ -87,9 +87,9 @@ class MysqlDumper implements DumperInterface
             }
         }
 
-        // Tables to whitelist/blacklist/truncate
-        $settings['include-tables'] = $config->getTablesWhitelist();
-        $settings['exclude-tables'] = $config->getTablesBlacklist();
+        // Tables to include/exclude/truncate
+        $settings['include-tables'] = $config->getIncludedTables();
+        $settings['exclude-tables'] = $config->getExcludedTables();
         $settings['no-data'] = $config->getTablesToTruncate();
 
         // Set readonly session

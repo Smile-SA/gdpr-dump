@@ -149,8 +149,8 @@ class DumpInfo
      */
     private function getMaxSteps(DumperConfig $config, MetadataInterface $metadata): int
     {
-        $includedTables = $config->getTablesWhitelist() ?: $metadata->getTableNames();
-        $excludedTables = $config->getTablesBlacklist();
+        $includedTables = $config->getIncludedTables() ?: $metadata->getTableNames();
+        $excludedTables = $config->getExcludedTables();
 
         return count(array_diff($includedTables, $excludedTables));
     }

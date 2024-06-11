@@ -14,21 +14,21 @@ class DumperConfigTest extends TestCase
     /**
      * Test the "tables_whitelist" parameter.
      */
-    public function testTablesWhitelist(): void
+    public function testIncludedTables(): void
     {
-        $whitelist = ['table1', 'table2'];
-        $config = $this->createConfig(['tables_whitelist' => $whitelist]);
-        $this->assertSame($whitelist, $config->getTablesWhitelist());
+        $includedTables = ['table1', 'table2'];
+        $config = $this->createConfig(['tables_whitelist' => $includedTables]);
+        $this->assertSame($includedTables, $config->getIncludedTables());
     }
 
     /**
      * Test the "tables_blacklist" parameter.
      */
-    public function testTablesBlacklist(): void
+    public function testExcludedTables(): void
     {
-        $blacklist = ['table1', 'table2'];
-        $config = $this->createConfig(['tables_blacklist' => $blacklist]);
-        $this->assertSame($blacklist, $config->getTablesBlacklist());
+        $excludedTables = ['table1', 'table2'];
+        $config = $this->createConfig(['tables_blacklist' => $excludedTables]);
+        $this->assertSame($excludedTables, $config->getExcludedTables());
     }
 
     /**
@@ -120,8 +120,8 @@ class DumperConfigTest extends TestCase
     {
         $config = $this->createConfig([]);
 
-        $this->assertSame([], $config->getTablesWhitelist());
-        $this->assertSame([], $config->getTablesBlacklist());
+        $this->assertSame([], $config->getIncludedTables());
+        $this->assertSame([], $config->getExcludedTables());
         $this->assertSame([], $config->getTablesToSort());
         $this->assertSame([], $config->getTablesToFilter());
         $this->assertSame([], $config->getTablesToTruncate());

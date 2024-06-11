@@ -50,12 +50,12 @@ class DumperConfig
     /**
      * @var string[]
      */
-    private array $tablesWhitelist = [];
+    private array $includedTables = [];
 
     /**
      * @var string[]
      */
-    private array $tablesBlacklist = [];
+    private array $excludedTables = [];
 
     /**
      * @var string[]
@@ -143,23 +143,23 @@ class DumperConfig
     }
 
     /**
-     * Get the tables to whitelist.
+     * Get the tables to include.
      *
      * @return string[]
      */
-    public function getTablesWhitelist(): array
+    public function getIncludedTables(): array
     {
-        return $this->tablesWhitelist;
+        return $this->includedTables;
     }
 
     /**
-     * Get the tables to blacklist.
+     * Get the tables to exclude.
      *
      * @return string[]
      */
-    public function getTablesBlacklist(): array
+    public function getExcludedTables(): array
     {
-        return $this->tablesBlacklist;
+        return $this->excludedTables;
     }
 
     /**
@@ -259,8 +259,8 @@ class DumperConfig
      */
     private function prepareTableSettings(ConfigInterface $config): void
     {
-        $this->tablesWhitelist = $config->get('tables_whitelist', []);
-        $this->tablesBlacklist = $config->get('tables_blacklist', []);
+        $this->includedTables = $config->get('tables_whitelist', []);
+        $this->excludedTables = $config->get('tables_blacklist', []);
         $this->tablesConfig = new TableConfigCollection();
 
         foreach ($config->get('tables', []) as $tableName => $tableData) {

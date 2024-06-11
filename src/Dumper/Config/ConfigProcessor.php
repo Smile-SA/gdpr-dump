@@ -31,7 +31,7 @@ class ConfigProcessor
     }
 
     /**
-     * Remote tables that don't exist and resolve patterns (e.g. "log_*") for the table whitelist/blacklist.
+     * Remote tables that don't exist and resolve patterns (e.g. "log_*") for included/excluded tables.
      */
     private function processTableLists(ConfigInterface $config): void
     {
