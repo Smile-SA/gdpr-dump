@@ -16,7 +16,7 @@ class ConditionBuilder
     /**
      * @var string[]
      */
-    private array $functionWhitelist = [
+    private array $allowedFunctions = [
         'addslashes', 'array_*', 'chr', 'date', 'empty', 'explode', 'htmlentities', 'htmlspecialchars',
         'implode', 'in_array', 'is_*', 'isset', 'lcfirst', 'ltrim', 'mb_*', 'number_format', 'ord',
         'preg_*', 'rtrim', 'sprintf', 'str_*', 'strchr', 'strcmp', 'strcoll', 'strcspn', 'stripcslashes',
@@ -186,7 +186,7 @@ class ConditionBuilder
     {
         $allowed = false;
 
-        foreach ($this->functionWhitelist as $pattern) {
+        foreach ($this->allowedFunctions as $pattern) {
             if (fnmatch($pattern, $function)) {
                 $allowed = true;
                 break;
