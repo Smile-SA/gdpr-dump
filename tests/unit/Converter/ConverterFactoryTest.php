@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter;
 use RuntimeException;
 use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\DependencyInjection\Compiler\ConverterAliasPass;
+use Smile\GdprDump\DependencyInjection\ConverterAliasResolver;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
@@ -51,6 +52,6 @@ class ConverterFactoryTest extends TestCase
                 )
             );
 
-        return new ConverterFactory($containerMock);
+        return new ConverterFactory($containerMock, new ConverterAliasResolver());
     }
 }

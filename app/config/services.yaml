@@ -87,12 +87,16 @@ services:
         class: 'Smile\GdprDump\Converter\ConverterFactory'
         arguments:
             - '@service_container'
+            - '@di.converter_alias_resolver'
 
     converter.condition_builder:
         class: 'Smile\GdprDump\Converter\ConditionBuilder'
 
     database.factory:
         class: 'Smile\GdprDump\Database\DatabaseFactory'
+
+    di.converter_alias_resolver:
+        class: 'Smile\GdprDump\DependencyInjection\ConverterAliasResolver'
 
     dumper:
         class: 'Smile\GdprDump\Dumper\MysqlDumper'
