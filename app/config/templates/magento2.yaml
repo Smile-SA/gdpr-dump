@@ -593,9 +593,6 @@ if_version:
                 converters:
                     email:
                         converter: 'randomizeEmail'
-
-            email_order:
-                converters:
                     email_imported:
                         converter: 'randomizeEmail'
 
