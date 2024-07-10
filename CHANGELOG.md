@@ -2,9 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [5.0.1] - 2024-07-10
+[5.0.1]: https://github.com/Smile-SA/gdpr-dump/compare/5.0.0...5.0.1
 
-- Fixed invalid column name in the magento2 template
+- Fixed invalid column name in the magento2 template ([#141](https://github.com/Smile-SA/gdpr-dump/pull/141))
 
 ## [5.0.0] - 2024-07-01
 [5.0.0]: https://github.com/Smile-SA/gdpr-dump/compare/4.2.2...5.0.0
