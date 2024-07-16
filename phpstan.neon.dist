@@ -5,8 +5,9 @@ parameters:
         - bin
         - src
         - tests
-    checkMissingIterableValueType: false
     ignoreErrors:
+        -
+            identifier: missingType.iterableValue
         -
             # False positive
             message: '#Cannot call method [a-zA-Z]+\(\) on Smile\\GdprDump\\Database\\Metadata\\Definition\\Constraint\\ForeignKey#'
