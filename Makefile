@@ -67,7 +67,7 @@ db-import: up ## Execute a SQL file. Pass the parameter "filename=" to set the f
 	$(eval filename ?= dump.sql)
 	$(DOCKER_COMPOSE) exec -T db sh -c 'mysql --password=$$MYSQL_ROOT_PASSWORD' < $(filename)
 
-vendor: composer.json
+vendor: | composer.json
 	$(PHP_CLI) composer install
 
 .env: | .env.dist
