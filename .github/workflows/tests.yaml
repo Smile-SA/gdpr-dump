@@ -15,10 +15,11 @@ jobs:
                 php-version:
                     - '8.1'
                     - '8.2'
+                    - '8.3'
 
         services:
             mysql:
-                image: 'mariadb:10.5'
+                image: 'mariadb:10.6'
                 env:
                     MYSQL_ALLOW_EMPTY_PASSWORD: false
                     MYSQL_ROOT_PASSWORD: '!root'
