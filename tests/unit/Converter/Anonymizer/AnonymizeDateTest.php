@@ -24,6 +24,7 @@ class AnonymizeDateTest extends TestCase
 
         $date = '1990-12-31';
         $value = $converter->convert($date);
+        $this->assertIsString($value);
         $this->assertDateIsAnonymized($value, $date, 'Y-m-d');
     }
 
@@ -37,6 +38,7 @@ class AnonymizeDateTest extends TestCase
 
         $date = '31/12/1990';
         $value = $converter->convert($date);
+        $this->assertIsString($value);
         $this->assertDateIsAnonymized($value, $date, $format);
     }
 

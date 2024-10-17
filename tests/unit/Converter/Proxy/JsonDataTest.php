@@ -29,6 +29,7 @@ class JsonDataTest extends TestCase
         $this->assertNull($value);
 
         $value = $converter->convert($this->getJsonData());
+        $this->assertIsString($value);
         $this->assertJson($this->getExpectedData(), $value);
     }
 

@@ -19,6 +19,7 @@ class AnonymizeDateTimeTest extends AnonymizeDateTest
 
         $date = '1990-12-31 12:05:41';
         $value = $converter->convert($date);
+        $this->assertIsString($value);
         $this->assertDateIsAnonymized($value, $date, 'Y-m-d H:i:s');
     }
 
@@ -32,6 +33,7 @@ class AnonymizeDateTimeTest extends AnonymizeDateTest
 
         $date = '31/12/1990 12:05:41';
         $value = $converter->convert($date);
+        $this->assertIsString($value);
         $this->assertDateIsAnonymized($value, $date, $format);
     }
 

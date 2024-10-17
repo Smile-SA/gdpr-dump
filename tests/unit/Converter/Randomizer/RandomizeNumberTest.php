@@ -20,12 +20,13 @@ class RandomizeNumberTest extends TestCase
         $this->assertSame('', $value);
 
         $value = $converter->convert('+33601010101');
+        $this->assertIsString($value);
         $this->assertStringStartsWith('+', $value);
         $this->assertSame(12, strlen($value));
 
         // Assert that the part without the "+" is still a numeric value
         $valueWithoutPlus = substr($value, 1);
-        $this->assertTrue(is_numeric($valueWithoutPlus));
+        $this->assertIsNumeric($valueWithoutPlus);
         $this->assertNotSame('33601010101', $valueWithoutPlus);
     }
 }

@@ -21,6 +21,7 @@ class RandomTextTest extends TestCase
         $this->assertNotNull($value);
 
         $value = $converter->convert('user1');
+        $this->assertIsString($value);
         $this->assertStringNotContainsString('user1', $value);
         $this->assertGreaterThanOrEqual(3, strlen($value));
     }
@@ -37,6 +38,7 @@ class RandomTextTest extends TestCase
         ]);
 
         $value = $converter->convert('user1');
+        $this->assertIsString($value);
         $this->assertSame(20, strlen($value));
     }
 
