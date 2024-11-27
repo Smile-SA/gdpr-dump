@@ -106,7 +106,7 @@ tables:
             email:
                 converter: 'randomizeEmail'
             dob:
-                converter: 'anonymizeDate'
+                converter: 'anonymizeDateTime'
             shipping_full:
                 converter: 'randomizeText'
             billing_full:
