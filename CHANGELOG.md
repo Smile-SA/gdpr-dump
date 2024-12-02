@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.0.2] - 2024-12-02
+[5.0.2]: https://github.com/Smile-SA/gdpr-dump/compare/5.0.1...5.0.2
+
+- Removed converter for "email_imported" column from magento2 template file ([#144](https://github.com/Smile-SA/gdpr-dump/pull/144))
+
 ## [5.0.1] - 2024-07-10
 [5.0.1]: https://github.com/Smile-SA/gdpr-dump/compare/5.0.0...5.0.1
 
