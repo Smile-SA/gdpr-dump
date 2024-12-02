@@ -593,8 +593,6 @@ if_version:
                 converters:
                     email:
                         converter: 'randomizeEmail'
-                    email_imported:
-                        converter: 'randomizeEmail'
 
             email_sms_order_queue:
                 converters:
