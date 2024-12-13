@@ -73,6 +73,9 @@
             "type": "object",
             "required": true,
             "properties": {
+                "url": {
+                    "type": "string"
+                },
                 "driver": {
                     "type": "string",
                     "enum": ["pdo_mysql"]
