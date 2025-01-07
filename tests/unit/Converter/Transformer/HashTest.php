@@ -8,7 +8,7 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Transformer\Hash;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-class HashTest extends TestCase
+final class HashTest extends TestCase
 {
     /**
      * Test the converter.

@@ -9,7 +9,7 @@ use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Database\Metadata\MysqlMetadata;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
-class MysqlMetadataTest extends TestCase
+final class MysqlMetadataTest extends TestCase
 {
     /**
      * Test the "getTableNames" method.

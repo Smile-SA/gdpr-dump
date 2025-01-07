@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Dumper\Config\Validation;
 use TheSeer\Tokenizer\TokenCollection;
 use TheSeer\Tokenizer\Tokenizer;
 
-class QueryValidator
+final class QueryValidator
 {
     private Tokenizer $tokenizer;
 

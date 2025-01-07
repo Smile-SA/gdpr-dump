@@ -12,7 +12,7 @@ use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 use stdClass;
 
-class UniqueTest extends TestCase
+final class UniqueTest extends TestCase
 {
     /**
      * Test the converter.

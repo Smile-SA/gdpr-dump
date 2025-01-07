@@ -9,7 +9,7 @@ use Smile\GdprDump\Database\ParameterBag;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use UnexpectedValueException;
 
-class ParameterBagTest extends TestCase
+final class ParameterBagTest extends TestCase
 {
     /**
      * Test the getter methods.

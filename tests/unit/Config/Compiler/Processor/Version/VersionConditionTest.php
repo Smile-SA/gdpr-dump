@@ -8,7 +8,7 @@ use Smile\GdprDump\Config\Compiler\Processor\Version\InvalidVersionException;
 use Smile\GdprDump\Config\Compiler\Processor\Version\VersionCondition;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class VersionConditionTest extends TestCase
+final class VersionConditionTest extends TestCase
 {
     /**
      * Test if the condition is properly parsed.

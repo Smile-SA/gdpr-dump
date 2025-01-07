@@ -10,7 +10,7 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use stdClass;
 
-class ParameterProcessorTest extends TestCase
+final class ParameterProcessorTest extends TestCase
 {
     public function testProcessor(): void
     {

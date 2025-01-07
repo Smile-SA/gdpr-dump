@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CompileCommand extends Command
+final class CompileCommand extends Command
 {
     public function __construct(private Compiler $compiler, private string $defaultLocale)
     {

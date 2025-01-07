@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Console;
 use Composer\InstalledVersions;
 use Symfony\Component\Console\Application as BaseApplication;
 
-class Application extends BaseApplication
+final class Application extends BaseApplication
 {
     private const PACKAGE_NAME = 'smile/gdpr-dump';
 

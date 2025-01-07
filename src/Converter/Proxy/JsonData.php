@@ -9,7 +9,7 @@ use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 use Smile\GdprDump\Util\ArrayHelper;
 
-class JsonData implements ConverterInterface
+final class JsonData implements ConverterInterface
 {
     /**
      * @var ConverterInterface[]

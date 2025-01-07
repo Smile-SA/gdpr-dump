@@ -22,7 +22,7 @@ use UnexpectedValueException;
  * We use a custom abstraction layer for database metadata, because the Doctrine schema manager
  * crashes when used with databases that use custom Doctrine types (e.g. OroCommerce).
  */
-class Database
+final class Database
 {
     public const DRIVER_MYSQL = 'pdo_mysql';
 

@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Faker;
 use Faker\Factory;
 use Faker\Generator;
 
-class FakerService
+final class FakerService
 {
     private ?Generator $generator = null;
 

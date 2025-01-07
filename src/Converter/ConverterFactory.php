@@ -9,7 +9,7 @@ use Smile\GdprDump\DependencyInjection\ConverterAliasResolver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
-class ConverterFactory
+final class ConverterFactory
 {
     public function __construct(
         private ContainerInterface $container,

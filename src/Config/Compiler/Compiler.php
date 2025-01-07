@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Config\Compiler;
 use Smile\GdprDump\Config\Compiler\Processor\ProcessorInterface;
 use Smile\GdprDump\Config\ConfigInterface;
 
-class Compiler implements CompilerInterface
+final class Compiler implements CompilerInterface
 {
     /**
      * @param ProcessorInterface[] $processors

@@ -8,7 +8,7 @@ use Smile\GdprDump\Converter\Generator\SetValue;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-class SetValueTest extends TestCase
+final class SetValueTest extends TestCase
 {
     /**
      * Test the converter.

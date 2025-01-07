@@ -9,7 +9,7 @@ use TheSeer\Tokenizer\Token;
 use TheSeer\Tokenizer\TokenCollection;
 use TheSeer\Tokenizer\Tokenizer;
 
-class ConditionBuilder
+final class ConditionBuilder
 {
     private Tokenizer $tokenizer;
 

@@ -8,7 +8,7 @@ use Smile\GdprDump\Converter\Generator\NumberBetween;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-class NumberBetweenTest extends TestCase
+final class NumberBetweenTest extends TestCase
 {
     /**
      * Test the converter.

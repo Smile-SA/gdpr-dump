@@ -9,7 +9,7 @@ use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 use Smile\GdprDump\Util\ArrayHelper;
 
-class FromContext implements ConverterInterface
+final class FromContext implements ConverterInterface
 {
     private string $key;
 

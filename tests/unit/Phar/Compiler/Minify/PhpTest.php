@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Phar\Compiler\Minify;
 use Smile\GdprDump\Phar\Minify\Php;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class PhpTest extends TestCase
+final class PhpTest extends TestCase
 {
     /**
      * Test the "minify" method.

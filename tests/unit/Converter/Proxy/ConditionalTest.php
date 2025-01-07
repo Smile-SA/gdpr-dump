@@ -6,18 +6,19 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Proxy\Conditional;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 use stdClass;
 
-class ConditionalTest extends TestCase
+final class ConditionalTest extends TestCase
 {
     /**
      * Test the converter.
      */
     public function testCondition(): void
     {
-        $converter = $this->createConditionalConverter([
+        $converter = $this->createConverter(Conditional::class, [
             'condition' => '{{id}} === @my_var',
             'if_true_converter' => $this->createIfTrueConverter(),
             'if_false_converter' => $this->createIfFalseConverter(),
@@ -39,7 +40,7 @@ class ConditionalTest extends TestCase
     public function testConvertersNotSet(): void
     {
         $this->expectException(ValidationException::class);
-        $this->createConditionalConverter(['condition' => '{{id}} === 1']);
+        $this->createConverter(Conditional::class, ['condition' => '{{id}} === 1']);
     }
 
     /**
@@ -49,7 +50,7 @@ class ConditionalTest extends TestCase
     public function testIfTrueConverterNotValid(): void
     {
         $this->expectException(ValidationException::class);
-        $this->createConditionalConverter(['if_true_converter' => new stdClass()]);
+        $this->createConverter(Conditional::class, ['if_true_converter' => new stdClass()]);
     }
 
     /**
@@ -59,7 +60,7 @@ class ConditionalTest extends TestCase
     public function testIfFalseConverterNotValid(): void
     {
         $this->expectException(ValidationException::class);
-        $this->createConditionalConverter(['if_false_converter' => new stdClass()]);
+        $this->createConverter(Conditional::class, ['if_false_converter' => new stdClass()]);
     }
 
     /**
@@ -68,7 +69,7 @@ class ConditionalTest extends TestCase
     public function testConditionNotSet(): void
     {
         $this->expectException(ValidationException::class);
-        $this->createConditionalConverter(['if_true_converter' => $this->createIfTrueConverter()]);
+        $this->createConverter(Conditional::class, ['if_true_converter' => $this->createIfTrueConverter()]);
     }
 
     /**
@@ -77,7 +78,7 @@ class ConditionalTest extends TestCase
     public function testEmptyCondition(): void
     {
         $this->expectException(ValidationException::class);
-        $this->createConditionalConverter([
+        $this->createConverter(Conditional::class, [
             'if_true_converter' => $this->createIfTrueConverter(),
             'condition' => '',
         ]);

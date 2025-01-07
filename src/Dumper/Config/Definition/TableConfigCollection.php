@@ -12,7 +12,7 @@ use UnexpectedValueException;
 /**
  * @implements IteratorAggregate<TableConfig>
  */
-class TableConfigCollection implements IteratorAggregate
+final class TableConfigCollection implements IteratorAggregate
 {
     /**
      * @var TableConfig[]

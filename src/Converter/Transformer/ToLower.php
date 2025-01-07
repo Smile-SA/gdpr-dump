@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Converter\Transformer;
 
 use Smile\GdprDump\Converter\ConverterInterface;
 
-class ToLower implements ConverterInterface
+final class ToLower implements ConverterInterface
 {
     private bool $multiByteEnabled;
 

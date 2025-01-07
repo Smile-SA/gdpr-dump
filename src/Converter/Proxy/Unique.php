@@ -9,7 +9,7 @@ use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-class Unique implements ConverterInterface
+final class Unique implements ConverterInterface
 {
     private ConverterInterface $converter;
     private int $maxRetries;

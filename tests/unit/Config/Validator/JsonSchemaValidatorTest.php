@@ -8,7 +8,7 @@ use Smile\GdprDump\Config\Validator\JsonSchemaValidator;
 use Smile\GdprDump\Config\Validator\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class JsonSchemaValidatorTest extends TestCase
+final class JsonSchemaValidatorTest extends TestCase
 {
     private string $schemaFile;
 

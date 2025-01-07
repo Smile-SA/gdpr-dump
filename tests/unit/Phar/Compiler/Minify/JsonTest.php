@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Phar\Compiler\Minify;
 use Smile\GdprDump\Phar\Minify\Json;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class JsonTest extends TestCase
+final class JsonTest extends TestCase
 {
     /**
      * Test the "minify" method.

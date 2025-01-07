@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
 use Smile\GdprDump\Converter\Randomizer\RandomizeNumber;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-class RandomizeNumberTest extends TestCase
+final class RandomizeNumberTest extends TestCase
 {
     /**
      * Test the converter.

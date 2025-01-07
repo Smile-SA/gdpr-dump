@@ -8,7 +8,7 @@ use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-class Replace implements ConverterInterface
+final class Replace implements ConverterInterface
 {
     private string $search;
     private string $replacement;

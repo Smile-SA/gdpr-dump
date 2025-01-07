@@ -10,7 +10,7 @@ use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use TheSeer\Tokenizer\Token;
 
-class QueryValidatorTest extends TestCase
+final class QueryValidatorTest extends TestCase
 {
     /**
      * Assert that no exceptio is thrown when the query is valid.

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Parameters;
 
-class Parameter
+final class Parameter
 {
     public const TYPE_BOOL = 'bool';
     public const TYPE_STRING = 'string';

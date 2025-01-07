@@ -8,7 +8,7 @@ use Smile\GdprDump\Converter\Anonymizer\AnonymizeDateTime;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use UnexpectedValueException;
 
-class AnonymizeDateTimeTest extends AnonymizeDateTest
+final class AnonymizeDateTimeTest extends AnonymizeDateTest
 {
     /**
      * Test the converter.

@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Config\Validator;
 use Smile\GdprDump\Config\Validator\ValidationResult;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class ValidationResultTest extends TestCase
+final class ValidationResultTest extends TestCase
 {
     /**
      * Test the "valid" property.

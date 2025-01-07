@@ -9,10 +9,10 @@ use RuntimeException;
 use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Converter\ConverterBuilder;
 use Smile\GdprDump\Converter\ConverterInterface;
-use Smile\GdprDump\Dumper\Config\DumperConfig;
+use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
 
-class DataConverterListener
+final class DataConverterListener
 {
     private array $context = [];
 
@@ -88,7 +88,7 @@ class DataConverterListener
     /**
      * Create the converters, grouped by table.
      */
-    private function buildConverters(DumperConfig $config): void
+    private function buildConverters(DumperConfigInterface $config): void
     {
         $this->converters = [];
         $this->skipConditions = [];

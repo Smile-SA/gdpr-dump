@@ -9,7 +9,7 @@ use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use UnexpectedValueException;
 
-class TableConfigTest extends TestCase
+final class TableConfigTest extends TestCase
 {
     /**
      * Test the creation of a table filter with empty data.

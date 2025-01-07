@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Converter\Generator;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-class RandomEmail extends RandomText
+final class RandomEmail extends RandomText
 {
     /**
      * @var string[]

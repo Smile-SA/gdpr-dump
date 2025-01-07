@@ -6,6 +6,6 @@ namespace Smile\GdprDump\Config\Compiler\Processor\Version;
 
 use Smile\GdprDump\Config\Compiler\CompileException;
 
-class MissingVersionException extends CompileException
+final class MissingVersionException extends CompileException
 {
 }

@@ -9,7 +9,7 @@ use Smile\GdprDump\Config\Compiler\Processor\VersionProcessor;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class VersionProcessorTest extends TestCase
+final class VersionProcessorTest extends TestCase
 {
     /**
      * Assert that "if_version" blocks are processed successfully.

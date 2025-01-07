@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Database;
 
 use Smile\GdprDump\Config\ConfigInterface;
 
-class DatabaseFactory
+final class DatabaseFactory
 {
     /**
      * Create a database object.

@@ -8,7 +8,7 @@ use Faker\Factory;
 use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class FakerServiceTest extends TestCase
+final class FakerServiceTest extends TestCase
 {
     /**
      * Test the "getGenerator" method.

@@ -8,7 +8,7 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Transformer\AppendText;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-class AppendTextTest extends TestCase
+final class AppendTextTest extends TestCase
 {
     /**
      * Test the converter.

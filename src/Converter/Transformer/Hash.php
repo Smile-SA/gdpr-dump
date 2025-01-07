@@ -9,7 +9,7 @@ use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 
-class Hash implements ConverterInterface
+final class Hash implements ConverterInterface
 {
     private string $algorithm;
 

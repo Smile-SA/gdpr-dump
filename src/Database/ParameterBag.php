@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Database;
 
 use UnexpectedValueException;
 
-class ParameterBag
+final class ParameterBag
 {
     private array $params;
     private array $defaults = [

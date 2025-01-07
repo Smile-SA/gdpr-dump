@@ -8,7 +8,7 @@ use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 
-class ConfigProcessor
+final class ConfigProcessor
 {
     /**
      * @var string[]|null

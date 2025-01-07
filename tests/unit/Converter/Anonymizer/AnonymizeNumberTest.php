@@ -8,7 +8,7 @@ use Smile\GdprDump\Converter\Anonymizer\AnonymizeNumber;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-class AnonymizeNumberTest extends TestCase
+final class AnonymizeNumberTest extends TestCase
 {
     /**
      * Test the converter.

@@ -8,7 +8,7 @@ use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
-class ConfigProcessorTest extends TestCase
+final class ConfigProcessorTest extends TestCase
 {
     /**
      * Test the table name resolution.

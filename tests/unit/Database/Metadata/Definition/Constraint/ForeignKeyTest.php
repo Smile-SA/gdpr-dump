@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Database\Metadata\Definition\Constraint;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class ForeignKeyTest extends TestCase
+final class ForeignKeyTest extends TestCase
 {
     /**
      * Test the getters methods.

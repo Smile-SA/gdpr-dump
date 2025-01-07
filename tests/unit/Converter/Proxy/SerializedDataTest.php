@@ -9,7 +9,7 @@ use Smile\GdprDump\Converter\Proxy\SerializedData;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-class SerializedDataTest extends TestCase
+final class SerializedDataTest extends TestCase
 {
     /**
      * Test the converter.

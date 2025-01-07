@@ -8,7 +8,7 @@ use Smile\GdprDump\Database\Driver\MysqlDriver;
 use Smile\GdprDump\Database\ParameterBag;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class MysqlDriverTest extends TestCase
+final class MysqlDriverTest extends TestCase
 {
     /**
      * Test if the DSN is generated successfully.

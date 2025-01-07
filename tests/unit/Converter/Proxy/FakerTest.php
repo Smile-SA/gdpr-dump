@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
 use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Proxy\Faker;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-class FakerTest extends TestCase
+final class FakerTest extends TestCase
 {
     /**
      * Test the converter.
      */
     public function testConverter(): void
     {
-        $converter = $this->createFakerConverter([
+        $converter = $this->createConverter(Faker::class, [
             'formatter' => 'numberBetween',
             'arguments' => [1, 1],
         ]);
@@ -28,7 +29,7 @@ class FakerTest extends TestCase
      */
     public function testValuePlaceholder(): void
     {
-        $converter = $this->createFakerConverter([
+        $converter = $this->createConverter(Faker::class, [
             'formatter' => 'numberBetween',
             'arguments' => ['{{value}}', '{{value}}'],
         ]);
@@ -43,7 +44,7 @@ class FakerTest extends TestCase
     public function testFormatterNotSet(): void
     {
         $this->expectException(ValidationException::class);
-        $this->createFakerConverter();
+        $this->createConverter(Faker::class);
     }
 
     /**
@@ -52,7 +53,7 @@ class FakerTest extends TestCase
     public function testInvalidFormatter(): void
     {
         $this->expectException(ValidationException::class);
-        $this->createFakerConverter([
+        $this->createConverter(Faker::class, [
             'formatter' => 'doesNotExist',
             'arguments' => [1, 1],
         ]);

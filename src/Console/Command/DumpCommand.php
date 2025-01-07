@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
-class DumpCommand extends Command
+final class DumpCommand extends Command
 {
     public function __construct(
         private DumperInterface $dumper,

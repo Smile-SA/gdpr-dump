@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Converter\Generator;
 
 use Smile\GdprDump\Converter\ConverterInterface;
 
-class SetNull implements ConverterInterface
+final class SetNull implements ConverterInterface
 {
     /**
      * @inheritdoc

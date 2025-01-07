@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Parameters;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class ParameterTest extends TestCase
+final class ParameterTest extends TestCase
 {
     /**
      * Test the parameter object.

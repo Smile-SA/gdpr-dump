@@ -9,7 +9,7 @@ use Smile\GdprDump\Dumper\Config\Definition\TableConfigCollection;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use UnexpectedValueException;
 
-class TableConfigCollectionTest extends TestCase
+final class TableConfigCollectionTest extends TestCase
 {
     /**
      * Test that an empty collection behaves as expected.

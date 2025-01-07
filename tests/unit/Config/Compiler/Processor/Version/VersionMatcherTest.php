@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Config\Compiler\Processor\Version;
 use Smile\GdprDump\Config\Compiler\Processor\Version\VersionMatcher;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class VersionMatcherTest extends TestCase
+final class VersionMatcherTest extends TestCase
 {
     /**
      * Test the "match" method with a single condition.

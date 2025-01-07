@@ -10,7 +10,7 @@ use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class CompilerTest extends TestCase
+final class CompilerTest extends TestCase
 {
     /**
      * Test the config compiler.

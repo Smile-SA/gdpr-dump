@@ -11,7 +11,7 @@ use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 use stdClass;
 
-class CacheTest extends TestCase
+final class CacheTest extends TestCase
 {
     /**
      * Assert that values are properly cached.

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Compiler\Processor\Version;
 
-class VersionMatcher
+final class VersionMatcher
 {
     /**
      * Check whether the requirement (e.g. ">=1.0.0 <2.0.0") matches the specified version (e.g. "1.1.0").

@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Dumper\Config\Definition\Table;
 
 use UnexpectedValueException;
 
-class SortOrder
+final class SortOrder
 {
     public const DIRECTION_ASC = 'ASC';
     public const DIRECTION_DESC = 'DESC';

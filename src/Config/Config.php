@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config;
 
-class Config implements ConfigInterface
+final class Config implements ConfigInterface
 {
     public function __construct(private array $items = [])
     {

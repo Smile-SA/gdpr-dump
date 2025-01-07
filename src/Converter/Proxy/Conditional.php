@@ -10,7 +10,7 @@ use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 
-class Conditional implements ConverterInterface
+final class Conditional implements ConverterInterface
 {
     private string $condition;
     private ?ConverterInterface $ifTrueConverter = null;

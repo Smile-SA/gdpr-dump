@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Converter\Anonymizer;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-class AnonymizeEmail extends AnonymizeText
+final class AnonymizeEmail extends AnonymizeText
 {
     /**
      * @var string[]

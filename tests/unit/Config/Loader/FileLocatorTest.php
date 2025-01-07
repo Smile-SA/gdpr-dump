@@ -8,7 +8,7 @@ use Smile\GdprDump\Config\Loader\FileLocator;
 use Smile\GdprDump\Config\Loader\FileNotFoundException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class FileLocatorTest extends TestCase
+final class FileLocatorTest extends TestCase
 {
     /**
      * Check if the locator can resolve relative paths.

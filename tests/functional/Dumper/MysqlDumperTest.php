@@ -9,7 +9,7 @@ use Smile\GdprDump\Dumper\MysqlDumper;
 use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
-class MysqlDumperTest extends TestCase
+final class MysqlDumperTest extends TestCase
 {
     private string $dumpFile;
 

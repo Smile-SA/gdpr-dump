@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Dumper\Config\Validation;
 
 use TheSeer\Tokenizer\Token;
 
-class WhereExprValidator
+final class WhereExprValidator
 {
     private QueryValidator $queryValidator;
 
