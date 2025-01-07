@@ -13,19 +13,8 @@ use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Database\Metadata\MysqlMetadata;
 use UnexpectedValueException;
 
-/**
- * Wrapper that stores the following objects:
- * - connection: the Doctrine connection.
- * - driver: allows to retrieve the DSN that was used to connect to the database.
- * - metadata: allows to fetch the database metadata (table names, foreign key constraints).
- *
- * We use a custom abstraction layer for database metadata, because the Doctrine schema manager
- * crashes when used with databases that use custom Doctrine types (e.g. OroCommerce).
- */
-final class Database
+final class Database implements DatabaseInterface
 {
-    public const DRIVER_MYSQL = 'pdo_mysql';
-
     private Connection $connection;
     private DriverInterface $driver;
     private MetadataInterface $metadata;
@@ -53,7 +42,7 @@ final class Database
     }
 
     /**
-     * Get the doctrine connection.
+     * @inheritdoc
      */
     public function getConnection(): Connection
     {
@@ -61,7 +50,7 @@ final class Database
     }
 
     /**
-     * Get the database driver.
+     * @inheritdoc
      */
     public function getDriver(): DriverInterface
     {
@@ -69,7 +58,7 @@ final class Database
     }
 
     /**
-     * Get the database metadata.
+     * @inheritdoc
      */
     public function getMetadata(): MetadataInterface
     {
@@ -77,7 +66,7 @@ final class Database
     }
 
     /**
-     * Get the connection parameters (host, port, user...).
+     * @inheritdoc
      */
     public function getConnectionParams(): ParameterBag
     {
