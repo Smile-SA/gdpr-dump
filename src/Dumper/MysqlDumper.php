@@ -8,12 +8,12 @@ use Druidfi\Mysqldump\Mysqldump;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Database\DatabaseFactory;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
-use Smile\GdprDump\Dumper\Config\DumperConfig;
+use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
 use Smile\GdprDump\Dumper\Event\DumpFinishedEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class MysqlDumper implements DumperInterface
+final class MysqlDumper implements DumperInterface
 {
     public function __construct(
         private DatabaseFactory $databaseFactory,
@@ -68,7 +68,7 @@ class MysqlDumper implements DumperInterface
     /**
      * Get the dump settings.
      */
-    private function getDumpSettings(DumperConfig $config): array
+    private function getDumpSettings(DumperConfigInterface $config): array
     {
         $settings = $config->getDumpSettings();
 

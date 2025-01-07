@@ -11,7 +11,7 @@ use Smile\GdprDump\Config\Loader\FileNotFoundException;
 use Smile\GdprDump\Config\Loader\ParseException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class ConfigLoaderTest extends TestCase
+final class ConfigLoaderTest extends TestCase
 {
     /**
      * Test the "load" method.

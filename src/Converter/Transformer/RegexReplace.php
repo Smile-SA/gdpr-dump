@@ -9,7 +9,7 @@ use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-class RegexReplace implements ConverterInterface
+final class RegexReplace implements ConverterInterface
 {
     private string $pattern;
     private string $replacement;

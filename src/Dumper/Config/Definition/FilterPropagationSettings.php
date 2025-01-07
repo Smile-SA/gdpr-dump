@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Config\Definition;
 
-class FilterPropagationSettings
+final class FilterPropagationSettings
 {
     public function __construct(private bool $enabled, private array $ignoredForeignKeys)
     {

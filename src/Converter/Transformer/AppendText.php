@@ -8,7 +8,7 @@ use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-class AppendText implements ConverterInterface
+final class AppendText implements ConverterInterface
 {
     private string $suffix;
 

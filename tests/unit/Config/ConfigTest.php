@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Config;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class ConfigTest extends TestCase
+final class ConfigTest extends TestCase
 {
     private array $data = [
         'string' => 'value',

@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Dumper\Config\Definition;
 use Smile\GdprDump\Dumper\Config\Definition\FilterPropagationSettings;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class FilterPropagationSettingsTest extends TestCase
+final class FilterPropagationSettingsTest extends TestCase
 {
     /**
      * Test the creation of a filter propagation settings object.

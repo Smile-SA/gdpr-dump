@@ -8,7 +8,7 @@ use Smile\GdprDump\DependencyInjection\Compiler\ConverterAliasPass;
 use Smile\GdprDump\DependencyInjection\ConverterAliasResolver;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class ConverterAliasResolverTest extends TestCase
+final class ConverterAliasResolverTest extends TestCase
 {
     /**
      * Test the alias resolver.

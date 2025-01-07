@@ -8,7 +8,7 @@ use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 use Smile\GdprDump\Dumper\Config\Validation\WhereExprValidator;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class WhereExprValidatorTest extends TestCase
+final class WhereExprValidatorTest extends TestCase
 {
     /**
      * Assert that no exception is thrown when the expression is valid.

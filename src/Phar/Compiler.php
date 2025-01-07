@@ -11,7 +11,7 @@ use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 use UnexpectedValueException;
 
-class Compiler
+final class Compiler
 {
     private string $basePath;
 

@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Config\Compiler\Processor;
 use Smile\GdprDump\Config\Compiler\CompileException;
 use Smile\GdprDump\Config\ConfigInterface;
 
-class EnvVarProcessor implements ProcessorInterface
+final class EnvVarProcessor implements ProcessorInterface
 {
     /**
      * Environment variable name format.

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Dumper\Config;
 
 use Smile\GdprDump\Config\Config;
-use Smile\GdprDump\Database\Metadata\MysqlMetadata;
+use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class ConfigProcessorTest extends TestCase
+final class ConfigProcessorTest extends TestCase
 {
     /**
      * Test the config processor.
@@ -70,7 +70,7 @@ class ConfigProcessorTest extends TestCase
      */
     private function createConfigProcessor(): ConfigProcessor
     {
-        $metadataMock = $this->createMock(MysqlMetadata::class);
+        $metadataMock = $this->createMock(MetadataInterface::class);
         $metadataMock->expects($this->atMost(1))
             ->method('getTableNames')
             ->willReturn(['table1', 'table2', 'table3']);

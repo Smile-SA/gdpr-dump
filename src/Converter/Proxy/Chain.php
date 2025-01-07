@@ -8,7 +8,7 @@ use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-class Chain implements ConverterInterface
+final class Chain implements ConverterInterface
 {
     /**
      * @var ConverterInterface[]

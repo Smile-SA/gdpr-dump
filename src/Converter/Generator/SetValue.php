@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Converter\Generator;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 
-class SetValue implements ConverterInterface
+final class SetValue implements ConverterInterface
 {
     private mixed $value;
 

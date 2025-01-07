@@ -8,7 +8,7 @@ use Smile\GdprDump\Config\Compiler\Processor\Version\MissingVersionException;
 use Smile\GdprDump\Config\Compiler\Processor\Version\VersionMatcher;
 use Smile\GdprDump\Config\ConfigInterface;
 
-class VersionProcessor implements ProcessorInterface
+final class VersionProcessor implements ProcessorInterface
 {
     /**
      * Process the "if_version" parameter.

@@ -9,7 +9,7 @@ use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class DumperConfigTest extends TestCase
+final class DumperConfigTest extends TestCase
 {
     /**
      * Test the "tables_whitelist" parameter.

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Phar\Minify;
 
-class Php implements MinifierInterface
+final class Php implements MinifierInterface
 {
     /**
      * @inheritdoc

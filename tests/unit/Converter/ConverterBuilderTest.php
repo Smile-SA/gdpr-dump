@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter;
 
 use RuntimeException;
+use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Converter\ConverterBuilder;
 use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\Converter\Proxy\Cache;
@@ -12,10 +13,13 @@ use Smile\GdprDump\Converter\Proxy\Chain;
 use Smile\GdprDump\Converter\Proxy\Conditional;
 use Smile\GdprDump\Converter\Proxy\Faker;
 use Smile\GdprDump\Converter\Proxy\Unique;
+use Smile\GdprDump\DependencyInjection\ConverterAliasResolver;
+use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
+use Symfony\Component\DependencyInjection\Container;
 use UnexpectedValueException;
 
-class ConverterBuilderTest extends TestCase
+final class ConverterBuilderTest extends TestCase
 {
     /**
      * Test the converter creation from an array definition.
@@ -212,25 +216,15 @@ class ConverterBuilderTest extends TestCase
      */
     private function createBuilder(): ConverterBuilder
     {
-        $containerMock = $this->createMock(ConverterFactory::class);
-        $containerMock
-            ->method('create')
-            ->willReturnCallback(
-                fn (string $value, array $parameters) => match ($value) {
-                    // Converters used in the context of this unit test
-                    'cache' => $this->createConverter(Cache::class, $parameters),
-                    'chain' => $this->createConverter(Chain::class, $parameters),
-                    'conditional' => $this->createConditionalConverter($parameters),
-                    'faker' => $this->createFakerConverter($parameters),
-                    'mock' => $this->createConverter(ConverterMock::class, $parameters),
-                    'notExists' => throw new RuntimeException($value),
-                    'unique' => $this->createConverter(Unique::class, $parameters),
-                    default => throw new UnexpectedValueException(
-                        sprintf('The converter "%s" was not expected in this unit case.', $value)
-                    ),
-                }
-            );
+        $resolver = new ConverterAliasResolver();
+        $container = new Container();
+        $container->set($resolver->getAliasByName('cache'), new Cache());
+        $container->set($resolver->getAliasByName('chain'), new Chain());
+        $container->set($resolver->getAliasByName('conditional'), new Conditional(new ConditionBuilder()));
+        $container->set($resolver->getAliasByName('faker'), new Faker(new FakerService()));
+        $container->set($resolver->getAliasByName('mock'), new ConverterMock());
+        $container->set($resolver->getAliasByName('unique'), new Unique());
 
-        return new ConverterBuilder($containerMock);
+        return new ConverterBuilder(new ConverterFactory($container, $resolver));
     }
 }

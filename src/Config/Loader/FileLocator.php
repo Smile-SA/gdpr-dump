@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Loader;
 
-class FileLocator implements FileLocatorInterface
+final class FileLocator implements FileLocatorInterface
 {
     /**
      * @var string[]

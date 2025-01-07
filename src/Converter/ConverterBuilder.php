@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Converter;
 
 use UnexpectedValueException;
 
-class ConverterBuilder
+final class ConverterBuilder
 {
     public function __construct(private ConverterFactory $converterFactory)
     {

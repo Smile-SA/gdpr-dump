@@ -9,7 +9,7 @@ use Smile\GdprDump\Converter\Proxy\Chain;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-class ChainTest extends TestCase
+final class ChainTest extends TestCase
 {
     /**
      * Test the converter.

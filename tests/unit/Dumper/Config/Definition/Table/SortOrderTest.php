@@ -8,7 +8,7 @@ use Smile\GdprDump\Dumper\Config\Definition\Table\SortOrder;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use UnexpectedValueException;
 
-class SortOrderTest extends TestCase
+final class SortOrderTest extends TestCase
 {
     /**
      * Test the creation of a sort order.

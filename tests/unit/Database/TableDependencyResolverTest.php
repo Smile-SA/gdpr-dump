@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Database;
 
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
-use Smile\GdprDump\Database\Metadata\MysqlMetadata;
+use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Database\TableDependencyResolver;
 use Smile\GdprDump\Dumper\Config\Definition\FilterPropagationSettings;
-use Smile\GdprDump\Dumper\Config\DumperConfig;
+use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class TableDependencyResolverTest extends TestCase
+final class TableDependencyResolverTest extends TestCase
 {
     /**
      * Test the "getDependencies" method.
@@ -174,14 +174,14 @@ class TableDependencyResolverTest extends TestCase
      */
     private function createResolver(array $foreignKeyMap, array $ignoredForeignKeys = []): TableDependencyResolver
     {
-        $metadataMock = $this->createMock(MysqlMetadata::class);
+        $metadataMock = $this->createMock(MetadataInterface::class);
         $metadataMock->expects($this->once())
             ->method('getTableNames')
             ->willReturn(array_column($foreignKeyMap, 0));
         $metadataMock->method('getTableForeignKeys')
             ->willReturnMap($foreignKeyMap);
 
-        $configMock = $this->createMock(DumperConfig::class);
+        $configMock = $this->createMock(DumperConfigInterface::class);
         $configMock->method('getFilterPropagationSettings')
             ->willReturn(new FilterPropagationSettings(true, $ignoredForeignKeys));
 

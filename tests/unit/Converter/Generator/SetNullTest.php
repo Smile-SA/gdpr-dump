@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 use Smile\GdprDump\Converter\Generator\SetNull;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-class SetNullTest extends TestCase
+final class SetNullTest extends TestCase
 {
     /**
      * Test the converter.

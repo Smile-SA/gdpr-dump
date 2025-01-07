@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Generator;
 
-class RandomDateTime extends RandomDate
+final class RandomDateTime extends RandomDate
 {
     protected string $defaultFormat = 'Y-m-d H:i:s';
 

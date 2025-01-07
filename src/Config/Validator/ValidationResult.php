@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Validator;
 
-class ValidationResult implements ValidationResultInterface
+final class ValidationResult implements ValidationResultInterface
 {
     private bool $valid = false;
 

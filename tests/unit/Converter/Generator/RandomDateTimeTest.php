@@ -8,7 +8,7 @@ use DateTime;
 use Smile\GdprDump\Converter\Generator\RandomDateTime;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 
-class RandomDateTimeTest extends RandomDateTest
+final class RandomDateTimeTest extends RandomDateTest
 {
     /**
      * Test the converter.

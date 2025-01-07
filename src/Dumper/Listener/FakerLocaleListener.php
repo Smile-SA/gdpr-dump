@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Dumper\Listener;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
 use Smile\GdprDump\Faker\FakerService;
 
-class FakerLocaleListener
+final class FakerLocaleListener
 {
     public function __construct(private FakerService $fakerService)
     {

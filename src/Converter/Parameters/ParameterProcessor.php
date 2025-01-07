@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Parameters;
 
-class ParameterProcessor
+final class ParameterProcessor
 {
     /**
      * @var Parameter[]

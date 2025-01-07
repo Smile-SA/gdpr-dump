@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Util;
 
-class ArrayHelper
+final class ArrayHelper
 {
     /**
      * Get an array value by path.

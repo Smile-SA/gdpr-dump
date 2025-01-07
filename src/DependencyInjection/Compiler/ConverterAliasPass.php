@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class ConverterAliasPass implements CompilerPassInterface
+final class ConverterAliasPass implements CompilerPassInterface
 {
     public const ALIAS_PREFIX = 'converter.';
 

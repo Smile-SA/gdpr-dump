@@ -9,7 +9,7 @@ use Smile\GdprDump\Config\Validator\JsonSchemaValidator;
 use Smile\GdprDump\Tests\Functional\TestCase;
 use stdClass;
 
-class JsonSchemaValidatorTest extends TestCase
+final class JsonSchemaValidatorTest extends TestCase
 {
     private JsonSchemaValidator $validator;
 

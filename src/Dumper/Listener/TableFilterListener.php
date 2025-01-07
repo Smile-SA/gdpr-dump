@@ -9,15 +9,15 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Database\TableDependencyResolver;
-use Smile\GdprDump\Dumper\Config\DumperConfig;
+use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
 use UnexpectedValueException;
 
-class TableFilterListener
+final class TableFilterListener
 {
     private Connection $connection;
     private MetadataInterface $metadata;
-    private DumperConfig $config;
+    private DumperConfigInterface $config;
 
     /**
      * Define the filters to apply on the tables.

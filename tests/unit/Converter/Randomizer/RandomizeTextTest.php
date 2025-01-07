@@ -8,7 +8,7 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Randomizer\RandomizeText;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-class RandomizeTextTest extends TestCase
+final class RandomizeTextTest extends TestCase
 {
     /**
      * Test the converter.

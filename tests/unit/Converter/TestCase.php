@@ -12,7 +12,7 @@ use Smile\GdprDump\Converter\Proxy\Faker;
 use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Unit\TestCase as UnitTestCase;
 
-class TestCase extends UnitTestCase
+abstract class TestCase extends UnitTestCase
 {
     /**
      * Create a converter.
@@ -25,29 +25,12 @@ class TestCase extends UnitTestCase
             );
         }
 
-        $converter = new $className();
-        $converter->setParameters($parameters);
+        $converter = match ($className) {
+            Conditional::class => new Conditional(new ConditionBuilder()),
+            Faker::class => new Faker(new FakerService()),
+            default => new $className(),
+        };
 
-        return $converter;
-    }
-
-    /**
-     * Create a conditional converter.
-     */
-    public function createConditionalConverter(array $parameters = []): ConverterInterface
-    {
-        $converter = new Conditional(new ConditionBuilder());
-        $converter->setParameters($parameters);
-
-        return $converter;
-    }
-
-    /**
-     * Create a Faker converter.
-     */
-    public function createFakerConverter(array $parameters = []): ConverterInterface
-    {
-        $converter = new Faker(new FakerService());
         $converter->setParameters($parameters);
 
         return $converter;

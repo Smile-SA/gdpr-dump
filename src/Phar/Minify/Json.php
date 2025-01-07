@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Phar\Minify;
 
-class Json implements MinifierInterface
+final class Json implements MinifierInterface
 {
     /**
      * @inheritdoc

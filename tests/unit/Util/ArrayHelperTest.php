@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Util;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use Smile\GdprDump\Util\ArrayHelper;
 
-class ArrayHelperTest extends TestCase
+final class ArrayHelperTest extends TestCase
 {
     /**
      * Test the "getPath" method.

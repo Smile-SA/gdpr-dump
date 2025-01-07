@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Converter\Randomizer;
 use Closure;
 use Smile\GdprDump\Converter\ConverterInterface;
 
-class RandomizeNumber implements ConverterInterface
+final class RandomizeNumber implements ConverterInterface
 {
     private Closure $replaceCallback;
 

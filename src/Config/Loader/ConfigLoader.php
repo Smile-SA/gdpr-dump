@@ -9,7 +9,7 @@ use Smile\GdprDump\Config\ConfigException;
 use Smile\GdprDump\Config\ConfigInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class ConfigLoader implements ConfigLoaderInterface
+final class ConfigLoader implements ConfigLoaderInterface
 {
     /**
      * @var string[]

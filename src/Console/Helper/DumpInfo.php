@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Console\Helper;
 
 use Smile\GdprDump\Database\Metadata\MetadataInterface;
-use Smile\GdprDump\Dumper\Config\DumperConfig;
+use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
 use Smile\GdprDump\Dumper\Event\DumpFinishedEvent;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class DumpInfo
+final class DumpInfo
 {
     private OutputInterface $output;
     private ProgressBar $progressBar;
@@ -147,7 +147,7 @@ class DumpInfo
     /**
      * Get max number of steps of the progress bar.
      */
-    private function getMaxSteps(DumperConfig $config, MetadataInterface $metadata): int
+    private function getMaxSteps(DumperConfigInterface $config, MetadataInterface $metadata): int
     {
         $includedTables = $config->getIncludedTables() ?: $metadata->getTableNames();
         $excludedTables = $config->getExcludedTables();

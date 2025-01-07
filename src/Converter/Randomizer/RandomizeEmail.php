@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Converter\Randomizer;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-class RandomizeEmail extends RandomizeText
+final class RandomizeEmail extends RandomizeText
 {
     /**
      * @var string[]

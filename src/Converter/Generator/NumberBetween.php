@@ -9,7 +9,7 @@ use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 
-class NumberBetween implements ConverterInterface
+final class NumberBetween implements ConverterInterface
 {
     private int $min;
     private int $max;

@@ -8,7 +8,7 @@ use RuntimeException;
 use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class ConditionBuilderTest extends TestCase
+final class ConditionBuilderTest extends TestCase
 {
     /**
      * Test the condition builder.

@@ -8,7 +8,7 @@ use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-class Cache implements ConverterInterface
+final class Cache implements ConverterInterface
 {
     private static array $values = [];
     private ConverterInterface $converter;

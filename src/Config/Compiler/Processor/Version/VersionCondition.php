@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Compiler\Processor\Version;
 
-class VersionCondition
+final class VersionCondition
 {
     /**
      * @var string[]

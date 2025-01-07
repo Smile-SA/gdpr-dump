@@ -11,7 +11,7 @@ use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Faker\FakerService;
 
-class Faker implements ConverterInterface
+final class Faker implements ConverterInterface
 {
     private object $provider;
     private string $method;

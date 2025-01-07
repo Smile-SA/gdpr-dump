@@ -6,7 +6,7 @@ namespace Smile\GdprDump\DependencyInjection;
 
 use Smile\GdprDump\DependencyInjection\Compiler\ConverterAliasPass;
 
-class ConverterAliasResolver
+final class ConverterAliasResolver
 {
     /**
      * Get service alias by converter name (e.g. "randomizeText").

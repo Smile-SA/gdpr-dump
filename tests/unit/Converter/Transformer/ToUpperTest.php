@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Transformer;
 use Smile\GdprDump\Converter\Transformer\ToUpper;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-class ToUpperTest extends TestCase
+final class ToUpperTest extends TestCase
 {
     /**
      * Test the converter.

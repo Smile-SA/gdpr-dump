@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Console;
 use Smile\GdprDump\Console\Application;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class ApplicationTest extends TestCase
+final class ApplicationTest extends TestCase
 {
     /**
      * Test the "getVersion" method.

@@ -6,13 +6,11 @@ namespace Smile\GdprDump\Tests\Unit\Converter;
 
 use RuntimeException;
 use Smile\GdprDump\Converter\ConverterFactory;
-use Smile\GdprDump\DependencyInjection\Compiler\ConverterAliasPass;
 use Smile\GdprDump\DependencyInjection\ConverterAliasResolver;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
-class ConverterFactoryTest extends TestCase
+final class ConverterFactoryTest extends TestCase
 {
     /**
      * Test the converter factory.
@@ -20,7 +18,7 @@ class ConverterFactoryTest extends TestCase
     public function testConverterCreation(): void
     {
         $converter = $this->createFactory()
-            ->create('test');
+            ->create('mock');
 
         $this->assertInstanceOf(ConverterMock::class, $converter);
     }
@@ -40,18 +38,10 @@ class ConverterFactoryTest extends TestCase
      */
     private function createFactory(): ConverterFactory
     {
-        $containerMock = $this->createMock(Container::class);
-        $containerMock
-            ->method('get')
-            ->will(
-                $this->returnCallback(
-                    fn (string $value) => match ($value) {
-                        ConverterAliasPass::ALIAS_PREFIX . 'test' => new ConverterMock(),
-                        default => throw new ServiceNotFoundException(ConverterAliasPass::ALIAS_PREFIX . $value),
-                    }
-                )
-            );
+        $resolver = new ConverterAliasResolver();
+        $container = new Container();
+        $container->set($resolver->getAliasByName('mock'), new ConverterMock());
 
-        return new ConverterFactory($containerMock, new ConverterAliasResolver());
+        return new ConverterFactory($container, $resolver);
     }
 }

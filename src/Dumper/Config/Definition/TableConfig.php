@@ -9,7 +9,7 @@ use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 use Smile\GdprDump\Dumper\Config\Validation\WhereExprValidator;
 use UnexpectedValueException;
 
-class TableConfig
+final class TableConfig
 {
     private string $name;
     private ?string $where = null;

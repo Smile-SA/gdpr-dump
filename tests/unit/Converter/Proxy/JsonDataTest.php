@@ -9,7 +9,7 @@ use Smile\GdprDump\Converter\Proxy\JsonData;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-class JsonDataTest extends TestCase
+final class JsonDataTest extends TestCase
 {
     /**
      * Test the converter.

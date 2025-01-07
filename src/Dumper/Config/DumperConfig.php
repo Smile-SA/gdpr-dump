@@ -14,7 +14,7 @@ use Smile\GdprDump\Dumper\Config\Definition\TableConfigCollection;
 use Smile\GdprDump\Dumper\Config\Validation\QueryValidator;
 use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 
-class DumperConfig
+final class DumperConfig implements DumperConfigInterface
 {
     private FakerSettings $fakerSettings;
     private FilterPropagationSettings $filterPropagationSettings;
@@ -90,7 +90,7 @@ class DumperConfig
     }
 
     /**
-     * Get the dump output.
+     * @inheritdoc
      */
     public function getDumpOutput(): string
     {
@@ -98,7 +98,7 @@ class DumperConfig
     }
 
     /**
-     * Get dump settings.
+     * @inheritdoc
      */
     public function getDumpSettings(): array
     {
@@ -106,7 +106,7 @@ class DumperConfig
     }
 
     /**
-     * Get faker settings.
+     * @inheritdoc
      */
     public function getFakerSettings(): FakerSettings
     {
@@ -114,7 +114,7 @@ class DumperConfig
     }
 
     /**
-     * Get filter propagation settings.
+     * @inheritdoc
      */
     public function getFilterPropagationSettings(): FilterPropagationSettings
     {
@@ -122,7 +122,7 @@ class DumperConfig
     }
 
     /**
-     * Get the tables configuration (filters, orders, limits).
+     * @inheritdoc
      */
     public function getTablesConfig(): TableConfigCollection
     {
@@ -130,12 +130,7 @@ class DumperConfig
     }
 
     /**
-     * Get the SQL queries to run.
-     *
-     * The result of each query will then be injected into user-defined variables.
-     * Array keys are the variable names, array values are the database queries.
-     *
-     * @return string[]
+     * @inheritdoc
      */
     public function getVarQueries(): array
     {
@@ -143,9 +138,7 @@ class DumperConfig
     }
 
     /**
-     * Get the tables to include.
-     *
-     * @return string[]
+     * @inheritdoc
      */
     public function getIncludedTables(): array
     {
@@ -153,9 +146,7 @@ class DumperConfig
     }
 
     /**
-     * Get the tables to exclude.
-     *
-     * @return string[]
+     * @inheritdoc
      */
     public function getExcludedTables(): array
     {
@@ -163,9 +154,7 @@ class DumperConfig
     }
 
     /**
-     * Get the tables to truncate (only the structure is included in the dump file, not the data).
-     *
-     * @return string[]
+     * @inheritdoc
      */
     public function getTablesToTruncate(): array
     {
@@ -173,9 +162,7 @@ class DumperConfig
     }
 
     /**
-     * Get the names of the tables to filter.
-     *
-     * @return string[]
+     * @inheritdoc
      */
     public function getTablesToFilter(): array
     {
@@ -183,9 +170,7 @@ class DumperConfig
     }
 
     /**
-     * Get the names of the tables to sort.
-     *
-     * @return string[]
+     * @inheritdoc
      */
     public function getTablesToSort(): array
     {

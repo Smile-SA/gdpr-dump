@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Dumper\Config\Definition;
 use Smile\GdprDump\Dumper\Config\Definition\FakerSettings;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class FakerSettingsTest extends TestCase
+final class FakerSettingsTest extends TestCase
 {
     /**
      * Test the creation of a faker settings object.

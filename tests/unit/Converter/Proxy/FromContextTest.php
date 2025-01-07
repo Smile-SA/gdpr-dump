@@ -8,7 +8,7 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Proxy\FromContext;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-class FromContextTest extends TestCase
+final class FromContextTest extends TestCase
 {
     /**
      * Test the converter.
