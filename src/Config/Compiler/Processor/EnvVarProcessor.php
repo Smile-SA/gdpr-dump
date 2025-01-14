@@ -84,6 +84,7 @@ final class EnvVarProcessor implements ProcessorInterface
     /**
      * Parse "%env($name)%".
      *
+     * @return array{0: string, 1: string}
      * @throws CompileException
      */
     private function parse(string $name): array

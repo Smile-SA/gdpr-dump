@@ -13,16 +13,17 @@ final class DumpOutputProcessor implements ProcessorInterface
      */
     public function process(ConfigInterface $config): void
     {
-        $dumpSettings = $config->get('dump', []);
-
-        if (array_key_exists('output', $dumpSettings)) {
-            $dumpSettings['output'] = preg_replace_callback(
-                '/{([^}]+)}/',
-                fn (array $matches) => date($matches[1]),
-                $dumpSettings['output']
-            );
-
-            $config->set('dump', $dumpSettings);
+        $dumpSettings = (array) $config->get('dump', []);
+        if (!array_key_exists('output', $dumpSettings)) {
+            return;
         }
+
+        $dumpSettings['output'] = preg_replace_callback(
+            '/{([^}]+)}/',
+            fn (array $matches) => date($matches[1]),
+            $dumpSettings['output']
+        );
+
+        $config->set('dump', $dumpSettings);
     }
 }

@@ -184,7 +184,7 @@ final class DumperConfig implements DumperConfigInterface
      */
     private function prepareVarQueries(ConfigInterface $config): void
     {
-        $this->varQueries = $config->get('variables', []);
+        $this->varQueries = (array) $config->get('variables', []);
 
         // Allow only "select" statements in queries
         $selectQueryValidator = new QueryValidator(['select']);
@@ -200,7 +200,7 @@ final class DumperConfig implements DumperConfigInterface
      */
     private function prepareDumpSettings(ConfigInterface $config): void
     {
-        $settings = $config->get('dump', []);
+        $settings = (array) $config->get('dump', []);
 
         foreach ($settings as $param => $value) {
             if (!array_key_exists($param, $this->dumpSettings)) {
@@ -222,7 +222,7 @@ final class DumperConfig implements DumperConfigInterface
      */
     private function prepareFakerSettings(ConfigInterface $config): void
     {
-        $settings = $config->get('faker', []);
+        $settings = (array) $config->get('faker', []);
         $this->fakerSettings = new FakerSettings((string) ($settings['locale'] ?? ''));
     }
 
@@ -231,7 +231,7 @@ final class DumperConfig implements DumperConfigInterface
      */
     private function prepareFilterPropagationSettings(ConfigInterface $config): void
     {
-        $settings = $config->get('filter_propagation', []);
+        $settings = (array) $config->get('filter_propagation', []);
 
         $this->filterPropagationSettings = new FilterPropagationSettings(
             $settings['enabled'] ?? true,
@@ -244,11 +244,12 @@ final class DumperConfig implements DumperConfigInterface
      */
     private function prepareTableSettings(ConfigInterface $config): void
     {
-        $this->includedTables = $config->get('tables_whitelist', []);
-        $this->excludedTables = $config->get('tables_blacklist', []);
+        $this->includedTables = (array) $config->get('tables_whitelist', []);
+        $this->excludedTables = (array) $config->get('tables_blacklist', []);
         $this->tablesConfig = new TableConfigCollection();
+        $tablesData = (array) $config->get('tables', []);
 
-        foreach ($config->get('tables', []) as $tableName => $tableData) {
+        foreach ($tablesData as $tableName => $tableData) {
             $tableConfig = new TableConfig((string) $tableName, $tableData);
             $this->tablesConfig->add($tableConfig);
 

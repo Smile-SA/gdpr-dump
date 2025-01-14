@@ -13,7 +13,7 @@ final class DatabaseFactory
      */
     public function create(ConfigInterface $config): Database
     {
-        $connectionParams = $config->get('database', []);
+        $connectionParams = (array) $config->get('database', []);
 
         // Rename some keys (for compatibility with the Doctrine connection)
         if (array_key_exists('name', $connectionParams)) {

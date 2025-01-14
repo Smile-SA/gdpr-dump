@@ -38,7 +38,7 @@ final class ConfigProcessor
         $configKeys = ['tables_whitelist', 'tables_blacklist'];
 
         foreach ($configKeys as $configKey) {
-            $tableNames = $config->get($configKey, []);
+            $tableNames = (array) $config->get($configKey, []);
 
             if (!empty($tableNames)) {
                 $resolved = $this->resolveTableNames($tableNames);
@@ -53,7 +53,7 @@ final class ConfigProcessor
      */
     private function processTablesData(ConfigInterface $config): void
     {
-        $tablesData = $config->get('tables', []);
+        $tablesData = (array) $config->get('tables', []);
         if (!empty($tablesData)) {
             $resolved = $this->resolveTablesData($tablesData);
             $config->set('tables', $resolved);
