@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Dumper\Config\Definition;
 
 use Smile\GdprDump\Dumper\Config\Definition\TableConfig;
-use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use UnexpectedValueException;
 
@@ -91,7 +90,7 @@ final class TableConfigTest extends TestCase
      */
     public function testWhereConditionWithDisallowedStatement(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(UnexpectedValueException::class);
         new TableConfig('table1', [
             'where' => 'drop database example',
         ]);
@@ -102,7 +101,7 @@ final class TableConfigTest extends TestCase
      */
     public function testWhereConditionWithUnmatchedClosingBracket(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(UnexpectedValueException::class);
         new TableConfig('table1', [
             'where' => '1); select * from customer where (1',
         ]);

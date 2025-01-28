@@ -4,26 +4,38 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Compiler\Processor;
 
+use Smile\GdprDump\Config\ConfigException;
 use Smile\GdprDump\Config\ConfigInterface;
 
 final class DumpOutputProcessor implements ProcessorInterface
 {
     /**
-     * Process date placeholders in dump output (e.g. "dump-{Y-m-d-H.i.s}.sql").
+     * Process placeholders in the dump output setting.
      */
     public function process(ConfigInterface $config): void
     {
-        $dumpSettings = (array) $config->get('dump', []);
-        if (!array_key_exists('output', $dumpSettings)) {
-            return;
-        }
+        $dumpSettings = (array) $config->get('dump');
+        $dumpSettings['output'] = $this->processDatePlaceholder((string) $dumpSettings['output']);
+        $config->set('dump', $dumpSettings);
+    }
 
-        $dumpSettings['output'] = preg_replace_callback(
+    /**
+     * Replace date placeholders.
+     *
+     * @throws ConfigException
+     */
+    private function processDatePlaceholder(string $input): string
+    {
+        $input = preg_replace_callback(
             '/{([^}]+)}/',
             fn (array $matches) => date($matches[1]),
-            $dumpSettings['output']
+            $input
         );
 
-        $config->set('dump', $dumpSettings);
+        if ($input === null) {
+            throw new ConfigException('Failed to replace placeholders in value "%s".', $input);
+        }
+
+        return $input;
     }
 }

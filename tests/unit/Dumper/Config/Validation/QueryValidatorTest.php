@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Dumper\Config\Validation;
 
 use RuntimeException;
-use Smile\GdprDump\Dumper\Config\Validation\QueryValidator;
-use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Util\QueryValidator;
 use TheSeer\Tokenizer\Token;
+use UnexpectedValueException;
 
 final class QueryValidatorTest extends TestCase
 {
@@ -27,7 +27,7 @@ final class QueryValidatorTest extends TestCase
      */
     public function testForbiddenStatement(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(UnexpectedValueException::class);
         $queryValidator = new QueryValidator(['set']);
         $queryValidator->validate('select * from my_table');
     }
