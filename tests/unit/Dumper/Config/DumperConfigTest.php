@@ -6,7 +6,6 @@ namespace Smile\GdprDump\Tests\Unit\Dumper\Config;
 
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
-use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 final class DumperConfigTest extends TestCase
@@ -120,44 +119,16 @@ final class DumperConfigTest extends TestCase
     {
         $config = $this->createConfig([]);
 
+        $this->assertSame([], $config->getDumpSettings());
         $this->assertSame([], $config->getIncludedTables());
         $this->assertSame([], $config->getExcludedTables());
         $this->assertSame([], $config->getTablesToSort());
         $this->assertSame([], $config->getTablesToFilter());
         $this->assertSame([], $config->getTablesToTruncate());
         $this->assertSame([], $config->getTablesConfig()->all());
-        $this->assertSame('php://stdout', $config->getDumpOutput());
         $this->assertTrue($config->getFilterPropagationSettings()->isEnabled());
         $this->assertSame([], $config->getFilterPropagationSettings()->getIgnoredForeignKeys());
-
-        // Test these values because they differ from MySQLDump-PHP
-        $settings = $config->getDumpSettings();
-        $this->assertArrayHasKey('add_drop_table', $settings);
-        $this->assertTrue($settings['add_drop_table']);
-        $this->assertArrayHasKey('hex_blob', $settings);
-        $this->assertFalse($settings['hex_blob']);
-        $this->assertArrayHasKey('lock_tables', $settings);
-        $this->assertFalse($settings['lock_tables']);
-
         $this->assertSame('', $config->getFakerSettings()->getLocale());
-    }
-
-    /**
-     * Assert that an exception is thrown when an invalid parameter is used.
-     */
-    public function testInvalidDumpParameter(): void
-    {
-        $this->expectException(ValidationException::class);
-        $this->createConfig(['dump' => ['not_exists' => true]]);
-    }
-
-    /**
-     * Assert that an exception is thrown when a var query contains a forbidden statement.
-     */
-    public function testInvalidStatementInQuery(): void
-    {
-        $this->expectException(ValidationException::class);
-        $this->createConfig(['variables' => ['my_var' => 'select my_col from my_table; delete from my_table']]);
     }
 
     /**

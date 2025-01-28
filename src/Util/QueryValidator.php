@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Config\Validation;
+namespace Smile\GdprDump\Util;
 
 use TheSeer\Tokenizer\TokenCollection;
 use TheSeer\Tokenizer\Tokenizer;
+use UnexpectedValueException;
 
 final class QueryValidator
 {
@@ -42,6 +43,8 @@ final class QueryValidator
 
     /**
      * Validate the query. An optional callback can be passed for additional validation.
+     *
+     * @throws UnexpectedValueException
      */
     public function validate(string $query, ?callable $callback = null): void
     {
@@ -52,11 +55,13 @@ final class QueryValidator
             $value = $token->getValue();
 
             if ($name === 'T_DEC' || $name === 'T_COMMENT') {
-                throw new ValidationException(sprintf('Forbidden comment found in query "%s".', $query));
+                throw new UnexpectedValueException(sprintf('Forbidden comment found in query "%s".', $query));
             }
 
             if ($name === 'T_STRING' && !$this->isStatementAllowed($value)) {
-                throw new ValidationException(sprintf('Forbidden keyword "%s" found in query "%s".', $value, $query));
+                throw new UnexpectedValueException(
+                    sprintf('Forbidden keyword "%s" found in query "%s".', $value, $query)
+                );
             }
 
             if ($callback !== null) {

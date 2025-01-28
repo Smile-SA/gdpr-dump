@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Dumper\Config\Validation;
 
-use Smile\GdprDump\Dumper\Config\Validation\ValidationException;
 use Smile\GdprDump\Dumper\Config\Validation\WhereExprValidator;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 final class WhereExprValidatorTest extends TestCase
 {
@@ -35,7 +35,7 @@ final class WhereExprValidatorTest extends TestCase
      */
     public function testForbiddenStatement(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(UnexpectedValueException::class);
         $queryValidator = new WhereExprValidator();
         $queryValidator->validate('drop database example');
     }
@@ -45,7 +45,7 @@ final class WhereExprValidatorTest extends TestCase
      */
     public function testUnmatchedClosingBracket(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(UnexpectedValueException::class);
         $queryValidator = new WhereExprValidator();
         $queryValidator->validate('1); select * from customer where (1');
     }

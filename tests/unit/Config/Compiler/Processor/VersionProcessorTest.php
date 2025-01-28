@@ -29,8 +29,8 @@ final class VersionProcessorTest extends TestCase
             ],
         ];
 
-        $processor = new VersionProcessor();
         $config = new Config($data);
+        $processor = new VersionProcessor();
 
         // Test with version "1.0.0"
         $config->set('version', '1.0.0');

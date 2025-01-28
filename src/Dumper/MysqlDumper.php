@@ -87,6 +87,11 @@ final class MysqlDumper implements DumperInterface
             }
         }
 
+        if (array_key_exists('compress', $settings)) {
+            // e.g. "gzip" -> "Gzip"
+            $settings['compress'] = strtoupper($settings['compress']);
+        }
+
         // Tables to include/exclude/truncate
         $settings['include-tables'] = $config->getIncludedTables();
         $settings['exclude-tables'] = $config->getExcludedTables();
