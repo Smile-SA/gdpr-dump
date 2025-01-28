@@ -78,9 +78,6 @@ services:
     config.compiler.processor.env_var:
         class: 'Smile\GdprDump\Config\Compiler\Processor\EnvVarProcessor'
 
-    config.compiler.processor.query_validation:
-        class: 'Smile\GdprDump\Config\Compiler\Processor\QueryValidationProcessor'
-
     config.compiler.processor.version:
         class: 'Smile\GdprDump\Config\Compiler\Processor\VersionProcessor'
 

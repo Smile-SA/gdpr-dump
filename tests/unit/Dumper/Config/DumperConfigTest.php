@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Dumper\Config;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 final class DumperConfigTest extends TestCase
 {
@@ -129,6 +130,32 @@ final class DumperConfigTest extends TestCase
         $this->assertTrue($config->getFilterPropagationSettings()->isEnabled());
         $this->assertSame([], $config->getFilterPropagationSettings()->getIgnoredForeignKeys());
         $this->assertSame('', $config->getFakerSettings()->getLocale());
+    }
+
+    /**
+     * Assert that an exception is thrown when a var query contains a forbidden statement.
+     */
+    public function testInvalidStatementInVariableQuery(): void
+    {
+        $this->expectException(UnexpectedValueException::class);
+        $this->createConfig([
+            'variables' => ['my_var' => 'select my_col from my_table; delete from my_table'],
+        ]);
+    }
+
+    /**
+     * Assert that an exception is thrown when an init command contains a forbidden statement.
+     */
+    public function testInvalidStatementInInitCommand(): void
+    {
+        $this->expectException(UnexpectedValueException::class);
+        $this->createConfig([
+            'dump' => [
+                'init_commands' => [
+                    'my_var' => 'select my_col from my_table; delete from my_table',
+                ],
+            ],
+        ]);
     }
 
     /**

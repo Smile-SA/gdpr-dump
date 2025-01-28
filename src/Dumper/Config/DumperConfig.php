@@ -9,6 +9,7 @@ use Smile\GdprDump\Dumper\Config\Definition\FakerSettings;
 use Smile\GdprDump\Dumper\Config\Definition\FilterPropagationSettings;
 use Smile\GdprDump\Dumper\Config\Definition\TableConfig;
 use Smile\GdprDump\Dumper\Config\Definition\TableConfigCollection;
+use Smile\GdprDump\Dumper\Config\Validation\QueryValidator;
 
 final class DumperConfig implements DumperConfigInterface
 {
@@ -49,8 +50,8 @@ final class DumperConfig implements DumperConfigInterface
 
     public function __construct(ConfigInterface $config)
     {
-        $this->varQueries = (array) $config->get('variables', []);
-        $this->dumpSettings = (array) $config->get('dump', []);
+        $this->prepareDumpSettings($config);
+        $this->prepareVarQueries($config);
         $this->prepareFakerSettings($config);
         $this->prepareFilterPropagationSettings($config);
         $this->prepareTableSettings($config);
@@ -142,6 +143,36 @@ final class DumperConfig implements DumperConfigInterface
     public function getTablesToSort(): array
     {
         return $this->tablesToSort;
+    }
+
+    /**
+     * Prepare dump settings.
+     */
+    private function prepareDumpSettings(ConfigInterface $config): void
+    {
+        $this->dumpSettings = (array) $config->get('dump', []);
+
+        // Validate init commands
+        $queryValidator = new QueryValidator(['set']);
+        $initCommands = (array) ($this->dumpSettings['init_commands'] ?? []);
+
+        foreach ($initCommands as $query) {
+            $queryValidator->validate($query);
+        }
+    }
+
+    /**
+     * Prepare SQL variables.
+     */
+    private function prepareVarQueries(ConfigInterface $config): void
+    {
+        $this->varQueries = (array) $config->get('variables', []);
+
+        // Validate SQL queries
+        $queryValidator = new QueryValidator(['select']);
+        foreach ($this->varQueries as $query) {
+            $queryValidator->validate($query);
+        }
     }
 
     /**
