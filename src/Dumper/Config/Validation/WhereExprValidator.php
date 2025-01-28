@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Config\Validation;
 
-use Smile\GdprDump\Util\QueryValidator;
 use TheSeer\Tokenizer\Token;
 use UnexpectedValueException;
 

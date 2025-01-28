@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Dumper\Config\Validation;
 
 use RuntimeException;
+use Smile\GdprDump\Dumper\Config\Validation\QueryValidator;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use Smile\GdprDump\Util\QueryValidator;
 use TheSeer\Tokenizer\Token;
 use UnexpectedValueException;
 
