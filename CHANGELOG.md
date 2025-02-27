@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## WIP
+
+- Add forbidden statements to the query validator: `begin`, `call`, `check`, `checksum`, `do`, `end`, `import`, `insert`, `replace`, `restart`, `stop` ([#153](https://github.com/Smile-SA/gdpr-dump/pull/153))
+
 ## [5.0.2] - 2024-12-02
 [5.0.2]: https://github.com/Smile-SA/gdpr-dump/compare/5.0.1...5.0.2
 
