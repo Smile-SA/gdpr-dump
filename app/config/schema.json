@@ -93,9 +93,6 @@
             "type": "object",
             "required": true,
             "properties": {
-                "url": {
-                    "type": "string"
-                },
                 "driver": {
                     "type": "string",
                     "enum": ["pdo_mysql"]
@@ -130,6 +127,10 @@
                     "minLength": 1
                 },
                 "unix_socket": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "url": {
                     "type": "string",
                     "minLength": 1
                 }

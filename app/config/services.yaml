@@ -72,6 +72,9 @@ services:
     config.compiler.processor.default_settings:
         class: 'Smile\GdprDump\Config\Compiler\Processor\DefaultSettingsProcessor'
 
+    config.compiler.processor.database_url:
+        class: 'Smile\GdprDump\Config\Compiler\Processor\DatabaseUrlProcessor'
+
     config.compiler.processor.dump_output:
         class: 'Smile\GdprDump\Config\Compiler\Processor\DumpOutputProcessor'
 
@@ -80,9 +83,6 @@ services:
 
     config.compiler.processor.version:
         class: 'Smile\GdprDump\Config\Compiler\Processor\VersionProcessor'
-
-    config.compiler.processor.database_url:
-        class: 'Smile\GdprDump\Config\Compiler\Processor\DatabaseUrlProcessor'
 
     converter.builder:
         class: 'Smile\GdprDump\Converter\ConverterBuilder'
