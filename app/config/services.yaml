@@ -81,6 +81,9 @@ services:
     config.compiler.processor.version:
         class: 'Smile\GdprDump\Config\Compiler\Processor\VersionProcessor'
 
+    config.compiler.processor.database_url:
+        class: 'Smile\GdprDump\Config\Compiler\Processor\DatabaseUrlProcessor'
+
     converter.builder:
         class: 'Smile\GdprDump\Converter\ConverterBuilder'
         arguments:
