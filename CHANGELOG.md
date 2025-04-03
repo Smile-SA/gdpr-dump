@@ -2,10 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.0.4] - 2025-04-03
+[5.0.4]: https://github.com/Smile-SA/gdpr-dump/compare/5.0.3...5.0.4
+
+- Added optional `database.url` config parameter ([#147](https://github.com/Smile-SA/gdpr-dump/pull/147))
+
 ## [5.0.3] - 2025-02-27
 [5.0.3]: https://github.com/Smile-SA/gdpr-dump/compare/5.0.2...5.0.3
 
-- Add forbidden statements to the query validator: `begin`, `call`, `check`, `checksum`, `do`, `end`, `import`, `insert`, `replace`, `restart`, `stop` ([#153](https://github.com/Smile-SA/gdpr-dump/pull/153))
+- Added forbidden statements to the query validator: `begin`, `call`, `check`, `checksum`, `do`, `end`, `import`, `insert`, `replace`, `restart`, `stop` ([#153](https://github.com/Smile-SA/gdpr-dump/pull/153))
 
 ## [5.0.2] - 2024-12-02
 [5.0.2]: https://github.com/Smile-SA/gdpr-dump/compare/5.0.1...5.0.2
