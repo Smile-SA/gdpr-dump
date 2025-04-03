@@ -238,10 +238,11 @@
         <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification"/>
     </rule>
 
-    <!-- Checks format of union type hints (only enabled if php >= 8.0) -->
-    <rule ref="SlevomatCodingStandard.TypeHints.UnionTypeHintFormat">
+    <!-- Checks format of DNF type hints (only enabled if php >= 8.0) -->
+    <rule ref="SlevomatCodingStandard.TypeHints.DNFTypeHintFormat">
         <properties>
-            <property name="withSpaces" value="no"/>
+            <property name="withSpacesAroundOperators" value="no"/>
+            <property name="shortNullable" value="yes"/>
             <property name="nullPosition" value="last"/>
         </properties>
     </rule>
