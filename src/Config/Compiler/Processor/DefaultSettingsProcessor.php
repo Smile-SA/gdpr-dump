@@ -8,6 +8,9 @@ use Smile\GdprDump\Config\ConfigInterface;
 
 final class DefaultSettingsProcessor implements ProcessorInterface
 {
+    /**
+     * Add default settings to the configuration.
+     */
     public function process(ConfigInterface $config): void
     {
         $data = $config->toArray();

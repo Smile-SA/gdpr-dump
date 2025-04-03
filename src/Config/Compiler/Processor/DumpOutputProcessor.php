@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Compiler\Processor;
 
-use Smile\GdprDump\Config\ConfigException;
+use Smile\GdprDump\Config\Compiler\CompileException;
 use Smile\GdprDump\Config\ConfigInterface;
 
 final class DumpOutputProcessor implements ProcessorInterface
@@ -22,7 +22,7 @@ final class DumpOutputProcessor implements ProcessorInterface
     /**
      * Replace date placeholders.
      *
-     * @throws ConfigException
+     * @throws CompileException
      */
     private function processDatePlaceholder(string $input): string
     {
@@ -33,7 +33,7 @@ final class DumpOutputProcessor implements ProcessorInterface
         );
 
         if ($input === null) {
-            throw new ConfigException('Failed to replace placeholders in value "%s".', $input);
+            throw new CompileException('Failed to replace placeholders in value "%s".', $input);
         }
 
         return $input;

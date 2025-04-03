@@ -27,6 +27,8 @@ final class EnvVarProcessor implements ProcessorInterface
 
     /**
      * Replace environment variable placeholders (e.g. "%env(DB_HOST)%")
+     *
+     * @throws CompileException
      */
     public function process(ConfigInterface $config): void
     {

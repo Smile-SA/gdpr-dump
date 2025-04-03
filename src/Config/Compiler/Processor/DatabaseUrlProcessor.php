@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Compiler\Processor;
 
-use Smile\GdprDump\Config\ConfigException;
+use Smile\GdprDump\Config\Compiler\CompileException;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Database\DatabaseInterface;
 
@@ -12,6 +12,8 @@ class DatabaseUrlProcessor implements ProcessorInterface
 {
     /**
      * Parse database url (if specified).
+     *
+     * @throws CompileException
      */
     public function process(ConfigInterface $config): void
     {
@@ -23,7 +25,7 @@ class DatabaseUrlProcessor implements ProcessorInterface
     /**
      * Parse the database url (if specified).
      *
-     * @throws ConfigException
+     * @throws CompileException
      */
     private function processDatabaseNode(array $database): array
     {
@@ -36,13 +38,13 @@ class DatabaseUrlProcessor implements ProcessorInterface
 
         // Validate url
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new ConfigException(sprintf('The value "%s" is not a valid URL.', $url));
+            throw new CompileException(sprintf('The value "%s" is not a valid URL.', $url));
         }
 
         // Parse url
         $parsedUrl = parse_url($url);
         if ($parsedUrl === false) {
-            throw new ConfigException(sprintf('Failed to parse the url "%s".', $url));
+            throw new CompileException(sprintf('Failed to parse the url "%s".', $url));
         }
 
         // Update database params from parsed url
@@ -75,13 +77,13 @@ class DatabaseUrlProcessor implements ProcessorInterface
     /**
      * Get driver by scheme.
      *
-     * @throws ConfigException
+     * @throws CompileException
      */
     private function getDriverByScheme(string $scheme): string
     {
         return match ($scheme) {
             'mysql' => DatabaseInterface::DRIVER_MYSQL,
-            default => throw new ConfigException(sprintf('Invalid scheme "%s".', $scheme))
+            default => throw new CompileException(sprintf('Invalid scheme "%s".', $scheme))
         };
     }
 }

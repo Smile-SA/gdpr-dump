@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Config\Compiler\Processor;
 
+use Smile\GdprDump\Config\Compiler\CompileException;
 use Smile\GdprDump\Config\Compiler\Processor\DatabaseUrlProcessor;
 use Smile\GdprDump\Config\Config;
-use Smile\GdprDump\Config\ConfigException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 class DatabaseUrlProcessorTest extends TestCase
@@ -68,7 +68,7 @@ class DatabaseUrlProcessorTest extends TestCase
         $config = new Config($data);
         $processor = new DatabaseUrlProcessor();
 
-        $this->expectException(ConfigException::class);
+        $this->expectException(CompileException::class);
         $processor->process($config);
     }
 
@@ -86,7 +86,7 @@ class DatabaseUrlProcessorTest extends TestCase
         $config = new Config($data);
         $processor = new DatabaseUrlProcessor();
 
-        $this->expectException(ConfigException::class);
+        $this->expectException(CompileException::class);
         $processor->process($config);
     }
 }
