@@ -1,18 +1,5 @@
 ---
-version: '2.2.0'
-
-database:
-    host: '%env(DB_HOST)%'
-    port: '%env(DB_PORT)%'
-    user: '%env(DB_USER)%'
-    password: '%env(DB_PASSWORD)%'
-    name: '%env(DB_NAME)%'
-
-dump:
-    output: 'php://stdout'
-
-faker:
-    locale: 'fr_FR'
+requires_version: true
 
 variables:
     main_store_id: 'select store_id from stores where code = "store1"'
