@@ -1,4 +1,6 @@
 ---
+version: '2.2.0'
+
 database:
     host: '%env(DB_HOST)%'
     port: '%env(DB_PORT)%'
@@ -32,12 +34,18 @@ tables:
                 condition: '{{store_id}} == @main_store_id'
                 parameters:
                     value: 'test_'
-            firstname:
-                converter: 'prependText'
-                parameters:
-                    value: 'test_'
-            lastname:
-                converter: 'prependText'
-                parameters:
-                    value: 'test_'
         skip_conversion_if: '{{customer_id}} == 2'
+
+if_version:
+    '>=2.0.0':
+        tables:
+            customers:
+                converters:
+                    firstname:
+                        converter: 'prependText'
+                        parameters:
+                            value: 'test_'
+                    lastname:
+                        converter: 'prependText'
+                        parameters:
+                            value: 'test_'
