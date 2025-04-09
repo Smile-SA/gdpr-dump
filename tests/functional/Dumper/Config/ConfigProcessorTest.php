@@ -24,8 +24,7 @@ final class ConfigProcessorTest extends TestCase
             ],
         ]);
 
-        $processor = $this->createConfigProcessor();
-        $processor->process($config);
+        $this->createConfigProcessor()->process($config);
 
         // Assert that table names were resolved
         $this->assertSame(['stores'], $config->get('tables_blacklist'));

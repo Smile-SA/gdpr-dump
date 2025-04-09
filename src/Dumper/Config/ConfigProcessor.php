@@ -24,6 +24,7 @@ final class ConfigProcessor
      *
      * - Removing tables that don't exist.
      * - Resolving table patterns (e.g. "log_*").
+     * - Validating table names (if strict_schema option is enabled in the configuration).
      * - Validating column names.
      *
      * @throws RuntimeException if there are invalid column names
@@ -45,7 +46,8 @@ final class ConfigProcessor
             $tableNames = (array) $config->get($configKey, []);
 
             if ($tableNames) {
-                $resolved = $this->resolveTableNames($tableNames);
+                $strict = (bool) $config->get('strict_schema');
+                $resolved = $this->resolveTableNames($tableNames, $strict);
                 $config->set($configKey, $resolved);
             }
         }
@@ -58,7 +60,8 @@ final class ConfigProcessor
     {
         $tablesData = (array) $config->get('tables', []);
         if ($tablesData) {
-            $resolved = $this->resolveTablesData($tablesData);
+            $strict = (bool) $config->get('strict_schema');
+            $resolved = $this->resolveTablesData($tablesData, $strict);
             $config->set('tables', $resolved);
         }
     }
@@ -66,12 +69,12 @@ final class ConfigProcessor
     /**
      * Resolve a list of table name patterns.
      */
-    private function resolveTableNames(array $tableNames): array
+    private function resolveTableNames(array $tableNames, bool $strict): array
     {
         $resolved = [];
 
         foreach ($tableNames as $tableName) {
-            $matches = $this->findTablesByName((string) $tableName);
+            $matches = $this->findTablesByName((string) $tableName, $strict);
             if ($matches) {
                 $resolved = array_merge($resolved, $matches);
             }
@@ -85,12 +88,12 @@ final class ConfigProcessor
      *
      * @throws RuntimeException
      */
-    private function resolveTablesData(array $tablesData): array
+    private function resolveTablesData(array $tablesData, bool $strict): array
     {
         $resolved = [];
 
         foreach ($tablesData as $tableName => $tableData) {
-            $matches = $this->findTablesByName((string) $tableName);
+            $matches = $this->findTablesByName((string) $tableName, $strict);
 
             foreach ($matches as $match) {
                 // Throw an exception if a converter refers to a column that does not exist
@@ -113,7 +116,7 @@ final class ConfigProcessor
      *
      * @return string[]
      */
-    private function findTablesByName(string $pattern): array
+    private function findTablesByName(string $pattern, bool $strict): array
     {
         $this->tableNames ??= $this->metadata->getTableNames();
         $matches = [];
@@ -122,6 +125,10 @@ final class ConfigProcessor
             if (fnmatch($pattern, $tableName)) {
                 $matches[] = $tableName;
             }
+        }
+
+        if (!$matches && $strict) {
+            throw new RuntimeException(sprintf('No table found with pattern "%s".', $pattern));
         }
 
         return $matches;
