@@ -1,6 +1,6 @@
 ---
-version: '2.2.0'
 extends: 'template.yaml'
+version: '2.2.0'
 
 database:
     host: '%env(DB_HOST)%'
