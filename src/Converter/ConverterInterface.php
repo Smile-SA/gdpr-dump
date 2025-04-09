@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter;
 
+use Smile\GdprDump\Converter\Parameters\ValidationException;
+
 interface ConverterInterface
 {
     /**
@@ -13,6 +15,8 @@ interface ConverterInterface
 
     /**
      * Set the converter parameters.
+     *
+     * @throws ValidationException
      */
     public function setParameters(array $parameters): void;
 }

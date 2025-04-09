@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Generator;
 
+use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-final class RandomEmail extends RandomText
+final class RandomEmail implements ConverterInterface
 {
     /**
      * @var string[]
@@ -15,20 +16,24 @@ final class RandomEmail extends RandomText
     private array $domains;
 
     private int $domainsCount;
+    private RandomText $textConverter;
 
     /**
      * @inheritdoc
      */
     public function setParameters(array $parameters): void
     {
-        parent::setParameters($parameters);
+        $emailParams = array_intersect_key($parameters, array_flip(['domains']));
 
         $input = (new ParameterProcessor())
             ->addParameter('domains', Parameter::TYPE_ARRAY, true, ['example.com', 'example.net', 'example.org'])
-            ->process($parameters);
+            ->process($emailParams);
 
         $this->domains = $input->get('domains');
         $this->domainsCount = count($this->domains);
+
+        $this->textConverter = new RandomText();
+        $this->textConverter->setParameters(array_diff_key($parameters, $emailParams));
     }
 
     /**
@@ -38,7 +43,7 @@ final class RandomEmail extends RandomText
     {
         $domainIndex = mt_rand(0, $this->domainsCount - 1);
 
-        $value = parent::convert($value);
+        $value = $this->textConverter->convert($value);
         if ($value !== '') {
             $value .= '@' . $this->domains[$domainIndex];
         }
