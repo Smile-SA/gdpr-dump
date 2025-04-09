@@ -24,9 +24,8 @@ final class ConfigProcessorTest extends TestCase
             ],
         ];
 
-        // Process the configuration
-        $processor = $this->createConfigProcessor();
-        $config = $processor->process(new Config($data));
+        $config = $this->createConfigProcessor()
+            ->process(new Config($data));
 
         // Check if the table names were resolved
         $this->assertSame(['customers'], $config->getIncludedTables());
@@ -43,11 +42,9 @@ final class ConfigProcessorTest extends TestCase
      */
     public function testWithEmptyConfig(): void
     {
-        // Create the config processor
-        $processor = $this->createConfigProcessor();
+        $config = $this->createConfigProcessor()
+            ->process(new Config([]));
 
-        // Process the configuration
-        $config = $processor->process(new Config([]));
         $this->assertEmpty($config->getExcludedTables());
         $this->assertEmpty($config->getIncludedTables());
         $this->assertEmpty($config->getTablesConfig()->all());
