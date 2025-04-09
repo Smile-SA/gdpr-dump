@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter;
 
 use RuntimeException;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\DependencyInjection\ConverterAliasResolver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
@@ -29,7 +30,13 @@ final class ConverterFactory
             throw new RuntimeException(sprintf('The converter "%s" is not defined.', $name));
         }
 
-        $converter->setParameters($parameters);
+        try {
+            $converter->setParameters($parameters);
+        } catch (ValidationException $e) {
+            throw new RuntimeException(
+                sprintf('An error occurred while parsing the converter "%s": %s', $name, lcfirst($e->getMessage()))
+            );
+        }
 
         return $converter;
     }

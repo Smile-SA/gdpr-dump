@@ -15,20 +15,24 @@ final class AnonymizeEmail extends AnonymizeText
     private array $domains;
 
     private int $domainsCount;
+    private AnonymizeText $textConverter;
 
     /**
      * @inheritdoc
      */
     public function setParameters(array $parameters): void
     {
-        parent::setParameters($parameters);
+        $emailParams = array_intersect_key($parameters, array_flip(['domains']));
 
         $input = (new ParameterProcessor())
             ->addParameter('domains', Parameter::TYPE_ARRAY, true, ['example.com', 'example.net', 'example.org'])
-            ->process($parameters);
+            ->process($emailParams);
 
         $this->domains = $input->get('domains');
         $this->domainsCount = count($this->domains);
+
+        $this->textConverter = new AnonymizeText();
+        $this->textConverter->setParameters(array_diff_key($parameters, $emailParams));
     }
 
     /**
@@ -43,7 +47,7 @@ final class AnonymizeEmail extends AnonymizeText
 
         // Replace the username
         $parts = explode('@', $value);
-        $value = parent::convert($parts[0]);
+        $value = $this->textConverter->convert($parts[0]);
 
         if (!isset($parts[1])) {
             return $value;
