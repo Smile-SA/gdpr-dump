@@ -6,17 +6,17 @@ namespace Smile\GdprDump\Tests\Functional;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use RuntimeException;
-use Smile\GdprDump\AppKernel;
 use Smile\GdprDump\Config\Compiler\CompilerInterface;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
 use Smile\GdprDump\Database\Database;
+use Smile\GdprDump\Kernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class TestCase extends BaseTestCase
 {
-    private static ?AppKernel $kernel = null;
+    private static ?Kernel $kernel = null;
     private static ?Database $database = null;
     private static ?Config $config = null;
 
@@ -42,7 +42,7 @@ abstract class TestCase extends BaseTestCase
     protected static function getContainer(): ContainerInterface
     {
         if (self::$kernel === null) {
-            self::$kernel = new AppKernel();
+            self::$kernel = new Kernel();
             self::$kernel->boot();
         }
 
