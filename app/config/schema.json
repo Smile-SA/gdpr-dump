@@ -4,6 +4,9 @@
         "extends": {
             "type": ["string", "array"]
         },
+        "strict_schema": {
+            "type": "boolean"
+        },
         "requires_version": {
             "type": "boolean"
         },
