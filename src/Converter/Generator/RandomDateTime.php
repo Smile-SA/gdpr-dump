@@ -4,23 +4,30 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Generator;
 
-final class RandomDateTime extends RandomDate
+use Smile\GdprDump\Converter\ConverterInterface;
+
+final class RandomDateTime implements ConverterInterface
 {
-    protected string $defaultFormat = 'Y-m-d H:i:s';
+    private RandomDate $dateConverter;
 
     /**
      * @inheritdoc
      */
-    protected function randomizeDate(): void
+    public function setParameters(array $parameters): void
     {
-        // Randomize the year, month and day
-        parent::randomizeDate();
+        if (!array_key_exists('format', $parameters)) {
+            $parameters['format'] = 'Y-m-d H:i:s';
+        }
 
-        // Randomize the hour, minute and second
-        $this->date->setTime(
-            mt_rand(0, 23),
-            mt_rand(0, 59),
-            mt_rand(0, 59)
-        );
+        $this->dateConverter = new RandomDate();
+        $this->dateConverter->setParameters($parameters);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function convert(mixed $value, array $context = []): string
+    {
+        return $this->dateConverter->convert($value);
     }
 }

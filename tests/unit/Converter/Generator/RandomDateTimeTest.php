@@ -7,8 +7,9 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 use DateTime;
 use Smile\GdprDump\Converter\Generator\RandomDateTime;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-final class RandomDateTimeTest extends RandomDateTest
+final class RandomDateTimeTest extends TestCase
 {
     /**
      * Test the converter.

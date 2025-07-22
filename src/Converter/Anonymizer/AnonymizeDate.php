@@ -10,10 +10,9 @@ use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 use UnexpectedValueException;
 
-class AnonymizeDate implements ConverterInterface
+final class AnonymizeDate implements ConverterInterface
 {
-    protected string $defaultFormat = 'Y-m-d';
-    private string $format = 'Y-m-d';
+    private string $format;
 
     /**
      * @inheritdoc
@@ -21,7 +20,7 @@ class AnonymizeDate implements ConverterInterface
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
-            ->addParameter('format', Parameter::TYPE_STRING, true, $this->defaultFormat)
+            ->addParameter('format', Parameter::TYPE_STRING, true, 'Y-m-d')
             ->process($parameters);
 
         $this->format = $input->get('format');

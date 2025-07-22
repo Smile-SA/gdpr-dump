@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Anonymizer;
 
+use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-final class AnonymizeEmail extends AnonymizeText
+final class AnonymizeEmail implements ConverterInterface
 {
     /**
      * @var string[]
