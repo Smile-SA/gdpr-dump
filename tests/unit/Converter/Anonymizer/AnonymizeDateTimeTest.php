@@ -6,9 +6,10 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeDateTime;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 use UnexpectedValueException;
 
-final class AnonymizeDateTimeTest extends AnonymizeDateTest
+final class AnonymizeDateTimeTest extends TestCase
 {
     /**
      * Test the converter.

@@ -8,7 +8,7 @@ use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-class AnonymizeText implements ConverterInterface
+final class AnonymizeText implements ConverterInterface
 {
     /**
      * @var string[]
