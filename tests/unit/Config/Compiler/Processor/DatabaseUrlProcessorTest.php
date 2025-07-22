@@ -9,7 +9,7 @@ use Smile\GdprDump\Config\Compiler\Processor\DatabaseUrlProcessor;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-class DatabaseUrlProcessorTest extends TestCase
+final class DatabaseUrlProcessorTest extends TestCase
 {
     /**
      * Assert that the url is processed and individual params (e.g. password) take precedence.
