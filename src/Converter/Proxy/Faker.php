@@ -26,9 +26,6 @@ final class Faker implements ConverterInterface
     {
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -57,9 +54,6 @@ final class Faker implements ConverterInterface
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): mixed
     {
         $arguments = $this->arguments;

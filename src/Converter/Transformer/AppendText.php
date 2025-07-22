@@ -12,9 +12,6 @@ final class AppendText implements ConverterInterface
 {
     private string $suffix;
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -24,9 +21,6 @@ final class AppendText implements ConverterInterface
         $this->suffix = $input->get('value');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;

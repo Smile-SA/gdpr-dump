@@ -14,7 +14,7 @@ final class ConverterFactory
 {
     public function __construct(
         private ContainerInterface $container,
-        private ConverterAliasResolver $converterAliasResolver
+        private ConverterAliasResolver $converterAliasResolver,
     ) {
     }
 

@@ -18,8 +18,6 @@ final class RandomDate implements ConverterInterface
     private int $maxYear;
 
     /**
-     * @inheritdoc
-     *
      * @throws ValidationException
      */
     public function setParameters(array $parameters): void
@@ -40,9 +38,6 @@ final class RandomDate implements ConverterInterface
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): string
     {
         // Randomize the year, month and day

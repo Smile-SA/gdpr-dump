@@ -16,17 +16,11 @@ final class RandomizeNumber implements ConverterInterface
         $this->replaceCallback = fn () => (string) mt_rand(0, 9);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         // No parameters
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;

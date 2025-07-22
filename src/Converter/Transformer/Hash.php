@@ -13,9 +13,6 @@ final class Hash implements ConverterInterface
 {
     private string $algorithm;
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -32,9 +29,6 @@ final class Hash implements ConverterInterface
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;

@@ -31,14 +31,11 @@ final class DumpCommand extends Command
         private ConfigLoaderInterface $configLoader,
         private ValidatorInterface $validator,
         private CompilerInterface $compiler,
-        private DumpInfo $dumpInfo
+        private DumpInfo $dumpInfo,
     ) {
         parent::__construct();
     }
 
-    /**
-     * @inheritdoc
-     */
     public function configure(): void
     {
         $configHint = ' (can also be specified in the configuration file)';
@@ -60,9 +57,6 @@ final class DumpCommand extends Command
         // phpcs:enable Generic.Files.LineLength.TooLong
     }
 
-    /**
-     * @inheritdoc
-     */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         try {

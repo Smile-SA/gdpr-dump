@@ -57,89 +57,56 @@ final class DumperConfig implements DumperConfigInterface
         $this->prepareTableSettings($config);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getDumpOutput(): string
     {
         return $this->getDumpSettings()['output'];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getDumpSettings(): array
     {
         return $this->dumpSettings;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getFakerSettings(): FakerSettings
     {
         return $this->fakerSettings;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getFilterPropagationSettings(): FilterPropagationSettings
     {
         return $this->filterPropagationSettings;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getTablesConfig(): TableConfigCollection
     {
         return $this->tablesConfig;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getVarQueries(): array
     {
         return $this->varQueries;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getIncludedTables(): array
     {
         return $this->includedTables;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getExcludedTables(): array
     {
         return $this->excludedTables;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getTablesToTruncate(): array
     {
         return $this->tablesToTruncate;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getTablesToFilter(): array
     {
         return $this->tablesToFilter;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getTablesToSort(): array
     {
         return $this->tablesToSort;

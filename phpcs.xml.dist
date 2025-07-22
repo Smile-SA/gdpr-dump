@@ -137,6 +137,12 @@
     <!-- Reports empty comments -->
     <rule ref="SlevomatCodingStandard.Commenting.EmptyComment"/>
 
+    <!-- Checks for useless doc comments -->
+    <rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment"/>
+
+    <!-- Reports documentation comments containing only @inheritdoc annotation -->
+    <rule ref="SlevomatCodingStandard.Commenting.UselessInheritDocComment"/>
+
     <!-- Disallows assignments in if, elseif and do-while loop conditions -->
     <rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
 
@@ -148,9 +154,6 @@
 
     <!-- This sniff finds unreachable catch blocks -->
     <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch"/>
-
-    <!-- Checks arrow function declaration -->
-    <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration"/>
 
     <!-- Checks whether uses at the top of a file are alphabetically sorted -->
     <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
@@ -168,11 +171,30 @@
     <!-- Disallows direct call of __invoke() -->
     <rule ref="SlevomatCodingStandard.PHP.DisallowDirectMagicInvokeCall"/>
 
+
+    <!-- Checks arrow function declaration -->
+    <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration"/>
+
     <!-- Reports empty functions body and requires at least a comment inside -->
     <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
 
     <!-- This sniff disallows usage of named arguments -->
     <rule ref="SlevomatCodingStandard.Functions.DisallowNamedArguments"/>
+
+    <!-- This sniff disallows trailing commas in multi-line calls -->
+    <rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInCall"/>
+
+    <!-- This sniff enforces trailing commas in multi-line declarations -->
+    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInClosureUse"/>
+
+    <!-- This sniff enforces trailing commas in multi-line declarations -->
+    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration"/>
+
+    <!-- This sniff reports calls to functions without the $strict parameter or with $strict = false -->
+    <rule ref="SlevomatCodingStandard.Functions.StrictCall"/>
+
+    <!-- Looks for unused inherited variables passed to closure via use -->
+    <rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure"/>
 
     <!-- Enforces using short form of list syntax -->
     <rule ref="SlevomatCodingStandard.PHP.ShortList"/>
@@ -191,6 +213,9 @@
 
     <!-- Disallows spaces after negation operator -->
     <rule ref="SlevomatCodingStandard.Operators.NegationOperatorSpacing"/>
+
+    <!-- Requires using combined assignment operators, eg +=, .= -->
+    <rule ref="SlevomatCodingStandard.Operators.RequireCombinedAssignmentOperator"/>
 
     <!-- Disallows use of super global variables -->
     <rule ref="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable"/>

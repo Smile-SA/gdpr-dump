@@ -21,9 +21,6 @@ final class JsonSchemaValidator implements ValidatorInterface
         $this->schemaFile = $schemaFile;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function validate(mixed $data): ValidationResultInterface
     {
         $validator = $this->getValidator();

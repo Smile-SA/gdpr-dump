@@ -14,9 +14,6 @@ final class NumberBetween implements ConverterInterface
     private int $min;
     private int $max;
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -32,9 +29,6 @@ final class NumberBetween implements ConverterInterface
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): int
     {
         return mt_rand($this->min, $this->max);

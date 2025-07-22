@@ -6,9 +6,6 @@ namespace Smile\GdprDump\Phar\Minify;
 
 final class Php implements MinifierInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function minify(string $contents): string
     {
         $result = '';
@@ -35,9 +32,6 @@ final class Php implements MinifierInterface
         return $result;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function supports(string $extension): bool
     {
         return $extension === 'php';

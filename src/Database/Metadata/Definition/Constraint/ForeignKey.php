@@ -15,7 +15,7 @@ final class ForeignKey
         private string $localTableName,
         private array $localColumns,
         private string $foreignTableName,
-        private array $foreignColumns
+        private array $foreignColumns,
     ) {
     }
 

@@ -16,7 +16,7 @@ final class Parameter
         private string $name,
         private string $type,
         private bool $required = false,
-        private mixed $default = null
+        private mixed $default = null,
     ) {
     }
 

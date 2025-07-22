@@ -25,9 +25,6 @@ final class AnonymizeText implements ConverterInterface
         $this->multiByteEnabled = extension_loaded('mbstring');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -44,9 +41,6 @@ final class AnonymizeText implements ConverterInterface
         $this->delimiters = array_flip($this->delimiters);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;

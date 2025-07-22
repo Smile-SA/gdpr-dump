@@ -20,9 +20,6 @@ final class AnonymizeNumber implements ConverterInterface
         $this->multiByteEnabled = extension_loaded('mbstring');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -34,9 +31,6 @@ final class AnonymizeNumber implements ConverterInterface
         $this->minNumberLength = $input->get('min_number_length');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;

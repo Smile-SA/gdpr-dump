@@ -20,9 +20,6 @@ final class Conditional implements ConverterInterface
     {
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -42,9 +39,6 @@ final class Conditional implements ConverterInterface
         $this->ifFalseConverter = $input->get('if_false_converter');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): mixed
     {
         $result = (bool) eval($this->condition);

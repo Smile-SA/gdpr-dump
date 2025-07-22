@@ -41,33 +41,21 @@ final class Database implements DatabaseInterface
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getConnection(): Connection
     {
         return $this->connection;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getDriver(): DriverInterface
     {
         return $this->driver;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getMetadata(): MetadataInterface
     {
         return $this->metadata;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getConnectionParams(): ParameterBag
     {
         return $this->connectionParams;

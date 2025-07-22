@@ -10,17 +10,11 @@ final class Config implements ConfigInterface
     {
     }
 
-    /**
-     * @inheritdoc
-     */
     public function get(string $key, mixed $default = null): mixed
     {
         return $this->has($key) ? $this->items[$key] : $default;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function set(string $key, mixed $value): self
     {
         $this->items[$key] = $value;
@@ -28,25 +22,16 @@ final class Config implements ConfigInterface
         return $this;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function has(string $key): bool
     {
         return array_key_exists($key, $this->items);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function toArray(): array
     {
         return $this->items;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function reset(array $items = []): self
     {
         $this->items = $items;
@@ -54,9 +39,6 @@ final class Config implements ConfigInterface
         return $this;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function merge(array $data): self
     {
         $this->items = $this->mergeArray($this->items, $data);

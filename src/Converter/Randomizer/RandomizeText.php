@@ -14,9 +14,6 @@ final class RandomizeText implements ConverterInterface
     private string $replacements;
     private int $replacementsCount;
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -29,9 +26,6 @@ final class RandomizeText implements ConverterInterface
         $this->replacementsCount = strlen($this->replacements);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;

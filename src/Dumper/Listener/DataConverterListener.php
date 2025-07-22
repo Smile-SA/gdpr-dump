@@ -28,7 +28,7 @@ final class DataConverterListener
 
     public function __construct(
         private ConverterBuilder $converterBuilder,
-        private ConditionBuilder $conditionBuilder
+        private ConditionBuilder $conditionBuilder,
     ) {
     }
 

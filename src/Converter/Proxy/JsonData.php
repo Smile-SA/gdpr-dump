@@ -16,9 +16,6 @@ final class JsonData implements ConverterInterface
      */
     private array $converters;
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -28,9 +25,6 @@ final class JsonData implements ConverterInterface
         $this->converters = $input->get('converters');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): mixed
     {
         $decoded = json_decode((string) $value, true);

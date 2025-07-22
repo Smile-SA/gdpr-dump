@@ -16,17 +16,11 @@ final class ToUpper implements ConverterInterface
         $this->multiByteEnabled = extension_loaded('mbstring');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         // No parameters
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;

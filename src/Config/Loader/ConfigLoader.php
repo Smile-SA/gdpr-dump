@@ -20,9 +20,6 @@ final class ConfigLoader implements ConfigLoaderInterface
     {
     }
 
-    /**
-     * @inheritdoc
-     */
     public function load(string $fileName, ConfigInterface $config): void
     {
         $fileName = $this->fileLocator->locate($fileName);

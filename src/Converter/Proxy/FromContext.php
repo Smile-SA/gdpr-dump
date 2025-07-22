@@ -13,9 +13,6 @@ final class FromContext implements ConverterInterface
 {
     private string $key;
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -25,9 +22,6 @@ final class FromContext implements ConverterInterface
         $this->key = $input->get('key');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): mixed
     {
         return ArrayHelper::getPath($context, $this->key);

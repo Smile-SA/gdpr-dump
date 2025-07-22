@@ -15,9 +15,6 @@ final class RegexReplace implements ConverterInterface
     private string $replacement;
     private int $limit;
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -31,9 +28,6 @@ final class RegexReplace implements ConverterInterface
         $this->limit = $input->get('limit');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;

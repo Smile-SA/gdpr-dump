@@ -111,7 +111,7 @@ final class TableFilterListener
         QueryBuilder $queryBuilder,
         array $dependencies,
         array $processedTables = [],
-        int &$subQueryCount = 0
+        int &$subQueryCount = 0,
     ): void {
         if (empty($processedTables)) {
             // Initialize $processedTables with the table name that was initially passed to the function
