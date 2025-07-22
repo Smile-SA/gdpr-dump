@@ -8,7 +8,7 @@ use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-class RandomizeText implements ConverterInterface
+final class RandomizeText implements ConverterInterface
 {
     private int $minLength;
     private string $replacements;

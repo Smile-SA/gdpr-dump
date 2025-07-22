@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter;
 
+use DateTime;
 use RuntimeException;
 use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Converter\ConverterInterface;
@@ -34,5 +35,41 @@ abstract class TestCase extends UnitTestCase
         $converter->setParameters($parameters);
 
         return $converter;
+    }
+
+    /**
+     * Assert that a date is anonymized.
+     */
+    protected function assertDateIsAnonymized(string $anonymized, string $actual, string $format): void
+    {
+        $anonymizedDate = DateTime::createFromFormat($format, $anonymized);
+        $actualDate = DateTime::createFromFormat($format, $actual);
+
+        // Make sure that PHP didn't fail to create the dates
+        $this->assertNotFalse($anonymizedDate);
+        $this->assertNotFalse($actualDate);
+
+        // The year must not have changed
+        $this->assertSame($anonymizedDate->format('Y'), $actualDate->format('Y'));
+
+        // The day and month must have been randomized
+        $this->assertTrue(
+            $anonymizedDate->format('n') !== $actualDate->format('n')
+            || $anonymizedDate->format('j') !== $actualDate->format('j')
+        );
+
+        // The time must not have changed
+        $this->assertSame($anonymizedDate->format('H:i:s'), $actualDate->format('H:i:s'));
+    }
+
+    /**
+     * Assert that a date is randomized.
+     */
+    protected function assertDateIsRandomized(string $randomized, string $actual, string $format): void
+    {
+        $randomizedDate = DateTime::createFromFormat($format, $randomized);
+        $actualDate = DateTime::createFromFormat($format, $actual);
+
+        $this->assertTrue($randomizedDate !== $actualDate);
     }
 }

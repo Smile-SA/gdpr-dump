@@ -10,7 +10,7 @@ use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 use UnexpectedValueException;
 
-class AnonymizeDateTest extends TestCase
+final class AnonymizeDateTest extends TestCase
 {
     /**
      * Test the converter.

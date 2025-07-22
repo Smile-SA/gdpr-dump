@@ -9,7 +9,7 @@ use Smile\GdprDump\Converter\Generator\RandomDate;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-class RandomDateTest extends TestCase
+final class RandomDateTest extends TestCase
 {
     /**
      * Test the converter.
@@ -95,16 +95,5 @@ class RandomDateTest extends TestCase
             'min_year' => 2020,
             'max_year' => 2019,
         ]);
-    }
-
-    /**
-     * Assert that a date is randomized.
-     */
-    protected function assertDateIsRandomized(string $randomized, string $actual, string $format): void
-    {
-        $randomizedDate = DateTime::createFromFormat($format, $randomized);
-        $actualDate = DateTime::createFromFormat($format, $actual);
-
-        $this->assertTrue($randomizedDate !== $actualDate);
     }
 }
