@@ -10,6 +10,7 @@ use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigException;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
+use Smile\GdprDump\Config\Validator\ValidationException;
 use Smile\GdprDump\Config\Validator\ValidationResultInterface;
 use Smile\GdprDump\Config\Validator\ValidatorInterface;
 use Smile\GdprDump\Console\Helper\DumpInfo;
@@ -125,7 +126,7 @@ final class DumpCommand extends Command
     /**
      * Add input option values to the config.
      *
-     * @throws ConfigException
+     * @throws ValidationException
      */
     private function addInputOptionsToConfig(ConfigInterface $config, InputInterface $input): void
     {
@@ -146,7 +147,7 @@ final class DumpCommand extends Command
                 }
 
                 // Option must have a value
-                throw new ConfigException(sprintf('Please provide a value for the option "%s".', $option));
+                throw new ValidationException(sprintf('Please provide a value for the option "%s".', $option));
             }
 
             // Override the config value with the provided option value
