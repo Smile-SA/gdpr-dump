@@ -41,7 +41,7 @@ final class TableFilterListener
         $tablesToSort = $this->config->getTablesToSort();
 
         // Do nothing if there is no sort order/filter defined in the configuration
-        if (empty($tablesToFilter) && empty($tablesToSort)) {
+        if (!$tablesToFilter && !$tablesToSort) {
             return [];
         }
 
@@ -111,9 +111,9 @@ final class TableFilterListener
         QueryBuilder $queryBuilder,
         array $dependencies,
         array $processedTables = [],
-        int &$subQueryCount = 0
+        int &$subQueryCount = 0,
     ): void {
-        if (empty($processedTables)) {
+        if (!$processedTables) {
             // Initialize $processedTables with the table name that was initially passed to the function
             // (otherwise, if this table had a cyclic dependency on itself, it would not be detected)
             $processedTables[$tableName] = true;
@@ -226,7 +226,7 @@ final class TableFilterListener
     private function getWhereSql(QueryBuilder $queryBuilder): string
     {
         $wherePart = $queryBuilder->getQueryPart('where');
-        if (empty($wherePart)) {
+        if ($wherePart === null) {
             $queryBuilder->where(1);
         }
 

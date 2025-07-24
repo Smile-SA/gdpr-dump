@@ -40,7 +40,7 @@ final class ConfigProcessor
         foreach ($configKeys as $configKey) {
             $tableNames = (array) $config->get($configKey, []);
 
-            if (!empty($tableNames)) {
+            if ($tableNames) {
                 $resolved = $this->resolveTableNames($tableNames);
                 $config->set($configKey, $resolved);
             }
@@ -54,7 +54,7 @@ final class ConfigProcessor
     private function processTablesData(ConfigInterface $config): void
     {
         $tablesData = (array) $config->get('tables', []);
-        if (!empty($tablesData)) {
+        if ($tablesData) {
             $resolved = $this->resolveTablesData($tablesData);
             $config->set('tables', $resolved);
         }
@@ -69,7 +69,7 @@ final class ConfigProcessor
 
         foreach ($tableNames as $tableName) {
             $matches = $this->findTablesByName((string) $tableName);
-            if (!empty($matches)) {
+            if ($matches) {
                 $resolved = array_merge($resolved, $matches);
             }
         }
@@ -110,10 +110,7 @@ final class ConfigProcessor
      */
     private function findTablesByName(string $pattern): array
     {
-        if ($this->tableNames === null) {
-            $this->tableNames = $this->metadata->getTableNames();
-        }
-
+        $this->tableNames ??= $this->metadata->getTableNames();
         $matches = [];
 
         foreach ($this->tableNames as $tableName) {
@@ -132,7 +129,7 @@ final class ConfigProcessor
      */
     private function validateTableColumns(string $tableName, array $tableData): void
     {
-        if (!array_key_exists('converters', $tableData) || empty($tableData['converters'])) {
+        if (!array_key_exists('converters', $tableData) || !$tableData['converters']) {
             return;
         }
 
@@ -141,7 +138,7 @@ final class ConfigProcessor
         foreach ($tableData['converters'] as $columnName => $converterData) {
             $disabled = $converterData['disabled'] ?? false;
 
-            if (!$disabled && !in_array($columnName, $columns)) {
+            if (!$disabled && !in_array($columnName, $columns, true)) {
                 $message = 'The table "%s" uses a converter on an undefined column "%s".';
                 throw new RuntimeException(sprintf($message, $tableName, $columnName));
             }

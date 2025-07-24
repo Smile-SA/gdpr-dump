@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Loader;
 
-use Exception;
 use Smile\GdprDump\Config\ConfigException;
 use Smile\GdprDump\Config\ConfigInterface;
 use Symfony\Component\Yaml\Yaml;
+use Throwable;
 
 final class ConfigLoader implements ConfigLoaderInterface
 {
@@ -20,9 +20,6 @@ final class ConfigLoader implements ConfigLoaderInterface
     {
     }
 
-    /**
-     * @inheritdoc
-     */
     public function load(string $fileName, ConfigInterface $config): void
     {
         $fileName = $this->fileLocator->locate($fileName);
@@ -43,7 +40,7 @@ final class ConfigLoader implements ConfigLoaderInterface
 
         try {
             $data = Yaml::parse($input);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new ParseException('Unable to parse the YAML input.', $e);
         }
 

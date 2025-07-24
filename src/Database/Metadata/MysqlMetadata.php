@@ -20,9 +20,6 @@ final class MysqlMetadata implements MetadataInterface
         $this->schema = (string) $connection->getDatabase();
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getTableNames(): array
     {
         if ($this->tableNames !== null) {
@@ -40,9 +37,6 @@ final class MysqlMetadata implements MetadataInterface
         return $this->tableNames;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getColumnNames(string $tableName): array
     {
         if ($this->columnNames === null) {
@@ -65,9 +59,6 @@ final class MysqlMetadata implements MetadataInterface
             ?? throw new RuntimeException(sprintf('The table "%s" is not defined.', $tableName));
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getForeignKeys(): array
     {
         if ($this->foreignKeys !== null) {
@@ -122,9 +113,6 @@ final class MysqlMetadata implements MetadataInterface
         return $this->foreignKeys;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getTableForeignKeys(string $tableName): array
     {
         return $this->getForeignKeys()[$tableName] ?? [];

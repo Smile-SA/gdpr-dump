@@ -15,14 +15,9 @@ final class FileLocator implements FileLocatorInterface
     {
     }
 
-    /**
-     * @inheritdoc
-     */
     public function locate(string $path, ?string $currentDirectory = null): string
     {
-        if ($this->templates === null) {
-            $this->templates = $this->getTemplates();
-        }
+        $this->templates ??= $this->getTemplates();
 
         // Check if it is a config template
         if (array_key_exists($path, $this->templates)) {
@@ -100,10 +95,9 @@ final class FileLocator implements FileLocatorInterface
         }
 
         // Windows filesystem
-        if (strlen($path) > 3 && ctype_alpha($path[0]) && $path[1] === ':' && ($path[2] === '\\' || $path[2] === '/')) {
-            return true;
-        }
-
-        return false;
+        return strlen($path) > 3
+            && ctype_alpha($path[0])
+            && $path[1] === ':'
+            && ($path[2] === '\\' || $path[2] === '/');
     }
 }

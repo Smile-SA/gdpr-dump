@@ -12,9 +12,6 @@ final class PrependText implements ConverterInterface
 {
     private string $prefix;
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -24,9 +21,6 @@ final class PrependText implements ConverterInterface
         $this->prefix = $input->get('value');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;

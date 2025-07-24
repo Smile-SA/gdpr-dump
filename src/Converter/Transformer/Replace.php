@@ -13,9 +13,6 @@ final class Replace implements ConverterInterface
     private string $search;
     private string $replacement;
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -27,9 +24,6 @@ final class Replace implements ConverterInterface
         $this->replacement = $input->get('replacement');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;

@@ -18,7 +18,7 @@ final class DumpEvent extends Event
         private Mysqldump $dumper,
         private DatabaseInterface $database,
         private DumperConfigInterface $config,
-        private array $context
+        private array $context,
     ) {
     }
 

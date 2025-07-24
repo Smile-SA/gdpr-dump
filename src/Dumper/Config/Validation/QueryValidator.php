@@ -84,7 +84,7 @@ final class QueryValidator
      */
     private function isStatementAllowed(string $statement): bool
     {
-        if (empty($this->allowedStatements)) {
+        if (!$this->allowedStatements) {
             return !array_key_exists($statement, $this->statements);
         }
 

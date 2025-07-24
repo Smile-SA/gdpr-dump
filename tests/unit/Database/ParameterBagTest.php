@@ -28,7 +28,7 @@ final class ParameterBagTest extends TestCase
         ];
 
         $bag = new ParameterBag($params);
-        $this->assertEquals($params, $bag->all());
+        $this->assertSame($params, $bag->all());
     }
 
     /**

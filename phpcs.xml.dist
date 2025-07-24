@@ -43,6 +43,7 @@
             <property name="allowMultiline" value="true"/>
         </properties>
     </rule>
+    <rule ref="Squiz.Operators.IncrementDecrementUsage"/>
 
     <!-- Disallows implicit array creation -->
     <rule ref="SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation"/>
@@ -63,16 +64,11 @@
     <!-- This sniff enforces trailing commas in multi-line arrays -->
     <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
 
+    <!-- Disallows $object->{'foo'} when the property name is compatible with identifier access -->
+    <rule ref="SlevomatCodingStandard.Classes.DisallowStringExpressionPropertyFetch"/>
+
     <!-- Disallows using public properties -->
     <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty"/>
-
-    <!-- Enforces no empty line before/after opening class/interface/trait brace -->
-    <rule ref="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces">
-        <properties>
-            <property name="linesCountAfterOpeningBrace" value="0"/>
-            <property name="linesCountBeforeClosingBrace" value="0"/>
-        </properties>
-    </rule>
 
     <!-- Checks that there is exactly one blank line between different class members -->
     <rule ref="SlevomatCodingStandard.Classes.ClassMemberSpacing"/>
@@ -80,11 +76,17 @@
     <!-- Checks that there is a certain number of blank lines between constants -->
     <rule ref="SlevomatCodingStandard.Classes.ConstantSpacing"/>
 
+    <!-- Checks that there is exactly one blank line between class methods -->
+    <rule ref="SlevomatCodingStandard.Classes.MethodSpacing"/>
+
     <!-- Checks that there is a certain number of blank lines between properties -->
     <rule ref="SlevomatCodingStandard.Classes.PropertySpacing"/>
 
-    <!-- Checks that there is exactly one blank line between class methods -->
-    <rule ref="SlevomatCodingStandard.Classes.MethodSpacing"/>
+    <!-- Requires use of constructor property promotion -->
+    <rule ref="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion"/>
+
+    <!-- SlevomatCodingStandard.Classes.RequireSelfReference -->
+    <rule ref="SlevomatCodingStandard.Classes.RequireSelfReference"/>
 
     <!-- Enforces configurable number of lines before first use, after last use and between two use statements -->
     <rule ref="SlevomatCodingStandard.Classes.TraitUseSpacing">
@@ -93,9 +95,6 @@
             <property name="linesCountAfterLastUseWhenLastInClass" value="0"/>
         </properties>
     </rule>
-
-    <!-- Requires use of constructor property promotion -->
-    <rule ref="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion"/>
 
     <!-- Expected PHPDoc format -->
     <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing">
@@ -112,7 +111,11 @@
     </rule>
 
     <!-- Reports invalid inline phpDocs with @var -->
-    <rule ref="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration"/>
+    <rule ref="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration">
+        <properties>
+            <property name="allowDocCommentAboveReturn" value="true"/>
+        </properties>
+    </rule>
 
     <!-- Forbidden PHPDoc annotations -->
     <rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
@@ -137,8 +140,17 @@
     <!-- Reports empty comments -->
     <rule ref="SlevomatCodingStandard.Commenting.EmptyComment"/>
 
+    <!-- Checks for useless doc comments -->
+    <rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment"/>
+
+    <!-- Reports documentation comments containing only @inheritdoc annotation -->
+    <rule ref="SlevomatCodingStandard.Commenting.UselessInheritDocComment"/>
+
     <!-- Disallows assignments in if, elseif and do-while loop conditions -->
     <rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
+
+    <!-- Disallows use of empty() -->
+    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowEmpty"/>
 
     <!-- Yoda conditions decrease code comprehensibility and readability -->
     <rule ref="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison"/>
@@ -146,14 +158,70 @@
     <!-- Requires use of null coalesce operator when possible -->
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator"/>
 
+    <!-- Requires use of ??= operator when possible -->
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator">
+        <properties>
+            <property name="checkIfConditions" value="true"/>
+        </properties>
+    </rule>
+
+    <!-- Requires use of ?-> operator when possible -->
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullSafeObjectOperator"/>
+
+    <!-- Requires ternary operator when possible -->
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireTernaryOperator"/>
+
+    <!-- Requires short ternary operator ?: when possible -->
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireShortTernaryOperator"/>
+
+    <!-- Reports useless conditions where both branches return true or false -->
+    <rule ref="SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn"/>
+
+    <!-- Reports useless ternary operator where both branches return true/false. Instead, use "(bool) $a" or "!$a" -->
+    <rule ref="SlevomatCodingStandard.ControlStructures.UselessTernaryOperator"/>
+
     <!-- This sniff finds unreachable catch blocks -->
     <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch"/>
+
+    <!-- This sniff enforces that catch statements contain Throwable instead of Exception -->
+    <rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly"/>
 
     <!-- Checks arrow function declaration -->
     <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration"/>
 
+    <!-- Reports empty functions body and requires at least a comment inside -->
+    <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
+
+    <!-- This sniff disallows usage of named arguments -->
+    <rule ref="SlevomatCodingStandard.Functions.DisallowNamedArguments"/>
+
+    <!-- This sniff disallows trailing commas in multi-line calls -->
+    <rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInCall"/>
+
+    <!-- This sniff enforces trailing commas in multi-line closure use declarations -->
+    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInClosureUse"/>
+
+    <!-- This sniff enforces trailing commas in multi-line function declarations -->
+    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration"/>
+
+    <!-- This sniff reports calls to functions without the $strict parameter or with $strict = false -->
+    <rule ref="SlevomatCodingStandard.Functions.StrictCall"/>
+
+    <!-- Looks for unused inherited variables passed to closure via use -->
+    <rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure"/>
+
     <!-- Checks whether uses at the top of a file are alphabetically sorted -->
     <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
+
+    <!-- Requires importing classes (but not functions/constants) -->
+    <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
+        <properties>
+            <property name="searchAnnotations" value="true"/>
+        </properties>
+    </rule>
+
+    <!-- Requires only one namespace in a file -->
+    <rule ref="SlevomatCodingStandard.Namespaces.RequireOneNamespaceInFile"/>
 
     <!-- Looks for unused imports from other namespaces -->
     <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
@@ -167,12 +235,6 @@
 
     <!-- Disallows direct call of __invoke() -->
     <rule ref="SlevomatCodingStandard.PHP.DisallowDirectMagicInvokeCall"/>
-
-    <!-- Reports empty functions body and requires at least a comment inside -->
-    <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
-
-    <!-- This sniff disallows usage of named arguments -->
-    <rule ref="SlevomatCodingStandard.Functions.DisallowNamedArguments"/>
 
     <!-- Enforces using short form of list syntax -->
     <rule ref="SlevomatCodingStandard.PHP.ShortList"/>
@@ -192,17 +254,8 @@
     <!-- Disallows spaces after negation operator -->
     <rule ref="SlevomatCodingStandard.Operators.NegationOperatorSpacing"/>
 
-    <!-- Disallows use of super global variables -->
-    <rule ref="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable"/>
-
-    <!-- Looks for duplicate assignments to a variable -->
-    <rule ref="SlevomatCodingStandard.Variables.DuplicateAssignmentToVariable"/>
-
-    <!-- Looks for unused variables -->
-    <rule ref="SlevomatCodingStandard.Variables.UnusedVariable"/>
-
-    <!-- Looks for useless variables -->
-    <rule ref="SlevomatCodingStandard.Variables.UselessVariable"/>
+    <!-- Requires using combined assignment operators, eg +=, .= -->
+    <rule ref="SlevomatCodingStandard.Operators.RequireCombinedAssignmentOperator"/>
 
     <!-- Enforces having declare(strict_types=1) at the top of each PHP file -->
     <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
@@ -249,6 +302,18 @@
 
     <!-- Reports useless @var annotation for constants because the type of constant is always clear -->
     <rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint"/>
+
+    <!-- Disallows use of super global variables -->
+    <rule ref="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable"/>
+
+    <!-- Looks for duplicate assignments to a variable -->
+    <rule ref="SlevomatCodingStandard.Variables.DuplicateAssignmentToVariable"/>
+
+    <!-- Looks for unused variables -->
+    <rule ref="SlevomatCodingStandard.Variables.UnusedVariable"/>
+
+    <!-- Looks for useless variables -->
+    <rule ref="SlevomatCodingStandard.Variables.UselessVariable"/>
 
     <!-- Checks duplicate spaces anywhere because there aren't sniffs for every part of code to check formatting -->
     <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>

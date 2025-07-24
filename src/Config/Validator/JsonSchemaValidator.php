@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Validator;
 
-use Exception;
 use JsonSchema\Validator;
+use Throwable;
 
 final class JsonSchemaValidator implements ValidatorInterface
 {
@@ -21,9 +21,6 @@ final class JsonSchemaValidator implements ValidatorInterface
         $this->schemaFile = $schemaFile;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function validate(mixed $data): ValidationResultInterface
     {
         $validator = $this->getValidator();
@@ -36,7 +33,7 @@ final class JsonSchemaValidator implements ValidatorInterface
         // Validate the data against the schema file
         try {
             $validator->validate($data, (object) ['$ref' => $this->schemaFile]);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new ValidationException($e->getMessage(), $e);
         }
 
@@ -61,9 +58,7 @@ final class JsonSchemaValidator implements ValidatorInterface
      */
     private function getValidator(): Validator
     {
-        if ($this->schemaValidator === null) {
-            $this->schemaValidator = new Validator();
-        }
+        $this->schemaValidator ??= new Validator();
 
         return $this->schemaValidator;
     }
