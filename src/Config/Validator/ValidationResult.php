@@ -13,17 +13,11 @@ final class ValidationResult implements ValidationResultInterface
      */
     private array $messages = [];
 
-    /**
-     * @inheritdoc
-     */
     public function isValid(): bool
     {
         return $this->valid;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setValid(bool $valid): self
     {
         $this->valid = $valid;
@@ -31,17 +25,11 @@ final class ValidationResult implements ValidationResultInterface
         return $this;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getMessages(): array
     {
         return $this->messages;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setMessages(array $messages): self
     {
         $this->messages = $messages;

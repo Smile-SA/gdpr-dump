@@ -25,9 +25,6 @@ final class AnonymizeText implements ConverterInterface
         $this->multiByteEnabled = extension_loaded('mbstring');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -44,9 +41,6 @@ final class AnonymizeText implements ConverterInterface
         $this->delimiters = array_flip($this->delimiters);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;
@@ -73,10 +67,8 @@ final class AnonymizeText implements ConverterInterface
 
             // Make sure the generated word has the minimum expected size
             if ($currentWordLength < $this->minWordLength) {
-                if ($lastKey === null) {
-                    // Calculate the last key only once and when needed
-                    $lastKey = array_key_last($array);
-                }
+                // Calculate the last key only once and when needed
+                $lastKey ??= array_key_last($array);
 
                 if ($index === $lastKey || isset($this->delimiters[$array[$index + 1]])) {
                     $multiplier = $this->minWordLength - $currentWordLength;

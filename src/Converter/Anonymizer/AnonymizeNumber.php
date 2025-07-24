@@ -20,9 +20,6 @@ final class AnonymizeNumber implements ConverterInterface
         $this->multiByteEnabled = extension_loaded('mbstring');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -34,9 +31,6 @@ final class AnonymizeNumber implements ConverterInterface
         $this->minNumberLength = $input->get('min_number_length');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;
@@ -63,10 +57,8 @@ final class AnonymizeNumber implements ConverterInterface
 
             // Make sure the generated word has the minimum expected size
             if ($currentNumberLength < $this->minNumberLength) {
-                if ($lastKey === null) {
-                    // Calculate the last key only once and when needed
-                    $lastKey = array_key_last($array);
-                }
+                // Calculate the last key only once and when needed
+                $lastKey ??= array_key_last($array);
 
                 if ($index === $lastKey || !is_numeric($array[$index + 1])) {
                     $multiplier = $this->minNumberLength - $currentNumberLength;

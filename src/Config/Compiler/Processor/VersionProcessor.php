@@ -30,7 +30,7 @@ final class VersionProcessor implements ProcessorInterface
             return;
         }
 
-        if (empty($versionsData)) {
+        if (!$versionsData) {
             return;
         }
 

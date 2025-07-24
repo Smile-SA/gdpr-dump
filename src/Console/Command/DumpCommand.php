@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Console\Command;
 
-use Exception;
 use Smile\GdprDump\Config\Compiler\CompilerInterface;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigException;
@@ -23,6 +22,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
+use Throwable;
 
 final class DumpCommand extends Command
 {
@@ -31,14 +31,11 @@ final class DumpCommand extends Command
         private ConfigLoaderInterface $configLoader,
         private ValidatorInterface $validator,
         private CompilerInterface $compiler,
-        private DumpInfo $dumpInfo
+        private DumpInfo $dumpInfo,
     ) {
         parent::__construct();
     }
 
-    /**
-     * @inheritdoc
-     */
     public function configure(): void
     {
         $configHint = ' (can also be specified in the configuration file)';
@@ -60,9 +57,6 @@ final class DumpCommand extends Command
         // phpcs:enable Generic.Files.LineLength.TooLong
     }
 
-    /**
-     * @inheritdoc
-     */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
@@ -88,7 +82,7 @@ final class DumpCommand extends Command
             }
 
             $this->dumper->dump($config, $input->getOption('dry-run'));
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             if ($output->isVerbose()) {
                 throw $e;
             }
@@ -155,7 +149,7 @@ final class DumpCommand extends Command
             $databaseConfig[$configKey] = $value;
         }
 
-        if (!empty($databaseConfig)) {
+        if ($databaseConfig) {
             $config->set('database', $databaseConfig);
         }
     }

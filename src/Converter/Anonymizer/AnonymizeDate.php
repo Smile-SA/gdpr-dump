@@ -14,9 +14,6 @@ final class AnonymizeDate implements ConverterInterface
 {
     private string $format;
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -27,8 +24,6 @@ final class AnonymizeDate implements ConverterInterface
     }
 
     /**
-     * @inheritdoc
-     *
      * @throws UnexpectedValueException
      */
     public function convert(mixed $value, array $context = []): string

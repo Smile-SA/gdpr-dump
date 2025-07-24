@@ -28,7 +28,7 @@ final class DumpOutputProcessor implements ProcessorInterface
     {
         $input = preg_replace_callback(
             '/{([^}]+)}/',
-            fn (array $matches) => date($matches[1]),
+            fn (array $matches): string => date($matches[1]),
             $input
         );
 

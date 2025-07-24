@@ -13,9 +13,6 @@ final class MysqlDumperTest extends TestCase
 {
     private string $dumpFile;
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
         $this->dumpFile = $this->getResource('var/dump.sql');
@@ -34,8 +31,8 @@ final class MysqlDumperTest extends TestCase
             unlink($this->dumpFile);
         }
 
-        /** @var FakerService $faker */
         $faker = $this->getContainer()->get('faker.service');
+        $this->assertInstanceOf(FakerService::class, $faker);
         $this->assertSame('en_US', $faker->getLocale());
 
         // Create the dump
@@ -162,9 +159,7 @@ final class MysqlDumperTest extends TestCase
      */
     private function createDumper(): MysqlDumper
     {
-        /** @var MysqlDumper $dumper */
-        $dumper = $this->getContainer()->get('dumper');
-
-        return $dumper;
+        /** @var MysqlDumper */
+        return $this->getContainer()->get('dumper');
     }
 }

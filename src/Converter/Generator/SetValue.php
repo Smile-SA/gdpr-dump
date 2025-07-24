@@ -11,9 +11,6 @@ final class SetValue implements ConverterInterface
 {
     private mixed $value;
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         // The parameter must be specified, but accepts empty values
@@ -28,9 +25,6 @@ final class SetValue implements ConverterInterface
         $this->value = $parameters['value'];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): mixed
     {
         return $this->value;

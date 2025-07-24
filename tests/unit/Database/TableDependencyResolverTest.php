@@ -66,8 +66,8 @@ final class TableDependencyResolverTest extends TestCase
         $this->assertCount(1, $dependencies['table']);
         $this->assertArrayHasKey('fk', $dependencies['table']);
 
-        /** @var ForeignKey $foreignKey */
         $foreignKey = $dependencies['table']['fk'];
+        $this->assertInstanceOf(ForeignKey::class, $foreignKey);
         $this->assertSame('fk', $foreignKey->getConstraintName());
     }
 
@@ -91,15 +91,15 @@ final class TableDependencyResolverTest extends TestCase
             $this->assertCount(1, $dependencies['table1']);
             $this->assertArrayHasKey('fk1', $dependencies['table1']);
 
-            /** @var ForeignKey $foreignKey */
             $foreignKey = $dependencies['table1']['fk1'];
+            $this->assertInstanceOf(ForeignKey::class, $foreignKey);
             $this->assertSame('fk1', $foreignKey->getConstraintName());
 
             $this->assertCount(1, $dependencies['table2']);
             $this->assertArrayHasKey('fk2', $dependencies['table2']);
 
-            /** @var ForeignKey $foreignKey */
             $foreignKey = $dependencies['table2']['fk2'];
+            $this->assertInstanceOf(ForeignKey::class, $foreignKey);
             $this->assertSame('fk2', $foreignKey->getConstraintName());
         };
 
@@ -140,12 +140,12 @@ final class TableDependencyResolverTest extends TestCase
         $this->assertArrayHasKey('fk1', $dependencies['table2']);
         $this->assertArrayHasKey('fk2', $dependencies['table2']);
 
-        /** @var ForeignKey $foreignKey */
         $foreignKey = $dependencies['table2']['fk1'];
+        $this->assertInstanceOf(ForeignKey::class, $foreignKey);
         $this->assertSame('fk1', $foreignKey->getConstraintName());
 
-        /** @var ForeignKey $foreignKey */
         $foreignKey = $dependencies['table2']['fk2'];
+        $this->assertInstanceOf(ForeignKey::class, $foreignKey);
         $this->assertSame('fk2', $foreignKey->getConstraintName());
     }
 
@@ -197,8 +197,8 @@ final class TableDependencyResolverTest extends TestCase
         $this->assertCount(1, $dependencies['addresses']);
         $this->assertArrayHasKey('fk_customers', $dependencies['addresses']);
 
-        /** @var ForeignKey $foreignKey */
         $foreignKey = $dependencies['addresses']['fk_customers'];
+        $this->assertInstanceOf(ForeignKey::class, $foreignKey);
         $this->assertSame('fk_customers', $foreignKey->getConstraintName());
     }
 
@@ -211,8 +211,8 @@ final class TableDependencyResolverTest extends TestCase
         $this->assertCount(1, $dependencies['customers']);
         $this->assertArrayHasKey('fk_stores', $dependencies['customers']);
 
-        /** @var ForeignKey $foreignKey */
         $foreignKey = $dependencies['customers']['fk_stores'];
+        $this->assertInstanceOf(ForeignKey::class, $foreignKey);
         $this->assertSame('fk_stores', $foreignKey->getConstraintName());
     }
 }

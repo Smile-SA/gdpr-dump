@@ -64,10 +64,8 @@ final class CompilerTest extends TestCase
      */
     private function getCompiler(): CompilerInterface
     {
-        /** @var CompilerInterface $compiler */
-        $compiler = $this->getContainer()->get('config.compiler');
-
-        return $compiler;
+        /** @var CompilerInterface */
+        return $this->getContainer()->get('config.compiler');
     }
 
     /**

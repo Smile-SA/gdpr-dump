@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Proxy;
 
-use Exception;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Faker\FakerService;
+use Throwable;
 
 final class Faker implements ConverterInterface
 {
@@ -26,9 +26,6 @@ final class Faker implements ConverterInterface
     {
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -44,7 +41,7 @@ final class Faker implements ConverterInterface
             [$this->provider, $this->method] = $this->fakerService
                 ->getGenerator()
                 ->getFormatter($formatter);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             // Wrap the original exception to make it more clear that the error is due to a faker formatter
             throw new ValidationException(sprintf('Faker formatter error: %s', $e->getMessage()), $e);
         }
@@ -57,9 +54,6 @@ final class Faker implements ConverterInterface
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): mixed
     {
         $arguments = $this->arguments;

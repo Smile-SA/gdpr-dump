@@ -82,7 +82,7 @@ final class TableConfig
      */
     public function hasSortOrder(): bool
     {
-        return !empty($this->sortOrders);
+        return (bool) $this->sortOrders;
     }
 
     /**

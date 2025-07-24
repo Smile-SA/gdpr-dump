@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Listener;
 
-use Exception;
 use RuntimeException;
 use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Converter\ConverterBuilder;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
+use Throwable;
 
 final class DataConverterListener
 {
@@ -28,7 +28,7 @@ final class DataConverterListener
 
     public function __construct(
         private ConverterBuilder $converterBuilder,
-        private ConditionBuilder $conditionBuilder
+        private ConditionBuilder $conditionBuilder,
     ) {
     }
 
@@ -76,7 +76,7 @@ final class DataConverterListener
                 try {
                     $row[$column] = $converter->convert($row[$column], $context);
                     $context['processed_data'][$column] = $row[$column];
-                } catch (Exception $e) {
+                } catch (Throwable $e) {
                     throw new RuntimeException(sprintf('[%s.%s] %s', $table, $column, $e->getMessage()), 0, $e);
                 }
             }
