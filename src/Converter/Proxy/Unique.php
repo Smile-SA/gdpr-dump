@@ -15,9 +15,6 @@ final class Unique implements ConverterInterface
     private int $maxRetries;
     private array $generated = [];
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -29,9 +26,6 @@ final class Unique implements ConverterInterface
         $this->maxRetries = $input->get('max_retries');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): mixed
     {
         $count = 0;

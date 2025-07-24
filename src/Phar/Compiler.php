@@ -59,7 +59,7 @@ final class Compiler
 
         // Create the build directory if it does not already exist
         $buildDir = pathinfo($fileName, PATHINFO_DIRNAME);
-        if (!is_dir($buildDir) && !mkdir($buildDir, 0775, true)) {
+        if (!is_dir($buildDir) && !mkdir($buildDir, 0o775, true)) {
             throw new RuntimeException(sprintf('Failed to create the directory "%s".', $buildDir));
         }
 
@@ -100,7 +100,7 @@ final class Compiler
      */
     private function getFinders(): array
     {
-        $finder = fn (string $directory) => (new Finder())->files()->in($directory);
+        $finder = fn (string $directory): Finder => (new Finder())->files()->in($directory);
 
         return [
             $finder($this->basePath . '/src')
@@ -147,9 +147,7 @@ final class Compiler
             throw new RuntimeException(sprintf('Failed to open the file "%s".', $fileName));
         }
 
-        if ($extension === null) {
-            $extension = pathinfo($fileName, PATHINFO_EXTENSION);
-        }
+        $extension ??= pathinfo($fileName, PATHINFO_EXTENSION);
 
         foreach ($this->minifiers as $minifier) {
             if ($minifier->supports($extension)) {

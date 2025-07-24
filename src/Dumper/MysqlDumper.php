@@ -17,13 +17,10 @@ final class MysqlDumper implements DumperInterface
 {
     public function __construct(
         private DatabaseFactory $databaseFactory,
-        private EventDispatcherInterface $eventDispatcher
+        private EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
-    /**
-     * @inheritdoc
-     */
     public function dump(ConfigInterface $config, bool $dryRun = false): void
     {
         $database = $this->databaseFactory->create($config);

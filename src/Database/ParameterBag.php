@@ -62,7 +62,7 @@ final class ParameterBag
         // Remove empty elements
         return array_filter(
             $params,
-            fn ($value) => $value !== null && $value !== '' && $value !== false
+            fn (mixed $value): bool => $value !== null && $value !== '' && $value !== false
         );
     }
 }

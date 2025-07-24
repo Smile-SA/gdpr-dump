@@ -13,9 +13,6 @@ final class JsonSchemaValidatorTest extends TestCase
 {
     private JsonSchemaValidator $validator;
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
         $schemaFile = $this->getBasePath() . '/app/config/schema.json';

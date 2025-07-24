@@ -30,6 +30,6 @@ final class CompilerTest extends TestCase
         $compiler->compile($config);
 
         $this->assertTrue($config->has('counter'));
-        $this->assertEquals(2, $config->get('counter'));
+        $this->assertSame(2, $config->get('counter'));
     }
 }

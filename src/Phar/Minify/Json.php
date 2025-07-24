@@ -6,9 +6,6 @@ namespace Smile\GdprDump\Phar\Minify;
 
 final class Json implements MinifierInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function minify(string $contents): string
     {
         $decoded = json_decode($contents);
@@ -19,9 +16,6 @@ final class Json implements MinifierInterface
         return json_encode($decoded, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function supports(string $extension): bool
     {
         return $extension === 'json';

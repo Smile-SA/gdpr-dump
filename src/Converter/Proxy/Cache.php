@@ -14,9 +14,6 @@ final class Cache implements ConverterInterface
     private ConverterInterface $converter;
     private string $cacheKey;
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -28,9 +25,6 @@ final class Cache implements ConverterInterface
         $this->cacheKey = $input->get('cache_key');
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): mixed
     {
         if (!isset(self::$values[$this->cacheKey][$value])) {

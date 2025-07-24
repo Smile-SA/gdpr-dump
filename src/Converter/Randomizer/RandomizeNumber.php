@@ -13,20 +13,14 @@ final class RandomizeNumber implements ConverterInterface
 
     public function __construct()
     {
-        $this->replaceCallback = fn () => (string) mt_rand(0, 9);
+        $this->replaceCallback = fn (): string => (string) mt_rand(0, 9);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         // No parameters
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;

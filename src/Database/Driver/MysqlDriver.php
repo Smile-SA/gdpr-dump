@@ -12,9 +12,6 @@ final class MysqlDriver implements DriverInterface
     {
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getDsn(): string
     {
         $connectionParams = $this->connectionParams->all();

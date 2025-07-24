@@ -18,9 +18,6 @@ final class RandomizeEmail implements ConverterInterface
     private int $domainsCount;
     private RandomizeText $textConverter;
 
-    /**
-     * @inheritdoc
-     */
     public function setParameters(array $parameters): void
     {
         $emailParams = array_intersect_key($parameters, array_flip(['domains']));
@@ -36,9 +33,6 @@ final class RandomizeEmail implements ConverterInterface
         $this->textConverter->setParameters(array_diff_key($parameters, $emailParams));
     }
 
-    /**
-     * @inheritdoc
-     */
     public function convert(mixed $value, array $context = []): string
     {
         $value = (string) $value;

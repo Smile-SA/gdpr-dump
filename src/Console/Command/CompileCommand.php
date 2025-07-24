@@ -17,9 +17,6 @@ final class CompileCommand extends Command
         parent::__construct();
     }
 
-    /**
-     * @inheritdoc
-     */
     public function configure(): void
     {
         $this->setName('compiler')
@@ -33,9 +30,6 @@ final class CompileCommand extends Command
             );
     }
 
-    /**
-     * @inheritdoc
-     */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($this->hasDevPackages()) {
