@@ -28,8 +28,8 @@ build: ## Build images.
 
 ## GdprDump
 .PHONY: dump
-dump: vendor ## Run bin/gdpr-dump command. Example: "make dump c=test.yaml"
-	@$(eval c ?=)
+dump: vendor ## Run bin/gdpr-dump command. Example: `make dump c=test.yaml`
+	$(eval c ?=)
 	$(PHP_CLI) bin/gdpr-dump $(c)
 
 .PHONY: compile
@@ -38,9 +38,14 @@ compile: ## Run bin/compile command.
 	$(PHP_CLI) bin/compile $(c)
 	$(PHP_CLI) composer install
 
+.PHONY: debug
+debug: ## Run a CLI command with xdebug enabled. Example: `make debug c="bin/gdpr-dump test.yaml"`
+	$(eval c ?= bin/gdpr-dump)
+	$(DOCKER_COMPOSE) run --rm --env PHP_IDE_CONFIG=serverName=_ --env XDEBUG_SESSION=cli app -d xdebug.mode=debug $(c)
+
 ## Composer
 .PHONY: composer
-composer: ## Run composer. Example: "make composer c=update"
+composer: ## Run composer. Example: `make composer c=update`
 	$(PHP_CLI) composer $(c)
 
 ## Code Quality
