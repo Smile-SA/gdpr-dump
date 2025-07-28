@@ -8,10 +8,12 @@ services:
         environment:
             COMPOSER_AUTH: '${COMPOSER_AUTH:-}'
             DB_HOST: 'db'
+        extra_hosts:
+            - 'host.docker.internal:host-gateway' # Matches xdebug.client_host
         depends_on:
             - 'db'
         volumes:
-            - '.:/var/www/html:rw,cached'
+            - '.:/app:rw,cached'
             - 'composer:/home/www/.composer'
 
     db:
