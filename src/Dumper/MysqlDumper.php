@@ -69,9 +69,6 @@ final class MysqlDumper implements DumperInterface
     {
         $settings = $config->getDumpSettings();
 
-        // Output setting is only used by our app
-        unset($settings['output']);
-
         // MySQLDump-PHP uses the '-' word separator for most settings
         foreach ($settings as $key => $value) {
             if ($key !== 'init_commands' && $key !== 'net_buffer_length') {
