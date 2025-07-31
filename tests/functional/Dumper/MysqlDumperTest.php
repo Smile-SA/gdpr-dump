@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Functional\Dumper;
 
+use RuntimeException;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Dumper\MysqlDumper;
 use Smile\GdprDump\Faker\FakerService;
@@ -23,20 +24,16 @@ final class MysqlDumperTest extends TestCase
      */
     public function testDumper(): void
     {
-        $config = $this->createConfig();
-        $dumper = $this->createDumper();
-
         // Make sure the dump file does not already exist
-        if (file_exists($this->dumpFile)) {
-            unlink($this->dumpFile);
-        }
+        $this->deleteDumpFile();
 
         $faker = $this->getContainer()->get('faker.service');
         $this->assertInstanceOf(FakerService::class, $faker);
         $this->assertSame('en_US', $faker->getLocale());
 
         // Create the dump
-        $dumper->dump($config);
+        $config = $this->createConfig();
+        $this->getDumper()->dump($config);
         $this->assertDumpIsValid();
 
         // Assert that the faker locale was changed
@@ -46,26 +43,38 @@ final class MysqlDumperTest extends TestCase
         $config = $this->createConfig();
         $config->set('filter_propagation', ['enabled' => false]);
 
-        $dumper = $this->createDumper();
-        $dumper->dump($config);
+        $this->getDumper()->dump($config);
         $this->assertDumpIsValid(false);
     }
 
     /**
-     * Assert that the dry run mode works properly.
+     * Assert that the dry run option works properly.
      */
     public function testDryRun(): void
     {
+        // Make sure the dump file does not already exist
+        $this->deleteDumpFile();
+
+        // Run the dumper with dry run option
         $config = $this->createConfig();
-        $dumper = $this->createDumper();
-
-        // Make sure the dump file does not exist
-        if (file_exists($this->dumpFile)) {
-            unlink($this->dumpFile);
-        }
-
-        $dumper->dump($config, true);
+        $this->getDumper()->dump($config, true);
         $this->assertFileDoesNotExist($this->dumpFile);
+    }
+
+    /**
+     * Assert that an exception is thrown when strict mode is enabled.
+     */
+    public function testStrictMode(): void
+    {
+        // Make sure the dump file does not exist
+        $this->deleteDumpFile();
+
+        // Run the dumper with strict mode
+        $config = $this->createConfig();
+        $config->set('strict_schema', true);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('No table found with pattern "not_exists".');
+        $this->getDumper()->dump($config, true);
     }
 
     /**
@@ -142,6 +151,16 @@ final class MysqlDumperTest extends TestCase
     }
 
     /**
+     * Delete the dump file if it exists.
+     */
+    private function deleteDumpFile(): void
+    {
+        if (file_exists($this->dumpFile)) {
+            unlink($this->dumpFile);
+        }
+    }
+
+    /**
      * Create the config object.
      */
     private function createConfig(): ConfigInterface
@@ -157,7 +176,7 @@ final class MysqlDumperTest extends TestCase
     /**
      * Create a SQL dumper object.
      */
-    private function createDumper(): MysqlDumper
+    private function getDumper(): MysqlDumper
     {
         /** @var MysqlDumper */
         return $this->getContainer()->get('dumper');
