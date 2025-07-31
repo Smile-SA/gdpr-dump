@@ -16,6 +16,7 @@ final class DumperConfig implements DumperConfigInterface
     private FakerSettings $fakerSettings;
     private FilterPropagationSettings $filterPropagationSettings;
     private TableConfigCollection $tablesConfig;
+    private string $dumpOutput;
     private array $dumpSettings;
 
     /**
@@ -26,12 +27,12 @@ final class DumperConfig implements DumperConfigInterface
     /**
      * @var string[]
      */
-    private array $includedTables = [];
+    private array $includedTables;
 
     /**
      * @var string[]
      */
-    private array $excludedTables = [];
+    private array $excludedTables;
 
     /**
      * @var string[]
@@ -59,7 +60,7 @@ final class DumperConfig implements DumperConfigInterface
 
     public function getDumpOutput(): string
     {
-        return $this->getDumpSettings()['output'];
+        return $this->dumpOutput;
     }
 
     public function getDumpSettings(): array
@@ -118,6 +119,8 @@ final class DumperConfig implements DumperConfigInterface
     private function prepareDumpSettings(ConfigInterface $config): void
     {
         $this->dumpSettings = (array) $config->get('dump', []);
+        $this->dumpOutput = $this->dumpSettings['output'] ?? 'php://stdout';
+        unset($this->dumpSettings['output']);
 
         // Validate init commands
         $queryValidator = new QueryValidator(['set']);
