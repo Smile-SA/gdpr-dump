@@ -8,6 +8,7 @@ use Druidfi\Mysqldump\Mysqldump;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Database\DatabaseFactory;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
+use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
 use Smile\GdprDump\Dumper\Event\DumpFinishedEvent;
@@ -25,9 +26,12 @@ final class MysqlDumper implements DumperInterface
     {
         $database = $this->databaseFactory->create($config);
 
-        // Process the configuration
+        // Process tables declared in the configuration (remove undefined tables, resolve patterns such as "log_*")
         $processor = new ConfigProcessor($database->getMetadata());
-        $config = $processor->process($config);
+        $processor->process($config);
+
+        // Convert the config into an object with getters/setters
+        $config = new DumperConfig($config);
 
         // Set the SQL variables
         $connection = $database->getConnection();
