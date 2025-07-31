@@ -20,18 +20,22 @@ final class ConfigProcessor
     }
 
     /**
-     * Process the configuration.
+     * Process the configuration by performing the following actions:
+     *
+     * - Removing tables that don't exist.
+     * - Resolving table patterns (e.g. "log_*").
+     * - Validating column names.
+     *
+     * @throws RuntimeException if there are invalid column names
      */
-    public function process(ConfigInterface $config): DumperConfig
+    public function process(ConfigInterface $config): void
     {
         $this->processTableLists($config);
         $this->processTablesData($config);
-
-        return new DumperConfig($config);
     }
 
     /**
-     * Remove tables that don't exist and resolve patterns (e.g. "log_*") for included/excluded tables.
+     * Process the `tables_whitelist` and `tables_blacklist` parameters.
      */
     private function processTableLists(ConfigInterface $config): void
     {
@@ -48,8 +52,7 @@ final class ConfigProcessor
     }
 
     /**
-     * Remove tables that don't exist from the "tables" parameter,
-     * and raise an exception if the remaining tables have converters that reference invalid columns.
+     * Process the `tables` parameter.
      */
     private function processTablesData(ConfigInterface $config): void
     {
@@ -79,6 +82,8 @@ final class ConfigProcessor
 
     /**
      * Resolve table name patterns stored as array keys.
+     *
+     * @throws RuntimeException
      */
     private function resolveTablesData(array $tablesData): array
     {
