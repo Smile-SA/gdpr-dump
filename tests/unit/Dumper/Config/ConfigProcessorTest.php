@@ -16,19 +16,20 @@ final class ConfigProcessorTest extends TestCase
      */
     public function testProcessor(): void
     {
-        $data = [
+        $config = new Config([
             'tables_blacklist' => ['table1', 'not_exists'],
             'tables_whitelist' => ['table2', 'not_exists'],
             'tables' => ['table3' => ['truncate' => true], 'not_exists' => ['truncate' => true]],
-        ];
+        ]);
 
-        $config = new Config($data);
         $processor = $this->createConfigProcessor();
-        $config = $processor->process($config);
+        $processor->process($config);
 
-        $this->assertSame(['table1'], $config->getExcludedTables());
-        $this->assertSame(['table2'], $config->getIncludedTables());
-        $this->assertSame(['table3'], array_keys($config->getTablesConfig()->all()));
+        // Assert that table names were resolved
+        $this->assertSame(['table1'], $config->get('tables_blacklist'));
+        $this->assertSame(['table2'], $config->get('tables_whitelist'));
+        $this->assertIsArray($config->get('tables'));
+        $this->assertSame(['table3'], array_keys($config->get('tables')));
     }
 
     /**
@@ -36,19 +37,20 @@ final class ConfigProcessorTest extends TestCase
      */
     public function testProcessorWithWildCard(): void
     {
-        $data = [
+        $config = new Config([
             'tables_blacklist' => ['table*'],
             'tables_whitelist' => ['table*'],
             'tables' => ['table*' => ['truncate' => true]],
-        ];
+        ]);
 
-        $config = new Config($data);
         $processor = $this->createConfigProcessor();
-        $config = $processor->process($config);
+        $processor->process($config);
 
-        $this->assertSame(['table1', 'table2', 'table3'], $config->getExcludedTables());
-        $this->assertSame(['table1', 'table2', 'table3'], $config->getIncludedTables());
-        $this->assertSame(['table1', 'table2', 'table3'], array_keys($config->getTablesConfig()->all()));
+        // Assert that table names were resolved
+        $this->assertSame(['table1', 'table2', 'table3'], $config->get('tables_blacklist'));
+        $this->assertSame(['table1', 'table2', 'table3'], $config->get('tables_whitelist'));
+        $this->assertIsArray($config->get('tables'));
+        $this->assertSame(['table1', 'table2', 'table3'], array_keys($config->get('tables')));
     }
 
     /**
@@ -58,11 +60,10 @@ final class ConfigProcessorTest extends TestCase
     {
         $config = new Config();
         $processor = $this->createConfigProcessor();
-        $config = $processor->process($config);
+        $processor->process($config);
 
-        $this->assertSame([], $config->getExcludedTables());
-        $this->assertSame([], $config->getIncludedTables());
-        $this->assertSame([], $config->getTablesConfig()->all());
+        // Assert that the config was not modified
+        $this->assertSame([], $config->toArray());
     }
 
     /**
