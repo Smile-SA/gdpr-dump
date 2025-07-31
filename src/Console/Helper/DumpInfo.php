@@ -59,6 +59,7 @@ final class DumpInfo
             // Dump settings
             $this->output->writeln('');
             $this->displaySection('Dump settings');
+            $this->displaySectionItem('output', $config->getDumpOutput());
             foreach ($config->getDumpSettings() as $name => $value) {
                 $this->displaySectionItem($name, $value);
             }
