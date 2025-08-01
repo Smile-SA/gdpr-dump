@@ -69,6 +69,8 @@
             <property name="allowMultiline" value="true"/>
         </properties>
     </rule>
+
+    <!-- Ensures that the ++ operator is used when possible -->
     <rule ref="Squiz.Operators.IncrementDecrementUsage"/>
 
     <!-- Disallows implicit array creation -->
