@@ -46,13 +46,13 @@
         </properties>
     </rule>
 
-    <!-- Disallow the use of the backtick operator for execution of shell commands -->
+    <!-- Disallows the use of the backtick operator for execution of shell commands -->
     <rule ref="Generic.PHP.BacktickOperator"/>
 
     <!-- Deprecated functions should not be used -->
     <rule ref="Generic.PHP.DeprecatedFunctions"/>
 
-    <!-- Always use <?php to delimit PHP code, not the <? shorthand -->
+    <!-- Always use <?php ?> to delimit PHP code, not the <? ?> shorthand -->
     <rule ref="Generic.PHP.DisallowShortOpenTag">
         <exclude name="Generic.PHP.DisallowShortOpenTag.EchoFound"/>
     </rule>
