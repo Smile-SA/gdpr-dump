@@ -67,7 +67,7 @@ final class DumpCommand extends Command
             $result = $this->validator->validate($config->toArray());
             if (!$result->isValid()) {
                 $this->outputValidationResult($result, $output);
-                return 1;
+                return Command::FAILURE;
             }
 
             // Prompt for the password if not defined
@@ -88,10 +88,10 @@ final class DumpCommand extends Command
             }
 
             $this->getErrorOutput($output)->writeln('<error>' . $e->getMessage() . '</error>');
-            return 1;
+            return Command::FAILURE;
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     /**
