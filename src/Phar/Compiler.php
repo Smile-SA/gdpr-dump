@@ -16,6 +16,8 @@ final class Compiler
     private string $basePath;
 
     /**
+     * Faker locales to include in the phar file. All locales are included if left empty.
+     *
      * @var string[]
      */
     private array $locales = [];
@@ -31,6 +33,7 @@ final class Compiler
     /**
      * Set the Faker locales to include.
      *
+     * @param string[] $locales
      * @throws UnexpectedValueException
      */
     public function setLocales(array $locales): self
@@ -102,21 +105,21 @@ final class Compiler
     {
         $finder = fn (string $directory): Finder => (new Finder())->files()->in($directory);
 
+        $vendorFinder = $finder($this->basePath . '/vendor')
+            // The directory "vendor/symfony/console/Resources" (which stores shell completion files) must exist
+            ->name(['*.php', 'completion.*']);
+
+        if ($this->locales) {
+            $vendorFinder->notPath([
+                'bin/',
+                '#fakerphp/faker/src/Faker/Provider/(?!' . implode('|', $this->locales) . ')[a-zA-Z_]+/#',
+            ]);
+        }
+
         return [
-            $finder($this->basePath . '/src')
-                ->name(['*.php']),
-            $finder($this->basePath . '/vendor')
-                // The directory "vendor/symfony/console/Resources" (which stores shell completion files) must exist,
-                // otherwise the generated phar fails to run
-                ->name(['*.php', 'completion.*'])
-                ->notPath(
-                    [
-                        'bin/',
-                        '#fakerphp/faker/src/Faker/Provider/(?!' . implode('|', $this->locales) . ')[a-zA-Z_]+/#',
-                    ]
-                ),
-            $finder($this->basePath . '/app')
-                ->notName(['example.yaml']),
+            $finder($this->basePath . '/src')->name(['*.php']),
+            $vendorFinder,
+            $finder($this->basePath . '/app')->notName(['example.yaml']),
         ];
     }
 
