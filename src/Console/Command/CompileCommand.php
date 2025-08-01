@@ -53,9 +53,11 @@ final class CompileCommand extends Command
 
         $output->writeln('');
         $output->writeln(sprintf('<info>The phar file was created in "%s".</info>', $fileName));
-        $output->writeln(
-            sprintf('<info>It is bundled with the following Faker locales: %s.</info>', implode(', ', $locales))
-        );
+
+        $localesMsg = $locales
+            ? sprintf('It is bundled with the following Faker locales: %s', implode(', ', $locales))
+            : 'It is bundled with all Faker locales';
+        $output->writeln(sprintf('<info>%s. The default locale is "%s".</info>', $localesMsg, $this->defaultLocale));
 
         return Command::SUCCESS;
     }
