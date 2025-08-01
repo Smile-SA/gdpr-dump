@@ -1,0 +1,15 @@
+name: 'Feature Request'
+description: 'Request new features or improvements'
+
+body:
+    - type: 'textarea'
+      attributes:
+          label: 'Description'
+          description: 'Describe the feature you would like to see added.'
+      validations:
+          required: true
+
+    - type: 'textarea'
+      attributes:
+          label: 'Example'
+          description: 'Optional: an example implementation of the new feature (e.g. PHP code, YAML config, screenshot, etc.).'
