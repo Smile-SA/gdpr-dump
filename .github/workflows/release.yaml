@@ -41,7 +41,7 @@ jobs:
               run: 'echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT'
 
             - name: 'Create phar'
-              run: 'bin/compile'
+              run: 'bin/compile --locale=en_US'
 
             - name: 'Test the phar file'
               run: |

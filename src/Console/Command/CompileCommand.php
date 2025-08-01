@@ -26,7 +26,7 @@ final class CompileCommand extends Command
                 null,
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
                 // phpcs:ignore Generic.Files.LineLength.TooLong
-                'Faker locale(s) added to the phar file (e.g. "en_US"). The default locale defined in app/config/services.yaml is always added to the phar file'
+                'Faker locale(s) added to the phar file (e.g. "en_US"). If omitted, all locales will be included'
             );
     }
 
@@ -37,9 +37,12 @@ final class CompileCommand extends Command
             return 1;
         }
 
+        /** @var string[] $locales */
         $locales = $input->getOption('locale');
-        if (!in_array($this->defaultLocale, $locales, true)) {
-            $locales[] = $this->defaultLocale;
+        if ($locales && !in_array($this->defaultLocale, $locales, true)) {
+            // phpcs:ignore Generic.Files.LineLength.TooLong
+            $output->writeln(sprintf('<error>Cannot proceed without including the default locale "%s" defined in app/config/services.yaml.</error>', $this->defaultLocale));
+            return 1;
         }
 
         $output->writeln('<comment>Creating the phar file, please wait...</comment>');
