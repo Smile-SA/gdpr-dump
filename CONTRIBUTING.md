@@ -18,7 +18,7 @@ Before submitting a pull request, please ensure that your code meet these requir
 - GdprDump has a minimum PHP version requirement of PHP 8.1.
   Don't use features that were introduced later than PHP 8.1.
 - Use type hinting and strict typing.
-- No errors were reported by the code analysis tools or by phpunit (`make analyse test` command).
+- No errors were reported by the code analysis tools or by phpunit.
 
 ### How to Submit a Pull Request
 
@@ -28,16 +28,16 @@ Follow these steps:
 2. Create a new branch.
 3. Implement your bugfix/feature.
    Don't forget to update the functional and unit tests accordingly.
-4. Run the tests (phpcs, phpstan, phpunit).
+4. Run the tests (`make analyse test` command).
    All tests must succeed.
 5. Create the pull request:
     - Source branch: the branch of your fork
-    - Target branch: the master branch of the core repository
+    - Target branch: the main branch of the base repository
     - Title/description: as detailed as possible
 
-### How to Run the Tests
+## How to Run the Tests
 
-#### Running Tests with Docker (recommended)
+### Running Tests with Docker (recommended)
 
 Run the following command:
 
@@ -45,12 +45,12 @@ Run the following command:
 make analyse test
 ```
 
-#### Running Tests Manually
+### Running Tests Manually
 
 Run the following commands:
 
 ```
-vendor/bin/parallel-lint src tests
+vendor/bin/parallel-lint app bin src tests
 vendor/bin/phpcs
 vendor/bin/phpstan analyse
 vendor/bin/phpunit
@@ -63,14 +63,3 @@ The PHPUnit tests require a database with the following credentials:
 - database: `tests` (can be changed by setting the `$DB_NAME` environment variable)
 - user: `tests` (can be changed by setting the `$DB_USER` environment variable)
 - password: `tests` (can be changed by setting the `$DB_PASSWORD` environment variable)
-
-## Database Driver Compatibility
-
-As of now, GdprDump only supports the pdo_mysql driver.
-
-To add compatibility with other drivers, the following actions would be required:
-
-- Replace the mysqldump-php dependency by a tool that is compatible with multiple drivers.
-- Make the database name optional in the DatabaseConfig class.
-- Add driver specific parameters to the schema.json file.
-- Replace the "SET" queries that define SQL variables by a database agnostic implementation.
