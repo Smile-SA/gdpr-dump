@@ -1,0 +1,37 @@
+name: 'Bug Report'
+description: 'File a bug report.'
+
+body:
+    - type: 'textarea'
+      attributes:
+          label: 'Description'
+          description: 'Please describe the issue that you are facing. If possible, include steps to reproduce.'
+      validations:
+          required: true
+
+    - type: 'input'
+      attributes:
+          label: 'GdprDump Version'
+          description: 'Provide the GdprDump version that you are using.'
+          placeholder: 'x.y.z'
+      validations:
+          required: true
+
+    - type: 'input'
+      attributes:
+          label: 'PHP Version'
+          description: 'Provide the PHP version that you are using.'
+          placeholder: '8.4'
+      validations:
+          required: true
+
+    - type: 'input'
+      attributes:
+          label: 'Database Version'
+          description: 'If related to the issue, provide the database version that you are using.'
+          placeholder: 'MariaDB 11.8'
+
+    - type: 'textarea'
+      attributes:
+          label: 'Possible Solution'
+          description: 'If you have suggestions on how to fix the issue.'
