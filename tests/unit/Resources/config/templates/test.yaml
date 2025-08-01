@@ -1,4 +1,3 @@
----
 extends: 'test_parent.yaml'
 
 dump:

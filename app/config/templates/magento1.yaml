@@ -1,4 +1,3 @@
----
 variables:
     firstname_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "firstname" and entity_type_id = 1'
     middlename_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "middlename" and entity_type_id = 1'

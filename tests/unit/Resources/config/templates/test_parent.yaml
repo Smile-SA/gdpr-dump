@@ -1,4 +1,3 @@
----
 extends:
     - 'test_parent_parent_1.yaml'
     - 'test_parent_parent_2.yaml'
