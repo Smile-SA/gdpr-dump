@@ -1,4 +1,3 @@
----
 parameters:
     config.schema_file: '%app_root%/app/config/schema.json'
     config.templates_dir: '%app_root%/app/config/templates'

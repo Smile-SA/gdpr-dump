@@ -1,4 +1,3 @@
----
 extends: 'template.yaml'
 version: '2.2.0'
 

@@ -1,4 +1,3 @@
----
 tables:
     cache_*:
         truncate: true
