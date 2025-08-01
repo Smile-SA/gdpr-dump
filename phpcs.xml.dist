@@ -16,28 +16,54 @@
     <!-- PSR-12 coding standard -->
     <rule ref="PSR12"/>
 
-    <!-- Generic rules not included in PSR-12 -->
+    <!-- Short array syntax must be used to define arrays -->
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+
+    <!-- Control Structures must have at least one statement inside of the body -->
     <rule ref="Generic.CodeAnalysis.EmptyStatement">
         <exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedCatch"/>
     </rule>
+
+    <!-- If statements that are always evaluated should not be used -->
     <rule ref="Generic.CodeAnalysis.UnconditionalIfStatement"/>
+
+    <!-- Methods should not be declared final inside of classes that are declared final -->
     <rule ref="Generic.CodeAnalysis.UnnecessaryFinalModifier"/>
+
+    <!-- Byte Order Marks that may corrupt your application should not be used -->
     <rule ref="Generic.Files.ByteOrderMark"/>
+
+    <!-- Files that contain php code should not have any inline html -->
     <rule ref="Generic.Files.InlineHTML"/>
+
+    <!-- Spaces are not allowed after casting operators -->
     <rule ref="Generic.Formatting.SpaceAfterCast"/>
+
+    <!-- Exactly one space is allowed after the NOT operator -->
     <rule ref="Generic.Formatting.SpaceAfterNot">
         <properties>
             <property name="spacing" value="0"/>
         </properties>
     </rule>
+
+    <!-- Disallow the use of the backtick operator for execution of shell commands -->
     <rule ref="Generic.PHP.BacktickOperator"/>
+
+    <!-- Deprecated functions should not be used -->
     <rule ref="Generic.PHP.DeprecatedFunctions"/>
+
+    <!-- Always use <?php to delimit PHP code, not the <? shorthand -->
     <rule ref="Generic.PHP.DisallowShortOpenTag">
         <exclude name="Generic.PHP.DisallowShortOpenTag.EchoFound"/>
     </rule>
+
+    <!-- Discourage the use of the PHP goto language construct -->
     <rule ref="Generic.PHP.DiscourageGoto"/>
+
+    <!-- The PHP_SAPI constant should be used instead of php_sapi_name() -->
     <rule ref="Generic.PHP.SAPIUsage"/>
+
+    <!-- Strings should not be concatenated together (if not stored in variables) -->
     <rule ref="Generic.Strings.UnnecessaryStringConcat">
         <properties>
             <property name="allowMultiline" value="true"/>
