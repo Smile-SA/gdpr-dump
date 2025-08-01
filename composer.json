@@ -3,12 +3,6 @@
     "description": "A utility to create anonymized database dumps",
     "type": "library",
     "license": "GPL-3.0-or-later",
-    "authors": [
-        {
-            "name": "Smile Technical Direction",
-            "email": "dirtech@smile.fr"
-        }
-    ],
     "require": {
         "php": "^8.1",
         "ext-json": "*",
@@ -46,6 +40,9 @@
             "Smile\\GdprDump\\Tests\\Unit\\": "tests/unit"
         }
     },
+    "bin": [
+        "bin/gdpr-dump"
+    ],
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
@@ -54,8 +51,5 @@
             "abandoned": "report"
         },
         "sort-packages": true
-    },
-    "bin": [
-        "bin/gdpr-dump"
-    ]
+    }
 }
