@@ -34,7 +34,7 @@ final class CompileCommand extends Command
     {
         if ($this->hasDevPackages()) {
             $output->writeln('<error>Dev packages detected. Please run "composer install --no-dev".</error>');
-            return 1;
+            return Command::FAILURE;
         }
 
         /** @var string[] $locales */
@@ -42,7 +42,7 @@ final class CompileCommand extends Command
         if ($locales && !in_array($this->defaultLocale, $locales, true)) {
             // phpcs:ignore Generic.Files.LineLength.TooLong
             $output->writeln(sprintf('<error>Cannot proceed without including the default locale "%s" defined in app/config/services.yaml.</error>', $this->defaultLocale));
-            return 1;
+            return Command::FAILURE;
         }
 
         $output->writeln('<comment>Creating the phar file, please wait...</comment>');
@@ -57,7 +57,7 @@ final class CompileCommand extends Command
             sprintf('<info>It is bundled with the following Faker locales: %s.</info>', implode(', ', $locales))
         );
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     /**
