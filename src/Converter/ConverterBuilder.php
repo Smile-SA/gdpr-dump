@@ -114,7 +114,7 @@ final class ConverterBuilder
         if ($definition['condition'] !== '') {
             $converter = $this->converterFactory->create(
                 'conditional',
-                ['condition' => $definition['condition'], 'if_true_converter' => $converter]
+                ['condition' => $definition['condition'], 'converter' => $converter]
             );
         }
 
