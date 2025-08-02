@@ -54,7 +54,7 @@ final class MysqlDumper implements DumperInterface
             $database->getConnectionParams()->get('driverOptions', [])
         );
 
-        $this->eventDispatcher->dispatch(new DumpEvent($dumper, $database, $config, $this->dumpContext));
+        $this->eventDispatcher->dispatch(new DumpEvent($dumper, $database, $config));
 
         // Close the Doctrine connection before proceeding to the dump creation (MySQLDump-PHP uses its own connection)
         $database->getConnection()->close();
