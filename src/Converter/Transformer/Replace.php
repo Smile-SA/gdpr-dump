@@ -24,7 +24,7 @@ final class Replace implements ConverterInterface
         $this->replacement = $input->get('replacement');
     }
 
-    public function convert(mixed $value, array $context = []): string
+    public function convert(mixed $value): string
     {
         $value = (string) $value;
 

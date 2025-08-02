@@ -11,7 +11,7 @@ interface ConverterInterface
     /**
      * Transform the value.
      */
-    public function convert(mixed $value, array $context = []): mixed;
+    public function convert(mixed $value): mixed;
 
     /**
      * Set the converter parameters.

@@ -29,7 +29,7 @@ final class RandomText implements ConverterInterface
         $this->charactersCount = strlen($this->characters);
     }
 
-    public function convert(mixed $value, array $context = []): string
+    public function convert(mixed $value): string
     {
         $result = '';
         $length = mt_rand($this->minLength, $this->maxLength);

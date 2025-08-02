@@ -54,7 +54,7 @@ final class Faker implements ConverterInterface
         }
     }
 
-    public function convert(mixed $value, array $context = []): mixed
+    public function convert(mixed $value): mixed
     {
         $arguments = $this->arguments;
 

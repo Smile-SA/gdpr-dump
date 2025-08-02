@@ -17,7 +17,7 @@ final class ConverterMock implements ConverterInterface
         }
     }
 
-    public function convert(mixed $value, array $context = []): string
+    public function convert(mixed $value): string
     {
         return $this->prefix . $value;
     }

@@ -33,7 +33,7 @@ final class AnonymizeEmail implements ConverterInterface
         $this->textConverter->setParameters(array_diff_key($parameters, $emailParams));
     }
 
-    public function convert(mixed $value, array $context = []): string
+    public function convert(mixed $value): string
     {
         $value = (string) $value;
         if ($value === '') {

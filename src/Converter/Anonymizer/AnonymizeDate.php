@@ -26,7 +26,7 @@ final class AnonymizeDate implements ConverterInterface
     /**
      * @throws UnexpectedValueException
      */
-    public function convert(mixed $value, array $context = []): string
+    public function convert(mixed $value): string
     {
         $value = (string) $value;
         if ($value === '') {

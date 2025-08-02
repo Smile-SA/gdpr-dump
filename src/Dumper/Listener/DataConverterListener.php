@@ -9,12 +9,13 @@ use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Converter\ConverterBuilder;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
+use Smile\GdprDump\Dumper\DumpContext;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
 use Throwable;
 
 final class DataConverterListener
 {
-    private array $context = [];
+    private DumpContext $dumpContext;
 
     /**
      * @var ConverterInterface[][]
@@ -39,7 +40,7 @@ final class DataConverterListener
     {
         $this->buildConverters($event->getConfig());
 
-        $this->context = $event->getContext();
+        $this->dumpContext = $event->getDumpContext();
         $event->getDumper()->setTransformTableRowHook($this->getHook());
     }
 
@@ -57,9 +58,9 @@ final class DataConverterListener
             }
 
             // Initialize the context data
-            $context = $this->context;
-            $context['row_data'] = $row;
-            $context['processed_data'] = [];
+            $dumpContext = $this->dumpContext;
+            $dumpContext->currentRow = $row;
+            $dumpContext->processedData = [];
 
             // Evaluate the skip condition (done after context initialization as it may depend on it)
             if (isset($this->skipConditions[$table]) && eval($this->skipConditions[$table])) {
@@ -74,8 +75,8 @@ final class DataConverterListener
 
                 // Convert the value
                 try {
-                    $row[$column] = $converter->convert($row[$column], $context);
-                    $context['processed_data'][$column] = $row[$column];
+                    $row[$column] = $converter->convert($row[$column]);
+                    $dumpContext->processedData[$column] = $row[$column];
                 } catch (Throwable $e) {
                     throw new RuntimeException(sprintf('[%s.%s] %s', $table, $column, $e->getMessage()), 0, $e);
                 }

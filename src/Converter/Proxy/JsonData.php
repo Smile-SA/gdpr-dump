@@ -25,7 +25,7 @@ final class JsonData implements ConverterInterface
         $this->converters = $input->get('converters');
     }
 
-    public function convert(mixed $value, array $context = []): mixed
+    public function convert(mixed $value): mixed
     {
         $decoded = json_decode((string) $value, true);
         if (!is_array($decoded)) {
@@ -40,7 +40,7 @@ final class JsonData implements ConverterInterface
             }
 
             // Format the value
-            $nestedValue = $converter->convert($nestedValue, $context);
+            $nestedValue = $converter->convert($nestedValue);
 
             // Replace the original value in the JSON by the converted value
             ArrayHelper::setPath($decoded, $path, $nestedValue);

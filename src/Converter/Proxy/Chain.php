@@ -24,10 +24,10 @@ final class Chain implements ConverterInterface
         $this->converters = $input->get('converters');
     }
 
-    public function convert(mixed $value, array $context = []): mixed
+    public function convert(mixed $value): mixed
     {
         foreach ($this->converters as $converter) {
-            $value = $converter->convert($value, $context);
+            $value = $converter->convert($value);
         }
 
         return $value;

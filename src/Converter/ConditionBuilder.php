@@ -101,13 +101,13 @@ final class ConditionBuilder
                 && $tokens[$index + 1]->getName() === 'T_CLOSE_CURLY'
                 && $tokens[$index + 2]->getName() === 'T_CLOSE_CURLY'
             ) {
-                $result .= "\$context['row_data']['{$token->getValue()}']";
+                $result .= "\$dumpContext->currentRow['{$token->getValue()}']";
                 continue;
             }
 
             // Replace SQL variable names by their values in the condition
             if ($token->getName() === 'T_STRING' && $index >= 1 && $tokens[$index - 1]->getName() === 'T_AT') {
-                $result .= "\$context['vars']['{$token->getValue()}']";
+                $result .= "\$dumpContext->variables['{$token->getValue()}']";
                 continue;
             }
 

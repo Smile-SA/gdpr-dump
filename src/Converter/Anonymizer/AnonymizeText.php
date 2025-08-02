@@ -41,7 +41,7 @@ final class AnonymizeText implements ConverterInterface
         $this->delimiters = array_flip($this->delimiters);
     }
 
-    public function convert(mixed $value, array $context = []): string
+    public function convert(mixed $value): string
     {
         $value = (string) $value;
         if ($value === '') {
