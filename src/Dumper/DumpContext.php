@@ -21,14 +21,14 @@ class DumpContext
     /**
      * The table row that is currently being dumped (column name as key).
      *
-     * @var array<string, ?string>
+     * @var array<string, ?scalar>
      */
     public array $currentRow = [];
 
     /**
      * Values of the current table row that were converted (column name as key).
      *
-     * @var array<string, mixed>
+     * @var array<string, ?scalar>
      */
     public array $processedData = [];
 
