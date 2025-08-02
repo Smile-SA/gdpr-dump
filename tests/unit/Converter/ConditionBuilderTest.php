@@ -19,7 +19,10 @@ final class ConditionBuilderTest extends TestCase
 
         // Variables must be interpreted
         $condition = $builder->build('{{id}} === @my_var');
-        $this->assertSame('return $context[\'row_data\'][\'id\'] === $context[\'vars\'][\'my_var\'];', $condition);
+        $this->assertSame(
+            'return $dumpContext->currentRow[\'id\'] === $dumpContext->variables[\'my_var\'];',
+            $condition
+        );
 
         // Variables must not be interpreted if they are encapsed by quotes
         $condition = $builder->build('\'{{2}}\' === "@2"');

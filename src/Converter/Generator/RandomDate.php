@@ -38,7 +38,7 @@ final class RandomDate implements ConverterInterface
         }
     }
 
-    public function convert(mixed $value, array $context = []): string
+    public function convert(mixed $value): string
     {
         // Randomize the year, month and day
         $this->date->setDate(

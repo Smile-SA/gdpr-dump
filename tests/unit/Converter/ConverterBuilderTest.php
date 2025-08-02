@@ -220,7 +220,10 @@ final class ConverterBuilderTest extends TestCase
         $container = new Container();
         $container->set($resolver->getAliasByName('cache'), new Cache());
         $container->set($resolver->getAliasByName('chain'), new Chain());
-        $container->set($resolver->getAliasByName('conditional'), new Conditional(new ConditionBuilder()));
+        $container->set(
+            $resolver->getAliasByName('conditional'),
+            new Conditional(new ConditionBuilder(), $this->getDumpContext())
+        );
         $container->set($resolver->getAliasByName('faker'), new Faker(new FakerService()));
         $container->set($resolver->getAliasByName('mock'), new ConverterMock());
         $container->set($resolver->getAliasByName('unique'), new Unique());

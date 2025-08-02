@@ -19,10 +19,15 @@ services:
     Smile\GdprDump\Converter\Proxy\Internal\Conditional:
         arguments:
             - '@converter.condition_builder'
+            - '@dumper.context'
 
     Smile\GdprDump\Converter\Proxy\Faker:
         arguments:
             - '@faker.service'
+
+    Smile\GdprDump\Converter\Proxy\FromContext:
+        arguments:
+            - '@dumper.context'
 
     console.dump_info:
         class: 'Smile\GdprDump\Console\Helper\DumpInfo'
@@ -115,6 +120,10 @@ services:
         arguments:
             - '@database.factory'
             - '@event_dispatcher'
+            - '@dumper.context'
+
+    dumper.context:
+        class: 'Smile\GdprDump\Dumper\DumpContext'
 
     dumper.listener.faker_locale:
         class: 'Smile\GdprDump\Dumper\Listener\FakerLocaleListener'

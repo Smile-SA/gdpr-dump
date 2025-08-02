@@ -27,12 +27,12 @@ final class Unique implements InternalConverterInterface
         $this->maxRetries = $input->get('max_retries');
     }
 
-    public function convert(mixed $value, array $context = []): mixed
+    public function convert(mixed $value): mixed
     {
         $count = 0;
 
         do {
-            $result = $this->converter->convert($value, $context);
+            $result = $this->converter->convert($value);
 
             // Ignore null values
             if ($result === null) {

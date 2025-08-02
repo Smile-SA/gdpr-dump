@@ -26,7 +26,7 @@ final class RandomizeText implements ConverterInterface
         $this->replacementsCount = strlen($this->replacements);
     }
 
-    public function convert(mixed $value, array $context = []): string
+    public function convert(mixed $value): string
     {
         $value = (string) $value;
         if ($value === '') {
