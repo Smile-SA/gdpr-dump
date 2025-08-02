@@ -26,27 +26,18 @@ final class ConverterBuilder
         // Create the converter
         $converter = $this->converterFactory->create($name, $parameters);
 
-        // Generate only unique values
-        if ($definition['unique']) {
-            $converter = $this->converterFactory->create('unique', ['converter' => $converter]);
-        }
-
-        if ($definition['cache_key'] !== '') {
-            $converter = $this->converterFactory->create(
-                'cache',
-                ['converter' => $converter, 'cache_key' => $definition['cache_key']]
+        // Disallow using internal converters
+        if ($converter instanceof InternalConverterInterface) {
+            throw new UnexpectedValueException(
+                sprintf('The converter "%s" is an internal implementation.', $name)
             );
         }
 
-        // Convert data only if it matches the specified condition
-        if ($definition['condition'] !== '') {
-            $converter = $this->converterFactory->create(
-                'conditional',
-                ['condition' => $definition['condition'], 'if_true_converter' => $converter]
-            );
-        }
+        // Add unique/cache/conditional converters if specified in the definition
+        $converter = $this->bindUnique($converter, $definition);
+        $converter = $this->bindCache($converter, $definition);
 
-        return $converter;
+        return $this->bindCondition($converter, $definition);
     }
 
     /**
@@ -85,6 +76,49 @@ final class ConverterBuilder
         $definition['cache_key'] = (string) $definition['cache_key'];
 
         return $definition;
+    }
+
+    /**
+     * If the unique parameter is set to true, bind a unique converter to the specified converter.
+     */
+    private function bindUnique(ConverterInterface $converter, array $definition): ConverterInterface
+    {
+        if ($definition['unique']) {
+            $converter = $this->converterFactory->create('unique', ['converter' => $converter]);
+        }
+
+        return $converter;
+    }
+
+    /**
+     * If a cache key is defined, bind a cache converter to the specified converter.
+     */
+    private function bindCache(ConverterInterface $converter, array $definition): ConverterInterface
+    {
+        if ($definition['cache_key'] !== '') {
+            $converter = $this->converterFactory->create(
+                'cache',
+                ['converter' => $converter, 'cache_key' => $definition['cache_key']]
+            );
+        }
+
+        return $converter;
+    }
+
+    /**
+     * If a condition is defined, bind a condition converter to the specified converter.
+     */
+    private function bindCondition(ConverterInterface $converter, array $definition): ConverterInterface
+    {
+        // Convert data only if it matches the specified condition
+        if ($definition['condition'] !== '') {
+            $converter = $this->converterFactory->create(
+                'conditional',
+                ['condition' => $definition['condition'], 'if_true_converter' => $converter]
+            );
+        }
+
+        return $converter;
     }
 
     /**

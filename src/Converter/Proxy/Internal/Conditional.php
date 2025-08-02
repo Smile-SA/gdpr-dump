@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Converter\Proxy;
+namespace Smile\GdprDump\Converter\Proxy\Internal;
 
 use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\InternalConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 
-final class Conditional implements ConverterInterface
+final class Conditional implements InternalConverterInterface
 {
     private string $condition;
     private ?ConverterInterface $ifTrueConverter = null;
