@@ -300,21 +300,6 @@
                             "additionalProperties": {
                                 "$ref": "#/definitions/converter"
                             }
-                        },
-                        "converter": {
-                            "type": {
-                                "$ref": "#/definitions/converter"
-                            }
-                        },
-                        "if_true_converter": {
-                            "type": {
-                                "$ref": "#/definitions/converter"
-                            }
-                        },
-                        "if_false_converter": {
-                            "type": {
-                                "$ref": "#/definitions/converter"
-                            }
                         }
                     }
                 },

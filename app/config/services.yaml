@@ -16,7 +16,7 @@ services:
     Smile\GdprDump\Converter\:
         resource: '../../src/Converter'
 
-    Smile\GdprDump\Converter\Proxy\Conditional:
+    Smile\GdprDump\Converter\Proxy\Internal\Conditional:
         arguments:
             - '@converter.condition_builder'
 

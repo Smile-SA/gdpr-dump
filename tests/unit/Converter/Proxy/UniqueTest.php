@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 use OverflowException;
 use Smile\GdprDump\Converter\Generator\SetNull;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
-use Smile\GdprDump\Converter\Proxy\Unique;
+use Smile\GdprDump\Converter\Proxy\Internal\Unique;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 use stdClass;
