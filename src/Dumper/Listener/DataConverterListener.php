@@ -15,8 +15,6 @@ use Throwable;
 
 final class DataConverterListener
 {
-    private DumpContext $dumpContext;
-
     /**
      * @var ConverterInterface[][]
      */
@@ -30,6 +28,7 @@ final class DataConverterListener
     public function __construct(
         private ConverterBuilder $converterBuilder,
         private ConditionBuilder $conditionBuilder,
+        private DumpContext $dumpContext,
     ) {
     }
 
@@ -40,7 +39,6 @@ final class DataConverterListener
     {
         $this->buildConverters($event->getConfig());
 
-        $this->dumpContext = $event->getDumpContext();
         $event->getDumper()->setTransformTableRowHook($this->getHook());
     }
 
