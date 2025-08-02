@@ -13,7 +13,7 @@ final class SetNull implements ConverterInterface
         // No parameters
     }
 
-    public function convert(mixed $value, array $context = []): mixed
+    public function convert(mixed $value): mixed
     {
         return null;
     }

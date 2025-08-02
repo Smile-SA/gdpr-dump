@@ -9,13 +9,14 @@ use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\InternalConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
+use Smile\GdprDump\Dumper\DumpContext;
 
 final class Conditional implements InternalConverterInterface
 {
     private string $condition;
     private ConverterInterface $converter;
 
-    public function __construct(private ConditionBuilder $conditionBuilder)
+    public function __construct(private ConditionBuilder $conditionBuilder, private DumpContext $dumpContext)
     {
     }
 
@@ -30,10 +31,15 @@ final class Conditional implements InternalConverterInterface
         $this->converter = $input->get('converter');
     }
 
-    public function convert(mixed $value, array $context = []): mixed
+    /**
+     * @see ConditionBuilder::parseCondition()
+     */
+    public function convert(mixed $value): mixed
     {
+        // phpcs:ignore SlevomatCodingStandard.Variables.UnusedVariable
+        $dumpContext = $this->dumpContext; // necessary for the condition to work
         $result = (bool) eval($this->condition);
 
-        return $result ? $this->converter->convert($value, $context) : $value;
+        return $result ? $this->converter->convert($value) : $value;
     }
 }

@@ -23,13 +23,19 @@ final class ConditionalTest extends TestCase
             'converter' => $this->createOnSuccessConverter(),
         ]);
 
-        $value = $converter->convert('value', ['row_data' => ['id' => 1], 'vars' => ['my_var' => 1]]);
+        $dumpContext = $this->getDumpContext();
+        $dumpContext->currentRow = ['id' => '1'];
+        $dumpContext->variables = ['my_var' => '1'];
+        $value = $converter->convert('value');
         $this->assertSame('success_value', $value);
 
-        $value = $converter->convert('value', ['row_data' => ['id' => 1], 'vars' => ['my_var' => 2]]);
+        $dumpContext->variables = ['my_var' => '2'];
+        $value = $converter->convert('value');
         $this->assertSame('value', $value);
 
-        $value = $converter->convert('value', ['row_data' => ['id' => 2], 'vars' => ['my_var' => 1]]);
+        $dumpContext->currentRow = ['id' => '2'];
+        $dumpContext->variables = ['my_var' => '1'];
+        $value = $converter->convert('value');
         $this->assertSame('value', $value);
     }
 

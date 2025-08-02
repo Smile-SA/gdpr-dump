@@ -9,12 +9,21 @@ use RuntimeException;
 use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Proxy\Faker;
+use Smile\GdprDump\Converter\Proxy\FromContext;
 use Smile\GdprDump\Converter\Proxy\Internal\Conditional;
+use Smile\GdprDump\Dumper\DumpContext;
 use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Unit\TestCase as UnitTestCase;
 
 abstract class TestCase extends UnitTestCase
 {
+    protected DumpContext $dumpContext;
+
+    protected function tearDown(): void
+    {
+        unset($this->dumpContext);
+    }
+
     /**
      * Create a converter.
      */
@@ -27,8 +36,9 @@ abstract class TestCase extends UnitTestCase
         }
 
         $converter = match ($className) {
-            Conditional::class => new Conditional(new ConditionBuilder()),
+            Conditional::class => new Conditional(new ConditionBuilder(), $this->getDumpContext()),
             Faker::class => new Faker(new FakerService()),
+            FromContext::class => new FromContext($this->getDumpContext()),
             default => new $className(),
         };
 
@@ -71,5 +81,17 @@ abstract class TestCase extends UnitTestCase
         $actualDate = DateTime::createFromFormat($format, $actual);
 
         $this->assertTrue($randomizedDate !== $actualDate);
+    }
+
+    /**
+     * Get the dump context object.
+     */
+    protected function getDumpContext(): DumpContext
+    {
+        if (!isset($this->dumpContext)) {
+            $this->dumpContext = new DumpContext();
+        }
+
+        return $this->dumpContext;
     }
 }

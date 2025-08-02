@@ -19,6 +19,7 @@ final class MysqlDumper implements DumperInterface
     public function __construct(
         private DatabaseFactory $databaseFactory,
         private EventDispatcherInterface $eventDispatcher,
+        private DumpContext $dumpContext,
     ) {
     }
 
@@ -36,11 +37,11 @@ final class MysqlDumper implements DumperInterface
         // Set the SQL variables
         $connection = $database->getConnection();
         $dumpSettings = $this->getDumpSettings($config);
-        $context = ['vars' => []];
+        $this->dumpContext->variables = [];
 
         foreach ($config->getVarQueries() as $varName => $query) {
             $value = $connection->fetchOne($query);
-            $context['vars'][$varName] = $value;
+            $this->dumpContext->variables[$varName] = $value;
             $dumpSettings['init_commands'][] = 'SET @' . $varName . ' = ' . $connection->quote($value);
         }
 
@@ -53,7 +54,7 @@ final class MysqlDumper implements DumperInterface
             $database->getConnectionParams()->get('driverOptions', [])
         );
 
-        $this->eventDispatcher->dispatch(new DumpEvent($dumper, $database, $config, $context));
+        $this->eventDispatcher->dispatch(new DumpEvent($dumper, $database, $config, $this->dumpContext));
 
         // Close the Doctrine connection before proceeding to the dump creation (MySQLDump-PHP uses its own connection)
         $database->getConnection()->close();

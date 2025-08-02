@@ -28,7 +28,7 @@ final class RegexReplace implements ConverterInterface
         $this->limit = $input->get('limit');
     }
 
-    public function convert(mixed $value, array $context = []): string
+    public function convert(mixed $value): string
     {
         $value = (string) $value;
 

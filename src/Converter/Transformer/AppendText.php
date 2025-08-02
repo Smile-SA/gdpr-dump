@@ -21,7 +21,7 @@ final class AppendText implements ConverterInterface
         $this->suffix = $input->get('value');
     }
 
-    public function convert(mixed $value, array $context = []): string
+    public function convert(mixed $value): string
     {
         $value = (string) $value;
 

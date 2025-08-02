@@ -21,7 +21,7 @@ final class RandomizeNumber implements ConverterInterface
         // No parameters
     }
 
-    public function convert(mixed $value, array $context = []): string
+    public function convert(mixed $value): string
     {
         $value = (string) $value;
 

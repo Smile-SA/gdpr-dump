@@ -33,7 +33,7 @@ final class RandomEmail implements ConverterInterface
         $this->textConverter->setParameters(array_diff_key($parameters, $emailParams));
     }
 
-    public function convert(mixed $value, array $context = []): string
+    public function convert(mixed $value): string
     {
         $domainIndex = mt_rand(0, $this->domainsCount - 1);
 

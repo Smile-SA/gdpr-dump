@@ -20,7 +20,7 @@ final class RandomDateTime implements ConverterInterface
         $this->dateConverter->setParameters($parameters);
     }
 
-    public function convert(mixed $value, array $context = []): string
+    public function convert(mixed $value): string
     {
         return $this->dateConverter->convert($value);
     }

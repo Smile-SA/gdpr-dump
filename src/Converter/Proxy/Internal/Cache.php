@@ -26,10 +26,10 @@ final class Cache implements InternalConverterInterface
         $this->cacheKey = $input->get('cache_key');
     }
 
-    public function convert(mixed $value, array $context = []): mixed
+    public function convert(mixed $value): mixed
     {
         if (!isset(self::$values[$this->cacheKey][$value])) {
-            self::$values[$this->cacheKey][$value] = $this->converter->convert($value, $context);
+            self::$values[$this->cacheKey][$value] = $this->converter->convert($value);
         }
 
         return self::$values[$this->cacheKey][$value];
