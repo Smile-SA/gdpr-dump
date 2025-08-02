@@ -119,11 +119,15 @@ services:
         public: true # used by functional tests
         arguments:
             - '@database.factory'
-            - '@event_dispatcher'
+            - '@dumper.mysqldump_settings_builder'
             - '@dumper.context'
+            - '@event_dispatcher'
 
     dumper.context:
         class: 'Smile\GdprDump\Dumper\DumpContext'
+
+    dumper.mysqldump_settings_builder:
+        class: 'Smile\GdprDump\Dumper\Builder\MysqldumpSettingsBuilder'
 
     dumper.listener.faker_locale:
         class: 'Smile\GdprDump\Dumper\Listener\FakerLocaleListener'
