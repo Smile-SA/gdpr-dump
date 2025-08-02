@@ -138,6 +138,7 @@ services:
         arguments:
             - '@converter.builder'
             - '@converter.condition_builder'
+            - '@dumper.context'
 
     dumper.listener.table_filter:
         class: 'Smile\GdprDump\Dumper\Listener\TableFilterListener'
