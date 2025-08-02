@@ -20,47 +20,35 @@ final class ConditionalTest extends TestCase
     {
         $converter = $this->createConverter(Conditional::class, [
             'condition' => '{{id}} === @my_var',
-            'if_true_converter' => $this->createIfTrueConverter(),
-            'if_false_converter' => $this->createIfFalseConverter(),
+            'converter' => $this->createOnSuccessConverter(),
         ]);
 
         $value = $converter->convert('value', ['row_data' => ['id' => 1], 'vars' => ['my_var' => 1]]);
         $this->assertSame('success_value', $value);
 
         $value = $converter->convert('value', ['row_data' => ['id' => 1], 'vars' => ['my_var' => 2]]);
-        $this->assertSame('failure_value', $value);
+        $this->assertSame('value', $value);
 
         $value = $converter->convert('value', ['row_data' => ['id' => 2], 'vars' => ['my_var' => 1]]);
-        $this->assertSame('failure_value', $value);
+        $this->assertSame('value', $value);
     }
 
     /**
-     * Assert that an exception is thrown when the converters are not set.
+     * Assert that an exception is thrown when the parameter "converter" is not set.
      */
-    public function testConvertersNotSet(): void
+    public function testConverterNotSet(): void
     {
         $this->expectException(ValidationException::class);
         $this->createConverter(Conditional::class, ['condition' => '{{id}} === 1']);
     }
 
     /**
-     * Assert that an exception is thrown when the parameter
-     * "if_true_converter" is not an instance of ConverterInterface.
+     * Assert that an exception is thrown when the parameter "converter" is not an instance of ConverterInterface.
      */
-    public function testIfTrueConverterNotValid(): void
+    public function testConverterNotValid(): void
     {
         $this->expectException(ValidationException::class);
-        $this->createConverter(Conditional::class, ['if_true_converter' => new stdClass()]);
-    }
-
-    /**
-     * Assert that an exception is thrown when the parameter
-     * "if_false_converter" is not an instance of ConverterInterface.
-     */
-    public function testIfFalseConverterNotValid(): void
-    {
-        $this->expectException(ValidationException::class);
-        $this->createConverter(Conditional::class, ['if_false_converter' => new stdClass()]);
+        $this->createConverter(Conditional::class, ['converter' => new stdClass()]);
     }
 
     /**
@@ -69,7 +57,7 @@ final class ConditionalTest extends TestCase
     public function testConditionNotSet(): void
     {
         $this->expectException(ValidationException::class);
-        $this->createConverter(Conditional::class, ['if_true_converter' => $this->createIfTrueConverter()]);
+        $this->createConverter(Conditional::class, ['converter' => $this->createOnSuccessConverter()]);
     }
 
     /**
@@ -79,7 +67,7 @@ final class ConditionalTest extends TestCase
     {
         $this->expectException(ValidationException::class);
         $this->createConverter(Conditional::class, [
-            'if_true_converter' => $this->createIfTrueConverter(),
+            'converter' => $this->createOnSuccessConverter(),
             'condition' => '',
         ]);
     }
@@ -87,16 +75,8 @@ final class ConditionalTest extends TestCase
     /**
      * Create a test converter for conditions that evaluate to true.
      */
-    private function createIfTrueConverter(): ConverterInterface
+    private function createOnSuccessConverter(): ConverterInterface
     {
         return $this->createConverter(ConverterMock::class, ['prefix' => 'success_']);
-    }
-
-    /**
-     * Create a test converter for conditions that evaluate to false.
-     */
-    private function createIfFalseConverter(): ConverterInterface
-    {
-        return $this->createConverter(ConverterMock::class, ['prefix' => 'failure_']);
     }
 }
