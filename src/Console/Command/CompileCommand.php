@@ -20,7 +20,7 @@ final class CompileCommand extends Command
     public function configure(): void
     {
         $this->setName('compiler')
-            ->setDescription('Create the phar file')
+            ->setDescription('Create a phar file in build/gdpr-dump.phar')
             ->addOption(
                 'locale',
                 null,
@@ -77,6 +77,6 @@ final class CompileCommand extends Command
     {
         $basePath = dirname(__DIR__, 3);
 
-        return $basePath . '/build/dist/gdpr-dump.phar';
+        return $basePath . '/build/gdpr-dump.phar';
     }
 }
