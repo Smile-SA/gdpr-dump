@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Converter\Proxy;
+namespace Smile\GdprDump\Converter\Proxy\Internal;
 
 use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\InternalConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-final class Cache implements ConverterInterface
+final class Cache implements InternalConverterInterface
 {
     private static array $values = [];
     private ConverterInterface $converter;

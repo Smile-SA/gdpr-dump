@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
 use Smile\GdprDump\Converter\Parameters\ValidationException;
-use Smile\GdprDump\Converter\Proxy\Cache;
+use Smile\GdprDump\Converter\Proxy\Internal\Cache;
 use Smile\GdprDump\Converter\Randomizer\RandomizeText;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
