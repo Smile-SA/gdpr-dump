@@ -37,6 +37,7 @@ services:
 
     command.dump:
         class: 'Smile\GdprDump\Console\Command\DumpCommand'
+        shared: false
         arguments:
             - '@dumper'
             - '@config.loader'
@@ -103,6 +104,7 @@ services:
 
     converter.condition_builder:
         class: 'Smile\GdprDump\Converter\ConditionBuilder'
+        shared: false
 
     database.factory:
         class: 'Smile\GdprDump\Database\DatabaseFactory'
