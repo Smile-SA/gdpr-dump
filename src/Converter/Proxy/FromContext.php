@@ -5,24 +5,22 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter\Proxy;
 
 use RuntimeException;
+use Smile\GdprDump\Converter\ContextAwareInterface;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Dumper\DumpContext;
 
-final class FromContext implements ConverterInterface
+final class FromContext implements ConverterInterface, ContextAwareInterface
 {
     private const TYPE_ROW_DATA = 'row_data';
     private const TYPE_PROCESSED_DATA = 'processed_data';
     private const TYPE_VARIABLES = 'variables';
 
+    private DumpContext $dumpContext;
     private string $type;
     private string $index;
-
-    public function __construct(private DumpContext $dumpContext)
-    {
-    }
 
     public function setParameters(array $parameters): void
     {
@@ -40,6 +38,11 @@ final class FromContext implements ConverterInterface
 
         $this->type = $parts[0];
         $this->index = $parts[1];
+    }
+
+    public function setDumpContext(DumpContext $dumpContext): void
+    {
+        $this->dumpContext = $dumpContext;
     }
 
     public function convert(mixed $value): mixed

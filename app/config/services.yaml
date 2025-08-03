@@ -19,15 +19,10 @@ services:
     Smile\GdprDump\Converter\Proxy\Internal\Conditional:
         arguments:
             - '@converter.condition_builder'
-            - '@dumper.context'
 
     Smile\GdprDump\Converter\Proxy\Faker:
         arguments:
             - '@faker.service'
-
-    Smile\GdprDump\Converter\Proxy\FromContext:
-        arguments:
-            - '@dumper.context'
 
     console.dump_info:
         class: 'Smile\GdprDump\Console\Helper\DumpInfo'
@@ -96,6 +91,7 @@ services:
 
     converter.builder:
         class: 'Smile\GdprDump\Converter\ConverterBuilder'
+        shared: false
         arguments:
             - '@converter.factory'
 
@@ -120,11 +116,7 @@ services:
         arguments:
             - '@database.factory'
             - '@dumper.mysqldump_settings_builder'
-            - '@dumper.context'
             - '@event_dispatcher'
-
-    dumper.context:
-        class: 'Smile\GdprDump\Dumper\DumpContext'
 
     dumper.mysqldump_settings_builder:
         class: 'Smile\GdprDump\Dumper\Builder\MysqldumpSettingsBuilder'
@@ -142,7 +134,6 @@ services:
         arguments:
             - '@converter.builder'
             - '@converter.condition_builder'
-            - '@dumper.context'
 
     dumper.listener.table_filter:
         class: 'Smile\GdprDump\Dumper\Listener\TableFilterListener'
