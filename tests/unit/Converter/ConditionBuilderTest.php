@@ -20,7 +20,7 @@ final class ConditionBuilderTest extends TestCase
         // Variables must be interpreted
         $condition = $builder->build('{{id}} === @my_var');
         $this->assertSame(
-            'return $dumpContext->currentRow[\'id\'] === $dumpContext->variables[\'my_var\'];',
+            'return $this->dumpContext->currentRow[\'id\'] === $this->dumpContext->variables[\'my_var\'];',
             $condition
         );
 

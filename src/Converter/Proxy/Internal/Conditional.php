@@ -16,8 +16,10 @@ final class Conditional implements InternalConverterInterface
     private string $condition;
     private ConverterInterface $converter;
 
-    public function __construct(private ConditionBuilder $conditionBuilder, private DumpContext $dumpContext)
-    {
+    public function __construct(
+        private ConditionBuilder $conditionBuilder,
+        private DumpContext $dumpContext, // @phpstan-ignore property.onlyWritten (required for condition evaluation)
+    ) {
     }
 
     public function setParameters(array $parameters): void
@@ -31,13 +33,8 @@ final class Conditional implements InternalConverterInterface
         $this->converter = $input->get('converter');
     }
 
-    /**
-     * @see ConditionBuilder::parseCondition()
-     */
     public function convert(mixed $value): mixed
     {
-        // phpcs:ignore SlevomatCodingStandard.Variables.UnusedVariable
-        $dumpContext = $this->dumpContext; // necessary for the condition to work
         $result = (bool) eval($this->condition);
 
         return $result ? $this->converter->convert($value) : $value;

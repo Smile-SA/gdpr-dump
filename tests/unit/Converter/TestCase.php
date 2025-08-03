@@ -17,11 +17,20 @@ use Smile\GdprDump\Tests\Unit\TestCase as UnitTestCase;
 
 abstract class TestCase extends UnitTestCase
 {
-    protected DumpContext $dumpContext;
+    private DumpContext $dumpContext;
+
+    protected function setUp(): void
+    {
+        if ($this instanceof DumpContextAwareInterface) {
+            $this->dumpContext = new DumpContext();
+        }
+    }
 
     protected function tearDown(): void
     {
-        unset($this->dumpContext);
+        if ($this instanceof DumpContextAwareInterface) {
+            unset($this->dumpContext);
+        }
     }
 
     /**
@@ -83,13 +92,10 @@ abstract class TestCase extends UnitTestCase
         $this->assertTrue($randomizedDate !== $actualDate);
     }
 
-    /**
-     * Get the dump context object.
-     */
     protected function getDumpContext(): DumpContext
     {
-        if (!isset($this->dumpContext)) {
-            $this->dumpContext = new DumpContext();
+        if (!$this instanceof DumpContextAwareInterface) {
+            throw new RuntimeException('Please implement DumpContextAwareInterface to access the dump context object');
         }
 
         return $this->dumpContext;

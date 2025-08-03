@@ -6,32 +6,35 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Proxy\FromContext;
+use Smile\GdprDump\Tests\Unit\Converter\DumpContextAwareInterface;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-final class FromContextTest extends TestCase
+final class FromContextTest extends TestCase implements DumpContextAwareInterface
 {
     /**
      * Test the converter.
      */
     public function testConverter(): void
     {
+        $dumpContext = $this->getDumpContext();
+
         // Test row_data
         $converter = $this->createConverter(FromContext::class, ['key' => 'row_data.email']);
-        $this->dumpContext->currentRow = ['email' => 'test@acme.com'];
+        $dumpContext->currentRow = ['email' => 'test@acme.com'];
         $value = $converter->convert('value');
-        $this->assertSame($this->dumpContext->currentRow['email'], $value);
+        $this->assertSame($dumpContext->currentRow['email'], $value);
 
         // Test processed_data
         $converter = $this->createConverter(FromContext::class, ['key' => 'processed_data.email']);
-        $this->dumpContext->processedData = ['email' => '1234@example.org'];
+        $dumpContext->processedData = ['email' => '1234@example.org'];
         $value = $converter->convert('value');
-        $this->assertSame($this->dumpContext->processedData['email'], $value);
+        $this->assertSame($dumpContext->processedData['email'], $value);
 
         // Test variables
         $converter = $this->createConverter(FromContext::class, ['key' => 'variables.firstname_attribute_id']);
-        $this->dumpContext->variables = ['firstname_attribute_id' => '1'];
+        $dumpContext->variables = ['firstname_attribute_id' => '1'];
         $value = $converter->convert('value');
-        $this->assertSame($this->dumpContext->variables['firstname_attribute_id'], $value);
+        $this->assertSame($dumpContext->variables['firstname_attribute_id'], $value);
     }
 
     /**
@@ -39,21 +42,23 @@ final class FromContextTest extends TestCase
      */
     public function testReturnsNullWithUndefinedColumn(): void
     {
+        $dumpContext = $this->getDumpContext();
+
         // Test row_data
         $converter = $this->createConverter(FromContext::class, ['key' => 'row_data.email']);
-        $this->dumpContext->currentRow = ['username' => 'test'];
+        $dumpContext->currentRow = ['username' => 'test'];
         $value = $converter->convert('value');
         $this->assertNull($value);
 
         // Test processed_data
         $converter = $this->createConverter(FromContext::class, ['key' => 'processed_data.email']);
-        $this->dumpContext->processedData = ['username' => 'test'];
+        $dumpContext->processedData = ['username' => 'test'];
         $value = $converter->convert('value');
         $this->assertNull($value);
 
         // Test variables
         $converter = $this->createConverter(FromContext::class, ['key' => 'variables.firstname_attribute_id']);
-        $this->dumpContext->variables = ['lastname_attribute_id' => '1'];
+        $dumpContext->variables = ['lastname_attribute_id' => '1'];
         $value = $converter->convert('value');
         $this->assertNull($value);
     }

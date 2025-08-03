@@ -8,22 +8,23 @@ use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Proxy\Internal\Conditional;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
+use Smile\GdprDump\Tests\Unit\Converter\DumpContextAwareInterface;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 use stdClass;
 
-final class ConditionalTest extends TestCase
+final class ConditionalTest extends TestCase implements DumpContextAwareInterface
 {
     /**
      * Test the converter.
      */
     public function testCondition(): void
     {
+        $dumpContext = $this->getDumpContext();
         $converter = $this->createConverter(Conditional::class, [
             'condition' => '{{id}} === @my_var',
             'converter' => $this->createOnSuccessConverter(),
         ]);
 
-        $dumpContext = $this->getDumpContext();
         $dumpContext->currentRow = ['id' => '1'];
         $dumpContext->variables = ['my_var' => '1'];
         $value = $converter->convert('value');
