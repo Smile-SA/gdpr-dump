@@ -212,22 +212,37 @@ final class ConverterBuilderTest extends TestCase implements DumpContextAwareInt
     }
 
     /**
+     * Assert that an exception is thrown if the dump context was not set and a DumpContextAware converter is built.
+     */
+    public function testMissingDumpContext(): void
+    {
+        $builder = $this->createBuilder(false);
+        $this->expectException(RuntimeException::class);
+        $builder->build([
+            'converter' => 'mock',
+            'condition' => '{{id}} === 1',
+        ]);
+    }
+
+    /**
      * Create a converter factory object.
      */
-    private function createBuilder(): ConverterBuilder
+    private function createBuilder(bool $withDumpContext = true): ConverterBuilder
     {
         $resolver = new ConverterAliasResolver();
         $container = new Container();
         $container->set($resolver->getAliasByName('cache'), new Cache());
         $container->set($resolver->getAliasByName('chain'), new Chain());
-        $container->set(
-            $resolver->getAliasByName('conditional'),
-            new Conditional(new ConditionBuilder(), $this->getDumpContext())
-        );
+        $container->set($resolver->getAliasByName('conditional'), new Conditional(new ConditionBuilder()));
         $container->set($resolver->getAliasByName('faker'), new Faker(new FakerService()));
         $container->set($resolver->getAliasByName('mock'), new ConverterMock());
         $container->set($resolver->getAliasByName('unique'), new Unique());
 
-        return new ConverterBuilder(new ConverterFactory($container, $resolver));
+        $converterBuilder = new ConverterBuilder(new ConverterFactory($container, $resolver));
+        if ($withDumpContext) {
+            $converterBuilder->setDumpContext($this->getDumpContext());
+        }
+
+        return $converterBuilder;
     }
 }

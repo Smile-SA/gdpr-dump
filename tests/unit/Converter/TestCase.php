@@ -7,9 +7,9 @@ namespace Smile\GdprDump\Tests\Unit\Converter;
 use DateTime;
 use RuntimeException;
 use Smile\GdprDump\Converter\ConditionBuilder;
+use Smile\GdprDump\Converter\ContextAwareInterface;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Proxy\Faker;
-use Smile\GdprDump\Converter\Proxy\FromContext;
 use Smile\GdprDump\Converter\Proxy\Internal\Conditional;
 use Smile\GdprDump\Dumper\DumpContext;
 use Smile\GdprDump\Faker\FakerService;
@@ -45,13 +45,16 @@ abstract class TestCase extends UnitTestCase
         }
 
         $converter = match ($className) {
-            Conditional::class => new Conditional(new ConditionBuilder(), $this->getDumpContext()),
+            Conditional::class => new Conditional(new ConditionBuilder()),
             Faker::class => new Faker(new FakerService()),
-            FromContext::class => new FromContext($this->getDumpContext()),
             default => new $className(),
         };
 
         $converter->setParameters($parameters);
+
+        if ($converter instanceof ContextAwareInterface) {
+            $converter->setDumpContext($this->getDumpContext());
+        }
 
         return $converter;
     }

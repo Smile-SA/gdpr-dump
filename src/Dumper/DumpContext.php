@@ -38,14 +38,4 @@ class DumpContext
      * @var array<string, string>
      */
     public array $variables = [];
-
-    /**
-     * Reset the context.
-     */
-    public function reset(): void
-    {
-        $this->currentRow = [];
-        $this->processedData = [];
-        $this->variables = [];
-    }
 }
