@@ -56,9 +56,8 @@ final class DataConverterListener
             }
 
             // Initialize the context data
-            $dumpContext = $this->dumpContext;
-            $dumpContext->currentRow = $row;
-            $dumpContext->processedData = [];
+            $this->dumpContext->currentRow = $row;
+            $this->dumpContext->processedData = [];
 
             // Evaluate the skip condition (done after context initialization as it may depend on it)
             if (isset($this->skipConditions[$table]) && eval($this->skipConditions[$table])) {
@@ -74,7 +73,7 @@ final class DataConverterListener
                 // Convert the value
                 try {
                     $row[$column] = $converter->convert($row[$column]);
-                    $dumpContext->processedData[$column] = $row[$column];
+                    $this->dumpContext->processedData[$column] = $row[$column];
                 } catch (Throwable $e) {
                     throw new RuntimeException(sprintf('[%s.%s] %s', $table, $column, $e->getMessage()), 0, $e);
                 }

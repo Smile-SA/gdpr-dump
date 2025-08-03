@@ -19,7 +19,7 @@ use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Symfony\Component\DependencyInjection\Container;
 use UnexpectedValueException;
 
-final class ConverterBuilderTest extends TestCase
+final class ConverterBuilderTest extends TestCase implements DumpContextAwareInterface
 {
     /**
      * Test the converter creation from an array definition.
