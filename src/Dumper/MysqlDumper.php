@@ -21,15 +21,12 @@ final class MysqlDumper implements DumperInterface
     public function __construct(
         private DatabaseFactory $databaseFactory,
         private MysqldumpSettingsBuilder $mysqldumpSettingsBuilder,
-        private DumpContext $dumpContext,
         private EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
     public function dump(ConfigInterface $config, bool $dryRun = false): void
     {
-        $this->dumpContext->reset();
-
         // Initialize the database connection
         $database = $this->databaseFactory->create($config);
 
@@ -37,9 +34,10 @@ final class MysqlDumper implements DumperInterface
         $config = $this->createDumperConfig($config, $database->getMetadata());
 
         // Create the Mysqldump object (mysqldump-php library)
-        $dumper = $this->createMysqldump($database, $config);
+        $dumpContext = new DumpContext();
+        $dumper = $this->createMysqldump($database, $config, $dumpContext);
 
-        $this->eventDispatcher->dispatch(new DumpEvent($dumper, $database, $config));
+        $this->eventDispatcher->dispatch(new DumpEvent($dumper, $database, $config, $dumpContext));
 
         // Close the Doctrine connection before proceeding to the dump creation (mysqldump-php uses its own connection)
         $database->getConnection()->close();
@@ -67,15 +65,18 @@ final class MysqlDumper implements DumperInterface
     /**
      * Create the Mysqldump object.
      */
-    private function createMysqldump(DatabaseInterface $database, DumperConfig $config): Mysqldump
-    {
+    private function createMysqldump(
+        DatabaseInterface $database,
+        DumperConfig $config,
+        DumpContext $dumpContext,
+    ): Mysqldump {
         $dumpSettings = $this->mysqldumpSettingsBuilder->build($config);
 
         // Set SQL variables
         $connection = $database->getConnection();
         foreach ($config->getVarQueries() as $varName => $query) {
             $value = $connection->fetchOne($query);
-            $this->dumpContext->variables[$varName] = $value;
+            $dumpContext->variables[$varName] = $value;
             $dumpSettings['init_commands'][] = 'SET @' . $varName . ' = ' . $connection->quote($value);
         }
 

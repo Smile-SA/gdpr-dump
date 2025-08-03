@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter;
 
+use RuntimeException;
+use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Dumper\DumpContext;
 use UnexpectedValueException;
 
 final class ConverterBuilder
 {
+    private DumpContext $dumpContext;
+
     public function __construct(private ConverterFactory $converterFactory)
     {
     }
@@ -24,7 +29,7 @@ final class ConverterBuilder
         $parameters = $definition['parameters'];
 
         // Create the converter
-        $converter = $this->converterFactory->create($name, $parameters);
+        $converter = $this->createConverter($name, $parameters);
 
         // Disallow using internal converters
         if ($converter instanceof InternalConverterInterface) {
@@ -38,6 +43,14 @@ final class ConverterBuilder
         $converter = $this->bindCache($converter, $definition);
 
         return $this->bindCondition($converter, $definition);
+    }
+
+    /**
+     * Set the dump context.
+     */
+    public function setDumpContext(DumpContext $dumpContext): void
+    {
+        $this->dumpContext = $dumpContext;
     }
 
     /**
@@ -79,12 +92,12 @@ final class ConverterBuilder
     }
 
     /**
-     * If the unique parameter is set to true, bind a unique converter to the specified converter.
+     * If the "unique" parameter is set to true, bind a unique converter to the specified converter.
      */
     private function bindUnique(ConverterInterface $converter, array $definition): ConverterInterface
     {
         if ($definition['unique']) {
-            $converter = $this->converterFactory->create('unique', ['converter' => $converter]);
+            $converter = $this->createConverter('unique', ['converter' => $converter]);
         }
 
         return $converter;
@@ -96,7 +109,7 @@ final class ConverterBuilder
     private function bindCache(ConverterInterface $converter, array $definition): ConverterInterface
     {
         if ($definition['cache_key'] !== '') {
-            $converter = $this->converterFactory->create(
+            $converter = $this->createConverter(
                 'cache',
                 ['converter' => $converter, 'cache_key' => $definition['cache_key']]
             );
@@ -112,7 +125,7 @@ final class ConverterBuilder
     {
         // Convert data only if it matches the specified condition
         if ($definition['condition'] !== '') {
-            $converter = $this->converterFactory->create(
+            $converter = $this->createConverter(
                 'conditional',
                 ['condition' => $definition['condition'], 'converter' => $converter]
             );
@@ -175,5 +188,31 @@ final class ConverterBuilder
         }
 
         return $this->build($parameter);
+    }
+
+    /**
+     * Create a converter that matches the specified name and parameters.
+     */
+    private function createConverter(string $name, array $parameters): ConverterInterface
+    {
+        $converter = $this->converterFactory->create($name);
+
+        try {
+            $converter->setParameters($parameters);
+        } catch (ValidationException $e) {
+            throw new RuntimeException(
+                sprintf('An error occurred while parsing the converter "%s": %s', $name, lcfirst($e->getMessage()))
+            );
+        }
+
+        if ($converter instanceof ContextAwareInterface) {
+            if (!isset($this->dumpContext)) {
+                throw new RuntimeException('The dump context is not set.');
+            }
+
+            $converter->setDumpContext($this->dumpContext);
+        }
+
+        return $converter;
     }
 }
