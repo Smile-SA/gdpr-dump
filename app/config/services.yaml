@@ -106,8 +106,13 @@ services:
         class: 'Smile\GdprDump\Converter\ConditionBuilder'
         shared: false
 
+    database.connection_params_builder:
+        class: 'Smile\GdprDump\Database\Builder\ConnectionParamsBuilder'
+
     database.factory:
         class: 'Smile\GdprDump\Database\DatabaseFactory'
+        arguments:
+            - '@database.connection_params_builder'
 
     di.converter_alias_resolver:
         class: 'Smile\GdprDump\DependencyInjection\ConverterAliasResolver'

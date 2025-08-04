@@ -23,4 +23,15 @@ abstract class TestCase extends BaseTestCase
     {
         return __DIR__ . '/Resources/' . $fileName;
     }
+
+    /**
+     * Assert that two arrays have the same key/value pairs. Sort order of keys can be different.
+     */
+    protected function assertSameKeyValuePairs(array $expected, array $actual): void
+    {
+        ksort($expected);
+        ksort($actual);
+
+        $this->assertSame($expected, $actual);
+    }
 }
