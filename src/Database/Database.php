@@ -18,14 +18,12 @@ final class Database implements DatabaseInterface
     private Connection $connection;
     private DriverInterface $driver;
     private MetadataInterface $metadata;
-    private ParameterBag $connectionParams;
 
     /**
      * @throws Exception|UnexpectedValueException
      */
-    public function __construct(array $connectionParams)
+    public function __construct(private ParameterBag $connectionParams)
     {
-        $this->connectionParams = new ParameterBag($connectionParams);
         $this->connection = DriverManager::getConnection($this->connectionParams->all());
 
         $driver = $this->connectionParams->get('driver');

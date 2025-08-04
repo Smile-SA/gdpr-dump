@@ -11,6 +11,7 @@ use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
 use Smile\GdprDump\Database\Database;
+use Smile\GdprDump\Database\ParameterBag;
 use Smile\GdprDump\Kernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -81,7 +82,7 @@ abstract class TestCase extends BaseTestCase
             $connectionParams = $config->get('database');
             $connectionParams['dbname'] = $connectionParams['name'];
             unset($connectionParams['name']);
-            self::$database = new Database($connectionParams);
+            self::$database = new Database(new ParameterBag($connectionParams));
 
             // Create the tables
             $connection = self::$database->getConnection();
