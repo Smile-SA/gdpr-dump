@@ -10,7 +10,7 @@ use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 class MysqldumpSettingsBuilder
 {
     /**
-     * Build the mysqldump-php settings.
+     * Build mysqldump-php settings.
      */
     public function build(DumperConfigInterface $config): array
     {
@@ -40,15 +40,15 @@ class MysqldumpSettingsBuilder
      */
     private function mapSettings(array $settings): array
     {
-        $map = $this->getMap();
+        $mapping = $this->getMapping();
 
         foreach ($settings as $key => $value) {
-            if (!array_key_exists($key, $map)) {
+            if (!array_key_exists($key, $mapping)) {
                 throw new RuntimeException(sprintf('The dump setting "%s" does not exist.', $key));
             }
 
-            if ($map[$key] !== $key) {
-                $settings[$map[$key]] = $value;
+            if ($mapping[$key] !== $key) {
+                $settings[$mapping[$key]] = $value;
                 unset($settings[$key]);
             }
         }
@@ -57,11 +57,13 @@ class MysqldumpSettingsBuilder
     }
 
     /**
-     * Get the list of allowed settings.
+     * Get the mapping between GdprDump settings and mysqldump-php settings.
      */
-    private function getMap(): array
+    private function getMapping(): array
     {
         return [
+            // This list must match the dump object defined in schema.json
+            // (except "output" which is stored elsewhere in the DumperConfig object)
             'add_drop_database' => 'add-drop-database',
             'add_drop_table' => 'add-drop-table',
             'add_drop_trigger' => 'add-drop-trigger',

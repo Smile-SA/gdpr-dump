@@ -12,7 +12,7 @@ use Smile\GdprDump\Tests\Unit\TestCase;
 final class MysqldumpSettingsBuilderTest extends TestCase
 {
     /**
-     * Test the builder when all settings are defined.
+     * Test the builder when all dump settings are defined.
      */
     public function testAllSettings(): void
     {
@@ -52,14 +52,14 @@ final class MysqldumpSettingsBuilderTest extends TestCase
         $builder = new MysqldumpSettingsBuilder();
         $result = $builder->build($config);
 
-        $this->assertSame(
+        $this->assertSameKeyValuePairs(
             $this->getExpectedResult($dumpSettings, $includedTables, $excludedTables, $truncatedTables),
             $result
         );
     }
 
     /**
-     * Test the builder when only a few settings are defined.
+     * Test the builder when only a few dump settings are defined.
      */
     public function testPartialSettings(): void
     {
@@ -78,7 +78,7 @@ final class MysqldumpSettingsBuilderTest extends TestCase
         $builder = new MysqldumpSettingsBuilder();
         $result = $builder->build($config);
 
-        $this->assertSame($this->getExpectedResult($dumpSettings, $includedTables), $result);
+        $this->assertSameKeyValuePairs($this->getExpectedResult($dumpSettings, $includedTables), $result);
     }
 
     /**
@@ -90,7 +90,7 @@ final class MysqldumpSettingsBuilderTest extends TestCase
         $builder = new MysqldumpSettingsBuilder();
         $result = $builder->build($config);
 
-        $this->assertSame($this->getExpectedResult(), $result);
+        $this->assertSameKeyValuePairs($this->getExpectedResult(), $result);
     }
 
     /**
