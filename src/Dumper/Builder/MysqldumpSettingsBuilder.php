@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Dumper\Builder;
 use RuntimeException;
 use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 
-class MysqldumpSettingsBuilder
+final class MysqldumpSettingsBuilder
 {
     /**
      * Build mysqldump-php settings.
@@ -34,7 +34,7 @@ class MysqldumpSettingsBuilder
     }
 
     /**
-     * Convert GdprDump settings to mysqldump-php settings.
+     * Convert dump settings to mysqldump-php settings.
      *
      * @throws RuntimeException
      */

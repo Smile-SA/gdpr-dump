@@ -8,7 +8,7 @@ use Smile\GdprDump\Config\Compiler\CompileException;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Database\DatabaseInterface;
 
-class DatabaseUrlProcessor implements ProcessorInterface
+final class DatabaseUrlProcessor implements ProcessorInterface
 {
     /**
      * Parse database url (if specified).

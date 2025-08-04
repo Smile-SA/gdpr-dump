@@ -16,7 +16,7 @@ use Smile\GdprDump\Dumper\Listener\DataConverterListener;
  *
  * @see DataConverterListener::getHook()
  */
-class DumpContext
+final class DumpContext
 {
     /**
      * The table row that is currently being dumped (column name as key).
