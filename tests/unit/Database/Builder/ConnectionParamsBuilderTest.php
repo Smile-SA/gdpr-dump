@@ -9,6 +9,7 @@ use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Database\Builder\ConnectionParamsBuilder;
 use Smile\GdprDump\Database\DatabaseInterface;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Util\ArrayHelper;
 
 final class ConnectionParamsBuilderTest extends TestCase
 {
@@ -33,8 +34,7 @@ final class ConnectionParamsBuilderTest extends TestCase
             ],
         ];
 
-        $builder = new ConnectionParamsBuilder();
-        $result = $builder->build($this->createConfig($settings));
+        $result = $this->createBuilder()->build($this->createConfig($settings));
         $this->assertSameKeyValuePairs($this->getExpectedResult($settings), $result);
     }
 
@@ -50,8 +50,7 @@ final class ConnectionParamsBuilderTest extends TestCase
             'host' => 'db',
         ];
 
-        $builder = new ConnectionParamsBuilder();
-        $result = $builder->build($this->createConfig($settings));
+        $result = $this->createBuilder()->build($this->createConfig($settings));
         $this->assertSameKeyValuePairs($this->getExpectedResult($settings), $result);
     }
 
@@ -60,8 +59,7 @@ final class ConnectionParamsBuilderTest extends TestCase
      */
     public function testEmptySettings(): void
     {
-        $builder = new ConnectionParamsBuilder();
-        $result = $builder->build($this->createConfig());
+        $result = $this->createBuilder()->build($this->createConfig());
         $this->assertSameKeyValuePairs($this->getExpectedResult(), $result);
     }
 
@@ -95,5 +93,13 @@ final class ConnectionParamsBuilderTest extends TestCase
             ->willReturn($databaseSettings);
 
         return $configMock;
+    }
+
+    /**
+     * Create the object to test.
+     */
+    private function createBuilder(): ConnectionParamsBuilder
+    {
+        return new ConnectionParamsBuilder(new ArrayHelper());
     }
 }
