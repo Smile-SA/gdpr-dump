@@ -4,31 +4,23 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Database\Builder;
 
-use RuntimeException;
 use Smile\GdprDump\Config\ConfigInterface;
+use Smile\GdprDump\Util\ArrayHelper;
 
 final class ConnectionParamsBuilder
 {
+    public function __construct(private ArrayHelper $arrayHelper)
+    {
+    }
+
     /**
      * Build Doctrine connection parameters.
      */
     public function build(ConfigInterface $config): array
     {
-        $parameters = (array) $config->get('database', []);
-        $mapping = $this->getMapping();
+        $settings = (array) $config->get('database', []);
 
-        foreach ($parameters as $key => $value) {
-            if (!array_key_exists($key, $mapping)) {
-                throw new RuntimeException(sprintf('The dump setting "%s" does not exist.', $key));
-            }
-
-            if ($mapping[$key] !== $key) {
-                $parameters[$mapping[$key]] = $value;
-                unset($parameters[$key]);
-            }
-        }
-
-        return $parameters;
+        return $this->arrayHelper->map($settings, $this->getMapping());
     }
 
     /**

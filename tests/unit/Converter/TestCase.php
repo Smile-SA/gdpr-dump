@@ -11,9 +11,12 @@ use Smile\GdprDump\Converter\ContextAwareInterface;
 use Smile\GdprDump\Converter\ConverterInterface;
 use Smile\GdprDump\Converter\Proxy\Faker;
 use Smile\GdprDump\Converter\Proxy\Internal\Conditional;
+use Smile\GdprDump\Converter\Proxy\JsonData;
+use Smile\GdprDump\Converter\Proxy\SerializedData;
 use Smile\GdprDump\Dumper\DumpContext;
 use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Unit\TestCase as UnitTestCase;
+use Smile\GdprDump\Util\ArrayHelper;
 
 abstract class TestCase extends UnitTestCase
 {
@@ -47,6 +50,8 @@ abstract class TestCase extends UnitTestCase
         $converter = match ($className) {
             Conditional::class => new Conditional(new ConditionBuilder()),
             Faker::class => new Faker(new FakerService()),
+            JsonData::class => new JsonData(new ArrayHelper()),
+            SerializedData::class => new SerializedData(new ArrayHelper()),
             default => new $className(),
         };
 

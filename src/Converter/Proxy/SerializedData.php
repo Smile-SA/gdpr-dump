@@ -16,6 +16,10 @@ final class SerializedData implements ConverterInterface
      */
     private array $converters;
 
+    public function __construct(private ArrayHelper $arrayHelper)
+    {
+    }
+
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
@@ -34,7 +38,7 @@ final class SerializedData implements ConverterInterface
 
         foreach ($this->converters as $path => $converter) {
             // Get the value
-            $nestedValue = ArrayHelper::getPath($decoded, $path);
+            $nestedValue = $this->arrayHelper->getPath($decoded, $path);
             if ($nestedValue === null) {
                 continue;
             }
@@ -43,7 +47,7 @@ final class SerializedData implements ConverterInterface
             $nestedValue = $converter->convert($nestedValue);
 
             // Replace the original value in the JSON by the converted value
-            ArrayHelper::setPath($decoded, $path, $nestedValue);
+            $this->arrayHelper->setPath($decoded, $path, $nestedValue);
         }
 
         return serialize($decoded);

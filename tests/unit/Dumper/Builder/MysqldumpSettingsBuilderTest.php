@@ -8,6 +8,7 @@ use RuntimeException;
 use Smile\GdprDump\Dumper\Builder\MysqldumpSettingsBuilder;
 use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use Smile\GdprDump\Util\ArrayHelper;
 
 final class MysqldumpSettingsBuilderTest extends TestCase
 {
@@ -49,8 +50,7 @@ final class MysqldumpSettingsBuilderTest extends TestCase
 
         // Build the Mysqldump settings
         $config = $this->createConfigMock($dumpSettings, $includedTables, $excludedTables, $truncatedTables);
-        $builder = new MysqldumpSettingsBuilder();
-        $result = $builder->build($config);
+        $result = $this->createBuilder()->build($config);
 
         $this->assertSameKeyValuePairs(
             $this->getExpectedResult($dumpSettings, $includedTables, $excludedTables, $truncatedTables),
@@ -75,8 +75,7 @@ final class MysqldumpSettingsBuilderTest extends TestCase
 
         // Build the Mysqldump settings
         $config = $this->createConfigMock($dumpSettings, $includedTables);
-        $builder = new MysqldumpSettingsBuilder();
-        $result = $builder->build($config);
+        $result = $this->createBuilder()->build($config);
 
         $this->assertSameKeyValuePairs($this->getExpectedResult($dumpSettings, $includedTables), $result);
     }
@@ -87,8 +86,7 @@ final class MysqldumpSettingsBuilderTest extends TestCase
     public function testEmptySettings(): void
     {
         $config = $this->createConfigMock();
-        $builder = new MysqldumpSettingsBuilder();
-        $result = $builder->build($config);
+        $result = $this->createBuilder()->build($config);
 
         $this->assertSameKeyValuePairs($this->getExpectedResult(), $result);
     }
@@ -99,10 +97,9 @@ final class MysqldumpSettingsBuilderTest extends TestCase
     public function testUndefinedSettings(): void
     {
         $config = $this->createConfigMock(['not_exists' => true]);
-        $builder = new MysqldumpSettingsBuilder();
 
         $this->expectException(RuntimeException::class);
-        $builder->build($config);
+        $this->createBuilder()->build($config);
     }
 
     /**
@@ -137,6 +134,14 @@ final class MysqldumpSettingsBuilderTest extends TestCase
         $result['init_commands'][] = 'SET SESSION TRANSACTION READ ONLY';
 
         return $result;
+    }
+
+    /**
+     * Create the object to test.
+     */
+    private function createBuilder(): MysqldumpSettingsBuilder
+    {
+        return new MysqldumpSettingsBuilder(new ArrayHelper());
     }
 
     /**
