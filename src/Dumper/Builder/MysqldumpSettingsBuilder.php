@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Builder;
 
-use RuntimeException;
 use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
+use Smile\GdprDump\Util\ArrayHelper;
 
 final class MysqldumpSettingsBuilder
 {
+    public function __construct(private ArrayHelper $arrayHelper)
+    {
+    }
+
     /**
      * Build mysqldump-php settings.
      */
     public function build(DumperConfigInterface $config): array
     {
         $settings = $config->getDumpSettings();
-        $settings = $this->mapSettings($settings);
+        $settings = $this->arrayHelper->map($settings, $this->getMapping());
 
         // "compress" setting must start with an uppercase letter (e.g. "gzip" -> "Gzip")
         if (array_key_exists('compress', $settings)) {
@@ -29,29 +33,6 @@ final class MysqldumpSettingsBuilder
 
         // Set readonly session
         $settings['init_commands'][] = 'SET SESSION TRANSACTION READ ONLY';
-
-        return $settings;
-    }
-
-    /**
-     * Convert dump settings to mysqldump-php settings.
-     *
-     * @throws RuntimeException
-     */
-    private function mapSettings(array $settings): array
-    {
-        $mapping = $this->getMapping();
-
-        foreach ($settings as $key => $value) {
-            if (!array_key_exists($key, $mapping)) {
-                throw new RuntimeException(sprintf('The dump setting "%s" does not exist.', $key));
-            }
-
-            if ($mapping[$key] !== $key) {
-                $settings[$mapping[$key]] = $value;
-                unset($settings[$key]);
-            }
-        }
 
         return $settings;
     }

@@ -24,6 +24,14 @@ services:
         arguments:
             - '@faker.service'
 
+    Smile\GdprDump\Converter\Proxy\JsonData:
+        arguments:
+            - '@util.array_helper'
+
+    Smile\GdprDump\Converter\Proxy\SerializedData:
+        arguments:
+            - '@util.array_helper'
+
     console.dump_info:
         class: 'Smile\GdprDump\Console\Helper\DumpInfo'
         arguments:
@@ -108,6 +116,8 @@ services:
 
     database.connection_params_builder:
         class: 'Smile\GdprDump\Database\Builder\ConnectionParamsBuilder'
+        arguments:
+            - '@util.array_helper'
 
     database.factory:
         class: 'Smile\GdprDump\Database\DatabaseFactory'
@@ -127,6 +137,8 @@ services:
 
     dumper.mysqldump_settings_builder:
         class: 'Smile\GdprDump\Dumper\Builder\MysqldumpSettingsBuilder'
+        arguments:
+            - '@util.array_helper'
 
     dumper.listener.faker_locale:
         class: 'Smile\GdprDump\Dumper\Listener\FakerLocaleListener'
@@ -162,3 +174,6 @@ services:
 
     phar.compiler.minify.php:
         class: 'Smile\GdprDump\Phar\Minify\Php'
+
+    util.array_helper:
+        class: 'Smile\GdprDump\Util\ArrayHelper'
