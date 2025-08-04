@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Database\Builder;
 
 use PDO;
-use Smile\GdprDump\Config\ConfigInterface;
+use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Database\Builder\ConnectionParamsBuilder;
 use Smile\GdprDump\Database\DatabaseInterface;
 use Smile\GdprDump\Tests\Unit\TestCase;
@@ -84,15 +84,9 @@ final class ConnectionParamsBuilderTest extends TestCase
     /**
      * Create a config object with the specified database settings.
      */
-    private function createConfig(array $databaseSettings = []): ConfigInterface
+    private function createConfig(array $databaseSettings = []): Config
     {
-        $configMock = $this->createMock(ConfigInterface::class);
-        $configMock
-            ->method('get')
-            ->with('database')
-            ->willReturn($databaseSettings);
-
-        return $configMock;
+        return new Config(['database' => $databaseSettings]);
     }
 
     /**
