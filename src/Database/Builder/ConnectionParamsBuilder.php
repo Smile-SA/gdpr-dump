@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Database\Builder;
 
+use RuntimeException;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Util\ArrayHelper;
 
@@ -18,13 +19,18 @@ final class ConnectionParamsBuilder
      */
     public function build(ConfigInterface $config): array
     {
+        $mapping = $this->getMapping();
         $settings = (array) $config->get('database', []);
 
-        return $this->arrayHelper->map($settings, $this->getMapping());
+        return $this->arrayHelper->mapKeys(
+            $settings,
+            fn (string $key): string => $mapping[$key]
+                ?? throw new RuntimeException(sprintf('The database setting "%s" is not supported.', $key))
+        );
     }
 
     /**
-     * Get the mapping between GdprDump parameters and Doctrine parameters.
+     * Get the mapping between database settings and Doctrine connection parameters.
      */
     private function getMapping(): array
     {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Util;
 
-use RuntimeException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use Smile\GdprDump\Util\ArrayHelper;
 
@@ -42,26 +41,40 @@ final class ArrayHelperTest extends TestCase
      */
     public function testMap(): void
     {
-        $data = ['k11' => 'v1', 'k22' => 'v2', 'k3' => 'v3'];
+        // phpcs:ignore SlevomatCodingStandard.Arrays.DisallowPartiallyKeyed
+        $data = [
+            'index0',
+            'index1',
+            'index2',
+            'k1' => 'v1',
+            'k2' => 'v2',
+            'k3' => 'v3',
+            'k4' => 'v4',
+            'k5' => 'v5',
+            'k6' => 'v6',
+        ];
+
         $arrayHelper = new ArrayHelper();
-        $result = $arrayHelper->map($data, ['k11' => 'k1', 'k22' => 'k2', 'k3' => 'k3']);
+        $result = $arrayHelper->mapKeys($data, function (int|string $key) {
+            return match ($key) {
+                'k1' => 'k2', // k1 renamed to k2, this will override k2
+                'k3' => 'k1', // k3 rename to k2
+                'k4', 0 => false, // index 0 and k4 removed
+                'k6' => 3, // k6 moved to index 3
+                1 => 'k0', // index 1 renamed to k0
+                default => $key, // index 2 and k5 preserved
+            };
+        });
 
-        $data['k1'] = $data['k11'];
-        $data['k2'] = $data['k22'];
-        unset($data['k11']);
-        unset($data['k22']);
-        $this->assertSameKeyValuePairs($data, $result);
-    }
+        $expected = [
+            'k0' => $data[1],
+            'k1' => $data['k3'],
+            'k2' => $data['k1'],
+            'k5' => $data['k5'],
+            2 => 'index2',
+            3 => $data['k6'],
+        ];
 
-    /**
-     * Assert that an exception is thrown when the input array contains a property that is not defined in the mapping.
-     */
-    public function testPropertyNotInMapping(): void
-    {
-        $data = ['k1' => 'v1', 'undefined' => 'v2'];
-        $arrayHelper = new ArrayHelper();
-
-        $this->expectException(RuntimeException::class);
-        $arrayHelper->map($data, ['k1' => 'k11', 'k2' => 'k22']);
+        $this->assertSameKeyValuePairs($expected, $result);
     }
 }
