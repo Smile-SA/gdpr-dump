@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Builder;
 
+use RuntimeException;
 use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 use Smile\GdprDump\Util\ArrayHelper;
 
@@ -18,8 +19,12 @@ final class MysqldumpSettingsBuilder
      */
     public function build(DumperConfigInterface $config): array
     {
-        $settings = $config->getDumpSettings();
-        $settings = $this->arrayHelper->map($settings, $this->getMapping());
+        $mapping = $this->getMapping();
+        $settings = $this->arrayHelper->mapKeys(
+            $config->getDumpSettings(),
+            fn (string $key): string => $mapping[$key]
+                ?? throw new RuntimeException(sprintf('The dump setting "%s" is not supported.', $key))
+        );
 
         // "compress" setting must start with an uppercase letter (e.g. "gzip" -> "Gzip")
         if (array_key_exists('compress', $settings)) {
@@ -38,7 +43,7 @@ final class MysqldumpSettingsBuilder
     }
 
     /**
-     * Get the mapping between GdprDump settings and mysqldump-php settings.
+     * Get the mapping between dump settings and mysqldump-php settings.
      */
     private function getMapping(): array
     {

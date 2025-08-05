@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Util;
 
-use RuntimeException;
-
 final class ArrayHelper
 {
     /**
@@ -48,22 +46,17 @@ final class ArrayHelper
     }
 
     /**
-     * Apply the mapping to the specified array.
-     *
-     * @param array<string, mixed> $input
-     * @param array<string, string> $mapping
-     * @return array<string, mixed>
-     * @throws RuntimeException
+     * Apply a callback on the specified array to rename or remove keys.
      */
-    public function map(array $input, array $mapping): array
+    public function mapKeys(array $input, callable $callback): array
     {
         foreach ($input as $key => $value) {
-            if (!array_key_exists($key, $mapping)) {
-                throw new RuntimeException(sprintf('The property "%s" is not supported.', $key));
-            }
+            $newKey = $callback($key, $value);
 
-            if ($mapping[$key] !== $key) {
-                $input[$mapping[$key]] = $value;
+            if ($newKey === false) {
+                unset($input[$key]);
+            } elseif ($newKey !== $key) {
+                $input[$newKey] = $value;
                 unset($input[$key]);
             }
         }
