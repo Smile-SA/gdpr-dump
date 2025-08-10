@@ -187,11 +187,7 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator"/>
 
     <!-- Requires use of ??= operator when possible -->
-    <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator">
-        <properties>
-            <property name="checkIfConditions" value="true"/>
-        </properties>
-    </rule>
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator"/>
 
     <!-- Requires use of ?-> operator when possible -->
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullSafeObjectOperator"/>
