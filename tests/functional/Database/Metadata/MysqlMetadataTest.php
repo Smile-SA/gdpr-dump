@@ -72,9 +72,9 @@ final class MysqlMetadataTest extends TestCase
     private function validateCustomersForeignKeys(MetadataInterface $metadata): void
     {
         $foreignKeys = $metadata->getTableForeignKeys('customers');
-        $this->assertCount(3, $foreignKeys);
 
         $foreignKey = reset($foreignKeys);
+        $this->assertNotFalse($foreignKey);
         $this->assertNotEmpty($foreignKey->getConstraintName());
         $this->assertSame('customers', $foreignKey->getLocalTableName());
         $this->assertSame(['billing_address_id'], $foreignKey->getLocalColumns());
@@ -82,6 +82,7 @@ final class MysqlMetadataTest extends TestCase
         $this->assertSame(['address_id'], $foreignKey->getForeignColumns());
 
         $foreignKey = next($foreignKeys);
+        $this->assertNotFalse($foreignKey);
         $this->assertNotEmpty($foreignKey->getConstraintName());
         $this->assertSame('customers', $foreignKey->getLocalTableName());
         $this->assertSame(['shipping_address_id'], $foreignKey->getLocalColumns());
@@ -89,11 +90,15 @@ final class MysqlMetadataTest extends TestCase
         $this->assertSame(['address_id'], $foreignKey->getForeignColumns());
 
         $foreignKey = next($foreignKeys);
+        $this->assertNotFalse($foreignKey);
         $this->assertNotEmpty($foreignKey->getConstraintName());
         $this->assertSame('customers', $foreignKey->getLocalTableName());
         $this->assertSame(['store_id'], $foreignKey->getLocalColumns());
         $this->assertSame('stores', $foreignKey->getForeignTableName());
         $this->assertSame(['store_id'], $foreignKey->getForeignColumns());
+
+        $foreignKey = next($foreignKeys);
+        $this->assertFalse($foreignKey);
     }
 
     /**
