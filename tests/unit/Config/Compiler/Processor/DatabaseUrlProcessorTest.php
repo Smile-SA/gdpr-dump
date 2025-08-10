@@ -28,11 +28,16 @@ final class DatabaseUrlProcessorTest extends TestCase
         $processor->process($config);
 
         $dbParams = $config->get('database');
+        $this->assertArrayHasKey('name', $dbParams);
+        $this->assertArrayHasKey('host', $dbParams);
+        $this->assertArrayHasKey('user', $dbParams);
+        $this->assertArrayHasKey('password', $dbParams);
+        $this->assertArrayNotHasKey('port', $dbParams);
+
         $this->assertSame('database_name', $dbParams['name']);
         $this->assertSame('localhost', $dbParams['host']);
         $this->assertSame('foo', $dbParams['user']);
         $this->assertSame('another_secret_password', $dbParams['password']);
-        $this->assertArrayNotHasKey('port', $dbParams);
     }
 
     /**
