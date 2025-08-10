@@ -11,7 +11,7 @@
         "doctrine/dbal": "^3.1",
         "druidfi/mysqldump-php": "^1.1",
         "fakerphp/faker": "^1.17",
-        "justinrainbow/json-schema": "^5.3",
+        "justinrainbow/json-schema": "^6.4",
         "symfony/config": "^6.1",
         "symfony/console": "^6.1",
         "symfony/dependency-injection": "^6.1",
