@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## WIP
 
 - Added `strict_schema` config parameter ([#158](https://github.com/Smile-SA/gdpr-dump/pull/158))
+- Upgraded `justinrainbow/json-schema` package to from v5 to v6 ([#185](https://github.com/Smile-SA/gdpr-dump/pull/185))
 
 ## [5.0.5] - 2025-04-05
 [5.0.5]: https://github.com/Smile-SA/gdpr-dump/compare/5.0.4...5.0.5
@@ -264,7 +265,7 @@ Minor fixes / code refactoring:
 [1.1.0]: https://github.com/Smile-SA/gdpr-dump/compare/1.0.0...1.1.0
 
 - Validate the config file before prompting for a password
-- Add parameter `skip_conversion_if` (table row is not converted if the condition evaluates to true) 
+- Add parameter `skip_conversion_if` (table row is not converted if the condition evaluates to true)
 - Remove unused parameter `ignore` from schema.json
 - Move TableDependencyResolver to the Database namespace
 - Add Mysqldump extension logic:
