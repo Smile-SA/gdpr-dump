@@ -1,5 +1,3 @@
-requires_version: true
-
 tables:
     admin_user_session:
         truncate: true
