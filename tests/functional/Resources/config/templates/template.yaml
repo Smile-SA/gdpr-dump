@@ -1,5 +1,3 @@
-requires_version: true
-
 variables:
     main_store_id: 'select store_id from stores where code = "store1"'
 

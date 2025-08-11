@@ -18,20 +18,15 @@ final class VersionProcessor implements ProcessorInterface
      */
     public function process(ConfigInterface $config): void
     {
-        $requiresVersion = (bool) $config->get('requires_version');
         $version = (string) $config->get('version');
         $versionsData = (array) $config->get('if_version');
 
-        if ($version === '') {
-            // Check if version is mandatory
-            if ($requiresVersion) {
-                throw new MissingVersionException('The application version must be specified in the configuration.');
-            }
+        if (!$versionsData) {
             return;
         }
 
-        if (!$versionsData) {
-            return;
+        if ($version === '') {
+            throw new MissingVersionException('The application version must be specified in the configuration.');
         }
 
         $versionMatcher = new VersionMatcher();

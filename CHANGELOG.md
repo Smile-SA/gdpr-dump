@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 - Added `strict_schema` config parameter ([#158](https://github.com/Smile-SA/gdpr-dump/pull/158))
 - Upgraded `justinrainbow/json-schema` package to from v5 to v6 ([#185](https://github.com/Smile-SA/gdpr-dump/pull/185))
+- Deprecated config parameter `requires_version`, it is now automatically detected ([#186](https://github.com/Smile-SA/gdpr-dump/pull/186))
 
 ## [5.0.5] - 2025-04-05
 [5.0.5]: https://github.com/Smile-SA/gdpr-dump/compare/5.0.4...5.0.5

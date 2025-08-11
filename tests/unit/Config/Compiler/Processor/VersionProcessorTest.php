@@ -63,7 +63,7 @@ final class VersionProcessorTest extends TestCase
     public function testVersionNotSpecifiedException(): void
     {
         $processor = new VersionProcessor();
-        $config = new Config(['requires_version' => true]);
+        $config = new Config(['if_version' => ['>=2.0.0' => ['key' => 'value']]]);
 
         $this->expectException(MissingVersionException::class);
         $processor->process($config);
