@@ -30,24 +30,25 @@ final class MysqlDumper implements DumperInterface
         // Initialize the database connection
         $database = $this->databaseFactory->create($config);
 
-        // Convert the configuration to an object with getters/setters
-        $config = $this->createDumperConfig($config, $database->getMetadata());
+        // Convert the configuration container to an object with getters/setters
+        $dumperConfig = $this->createDumperConfig($config, $database->getMetadata());
 
         // Create the Mysqldump object (mysqldump-php library)
         $dumpContext = new DumpContext();
-        $dumper = $this->createMysqldump($database, $config, $dumpContext);
+        $dumpContext->secret = (string) $config->get('secret');
+        $dumper = $this->createMysqldump($database, $dumperConfig, $dumpContext);
 
-        $this->eventDispatcher->dispatch(new DumpEvent($dumper, $database, $config, $dumpContext));
+        $this->eventDispatcher->dispatch(new DumpEvent($dumper, $database, $dumperConfig, $dumpContext));
 
         // Close the Doctrine connection before proceeding to the dump creation (mysqldump-php uses its own connection)
         $database->getConnection()->close();
 
         if (!$dryRun) {
             // Create the dump
-            $dumper->start($config->getDumpOutput());
+            $dumper->start($dumperConfig->getDumpOutput());
         }
 
-        $this->eventDispatcher->dispatch(new DumpFinishedEvent($config));
+        $this->eventDispatcher->dispatch(new DumpFinishedEvent($dumperConfig));
     }
 
     /**

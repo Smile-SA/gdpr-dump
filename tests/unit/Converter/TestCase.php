@@ -141,6 +141,27 @@ abstract class TestCase extends UnitTestCase
     }
 
     /**
+     * Assert that a value was properly hash.
+     *
+     * With the default settings, the hash if generated with the sha224 algorithm,
+     * and the value is truncated to half the size of the hash (24 chars instead of 56).
+     */
+    protected function assertValueIsHashed(
+        string $actual,
+        string $original,
+        int $expectedLength = 56 / 2,
+        string $algorithm = 'sha224',
+    ): void {
+        $hash = hash_hmac($algorithm, $original, $this->getDumpContext()->secret);
+
+        // The converter is supposed to truncate the hash to the specified length
+        $hash = substr($hash, 0, $expectedLength);
+
+        $this->assertStringContainsString($hash, $actual);
+        $this->assertSame($expectedLength, strlen($hash));
+    }
+
+    /**
      * Generate a random username.
      */
     protected function randomUsername(): string

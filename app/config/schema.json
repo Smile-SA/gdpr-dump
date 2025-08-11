@@ -7,6 +7,9 @@
         "strict_schema": {
             "type": "boolean"
         },
+        "secret": {
+            "type": "string"
+        },
         "requires_version": {
             "type": "boolean"
         },

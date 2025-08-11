@@ -38,4 +38,9 @@ final class DumpContext
      * @var array<string, string>
      */
     public array $variables = [];
+
+    /**
+     * Hash secret.
+     */
+    public string $secret = '';
 }
