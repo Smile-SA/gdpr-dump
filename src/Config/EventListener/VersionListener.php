@@ -17,17 +17,14 @@ final class VersionListener
     private string $version = '';
 
     /**
-     * Reset the application version.
+     * Reset the application version when the config loader starts the loading process.
      */
     public function onLoad(LoadEvent $event): void
     {
-        $this->version = '';
         $config = $event->getConfig();
 
         // Check if the version is already provided in the initial configuration
-        if ($config->has('version') && is_string($config->get('version'))) {
-            $this->version = $config->get('version');
-        }
+        $this->version = $this->getVersion($config);
     }
 
     /**
@@ -37,8 +34,8 @@ final class VersionListener
     {
         $config = $event->getConfig();
 
-        if ($config->has('version') && $this->version === '' && is_string($config->get('version'))) {
-            $this->version = $config->get('version');
+        if ($this->version === '') {
+            $this->version = $this->getVersion($config);
         }
     }
 
@@ -76,6 +73,19 @@ final class VersionListener
                     ->remove('if_version');
             }
         }
+    }
+
+    /**
+     * Get the application version.
+     */
+    private function getVersion(ConfigInterface $config): string
+    {
+        $version = $config->get('version', '');
+        if (!is_string($version)) {
+            throw new ValidationException('The parameter "version" must be a string.');
+        }
+
+        return $version;
     }
 
     /**
