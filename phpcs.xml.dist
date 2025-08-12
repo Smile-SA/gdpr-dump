@@ -133,7 +133,7 @@
             <property name="linesCountBetweenAnnotationsGroups" value="1"/>
             <property name="annotationsGroups" type="array">
                 <element value="@inheritdoc"/>
-                <element value="@internal,@deprecated,@var,@param,@return,@throws"/>
+                <element value="@internal,@deprecated,@template,@var,@param,@return,@throws,@phpstan-assert,@phpstan-assert-if-true,@phpstan-assert-if-false,@phpstan-ignore"/>
             </property>
         </properties>
     </rule>
@@ -215,9 +215,6 @@
 
     <!-- Reports empty functions body and requires at least a comment inside -->
     <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
-
-    <!-- This sniff disallows usage of named arguments -->
-    <rule ref="SlevomatCodingStandard.Functions.DisallowNamedArguments"/>
 
     <!-- This sniff disallows trailing commas in multi-line calls -->
     <rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInCall"/>

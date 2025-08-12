@@ -15,16 +15,18 @@ final class RandomEmailTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = $this->createConverter(RandomEmail::class, ['domains' => ['example.org']]);
+        $converter = $this->createConverter(RandomEmail::class);
 
         $value = $converter->convert(null);
         $this->assertNotNull($value);
 
-        $value = $converter->convert('user1@gmail.com');
-        $this->assertIsString($value);
-        $this->assertStringNotContainsString('user1', $value);
-        $this->assertStringNotContainsString('@gmail.com', $value);
-        $this->assertStringEndsWith('@example.org', $value);
+        $email = $this->randomUsername();
+        $value = $converter->convert($email);
+        $this->assertEmailIsConverted($value, $email);
+
+        $email = $this->randomEmail();
+        $value = $converter->convert($email);
+        $this->assertEmailIsConverted($value, $email);
     }
 
     /**
@@ -32,15 +34,11 @@ final class RandomEmailTest extends TestCase
      */
     public function testCustomLength(): void
     {
-        $converter = $this->createConverter(RandomEmail::class, [
-            'min_length' => 10,
-            'max_length' => 10,
-            'domains' => ['example.org'],
-        ]);
+        $converter = $this->createConverter(RandomEmail::class, ['min_length' => 10, 'max_length' => 10]);
 
-        $value = $converter->convert('user1@example.org');
-        $this->assertIsString($value);
-        $this->assertStringEndsWith('@example.org', $value);
+        $email = $this->randomEmail();
+        $value = $converter->convert($email);
+        $this->assertEmailIsConverted($value, $email);
 
         $parts = explode('@', $value);
         $this->assertSame(10, strlen($parts[0]));
@@ -51,14 +49,15 @@ final class RandomEmailTest extends TestCase
      */
     public function testCustomCharacters(): void
     {
-        $converter = $this->createConverter(RandomEmail::class, [
-            'characters' => 'a',
-            'max_length' => 3,
-            'domains' => ['example.org'],
-        ]);
+        $converter = $this->createConverter(RandomEmail::class, ['characters' => 'a', 'max_length' => 3]);
 
-        $value = $converter->convert('user1@example.org');
-        $this->assertSame('aaa@example.org', $value);
+        $email = 'user1@acme.com';
+        $value = $converter->convert($email);
+        $this->assertEmailIsConverted(
+            $value,
+            $email,
+            callback: fn (string $username) => $this->assertSame('aaa', $username)
+        );
     }
 
     /**
@@ -68,6 +67,19 @@ final class RandomEmailTest extends TestCase
     {
         $this->expectException(ValidationException::class);
         $this->createConverter(RandomEmail::class, ['characters' => '']);
+    }
+
+    /**
+     * Test the converter with a custom domain.
+     */
+    public function testCustomDomain(): void
+    {
+        $expectedDomains = ['acme.com'];
+        $converter = $this->createConverter(RandomEmail::class, ['domains' => $expectedDomains]);
+
+        $email = $this->randomEmail();
+        $value = $converter->convert($email);
+        $this->assertEmailIsConverted($value, $email, $expectedDomains);
     }
 
     /**

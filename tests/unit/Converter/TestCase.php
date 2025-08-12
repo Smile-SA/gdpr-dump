@@ -38,6 +38,11 @@ abstract class TestCase extends UnitTestCase
 
     /**
      * Create a converter.
+     *
+     * @template T
+     * @param class-string<T> $className
+     * @return T
+     * @phpstan-ignore return.phpDocType (T is resolved at the beginning of the function)
      */
     public function createConverter(string $className, array $parameters = []): ConverterInterface
     {
@@ -62,6 +67,41 @@ abstract class TestCase extends UnitTestCase
         }
 
         return $converter;
+    }
+
+    /**
+     * Assert that an email is converted (username and domain were changed).
+     */
+    protected function assertEmailIsConverted(
+        string $actual,
+        string $original,
+        array $expectedDomains = ['example.com', 'example.net', 'example.org'],
+        ?callable $callback = null,
+    ): void {
+        // Check for position of "@" character
+        $originalSeparatorPos = strrpos($original, '@');
+
+        // Domain validation
+        if ($originalSeparatorPos !== false) {
+            $actualSeparatorPos = strrpos($actual, '@');
+            $this->assertNotFalse($actualSeparatorPos);
+
+            $actualDomain = substr($actual, $actualSeparatorPos + 1);
+            $this->assertTrue(in_array($actualDomain, $expectedDomains, true));
+        } else {
+            $originalSeparatorPos = null;
+            $actualSeparatorPos = null;
+        }
+
+        // Username validation
+        $actualUsername = substr($actual, 0, $actualSeparatorPos);
+        $originalUsername = substr($original, 0, $originalSeparatorPos);
+        $this->assertNotSame($originalUsername, $actualUsername);
+
+        // Additional username validation (if the callback is defined)
+        if ($callback) {
+            $callback($actualUsername, $originalUsername);
+        }
     }
 
     /**
@@ -100,6 +140,27 @@ abstract class TestCase extends UnitTestCase
         $this->assertTrue($randomizedDate !== $actualDate);
     }
 
+    /**
+     * Generate a random username.
+     */
+    protected function randomUsername(): string
+    {
+        return 'user_' . random_int(1, 999999);
+    }
+
+    /**
+     * Generate a random email.
+     */
+    protected function randomEmail(): string
+    {
+        $domains = ['acme.com', 'acme.net', 'acme.org'];
+
+        return $this->randomUsername() . '@' . $domains[random_int(0, 1)];
+    }
+
+    /**
+     * Get the dump context object.
+     */
     protected function getDumpContext(): DumpContext
     {
         if (!$this instanceof DumpContextAwareInterface) {

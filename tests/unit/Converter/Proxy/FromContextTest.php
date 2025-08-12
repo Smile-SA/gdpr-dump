@@ -26,7 +26,7 @@ final class FromContextTest extends TestCase implements DumpContextAwareInterfac
 
         // Test processed_data
         $converter = $this->createConverter(FromContext::class, ['key' => 'processed_data.email']);
-        $dumpContext->processedData = ['email' => '1234@example.org'];
+        $dumpContext->processedData = ['email' => '1234@acme.com'];
         $value = $converter->convert('value');
         $this->assertSame($dumpContext->processedData['email'], $value);
 
