@@ -11,7 +11,7 @@ New features:
 Breaking changes:
 
 - Deprecated config parameter `requires_version`, it is now automatically detected ([#186](https://github.com/Smile-SA/gdpr-dump/pull/186))
-- Fixed `if_version` parameter being processed too late ([#187](https://github.com/Smile-SA/gdpr-dump/pull/187))
+- Fixed `if_version` parameter being processed too late ([#188](https://github.com/Smile-SA/gdpr-dump/pull/188))
 
 Improvements:
 
