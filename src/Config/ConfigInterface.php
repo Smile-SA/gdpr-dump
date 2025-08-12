@@ -22,6 +22,11 @@ interface ConfigInterface
     public function has(string $key): bool;
 
     /**
+     * Remove a config item.
+     */
+    public function remove(string $key): self;
+
+    /**
      * Get the configuration data.
      */
     public function toArray(): array;

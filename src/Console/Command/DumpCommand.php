@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Console\Command;
 
-use Smile\GdprDump\Config\Compiler\CompilerInterface;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigException;
 use Smile\GdprDump\Config\ConfigInterface;
@@ -30,7 +29,6 @@ final class DumpCommand extends Command
         private DumperInterface $dumper,
         private ConfigLoaderInterface $configLoader,
         private ValidatorInterface $validator,
-        private CompilerInterface $compiler,
         private DumpInfo $dumpInfo,
     ) {
         parent::__construct();
@@ -102,17 +100,11 @@ final class DumpCommand extends Command
     private function loadConfig(InputInterface $input): ConfigInterface
     {
         $config = new Config();
-
-        // Load config files
-        foreach ($input->getArgument('config_file') as $configFile) {
-            $this->configLoader->load($configFile, $config);
-        }
+        $files = (array) $input->getArgument('config_file');
+        $this->configLoader->load($config, ...$files);
 
         // Add database config from input options
         $this->addInputOptionsToConfig($config, $input);
-
-        // Compile the config
-        $this->compiler->compile($config);
 
         return $config;
     }
