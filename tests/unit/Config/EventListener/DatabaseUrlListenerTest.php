@@ -95,4 +95,16 @@ final class DatabaseUrlListenerTest extends TestCase
         $this->expectException(ValidationException::class);
         $listener(new LoadedEvent($config));
     }
+
+    /**
+     * Assert that an exception is thrown when the `database` parameter has an invalid type.
+     */
+    public function testInvalidDatabaseType(): void
+    {
+        $config = new Config(['database' => 'not an array']);
+        $listener = new DatabaseUrlListener();
+
+        $this->expectException(ValidationException::class);
+        $listener(new LoadedEvent($config));
+    }
 }

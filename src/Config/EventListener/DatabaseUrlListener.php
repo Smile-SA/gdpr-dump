@@ -17,7 +17,7 @@ final class DatabaseUrlListener
     {
         $config = $event->getConfig();
 
-        $database = $config->get('database');
+        $database = $config->get('database', []);
         if (!is_array($database) || (array_key_exists('url', $database) && !is_string($database['url']))) {
             throw new ValidationException('Failed to parse the database url.');
         }

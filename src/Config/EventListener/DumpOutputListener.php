@@ -16,7 +16,7 @@ final class DumpOutputListener
     {
         $config = $event->getConfig();
 
-        $dump = $config->get('dump');
+        $dump = $config->get('dump', []);
         if (!is_array($dump) || (array_key_exists('output', $dump) && !is_string($dump['output']))) {
             throw new ValidationException('Failed to parse the dump output.');
         }

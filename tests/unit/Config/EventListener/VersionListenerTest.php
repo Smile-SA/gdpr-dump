@@ -9,6 +9,7 @@ use Smile\GdprDump\Config\Event\LoadEvent;
 use Smile\GdprDump\Config\Event\MergeEvent;
 use Smile\GdprDump\Config\Event\ParseEvent;
 use Smile\GdprDump\Config\EventListener\VersionListener;
+use Smile\GdprDump\Config\Validator\ValidationException;
 use Smile\GdprDump\Config\Version\MissingVersionException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
@@ -64,11 +65,28 @@ final class VersionListenerTest extends TestCase
     }
 
     /**
+     * Assert that an exception is thrown when the version has an invalid type.
+     */
+    public function testInvalidVersionType(): void
+    {
+        $this->expectException(ValidationException::class);
+        $this->processVersions(['version' => ['not a string']]);
+    }
+
+    /**
+     * Assert that an exception is thrown when the version data has an invalid type.
+     */
+    public function testInvalidVersionsData(): void
+    {
+        $this->expectException(ValidationException::class);
+        $this->processVersions(['version' => '2.0.0', 'if_version' => 'not an array']);
+    }
+
+    /**
      * Create and run the event listener with the specified configuration.
      */
     private function processVersions(array $data, ?Config $config = null): Config
     {
-
         if (!$config) {
             $config = new Config();
         }
