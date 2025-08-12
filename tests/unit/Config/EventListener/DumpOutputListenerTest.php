@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Config\Compiler\Processor;
+namespace Smile\GdprDump\Tests\Unit\Config\EventListener;
 
 use DateTime;
-use Smile\GdprDump\Config\Compiler\Processor\DumpOutputProcessor;
 use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Config\Event\LoadedEvent;
+use Smile\GdprDump\Config\EventListener\DumpOutputListener;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-final class DumpOutputProcessorTest extends TestCase
+final class DumpOutputListenerTest extends TestCase
 {
     /**
      * Assert that date placeholders are processed.
@@ -22,8 +23,8 @@ final class DumpOutputProcessorTest extends TestCase
             ],
         ]);
 
-        $processor = new DumpOutputProcessor();
-        $processor->process($config);
+        $listener = new DumpOutputListener();
+        $listener(new LoadedEvent($config));
 
         $dumpSettings = $config->get('dump');
         $this->assertIsArray($dumpSettings);

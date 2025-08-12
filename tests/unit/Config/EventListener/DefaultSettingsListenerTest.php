@@ -2,22 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Config\Compiler\Processor;
+namespace Smile\GdprDump\Tests\Unit\Config\EventListener;
 
-use Smile\GdprDump\Config\Compiler\Processor\DefaultSettingsProcessor;
 use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Config\Event\LoadEvent;
+use Smile\GdprDump\Config\EventListener\DefaultSettingsListener;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-final class DefaultSettingsProcessorTest extends TestCase
+final class DefaultSettingsListenerTest extends TestCase
 {
     /**
-     * Test default values added by the processor.
+     * Test default values added by the listener.
      */
     public function testDefaultValues(): void
     {
         $config = new Config();
-        $processor = new DefaultSettingsProcessor();
-        $processor->process($config);
+        $listener = new DefaultSettingsListener();
+        $listener(new LoadEvent($config));
 
         $this->assertSame([], $config->get('database'));
         $this->assertSame([], $config->get('tables_blacklist'));
@@ -83,8 +84,8 @@ final class DefaultSettingsProcessorTest extends TestCase
         ];
 
         $config = new Config($data);
-        $processor = new DefaultSettingsProcessor();
-        $processor->process($config);
+        $listener = new DefaultSettingsListener();
+        $listener(new LoadEvent($config));
 
         $dumpSettings = $config->get('dump');
         $this->assertIsArray($dumpSettings);

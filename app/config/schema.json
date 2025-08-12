@@ -13,12 +13,6 @@
         "version": {
             "type": "string"
         },
-        "if_version": {
-            "type": "object",
-            "additionalProperties": {
-                "$ref": "#/definitions/if_version"
-            }
-        },
         "database": {
             "$ref": "#/definitions/database"
         },
@@ -80,18 +74,6 @@
     },
     "additionalProperties": false,
     "definitions": {
-        "if_version": {
-            "type": "object",
-            "properties": {
-                "tables": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "$ref": "#/definitions/table"
-                    }
-                }
-            },
-            "additionalProperties": false
-        },
         "database": {
             "type": "object",
             "required": true,

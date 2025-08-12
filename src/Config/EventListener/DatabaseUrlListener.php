@@ -2,49 +2,47 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Config\Compiler\Processor;
+namespace Smile\GdprDump\Config\EventListener;
 
-use Smile\GdprDump\Config\Compiler\CompileException;
-use Smile\GdprDump\Config\ConfigInterface;
+use Smile\GdprDump\Config\Event\LoadedEvent;
+use Smile\GdprDump\Config\Validator\ValidationException;
 use Smile\GdprDump\Database\DatabaseInterface;
 
-final class DatabaseUrlProcessor implements ProcessorInterface
+final class DatabaseUrlListener
 {
     /**
-     * Parse database url (if specified).
-     *
-     * @throws CompileException
+     * If a database url is set, update the connection params defined in the configuration.
      */
-    public function process(ConfigInterface $config): void
+    public function __invoke(LoadedEvent $event): void
     {
-        $data = $config->toArray();
-        $data['database'] = $this->processDatabaseNode($data['database']);
-        $config->reset($data);
+        $config = $event->getConfig();
+
+        $database = $config->get('database');
+        if (!is_array($database) || (array_key_exists('url', $database) && !is_string($database['url']))) {
+            throw new ValidationException('Failed to parse the database url.');
+        }
+
+        $url = $database['url'] ?? '';
+        if ($url !== '') {
+            $database = $this->processDatabaseNode($url, $database);
+            $config->set('database', $database);
+        }
     }
 
     /**
-     * Parse the database url (if specified).
-     *
-     * @throws CompileException
+     * Parse the database url.
      */
-    private function processDatabaseNode(array $database): array
+    private function processDatabaseNode(string $url, array $database): array
     {
-        $url = (string) ($database['url'] ?? '');
-        unset($database['url']);
-
-        if ($url === '') {
-            return $database;
-        }
-
         // Validate url
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new CompileException(sprintf('The value "%s" is not a valid URL.', $url));
+            throw new ValidationException(sprintf('The value "%s" is not a valid URL.', $url));
         }
 
         // Parse url
         $parsedUrl = parse_url($url);
         if ($parsedUrl === false) {
-            throw new CompileException(sprintf('Failed to parse the url "%s".', $url));
+            throw new ValidationException(sprintf('Failed to parse the url "%s".', $url));
         }
 
         // Update database params from parsed url
@@ -71,19 +69,19 @@ final class DatabaseUrlProcessor implements ProcessorInterface
             };
         }
 
+        unset($database['url']);
+
         return $database;
     }
 
     /**
      * Get driver by scheme.
-     *
-     * @throws CompileException
      */
     private function getDriverByScheme(string $scheme): string
     {
         return match ($scheme) {
             'mysql' => DatabaseInterface::DRIVER_MYSQL,
-            default => throw new CompileException(sprintf('Invalid scheme "%s".', $scheme))
+            default => throw new ValidationException(sprintf('Invalid scheme "%s".', $scheme))
         };
     }
 }

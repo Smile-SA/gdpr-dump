@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Config\Compiler\Processor;
+namespace Smile\GdprDump\Config\EventListener;
 
-use Smile\GdprDump\Config\ConfigInterface;
+use Smile\GdprDump\Config\Event\LoadEvent;
 
-final class DefaultSettingsProcessor implements ProcessorInterface
+final class DefaultSettingsListener
 {
     /**
      * Add default settings to the configuration.
      */
-    public function process(ConfigInterface $config): void
+    public function __invoke(LoadEvent $event): void
     {
+        $config = $event->getConfig();
         $data = $config->toArray();
         $data += [
             'database' => [],

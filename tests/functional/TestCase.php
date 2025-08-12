@@ -6,7 +6,6 @@ namespace Smile\GdprDump\Tests\Functional;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use RuntimeException;
-use Smile\GdprDump\Config\Compiler\CompilerInterface;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigInterface;
 use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
@@ -60,11 +59,7 @@ abstract class TestCase extends BaseTestCase
 
             /** @var ConfigLoaderInterface $loader */
             $loader = self::getContainer()->get('config.loader');
-            $loader->load(self::getResource('config/templates/config.yaml'), self::$config);
-
-            /** @var CompilerInterface $compiler */
-            $compiler = self::getContainer()->get('config.compiler');
-            $compiler->compile(self::$config);
+            $loader->load(self::$config, self::getResource('config/config.yaml'));
         }
 
         return self::$config;

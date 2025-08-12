@@ -50,7 +50,6 @@ services:
             - '@dumper'
             - '@config.loader'
             - '@config.schema_validator'
-            - '@config.compiler'
             - '@console.dump_info'
 
     config.loader:
@@ -58,6 +57,32 @@ services:
         public: true # used by functional tests
         arguments:
             - '@config.file_locator'
+            - '@event_dispatcher'
+
+    config.event_listener.default_settings:
+        class: 'Smile\GdprDump\Config\EventListener\DefaultSettingsListener'
+        tags:
+            - { name: 'kernel.event_listener', priority: 100 }
+
+    config.event_listener.env_var:
+        class: 'Smile\GdprDump\Config\EventListener\EnvVarListener'
+        tags:
+           - { name: 'kernel.event_listener', priority: 100 }
+
+    config.event_listener.version:
+        class: 'Smile\GdprDump\Config\EventListener\VersionListener'
+        tags:
+            - { name: 'kernel.event_listener', method: 'onLoad' }
+            - { name: 'kernel.event_listener', method: 'onParse' }
+            - { name: 'kernel.event_listener', method: 'onMerge' }
+
+    config.event_listener.database_url:
+        class: 'Smile\GdprDump\Config\EventListener\DatabaseUrlListener'
+        tags: ['kernel.event_listener']
+
+    config.event_listener.dump_output:
+        class: 'Smile\GdprDump\Config\EventListener\DumpOutputListener'
+        tags: ['kernel.event_listener']
 
     config.file_locator:
         class: 'Smile\GdprDump\Config\Loader\FileLocator'
@@ -68,35 +93,6 @@ services:
         class: 'Smile\GdprDump\Config\Validator\JsonSchemaValidator'
         arguments:
             - '%config.schema_file%'
-
-    config.compiler:
-        class: 'Smile\GdprDump\Config\Compiler\Compiler'
-        public: true # used by functional tests
-        arguments:
-            - !tagged_iterator config.compiler_processor
-
-    config.compiler.processor.default_settings:
-        class: 'Smile\GdprDump\Config\Compiler\Processor\DefaultSettingsProcessor'
-        tags:
-            - { name: 'config.compiler_processor', priority: 30 }
-
-    config.compiler.processor.env_var:
-        class: 'Smile\GdprDump\Config\Compiler\Processor\EnvVarProcessor'
-        tags:
-            - { name: 'config.compiler_processor', priority: 20 }
-
-    config.compiler.processor.version:
-        class: 'Smile\GdprDump\Config\Compiler\Processor\VersionProcessor'
-        tags:
-            - { name: 'config.compiler_processor', priority: 10 }
-
-    config.compiler.processor.database_url:
-        class: 'Smile\GdprDump\Config\Compiler\Processor\DatabaseUrlProcessor'
-        tags: ['config.compiler_processor']
-
-    config.compiler.processor.dump_output:
-        class: 'Smile\GdprDump\Config\Compiler\Processor\DumpOutputProcessor'
-        tags: ['config.compiler_processor']
 
     converter.builder:
         class: 'Smile\GdprDump\Converter\ConverterBuilder'
@@ -143,18 +139,18 @@ services:
     dumper.listener.faker_locale:
         class: 'Smile\GdprDump\Dumper\Listener\FakerLocaleListener'
         tags:
-            - { name: 'kernel.event_listener', priority: 10 } # must be triggered before data converter listener
+            - { name: 'kernel.event_listener', priority: 100 } # must be triggered before data converter listener
         arguments:
             - '@faker.service'
 
-    dumper.listener.data_converter:
+    dumper.event_listener.data_converter:
         class: 'Smile\GdprDump\Dumper\Listener\DataConverterListener'
         tags: ['kernel.event_listener']
         arguments:
             - '@converter.builder'
             - '@converter.condition_builder'
 
-    dumper.listener.table_filter:
+    dumper.event_listener.table_filter:
         class: 'Smile\GdprDump\Dumper\Listener\TableFilterListener'
         tags: ['kernel.event_listener']
 

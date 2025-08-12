@@ -10,6 +10,7 @@ use Smile\GdprDump\Config\Loader\FileLocator;
 use Smile\GdprDump\Config\Loader\FileNotFoundException;
 use Smile\GdprDump\Config\Loader\ParseException;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class ConfigLoaderTest extends TestCase
 {
@@ -20,7 +21,7 @@ final class ConfigLoaderTest extends TestCase
     {
         $config = new Config(['version' => '2.0.0']);
         $configLoader = $this->createConfigLoader();
-        $configLoader->load($this->getResource('config/templates/test.yaml'), $config);
+        $configLoader->load($config, $this->getResource('config/templates/test.yaml'));
 
         $expectedSubset = ['output' => '%env(DUMP_OUTPUT)%'];
         $this->assertArraySubset($expectedSubset, $config->get('dump'));
@@ -54,7 +55,7 @@ final class ConfigLoaderTest extends TestCase
         $configLoader = $this->createConfigLoader();
 
         $this->expectException(FileNotFoundException::class);
-        $configLoader->load('not_exists.yaml', $config);
+        $configLoader->load($config, 'not_exists.yaml');
     }
 
     /**
@@ -66,7 +67,7 @@ final class ConfigLoaderTest extends TestCase
         $configLoader = $this->createConfigLoader();
 
         $this->expectException(ParseException::class);
-        $configLoader->load($this->getResource('config/templates/invalid_data.yaml'), $config);
+        $configLoader->load($config, $this->getResource('config/templates/invalid_data.yaml'));
     }
 
     /**
@@ -105,7 +106,9 @@ final class ConfigLoaderTest extends TestCase
     private function createConfigLoader(): ConfigLoader
     {
         $templatesDirectory = $this->getResource('config/templates');
+        $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
+        //$eventDispatcherMock->method('dispatch');
 
-        return new ConfigLoader(new FileLocator($templatesDirectory));
+        return new ConfigLoader(new FileLocator($templatesDirectory), $eventDispatcherMock);
     }
 }

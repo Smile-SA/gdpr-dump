@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Config\Compiler\Processor;
+namespace Smile\GdprDump\Config\EventListener;
 
-use Smile\GdprDump\Config\Compiler\CompileException;
-use Smile\GdprDump\Config\ConfigInterface;
+use Smile\GdprDump\Config\Event\ParseEvent;
+use Smile\GdprDump\Config\Validator\ValidationException;
 
-final class EnvVarProcessor implements ProcessorInterface
+final class EnvVarListener
 {
     /**
      * Environment variable name format.
@@ -26,20 +26,17 @@ final class EnvVarProcessor implements ProcessorInterface
     ];
 
     /**
-     * Replace environment variable placeholders (e.g. "%env(DB_HOST)%")
-     *
-     * @throws CompileException
+     * Replace environment variable placeholders (e.g. "%env(DB_HOST)%").
      */
-    public function process(ConfigInterface $config): void
+    public function __invoke(ParseEvent $event): void
     {
+        $config = $event->getConfig();
         $data = $this->processItem($config->toArray());
         $config->reset($data);
     }
 
     /**
      * Process a config item.
-     *
-     * @throws CompileException
      */
     private function processItem(array $data): array
     {
@@ -57,8 +54,6 @@ final class EnvVarProcessor implements ProcessorInterface
 
     /**
      * Process a config value.
-     *
-     * @throws CompileException
      */
     private function processValue(mixed $value): mixed
     {
@@ -71,7 +66,7 @@ final class EnvVarProcessor implements ProcessorInterface
 
         $value = getenv($name);
         if ($value === false) {
-            throw new CompileException(sprintf('The environment variable "%s" is not defined.', $name));
+            throw new ValidationException(sprintf('The environment variable "%s" is not defined.', $name));
         }
 
         if ($type === 'json') {
@@ -87,7 +82,6 @@ final class EnvVarProcessor implements ProcessorInterface
      * Parse "%env($name)%".
      *
      * @return array{0: string, 1: string}
-     * @throws CompileException
      */
     private function parse(string $name): array
     {
@@ -101,17 +95,17 @@ final class EnvVarProcessor implements ProcessorInterface
         }
 
         if (!in_array($type, $this->types, true)) {
-            throw new CompileException(
+            throw new ValidationException(
                 sprintf('Invalid type "%s". Expected: %s.', $type, implode(', ', $this->types))
             );
         }
 
         if ($name === '') {
-            throw new CompileException('Environment variable name must not be empty.');
+            throw new ValidationException('Environment variable name must not be empty.');
         }
 
         if (!preg_match('/^' . self::VAR_NAME_REGEX . '$/', $name)) {
-            throw new CompileException(
+            throw new ValidationException(
                 sprintf('"%s" is not a valid environment variable name. Expected format: "[A-Z][A-Z0-9_]*".', $name)
             );
         }
@@ -121,15 +115,13 @@ final class EnvVarProcessor implements ProcessorInterface
 
     /**
      * Decode a JSON-encoded string.
-     *
-     * @throws CompileException
      */
     private function decodeJson(string $value, string $name): mixed
     {
         $value = json_decode($value, true);
 
         if ($value === null) {
-            throw new CompileException(
+            throw new ValidationException(
                 sprintf('Failed to parse the JSON value of the environment variable "%s".', $name)
             );
         }

@@ -6,6 +6,6 @@ namespace Smile\GdprDump\Config\Validator;
 
 use Smile\GdprDump\Config\ConfigException;
 
-final class ValidationException extends ConfigException
+class ValidationException extends ConfigException
 {
 }

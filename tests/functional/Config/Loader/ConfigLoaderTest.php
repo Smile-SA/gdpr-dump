@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Functional\Config\Compiler;
+namespace Smile\GdprDump\Tests\Functional\Config\Loader;
 
-use Smile\GdprDump\Config\Compiler\CompilerInterface;
 use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
-final class CompilerTest extends TestCase
+final class ConfigLoaderTest extends TestCase
 {
     /**
      * @var array<string, string>
@@ -20,27 +20,16 @@ final class CompilerTest extends TestCase
      */
     public function testProcessorsOrder(): void
     {
-        $config = new Config([
-            'version' => '%env(TEST_VERSION)%',
-            'if_version' => [
-                '>10.0' => [
-                    'dump' => [
-                        'output' => '%env(TEST_DUMP_OUTPUT)%',
-                    ],
-                    'database' => [
-                        'url' => '%env(TEST_DATABASE_URL)%',
-                    ],
-                ],
-            ],
-        ]);
-
         $this->initEnvVars([
             'TEST_DUMP_OUTPUT' => 'dump.sql',
             'TEST_DATABASE_URL' => 'mysql://localhost/db_name',
             'TEST_VERSION' => '10.5',
         ]);
 
-        $this->getCompiler()->compile($config);
+        $config = new Config();
+        $loader = $this->getConfigLoader();
+        $fileName = self::getResource('config/test_listener_order/config.yaml');
+        $loader->load($config, $fileName);
 
         // Assert that EnvVarProcessor and VersionProcessor were executed before DumpOutputProcessor
         $dump = $config->get('dump');
@@ -62,10 +51,10 @@ final class CompilerTest extends TestCase
     /**
      * Get the config compiler.
      */
-    private function getCompiler(): CompilerInterface
+    private function getConfigLoader(): ConfigLoaderInterface
     {
-        /** @var CompilerInterface */
-        return $this->getContainer()->get('config.compiler');
+        /** @var ConfigLoaderInterface */
+        return $this->getContainer()->get('config.loader');
     }
 
     /**
