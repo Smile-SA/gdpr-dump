@@ -22,7 +22,6 @@ final class HashTest extends TestCase
         $this->assertSame('', $value);
 
         $value = $converter->convert('user1');
-        $this->assertIsString($value);
         $this->assertSame(40, strlen($value));
     }
 
@@ -34,7 +33,6 @@ final class HashTest extends TestCase
         $converter = $this->createConverter(Hash::class, ['algorithm' => 'sha256']);
 
         $value = $converter->convert('user1');
-        $this->assertIsString($value);
         $this->assertSame(64, strlen($value));
     }
 

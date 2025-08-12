@@ -23,7 +23,6 @@ final class RandomDateTimeTest extends TestCase
 
         $date = '1990-12-31 12:05:41';
         $value = $converter->convert($date);
-        $this->assertIsString($value);
         $this->assertDateIsRandomized($value, $date, 'Y-m-d H:i:s');
     }
 
@@ -37,7 +36,6 @@ final class RandomDateTimeTest extends TestCase
 
         $date = '31/12/1990 12:05:41';
         $randomizedDate = $converter->convert($date);
-        $this->assertIsString($randomizedDate);
         $this->assertDateIsRandomized($randomizedDate, $date, $format);
     }
 
@@ -53,7 +51,6 @@ final class RandomDateTimeTest extends TestCase
 
         $date = '1990-12-31 12:05:41';
         $randomizedDate = $converter->convert($date);
-        $this->assertIsString($randomizedDate);
         $this->assertDateIsRandomized($randomizedDate, $date, 'Y-m-d H:i:s');
     }
 
@@ -69,7 +66,6 @@ final class RandomDateTimeTest extends TestCase
 
         $date = '1990-12-31 12:05:41';
         $randomizedDate = $converter->convert($date);
-        $this->assertIsString($randomizedDate);
 
         $currentYear = (new DateTime())->format('Y');
         $randomizedYear = (new DateTime($randomizedDate))->format('Y');

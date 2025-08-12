@@ -23,7 +23,6 @@ final class RandomDateTest extends TestCase
 
         $date = '1990-12-31';
         $value = $converter->convert($date);
-        $this->assertIsString($value);
         $this->assertDateIsRandomized($value, $date, 'Y-m-d');
     }
 
@@ -37,7 +36,6 @@ final class RandomDateTest extends TestCase
 
         $date = '31/12/1990';
         $value = $converter->convert($date);
-        $this->assertIsString($value);
         $this->assertDateIsRandomized($value, $date, $format);
     }
 
@@ -53,7 +51,6 @@ final class RandomDateTest extends TestCase
 
         $date = '1990-12-31';
         $value = $converter->convert($date);
-        $this->assertIsString($value);
         $this->assertDateIsRandomized($value, $date, 'Y-m-d');
     }
 
@@ -69,7 +66,6 @@ final class RandomDateTest extends TestCase
 
         $date = '1990-12-31';
         $value = $converter->convert($date);
-        $this->assertIsString($value);
 
         $currentYear = (new DateTime())->format('Y');
         $randomizedYear = (new DateTime($value))->format('Y');
