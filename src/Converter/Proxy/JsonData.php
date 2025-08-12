@@ -12,7 +12,7 @@ use Smile\GdprDump\Util\ArrayHelper;
 final class JsonData implements ConverterInterface
 {
     /**
-     * @var ConverterInterface[]
+     * @var array<string, ConverterInterface>
      */
     private array $converters;
 

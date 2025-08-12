@@ -12,7 +12,7 @@ use Smile\GdprDump\Util\ArrayHelper;
 final class SerializedData implements ConverterInterface
 {
     /**
-     * @var ConverterInterface[]
+     * @var array<string, ConverterInterface>
      */
     private array $converters;
 
