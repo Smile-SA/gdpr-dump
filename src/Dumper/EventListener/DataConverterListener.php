@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Listener;
+namespace Smile\GdprDump\Dumper\EventListener;
 
 use RuntimeException;
 use Smile\GdprDump\Converter\ConditionBuilder;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Listener;
+namespace Smile\GdprDump\Dumper\EventListener;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
