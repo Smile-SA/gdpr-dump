@@ -57,7 +57,10 @@ final class Parameter
      */
     public function isScalar(): bool
     {
-        return in_array($this->type, [self::TYPE_BOOL, self::TYPE_STRING, self::TYPE_INT, self::TYPE_FLOAT], true);
+        return match ($this->type) {
+            self::TYPE_BOOL, self::TYPE_STRING, self::TYPE_INT, self::TYPE_FLOAT => true,
+            default => false,
+        };
     }
 
     /**
