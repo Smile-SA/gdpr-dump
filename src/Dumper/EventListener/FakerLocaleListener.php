@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Dumper\Listener;
+namespace Smile\GdprDump\Dumper\EventListener;
 
 use Smile\GdprDump\Dumper\Event\DumpEvent;
 use Smile\GdprDump\Faker\FakerService;

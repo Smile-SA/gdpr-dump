@@ -137,21 +137,21 @@ services:
             - '@util.array_helper'
 
     dumper.listener.faker_locale:
-        class: 'Smile\GdprDump\Dumper\Listener\FakerLocaleListener'
+        class: 'Smile\GdprDump\Dumper\EventListener\FakerLocaleListener'
         tags:
             - { name: 'kernel.event_listener', priority: 100 } # must be triggered before data converter listener
         arguments:
             - '@faker.service'
 
     dumper.event_listener.data_converter:
-        class: 'Smile\GdprDump\Dumper\Listener\DataConverterListener'
+        class: 'Smile\GdprDump\Dumper\EventListener\DataConverterListener'
         tags: ['kernel.event_listener']
         arguments:
             - '@converter.builder'
             - '@converter.condition_builder'
 
     dumper.event_listener.table_filter:
-        class: 'Smile\GdprDump\Dumper\Listener\TableFilterListener'
+        class: 'Smile\GdprDump\Dumper\EventListener\TableFilterListener'
         tags: ['kernel.event_listener']
 
     faker.service:

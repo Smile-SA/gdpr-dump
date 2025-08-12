@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper;
 
-use Smile\GdprDump\Dumper\Listener\DataConverterListener;
+use Smile\GdprDump\Dumper\EventListener\DataConverterListener;
 
 /**
  * Stores the dump context data (e.g. row currently being dumped).
