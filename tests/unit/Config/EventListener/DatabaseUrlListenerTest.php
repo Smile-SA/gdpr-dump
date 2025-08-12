@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Config\Compiler\Processor;
+namespace Smile\GdprDump\Tests\Unit\Config\EventListener;
 
-use Smile\GdprDump\Config\Compiler\CompileException;
-use Smile\GdprDump\Config\Compiler\Processor\DatabaseUrlProcessor;
 use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Config\Event\LoadedEvent;
+use Smile\GdprDump\Config\EventListener\DatabaseUrlListener;
+use Smile\GdprDump\Config\Validator\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-final class DatabaseUrlProcessorTest extends TestCase
+final class DatabaseUrlListenerTest extends TestCase
 {
     /**
      * Assert that the url is processed and individual params (e.g. password) take precedence.
      */
-    public function testDatabaseUrlProcessor(): void
+    public function testDatabaseUrlListener(): void
     {
         $data = [
             'database' => [
@@ -24,8 +25,8 @@ final class DatabaseUrlProcessorTest extends TestCase
         ];
 
         $config = new Config($data);
-        $processor = new DatabaseUrlProcessor();
-        $processor->process($config);
+        $listener = new DatabaseUrlListener();
+        $listener(new LoadedEvent($config));
 
         $dbParams = $config->get('database');
         $this->assertArrayHasKey('name', $dbParams);
@@ -52,8 +53,8 @@ final class DatabaseUrlProcessorTest extends TestCase
         ];
 
         $config = new Config($data);
-        $processor = new DatabaseUrlProcessor();
-        $processor->process($config);
+        $listener = new DatabaseUrlListener();
+        $listener(new LoadedEvent($config));
 
         $dbParams = $config->get('database');
         $this->assertSame('localhost', $dbParams['host']);
@@ -71,10 +72,10 @@ final class DatabaseUrlProcessorTest extends TestCase
         ];
 
         $config = new Config($data);
-        $processor = new DatabaseUrlProcessor();
+        $listener = new DatabaseUrlListener();
 
-        $this->expectException(CompileException::class);
-        $processor->process($config);
+        $this->expectException(ValidationException::class);
+        $listener(new LoadedEvent($config));
     }
 
     /**
@@ -89,9 +90,9 @@ final class DatabaseUrlProcessorTest extends TestCase
         ];
 
         $config = new Config($data);
-        $processor = new DatabaseUrlProcessor();
+        $listener = new DatabaseUrlListener();
 
-        $this->expectException(CompileException::class);
-        $processor->process($config);
+        $this->expectException(ValidationException::class);
+        $listener(new LoadedEvent($config));
     }
 }

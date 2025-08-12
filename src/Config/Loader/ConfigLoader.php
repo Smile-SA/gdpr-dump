@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Loader;
 
+use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigException;
 use Smile\GdprDump\Config\ConfigInterface;
+use Smile\GdprDump\Config\Event\LoadedEvent;
+use Smile\GdprDump\Config\Event\LoadEvent;
+use Smile\GdprDump\Config\Event\MergeEvent;
+use Smile\GdprDump\Config\Event\ParseEvent;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Throwable;
 
 final class ConfigLoader implements ConfigLoaderInterface
@@ -14,16 +20,24 @@ final class ConfigLoader implements ConfigLoaderInterface
     /**
      * @var string[]
      */
-    private array $loadedTemplates = [];
+    private array $loadedFiles = [];
 
-    public function __construct(private FileLocatorInterface $fileLocator)
-    {
+    public function __construct(
+        private FileLocatorInterface $fileLocator,
+        private EventDispatcherInterface $eventDispatcher,
+    ) {
     }
 
-    public function load(string $fileName, ConfigInterface $config): void
+    public function load(ConfigInterface $config, string ...$fileNames): void
     {
-        $fileName = $this->fileLocator->locate($fileName);
-        $this->loadFile($fileName, $config);
+        $this->eventDispatcher->dispatch(new LoadEvent($config));
+
+        foreach ($fileNames as $fileName) {
+            $fileName = $this->fileLocator->locate($fileName);
+            $this->loadFile($fileName, $config);
+        }
+
+        $this->eventDispatcher->dispatch(new LoadedEvent($config));
     }
 
     /**
@@ -31,7 +45,7 @@ final class ConfigLoader implements ConfigLoaderInterface
      *
      * @throws ConfigException
      */
-    private function loadFile(string $fileName, ConfigInterface $config): void
+    private function loadFile(string $fileName, ConfigInterface $config): void // TODO remove $config arg
     {
         $input = file_get_contents($fileName);
         if ($input === false) {
@@ -48,6 +62,9 @@ final class ConfigLoader implements ConfigLoaderInterface
             throw new ParseException(sprintf('The file "%s" could not be parsed into an array.', $fileName));
         }
 
+        $dataObject = new Config($data);
+        $this->eventDispatcher->dispatch(new ParseEvent($dataObject));
+
         // Recursively load parent config files
         if (isset($data['extends'])) {
             $fileNames = (array) $data['extends'];
@@ -56,7 +73,8 @@ final class ConfigLoader implements ConfigLoaderInterface
             unset($data['extends']);
         }
 
-        $config->merge($data);
+        $this->eventDispatcher->dispatch(new MergeEvent($dataObject));
+        $config->merge($dataObject->toArray());
     }
 
     /**
@@ -71,9 +89,9 @@ final class ConfigLoader implements ConfigLoaderInterface
             $fileName = $this->fileLocator->locate($fileName, $currentDirectory);
 
             // Load the parent file if it was not already loaded
-            if (!in_array($fileName, $this->loadedTemplates, true)) {
+            if (!in_array($fileName, $this->loadedFiles, true)) {
                 $this->loadFile($fileName, $config);
-                $this->loadedTemplates[] = $fileName;
+                $this->loadedFiles[] = $fileName;
             }
         }
     }

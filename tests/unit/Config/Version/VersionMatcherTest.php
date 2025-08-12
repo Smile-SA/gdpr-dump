@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Config\Compiler\Processor\Version;
+namespace Smile\GdprDump\Tests\Unit\Config\Version;
 
-use Smile\GdprDump\Config\Compiler\Processor\Version\VersionMatcher;
+use Smile\GdprDump\Config\Version\VersionMatcher;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 final class VersionMatcherTest extends TestCase

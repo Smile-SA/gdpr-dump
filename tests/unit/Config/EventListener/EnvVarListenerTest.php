@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Config\Compiler\Processor;
+namespace Smile\GdprDump\Tests\Unit\Config\EventListener;
 
-use Smile\GdprDump\Config\Compiler\CompileException;
-use Smile\GdprDump\Config\Compiler\Processor\EnvVarProcessor;
 use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Config\Event\ParseEvent;
+use Smile\GdprDump\Config\EventListener\EnvVarListener;
+use Smile\GdprDump\Config\Validator\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
-final class EnvVarProcessorTest extends TestCase
+final class EnvVarListenerTest extends TestCase
 {
     /**
      * Assert that environment variables are processed successfully.
      */
-    public function testEnvVarProcessor(): void
+    public function testEnvVarListener(): void
     {
         $data = [
             'no_type' => '%env(TEST_ENV_VAR)%',
@@ -26,9 +27,9 @@ final class EnvVarProcessorTest extends TestCase
         ];
 
         $config = new Config($data);
-        $processor = new EnvVarProcessor();
+        $listener = new EnvVarListener();
         putenv('TEST_ENV_VAR=12345');
-        $processor->process($config);
+        $listener(new ParseEvent($config));
 
         $env = getenv('TEST_ENV_VAR');
 
@@ -47,9 +48,9 @@ final class EnvVarProcessorTest extends TestCase
     public function testJsonEnvVar(): void
     {
         $config = new Config(['json' => '%env(json:TEST_ENV_VAR)%']);
-        $processor = new EnvVarProcessor();
+        $listener = new EnvVarListener();
         putenv('TEST_ENV_VAR={"key": "value"}');
-        $processor->process($config);
+        $listener(new ParseEvent($config));
 
         $this->assertSame(['key' => 'value'], $config->get('json'));
 
@@ -64,8 +65,8 @@ final class EnvVarProcessorTest extends TestCase
         $data = ['key1' => '12345', 'key2' => 'env(test)'];
         $config = new Config($data);
 
-        $processor = new EnvVarProcessor();
-        $processor->process($config);
+        $listener = new EnvVarListener();
+        $listener(new ParseEvent($config));
 
         $this->assertSame($data['key1'], $config->get('key1'));
         $this->assertSame($data['key2'], $config->get('key2'));
@@ -78,7 +79,7 @@ final class EnvVarProcessorTest extends TestCase
     {
         putenv('TEST_ENV_VAR=invalidData');
 
-        $this->expectException(CompileException::class);
+        $this->expectException(ValidationException::class);
         $this->processValue('%env(json:TEST_ENV_VAR)%');
 
         putenv('TEST_ENV_VAR');
@@ -89,7 +90,7 @@ final class EnvVarProcessorTest extends TestCase
      */
     public function testUndefinedEnvVar(): void
     {
-        $this->expectException(CompileException::class);
+        $this->expectException(ValidationException::class);
         $this->processValue('%env(NOT_DEFINED)%');
     }
 
@@ -98,7 +99,7 @@ final class EnvVarProcessorTest extends TestCase
      */
     public function testEmptyVariableName(): void
     {
-        $this->expectException(CompileException::class);
+        $this->expectException(ValidationException::class);
         $this->processValue('%env()%');
     }
 
@@ -107,7 +108,7 @@ final class EnvVarProcessorTest extends TestCase
      */
     public function testEmptyVariableNameAndType(): void
     {
-        $this->expectException(CompileException::class);
+        $this->expectException(ValidationException::class);
         $this->processValue('%env(:)%');
     }
 
@@ -116,7 +117,7 @@ final class EnvVarProcessorTest extends TestCase
      */
     public function testEmptyVariableType(): void
     {
-        $this->expectException(CompileException::class);
+        $this->expectException(ValidationException::class);
         $this->processValue('%env(:ENV_VAR)%');
     }
 
@@ -125,7 +126,7 @@ final class EnvVarProcessorTest extends TestCase
      */
     public function testInvalidVariableName(): void
     {
-        $this->expectException(CompileException::class);
+        $this->expectException(ValidationException::class);
         $this->processValue('%env(invalidName)%');
     }
 
@@ -134,7 +135,7 @@ final class EnvVarProcessorTest extends TestCase
      */
     public function testInvalidVariableType(): void
     {
-        $this->expectException(CompileException::class);
+        $this->expectException(ValidationException::class);
         $this->processValue('%env(invalidType:ENV_VAR)%');
     }
 
@@ -143,8 +144,8 @@ final class EnvVarProcessorTest extends TestCase
      */
     private function processValue(string $value): void
     {
-        $processor = new EnvVarProcessor();
+        $listener = new EnvVarListener();
         $config = new Config([$value]);
-        $processor->process($config);
+        $listener(new ParseEvent($config));
     }
 }

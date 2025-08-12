@@ -14,5 +14,5 @@ interface ConfigLoaderInterface
      *
      * @throws ConfigException
      */
-    public function load(string $fileName, ConfigInterface $config): void;
+    public function load(ConfigInterface $config, string ...$fileNames): void;
 }
