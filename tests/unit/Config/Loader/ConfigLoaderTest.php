@@ -107,7 +107,6 @@ final class ConfigLoaderTest extends TestCase
     {
         $templatesDirectory = $this->getResource('config/templates');
         $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
-        //$eventDispatcherMock->method('dispatch');
 
         return new ConfigLoader(new FileLocator($templatesDirectory), $eventDispatcherMock);
     }
