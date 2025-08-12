@@ -15,25 +15,30 @@ final class AnonymizeEmailTest extends TestCase
      */
     public function testConverter(): void
     {
-        $converter = $this->createConverter(AnonymizeEmail::class, ['domains' => ['example.org']]);
+        $converter = $this->createConverter(AnonymizeEmail::class);
 
         $value = $converter->convert(null);
         $this->assertSame('', $value);
 
-        $value = $converter->convert('a');
-        $this->assertSame('a**', $value);
+        $email = 'a';
+        $value = $converter->convert($email);
+        $this->assertEmailIsAnonymized('a**', $value, $email);
 
-        $value = $converter->convert('a@gmail.com');
-        $this->assertSame('a**@example.org', $value);
+        $email = 'b@acme.com';
+        $value = $converter->convert($email);
+        $this->assertEmailIsAnonymized('b**', $value, $email);
 
-        $value = $converter->convert('user1');
-        $this->assertSame('u****', $value);
+        $email = 'user1';
+        $value = $converter->convert($email);
+        $this->assertEmailIsAnonymized('u****', $value, $email);
 
-        $value = $converter->convert('user1@gmail.com');
-        $this->assertSame('u****@example.org', $value);
+        $email = 'user2@acme.com';
+        $value = $converter->convert($email);
+        $this->assertEmailIsAnonymized('u****', $value, $email);
 
-        $value = $converter->convert('john.doe@gmail.com');
-        $this->assertSame('j***.d**@example.org', $value);
+        $email = 'john.doe@acme.com';
+        $value = $converter->convert($email);
+        $this->assertEmailIsAnonymized('j***.d**', $value, $email);
     }
 
     /**
@@ -41,13 +46,15 @@ final class AnonymizeEmailTest extends TestCase
      */
     public function testEncoding(): void
     {
-        $converter = $this->createConverter(AnonymizeEmail::class, ['domains' => ['example.org']]);
+        $converter = $this->createConverter(AnonymizeEmail::class);
 
-        $value = $converter->convert('àà.éé.èè.üü.øø@gmail.com');
-        $this->assertSame('à**.é**.è**.ü**.ø**@example.org', $value);
+        $email = 'àà.éé.èè.üü.øø@acme.com';
+        $value = $converter->convert($email);
+        $this->assertEmailIsAnonymized('à**.é**.è**.ü**.ø**', $value, $email);
 
-        $value = $converter->convert('汉字.한글.漢字@gmail.com');
-        $this->assertSame('汉**.한**.漢**@example.org', $value);
+        $email = '汉字.한글.漢字@acme.com';
+        $value = $converter->convert($email);
+        $this->assertEmailIsAnonymized('汉**.한**.漢**', $value, $email);
     }
 
     /**
@@ -55,13 +62,11 @@ final class AnonymizeEmailTest extends TestCase
      */
     public function testMinWordLength(): void
     {
-        $converter = $this->createConverter(AnonymizeEmail::class, [
-            'domains' => ['example.org'],
-            'min_word_length' => 4,
-        ]);
+        $converter = $this->createConverter(AnonymizeEmail::class, ['min_word_length' => 4]);
 
-        $value = $converter->convert('john.doe@gmail.com');
-        $this->assertSame('j***.d***@example.org', $value);
+        $email = 'john.doe@acme.com';
+        $value = $converter->convert($email);
+        $this->assertEmailIsAnonymized('j***.d***', $value, $email);
     }
 
     /**
@@ -78,13 +83,11 @@ final class AnonymizeEmailTest extends TestCase
      */
     public function testCustomReplacement(): void
     {
-        $converter = $this->createConverter(AnonymizeEmail::class, [
-            'domains' => ['example.org'],
-            'replacement' => 'x',
-        ]);
+        $converter = $this->createConverter(AnonymizeEmail::class, ['replacement' => 'x']);
 
-        $value = $converter->convert('john.doe@gmail.com');
-        $this->assertSame('jxxx.dxx@example.org', $value);
+        $email = 'john.doe@acme.com';
+        $value = $converter->convert($email);
+        $this->assertEmailIsAnonymized('jxxx.dxx', $value, $email);
     }
 
     /**
@@ -101,19 +104,19 @@ final class AnonymizeEmailTest extends TestCase
      */
     public function testCustomDelimiters(): void
     {
-        $converter = $this->createConverter(AnonymizeEmail::class, [
-            'domains' => ['example.org'],
-            'delimiters' => ['%', '/'],
-        ]);
+        $converter = $this->createConverter(AnonymizeEmail::class, ['delimiters' => ['%', '/']]);
 
-        $value = $converter->convert('john.doe@gmail.com');
-        $this->assertSame('j*******@example.org', $value);
+        $email = 'john.doe@acme.com';
+        $value = $converter->convert($email);
+        $this->assertEmailIsAnonymized('j*******', $value, $email);
 
-        $value = $converter->convert('john%doe@gmail.com');
-        $this->assertSame('j***%d**@example.org', $value);
+        $email = 'john%doe@acme.com';
+        $value = $converter->convert($email);
+        $this->assertEmailIsAnonymized('j***%d**', $value, $email);
 
-        $value = $converter->convert('john/doe@gmail.com');
-        $this->assertSame('j***/d**@example.org', $value);
+        $email = 'john/doe@acme.com';
+        $value = $converter->convert($email);
+        $this->assertEmailIsAnonymized('j***/d**', $value, $email);
     }
 
     /**
@@ -121,13 +124,11 @@ final class AnonymizeEmailTest extends TestCase
      */
     public function testEmptyDelimiters(): void
     {
-        $converter = $this->createConverter(AnonymizeEmail::class, [
-            'domains' => ['example.org'],
-            'delimiters' => [],
-        ]);
+        $converter = $this->createConverter(AnonymizeEmail::class, ['delimiters' => []]);
 
-        $value = $converter->convert('john.doe@gmail.com');
-        $this->assertSame('j*******@example.org', $value);
+        $email = 'john.doe@acme.com';
+        $value = $converter->convert($email);
+        $this->assertEmailIsAnonymized('j*******', $value, $email);
     }
 
     /**
@@ -137,6 +138,19 @@ final class AnonymizeEmailTest extends TestCase
     {
         $this->expectException(ValidationException::class);
         $this->createConverter(AnonymizeEmail::class, ['delimiters' => 'invalid']);
+    }
+
+    /**
+     * Test the converter with a custom domain.
+     */
+    public function testCustomDomain(): void
+    {
+        $expectedDomains = ['acme.com'];
+        $converter = $this->createConverter(AnonymizeEmail::class, ['domains' => $expectedDomains]);
+
+        $email = 'john.doe@acme.com';
+        $value = $converter->convert($email);
+        $this->assertEmailIsAnonymized('j***.d**', $value, $email, $expectedDomains);
     }
 
     /**
@@ -155,5 +169,22 @@ final class AnonymizeEmailTest extends TestCase
     {
         $this->expectException(ValidationException::class);
         $this->createConverter(AnonymizeEmail::class, ['domains' => 'invalid']);
+    }
+
+    /**
+     * Assert that an email is anonymized.
+     */
+    protected function assertEmailIsAnonymized(
+        string $expectedUsername,
+        string $actualEmail,
+        string $originalEmail,
+        array $expectedDomains = ['example.com', 'example.net', 'example.org'],
+    ): void {
+        $this->assertEmailIsConverted(
+            $actualEmail,
+            $originalEmail,
+            $expectedDomains,
+            fn (string $username) => $this->assertSame($username, $expectedUsername)
+        );
     }
 }

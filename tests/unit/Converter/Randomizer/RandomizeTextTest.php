@@ -20,9 +20,9 @@ final class RandomizeTextTest extends TestCase
         $value = $converter->convert(null);
         $this->assertSame('', $value);
 
-        $value = $converter->convert('user1');
-        $this->assertIsString($value);
-        $this->assertStringNotContainsString('user1', $value);
+        $username = $this->randomUsername();
+        $value = $converter->convert($username);
+        $this->assertStringNotContainsString($username, $value);
     }
 
     /**
@@ -32,8 +32,9 @@ final class RandomizeTextTest extends TestCase
     {
         $converter = $this->createConverter(RandomizeText::class, ['min_length' => 10]);
 
-        $value = $converter->convert('user1');
-        $this->assertIsString($value);
+        $username = 'user1';
+        $value = $converter->convert($username);
+        $this->assertStringNotContainsString($username, $value);
         $this->assertSame(10, strlen($value));
     }
 
@@ -44,7 +45,7 @@ final class RandomizeTextTest extends TestCase
     {
         $converter = $this->createConverter(RandomizeText::class, ['replacements' => 'a']);
 
-        $value = $converter->convert('user1');
+        $value = $converter->convert('user2');
         $this->assertSame('aaaaa', $value);
     }
 

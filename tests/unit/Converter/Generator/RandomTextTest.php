@@ -20,9 +20,12 @@ final class RandomTextTest extends TestCase
         $value = $converter->convert(null);
         $this->assertNotNull($value);
 
-        $value = $converter->convert('user1');
-        $this->assertIsString($value);
-        $this->assertStringNotContainsString('user1', $value);
+        $username = $this->randomUsername();
+        $value = $converter->convert($username);
+        $this->assertStringNotContainsString($username, $value);
+
+        $char = 'a';
+        $value = $converter->convert($char);
         $this->assertGreaterThanOrEqual(3, strlen($value));
     }
 
@@ -31,14 +34,11 @@ final class RandomTextTest extends TestCase
      */
     public function testCustomLength(): void
     {
+        $converter = $this->createConverter(RandomText::class, ['min_length' => 20, 'max_length' => 20]);
 
-        $converter = $this->createConverter(RandomText::class, [
-            'min_length' => 20,
-            'max_length' => 20,
-        ]);
-
-        $value = $converter->convert('user1');
-        $this->assertIsString($value);
+        $username = 'user1';
+        $value = $converter->convert($username);
+        $this->assertStringNotContainsString($username, $value);
         $this->assertSame(20, strlen($value));
     }
 
@@ -53,7 +53,7 @@ final class RandomTextTest extends TestCase
             'max_length' => 5,
         ]);
 
-        $value = $converter->convert('user1');
+        $value = $converter->convert('user2');
         $this->assertSame('aaaaa', $value);
     }
 

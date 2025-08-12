@@ -20,7 +20,6 @@ final class RandomizeNumberTest extends TestCase
         $this->assertSame('', $value);
 
         $value = $converter->convert('+33601010101');
-        $this->assertIsString($value);
         $this->assertStringStartsWith('+', $value);
         $this->assertSame(12, strlen($value));
 
