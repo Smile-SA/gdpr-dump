@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Config\Version;
 
-use Smile\GdprDump\Config\Version\VersionMatcher;
+use Smile\GdprDump\Configuration\Version\VersionMatcher;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 final class VersionMatcherTest extends TestCase

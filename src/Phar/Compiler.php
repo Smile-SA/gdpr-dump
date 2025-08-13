@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Phar;
 
+use Exception;
 use Phar;
 use RuntimeException;
-use Smile\GdprDump\Phar\Minify\MinifierInterface;
+use Smile\GdprDump\Phar\Minify\MinifierResolver;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
-use UnexpectedValueException;
 
 final class Compiler
 {
@@ -22,10 +22,7 @@ final class Compiler
      */
     private array $locales = [];
 
-    /**
-     * @param MinifierInterface[] $minifiers
-     */
-    public function __construct(private iterable $minifiers = [])
+    public function __construct(private MinifierResolver $minifierResolver)
     {
         $this->basePath = dirname(__DIR__, 2);
     }
@@ -34,13 +31,13 @@ final class Compiler
      * Set the Faker locales to include.
      *
      * @param string[] $locales
-     * @throws UnexpectedValueException
+     * @throws RuntimeException
      */
     public function setLocales(array $locales): self
     {
         foreach ($locales as $locale) {
             if (!is_dir($this->basePath . '/vendor/fakerphp/faker/src/Faker/Provider/' . $locale)) {
-                throw new UnexpectedValueException(sprintf('Faker does not support the locale "%s".', $locale));
+                throw new RuntimeException(sprintf('Faker does not support the locale "%s".', $locale));
             }
         }
 
@@ -52,7 +49,7 @@ final class Compiler
     /**
      * Generate a phar file.
      *
-     * @throws RuntimeException
+     * @throws Exception
      */
     public function compile(string $fileName): void
     {
@@ -77,8 +74,6 @@ final class Compiler
 
     /**
      * Add files to the phar file.
-     *
-     * @throws RuntimeException
      */
     private function addFiles(Phar $phar): void
     {
@@ -141,8 +136,6 @@ final class Compiler
 
     /**
      * Read and minify the contents of a file.
-     *
-     * @throws RuntimeException
      */
     private function parseFile(string $fileName, ?string $extension = null): string
     {
@@ -152,15 +145,9 @@ final class Compiler
         }
 
         $extension ??= pathinfo($fileName, PATHINFO_EXTENSION);
+        $minifier = $this->minifierResolver->getMinifier($extension);
 
-        foreach ($this->minifiers as $minifier) {
-            if ($minifier->supports($extension)) {
-                $contents = $minifier->minify($contents);
-                break;
-            }
-        }
-
-        return $contents;
+        return $minifier ? $minifier->minify($contents) : $contents;
     }
 
     /**

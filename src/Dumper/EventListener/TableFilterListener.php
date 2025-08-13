@@ -6,18 +6,17 @@ namespace Smile\GdprDump\Dumper\EventListener;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
-use Smile\GdprDump\Database\Metadata\MetadataInterface;
+use Smile\GdprDump\Configuration\Configuration;
+use Smile\GdprDump\Database\Metadata\DatabaseMetadata;
+use Smile\GdprDump\Database\Metadata\Definition\ForeignKey;
 use Smile\GdprDump\Database\TableDependencyResolver;
-use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
-use UnexpectedValueException;
 
 final class TableFilterListener
 {
     private Connection $connection;
-    private MetadataInterface $metadata;
-    private DumperConfigInterface $config;
+    private DatabaseMetadata $metadata;
+    private Configuration $configuration;
 
     /**
      * Define the filters to apply on the tables.
@@ -26,7 +25,7 @@ final class TableFilterListener
     {
         $this->connection = $event->getDatabase()->getConnection();
         $this->metadata = $event->getDatabase()->getMetadata();
-        $this->config = $event->getConfig();
+        $this->configuration = $event->getConfig();
 
         $event->getDumper()->setTableWheres($this->buildTablesWhere());
     }
@@ -37,8 +36,8 @@ final class TableFilterListener
     private function buildTablesWhere(): array
     {
         // Get the tables to sort/filter
-        $tablesToFilter = $this->config->getTablesToFilter();
-        $tablesToSort = $this->config->getTablesToSort();
+        $tablesToFilter = $this->configuration->getTablesToFilter();
+        $tablesToSort = $this->configuration->getTablesToSort();
 
         // Do nothing if there is no sort order/filter defined in the configuration
         if (!$tablesToFilter && !$tablesToSort) {
@@ -50,8 +49,9 @@ final class TableFilterListener
 
         // If recursive filters are enabled, tables to query must contain
         // all tables that depend on the tables that have filters/sort order
-        if ($this->config->getFilterPropagationSettings()->isEnabled()) {
-            $dependencyResolver = new TableDependencyResolver($this->metadata, $this->config);
+        if ($this->configuration->getFilterPropagationConfig()->isEnabled()) {
+            $ignoredForeignKeys = $this->configuration->getFilterPropagationConfig()->getIgnoredForeignKeys();
+            $dependencyResolver = new TableDependencyResolver($this->metadata, $ignoredForeignKeys);
             $dependencies = $dependencyResolver->getDependencies($tablesToFilter);
         }
 
@@ -66,7 +66,7 @@ final class TableFilterListener
 
             // Add where conditions on the parent tables that also have active filters
             if (
-                $this->config->getFilterPropagationSettings()->isEnabled()
+                $this->configuration->getFilterPropagationConfig()->isEnabled()
                 && $queryBuilder->getMaxResults() !== 0
                 && array_key_exists($tableName, $dependencies)
             ) {
@@ -173,16 +173,17 @@ final class TableFilterListener
         $queryBuilder->select('*')
             ->from($this->connection->quoteIdentifier($tableName));
 
-        try {
-            $tableConfig = $this->config->getTablesConfig()->get($tableName);
-        } catch (UnexpectedValueException) {
+        $tablesConfig = $this->configuration->getTablesConfig();
+        if (!array_key_exists($tableName, $tablesConfig)) {
             // Table doesn't exist, skip
             return $queryBuilder;
         }
 
+        $tableConfig = $tablesConfig[$tableName];
+
         // Apply where condition (wrap the condition with brackets to prevent SQL injection)
-        if ($tableConfig->hasWhereCondition()) {
-            $queryBuilder->andWhere(sprintf('(%s)', $tableConfig->getWhereCondition()));
+        if ($tableConfig->getWhere() !== '') {
+            $queryBuilder->andWhere(sprintf('(%s)', $tableConfig->getWhere()));
         }
 
         // Apply sort orders
@@ -194,7 +195,7 @@ final class TableFilterListener
         }
 
         // Apply limit
-        if ($tableConfig->hasLimit()) {
+        if ($tableConfig->getLimit() > 0) {
             $queryBuilder->setMaxResults($tableConfig->getLimit());
         }
 

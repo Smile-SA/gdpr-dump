@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Transformer;
 
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Converter\Transformer\Hash;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
@@ -41,7 +41,7 @@ final class HashTest extends TestCase
      */
     public function testInvalidAlgorithm(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(Hash::class, ['algorithm' => 'invalid']);
     }
 }

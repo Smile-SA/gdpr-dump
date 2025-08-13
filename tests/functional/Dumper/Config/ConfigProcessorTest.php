@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Functional\Dumper\Config;
 
-use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Configuration\Configuration;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
@@ -15,7 +15,7 @@ final class ConfigProcessorTest extends TestCase
      */
     public function testTableNameResolution(): void
     {
-        $config = new Config([
+        $configuration = new Config([
             'tables_blacklist' => ['stor*', 'notExist*'],
             'tables_whitelist' => ['cust*', 'notExist*'],
             'tables' => [
@@ -24,13 +24,13 @@ final class ConfigProcessorTest extends TestCase
             ],
         ]);
 
-        $this->createConfigProcessor()->process($config);
+        $this->createConfigProcessor()->process($configuration);
 
         // Assert that table names were resolved
-        $this->assertSame(['stores'], $config->get('tables_blacklist'));
-        $this->assertSame(['customers'], $config->get('tables_whitelist'));
+        $this->assertSame(['stores'], $configuration->get('tables_blacklist'));
+        $this->assertSame(['customers'], $configuration->get('tables_whitelist'));
 
-        $tablesData = $config->get('tables');
+        $tablesData = $configuration->get('tables');
         $this->assertIsArray($tablesData);
         $this->assertArrayHasKey('customers', $tablesData);
         $this->assertArrayNotHasKey('cust*', $tablesData);

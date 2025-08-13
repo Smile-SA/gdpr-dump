@@ -1,5 +1,3 @@
-/.fleet
-/.idea
 /build
 /docker/db-data
 /tests/functional/Resources/var

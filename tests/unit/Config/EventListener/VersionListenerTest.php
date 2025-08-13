@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Config\EventListener;
 
-use Smile\GdprDump\Config\Config;
-use Smile\GdprDump\Config\Event\LoadEvent;
-use Smile\GdprDump\Config\Event\MergeEvent;
-use Smile\GdprDump\Config\Event\ParseEvent;
-use Smile\GdprDump\Config\EventListener\VersionListener;
-use Smile\GdprDump\Config\Validator\ValidationException;
-use Smile\GdprDump\Config\Version\MissingVersionException;
+use Smile\GdprDump\Configuration\Event\ParseConfigurationEvent;
+use Smile\GdprDump\Configuration\Event\MergeResourceEvent;
+use Smile\GdprDump\Configuration\Event\ParseResourceEvent;
+use Smile\GdprDump\Configuration\EventListener\VersionListener;
+use Smile\GdprDump\Configuration\Exception\InvalidVersionException;
+use Smile\GdprDump\Configuration\Loader\EnvVarProcessor;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use stdClass;
 
 final class VersionListenerTest extends TestCase
 {
@@ -20,39 +20,33 @@ final class VersionListenerTest extends TestCase
      */
     public function testVersionListener(): void
     {
-        $data = [
-            'items' => ['key' => 'value'],
-            'if_version' => [
-                '>=1.0.0 <2.0.0' => [
-                    'items' => ['key' => 'new_value_1'],
+        $data = (object) [
+            'items' => (object) ['key' => 'value'],
+            'if_version' => (object) [
+                '>=1.0.0 <2.0.0' => (object) [
+                    'items' => (object) ['key' => 'new_value_1'],
                     'new_key' => 1,
                 ],
-                '>=2.0.0' => [
-                    'items' => ['key' => 'new_value_2'],
+                '>=2.0.0' => (object) [
+                    'items' => (object) ['key' => 'new_value_2'],
                 ],
             ],
         ];
 
         // Test with version "1.0.0"
-        $data['version'] = '1.0.0';
-        $config = $this->processVersions($data);
-        //$this->assertSame('1.0.0', $config->get('version'));
-        $this->assertSame(['key' => 'new_value_1'], $config->get('items'));
-        $this->assertTrue($config->has('new_key'));
+        $data->version = '1.0.0';
+        $processedData = $this->processVersions($data);
+        //$this->assertSame('1.0.0', $configuration->get('version')); // TODO
+        $this->assertSame('new_value_1', $processedData->items->key);
+        $this->assertObjectHasProperty('new_key', $processedData);
+        $this->assertSame(1, $processedData->new_key);
 
         // Test with version "2.0.0"
-        $data['version'] = '2.0.0';
-        $config = $this->processVersions($data);
-        //$this->assertSame('2.0.0', $config->get('version'));
-        $this->assertSame(['key' => 'new_value_2'], $config->get('items'));
-        $this->assertFalse($config->has('new_key'));
-
-        // Test with version "0.9.0" set in the configuration
-        unset($data['version']);
-        $config = $this->processVersions($data, new Config(['version' => '0.9.0']));
-        //$this->assertSame('0.9.0', $config->get('version'));
-        $this->assertSame(['key' => 'value'], $config->get('items'));
-        $this->assertFalse($config->has('new_key'));
+        $data->version = '2.0.0';
+        $processedData = $this->processVersions($data);
+        //$this->assertSame('2.0.0', $configuration->get('version'));
+        $this->assertSame('new_value_2', $processedData->items->key);
+        $this->assertObjectNotHasProperty('new_key', $processedData);
     }
 
     /**
@@ -60,8 +54,17 @@ final class VersionListenerTest extends TestCase
      */
     public function testVersionNotSpecifiedException(): void
     {
-        $this->expectException(MissingVersionException::class);
-        $this->processVersions(['if_version' => ['>=2.0.0' => ['key' => 'value']]]);
+        $this->expectException(InvalidVersionException::class);
+        $this->processVersions((object) ['if_version' => (object) ['>=2.0.0' => (object) ['key' => 'value']]]);
+    }
+
+    /**
+     * Assert that an exception is thrown when the version is missing.
+     */
+    public function testMissingVersion(): void
+    {
+        $this->expectException(InvalidVersionException::class);
+        $this->processVersions((object) ['if_version' => (object) ['>2.0.0' => (object) ['key' => 'value']]]);
     }
 
     /**
@@ -69,8 +72,8 @@ final class VersionListenerTest extends TestCase
      */
     public function testInvalidVersionType(): void
     {
-        $this->expectException(ValidationException::class);
-        $this->processVersions(['version' => ['not a string']]);
+        $this->expectException(InvalidVersionException::class);
+        $this->processVersions((object) ['version' => ['not a string']]);
     }
 
     /**
@@ -78,28 +81,23 @@ final class VersionListenerTest extends TestCase
      */
     public function testInvalidVersionsData(): void
     {
-        $this->expectException(ValidationException::class);
-        $this->processVersions(['version' => '2.0.0', 'if_version' => 'not an array']);
+        $this->expectException(InvalidVersionException::class);
+        $this->processVersions((object) ['version' => '>2.0.0', 'if_version' => 'not an array']);
     }
 
     /**
      * Create and run the event listener with the specified configuration.
      */
-    private function processVersions(array $data, ?Config $config = null): Config
+    private function processVersions(stdClass $dataObject): stdClass
     {
-        if (!$config) {
-            $config = new Config();
-        }
-
-        $listener = new VersionListener();
-        $listener->onLoad(new LoadEvent($config));
+        $dataObject = clone $dataObject; // for easier comparison in assertions
+        $listener = new VersionListener(new EnvVarProcessor());
+        $listener->onConfigLoad(new ParseConfigurationEvent());
 
         // Simulate loading a configuration item
-        $dataObject = new Config($data);
-        $listener->onParse(new ParseEvent($dataObject));
-        $listener->onMerge(new MergeEvent($dataObject));
-        $config->merge($dataObject->toArray());
+        $listener->onConfigParse(new ParseResourceEvent($dataObject));
+        $listener->onConfigMerge(new MergeResourceEvent($dataObject));
 
-        return $config;
+        return $dataObject;
     }
 }

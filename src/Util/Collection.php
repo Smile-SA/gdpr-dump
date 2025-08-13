@@ -13,6 +13,7 @@ use UnexpectedValueException;
  * @template T
  * @implements IteratorAggregate<string, T>
  */
+ // TODO remove or use and unit test of getKeys / filter
 abstract class Collection implements IteratorAggregate
 {
     protected string $descriptor = 'item';
@@ -76,9 +77,27 @@ abstract class Collection implements IteratorAggregate
      *
      * @return array<string, T>
      */
-    public function all(): array
+    public function getValues(): array
     {
         return $this->items;
+    }
+
+    /**
+     * Get all keys.
+     *
+     * @return string[]
+     */
+    public function getKeys(): array
+    {
+        return array_keys($this->items);
+    }
+
+    /**
+     * Return a filtered collection.
+     */
+    public function filter(callable $callback): static
+    {
+        return new static(array_filter($this->items, $callback, ARRAY_FILTER_USE_BOTH));
     }
 
     /**

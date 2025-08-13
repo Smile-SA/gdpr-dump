@@ -6,19 +6,24 @@ namespace Smile\GdprDump\Tests\Functional;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use RuntimeException;
-use Smile\GdprDump\Config\Config;
-use Smile\GdprDump\Config\ConfigInterface;
-use Smile\GdprDump\Config\Loader\ConfigLoader;
+use Smile\GdprDump\Configuration\Configuration;
+use Smile\GdprDump\Configuration\ConfigInterface;
+use Smile\GdprDump\Configuration\Loader\Loader;
 use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Database\ParameterBag;
 use Smile\GdprDump\Kernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+// TODO
+// https://github.com/symfony/symfony/blob/7.4/src/Symfony/Bundle/FrameworkBundle/Test/KernelTestCase.php
+// https://github.com/symfony/symfony/blob/7.4/src/Symfony/Bundle/FrameworkBundle/Resources/config/test.php#L48
+// https://github.com/symfony/symfony/blob/7.4/src/Symfony/Bundle/FrameworkBundle/Kernel/MicroKernelTrait.php#L161
+// https://github.com/symfony/symfony/blob/7.4/src/Symfony/Bundle/FrameworkBundle/Test/TestContainer.php
 abstract class TestCase extends BaseTestCase
 {
     private static ?Kernel $kernel = null;
     private static ?Database $database = null;
-    private static ?Config $config = null;
+    private static ?Configuration $configuration = null;
 
     /**
      * Get the absolute path of the application.
@@ -54,15 +59,15 @@ abstract class TestCase extends BaseTestCase
      */
     protected static function getConfig(): ConfigInterface
     {
-        if (self::$config === null) {
-            self::$config = new Config();
+        if (self::$configuration === null) {
+            self::$configuration = new Configuration();
 
-            /** @var ConfigLoader $loader */
-            $loader = self::getContainer()->get(ConfigLoader::class);
-            $loader->load(self::$config, self::getResource('config/config.yaml'));
+            /** @var Loader $loader */
+            $loader = self::getContainer()->get(Loader::class);
+            $loader->load(self::$configuration, self::getResource('config/config.yaml'));
         }
 
-        return self::$config;
+        return self::$configuration;
     }
 
     /**
@@ -71,10 +76,10 @@ abstract class TestCase extends BaseTestCase
     protected static function getDatabase(): Database
     {
         if (self::$database === null) {
-            $config = self::getConfig();
+            $configuration = self::getConfig();
 
             // Initialize the shared connection
-            $connectionParams = $config->get('database');
+            $connectionParams = $configuration->get('database');
             $connectionParams['dbname'] = $connectionParams['name'];
             unset($connectionParams['name']);
             self::$database = new Database(new ParameterBag($connectionParams));

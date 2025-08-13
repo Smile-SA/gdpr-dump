@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Randomizer;
 
-use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Converter;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-final class RandomizeText implements ConverterInterface
+final class RandomizeText implements Converter
 {
     private int $minLength;
     private string $replacements;

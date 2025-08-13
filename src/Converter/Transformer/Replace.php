@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Transformer;
 
-use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Converter;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-final class Replace implements ConverterInterface
+final class Replace implements Converter
 {
     private string $search;
     private string $replacement;

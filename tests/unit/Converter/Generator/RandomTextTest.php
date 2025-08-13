@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Converter\Generator\RandomText;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 final class RandomTextTest extends TestCase
@@ -62,7 +62,7 @@ final class RandomTextTest extends TestCase
      */
     public function testEmptyCharacters(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(RandomText::class, ['characters' => '']);
     }
 }

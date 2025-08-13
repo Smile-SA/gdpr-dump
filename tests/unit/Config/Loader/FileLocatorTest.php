@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Config\Loader;
 
-use Smile\GdprDump\Config\Loader\FileLocator;
-use Smile\GdprDump\Config\Loader\FileNotFoundException;
+use Smile\GdprDump\Configuration\Exception\FileLocatorException;
+use Smile\GdprDump\Configuration\Loader\FileLocator;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 final class FileLocatorTest extends TestCase
@@ -61,7 +61,7 @@ final class FileLocatorTest extends TestCase
     public function testFileWithRelativePathNotFound(): void
     {
         $locator = $this->createFileLocator();
-        $this->expectException(FileNotFoundException::class);
+        $this->expectException(FileLocatorException::class);
         $locator->locate('not_exists');
     }
 
@@ -71,7 +71,7 @@ final class FileLocatorTest extends TestCase
     public function testFileWithAbsolutePathNotFound(): void
     {
         $locator = $this->createFileLocator();
-        $this->expectException(FileNotFoundException::class);
+        $this->expectException(FileLocatorException::class);
         $locator->locate('/not/exists');
     }
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Database\Metadata\Definition\Constraint;
 
-use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
+use Smile\GdprDump\Database\Metadata\Definition\ForeignKey;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 final class ForeignKeyTest extends TestCase

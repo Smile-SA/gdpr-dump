@@ -18,7 +18,7 @@ final class FakerLocaleListener
      */
     public function __invoke(DumpEvent $event): void
     {
-        $locale = $event->getConfig()->getFakerSettings()->getLocale();
+        $locale = $event->getConfig()->getFakerConfig()->getLocale();
         if ($locale !== '') {
             $this->fakerService->setLocale($locale);
         }

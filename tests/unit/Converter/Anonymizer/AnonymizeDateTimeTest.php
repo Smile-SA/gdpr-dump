@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeDateTime;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 use UnexpectedValueException;
 
@@ -41,7 +41,7 @@ final class AnonymizeDateTimeTest extends TestCase
      */
     public function testEmptyFormat(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(AnonymizeDateTime::class, ['format' => '']);
     }
 

@@ -4,21 +4,17 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Proxy;
 
-use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Converter;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
-use Smile\GdprDump\Util\ArrayHelper;
+use Smile\GdprDump\Util\Arrays;
 
-final class JsonData implements ConverterInterface
+final class JsonData implements Converter
 {
     /**
-     * @var array<string, ConverterInterface>
+     * @var array<string, Converter>
      */
     private array $converters;
-
-    public function __construct(private ArrayHelper $arrayHelper)
-    {
-    }
 
     public function setParameters(array $parameters): void
     {
@@ -38,7 +34,7 @@ final class JsonData implements ConverterInterface
 
         foreach ($this->converters as $path => $converter) {
             // Get the value
-            $nestedValue = $this->arrayHelper->getPath($decoded, $path);
+            $nestedValue = Arrays::getPath($decoded, $path);
             if ($nestedValue === null) {
                 continue;
             }
@@ -47,7 +43,7 @@ final class JsonData implements ConverterInterface
             $nestedValue = $converter->convert($nestedValue);
 
             // Replace the original value in the JSON by the converted value
-            $this->arrayHelper->setPath($decoded, $path, $nestedValue);
+            Arrays::setPath($decoded, $path, $nestedValue);
         }
 
         return json_encode($decoded);

@@ -56,6 +56,7 @@ composer: ## Run composer. Example: `make composer c=update`
 .PHONY: analyse
 analyse: vendor ## Run code analysis tools (parallel-lint, phpcs, phpstan).
 	$(PHP_CLI) composer audit
+	$(PHP_CLI) vendor/bin/yaml-lint app/config --parse-tags
 	$(PHP_CLI) vendor/bin/parallel-lint app bin src tests
 	$(PHP_CLI) vendor/bin/phpcs
 	$(PHP_CLI) vendor/bin/phpstan analyse

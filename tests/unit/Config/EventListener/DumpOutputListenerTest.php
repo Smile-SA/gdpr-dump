@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Config\EventListener;
 
 use DateTime;
-use Smile\GdprDump\Config\Config;
-use Smile\GdprDump\Config\Event\LoadedEvent;
-use Smile\GdprDump\Config\EventListener\DumpOutputListener;
-use Smile\GdprDump\Config\Validator\ValidationException;
+use Smile\GdprDump\Configuration\Configuration;
+use Smile\GdprDump\Configuration\Event\ConfigurationParsedEvent;
+use Smile\GdprDump\Configuration\Event\LoadedEvent;
+use Smile\GdprDump\Configuration\EventListener\DumpOutputListener;
+use Smile\GdprDump\Configuration\Exception\ConfigLoadException;
+use Smile\GdprDump\Configuration\Validator\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 final class DumpOutputListenerTest extends TestCase
@@ -18,30 +20,25 @@ final class DumpOutputListenerTest extends TestCase
      */
     public function testDatePlaceholder(): void
     {
-        $config = new Config([
-            'dump' => [
+        $data = (object) [
+            'dump' => (object) [
                 'output' => 'dump-{Ymd}.sql',
             ],
-        ]);
+        ];
 
         $listener = new DumpOutputListener();
-        $listener(new LoadedEvent($config));
+        $listener(new ConfigurationParsedEvent($data));
 
-        $dumpSettings = $config->get('dump');
-        $this->assertIsArray($dumpSettings);
-        $this->assertArrayHasKey('output', $dumpSettings);
-        $this->assertSame('dump-' . (new DateTime())->format('Ymd') . '.sql', $dumpSettings['output']);
+        $this->assertSame('dump-' . (new DateTime())->format('Ymd') . '.sql', $data->dump->output);
     }
 
     /**
      * Assert that an exception is thrown when the `dump` parameter has an invalid type.
      */
-    public function testInvalidDatabaseType(): void
+    public function testInvalidOutputType(): void
     {
-        $config = new Config(['dump' => 'not an array']);
         $listener = new DumpOutputListener();
-
-        $this->expectException(ValidationException::class);
-        $listener(new LoadedEvent($config));
+        $this->expectException(ConfigLoadException::class);
+        $listener(new ConfigurationParsedEvent((object) ['dump' => 'not an object']));
     }
 }

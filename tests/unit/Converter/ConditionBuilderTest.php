@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter;
 
-use RuntimeException;
 use Smile\GdprDump\Converter\ConditionBuilder;
+use Smile\GdprDump\Converter\Exception\InvalidConditionException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 final class ConditionBuilderTest extends TestCase
@@ -45,7 +45,7 @@ final class ConditionBuilderTest extends TestCase
     public function testErrorOnEmptyCondition(): void
     {
         $builder = new ConditionBuilder();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InvalidConditionException::class);
         $builder->build('');
     }
 
@@ -55,7 +55,7 @@ final class ConditionBuilderTest extends TestCase
     public function testErrorOnDollarSymbol(): void
     {
         $builder = new ConditionBuilder();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InvalidConditionException::class);
         $builder->build('$1 = 1');
     }
 
@@ -65,7 +65,7 @@ final class ConditionBuilderTest extends TestCase
     public function testErrorOnAssignmentOperator(): void
     {
         $builder = new ConditionBuilder();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InvalidConditionException::class);
         $builder->build('{{id}} = 1');
     }
 
@@ -75,7 +75,7 @@ final class ConditionBuilderTest extends TestCase
     public function testErrorOnPhpTag(): void
     {
         $builder = new ConditionBuilder();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InvalidConditionException::class);
         $builder->build('<?php {{id}} === 1 ?>');
     }
 
@@ -85,7 +85,7 @@ final class ConditionBuilderTest extends TestCase
     public function testErrorOnForbiddenFunction(): void
     {
         $builder = new ConditionBuilder();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InvalidConditionException::class);
         $builder->build('usleep(1000)');
     }
 
@@ -95,7 +95,7 @@ final class ConditionBuilderTest extends TestCase
     public function testErrorOnForbiddenStringFunction(): void
     {
         $builder = new ConditionBuilder();
-        $this->expectException(RuntimeException::class);
+        $this->expectException(InvalidConditionException::class);
         $builder->build('\'usleep\'(1000)');
     }
 
@@ -105,8 +105,8 @@ final class ConditionBuilderTest extends TestCase
     public function testErrorOnStaticFunction(): void
     {
         $builder = new ConditionBuilder();
-        $this->expectException(RuntimeException::class);
-        $builder->build('ArrayHelper::getPath(\'id\') === 1');
+        $this->expectException(InvalidConditionException::class);
+        $builder->build('Arrays::getPath(\'id\') === 1');
     }
 
     /**
@@ -115,7 +115,7 @@ final class ConditionBuilderTest extends TestCase
     public function testErrorOnStringStaticFunction(): void
     {
         $builder = new ConditionBuilder();
-        $this->expectException(RuntimeException::class);
-        $builder->build('\'ArrayHelper\'::getPath(\'id\') === 1');
+        $this->expectException(InvalidConditionException::class);
+        $builder->build('\'Arrays\'::getPath(\'id\') === 1');
     }
 }

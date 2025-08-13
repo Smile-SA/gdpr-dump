@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Functional\Config\Loader;
 
-use Smile\GdprDump\Config\Config;
-use Smile\GdprDump\Config\Loader\ConfigLoader;
-use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
+use Smile\GdprDump\Configuration\Configuration;
+use Smile\GdprDump\Configuration\Loader\ConfigLoader;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
 final class ConfigLoaderTest extends TestCase
@@ -24,22 +23,22 @@ final class ConfigLoaderTest extends TestCase
         $this->initEnvVars([
             'TEST_DUMP_OUTPUT' => 'dump.sql',
             'TEST_DATABASE_URL' => 'mysql://localhost/db_name',
-            'TEST_VERSION' => '10.5',
+            'TEST_VERSION' => '2.5',
         ]);
 
-        $config = new Config();
+        $configuration = new Configuration();
         $loader = $this->getConfigLoader();
         $fileName = self::getResource('config/test_listener_order/config.yaml');
-        $loader->load($config, $fileName);
+        $loader->load($configuration, $fileName);
 
         // Assert that EnvVarProcessor and VersionProcessor were executed before DumpOutputProcessor
-        $dump = $config->get('dump');
+        $dump = $configuration->get('dump');
         $this->assertIsArray($dump);
         $this->assertArrayHasKey('output', $dump);
-        $this->assertSame('dump.sql', $config->get('dump')['output']);
+        $this->assertSame('dump.sql', $configuration->get('dump')['output']);
 
         // Assert that EnvVarProcessor and VersionProcessor were executed before DatabaseUrlProcessor
-        $database = $config->get('database');
+        $database = $configuration->get('database');
         $this->assertIsArray($database);
         $this->assertArrayHasKey('host', $database);
         $this->assertSame('localhost', $database['host']);
@@ -50,11 +49,11 @@ final class ConfigLoaderTest extends TestCase
     }
 
     /**
-     * Get the config compiler.
+     * Get the config loader.
      */
-    private function getConfigLoader(): ConfigLoaderInterface
+    private function getConfigLoader(): ConfigLoader
     {
-        /** @var ConfigLoaderInterface */
+        /** @var ConfigLoader */
         return $this->getContainer()->get(ConfigLoader::class);
     }
 

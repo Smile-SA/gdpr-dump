@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Dumper;
 
 use Druidfi\Mysqldump\Mysqldump;
-use Smile\GdprDump\Config\ConfigInterface;
+use Smile\GdprDump\Configuration\Configuration;
+use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Database\DatabaseFactory;
-use Smile\GdprDump\Database\DatabaseInterface;
-use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Dumper\Builder\MysqldumpSettingsBuilder;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
-use Smile\GdprDump\Dumper\Config\DumperConfig;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
 use Smile\GdprDump\Dumper\Event\DumpFinishedEvent;
+use Smile\GdprDump\Dumper\Exception\DumpException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Throwable;
 
-final class MysqlDumper implements DumperInterface
+final class MysqlDumper implements Dumper
 {
     public function __construct(
         private DatabaseFactory $databaseFactory,
@@ -25,56 +25,54 @@ final class MysqlDumper implements DumperInterface
     ) {
     }
 
-    public function dump(ConfigInterface $config, bool $dryRun = false): void
+    public function dump(Configuration $configuration, bool $dryRun = false): void
     {
-        // Initialize the database connection
-        $database = $this->databaseFactory->create($config);
+        try {
+            $configuration = clone $configuration; // object will be modified by ConfigProcessor
 
-        // Convert the configuration to an object with getters/setters
-        $config = $this->createDumperConfig($config, $database->getMetadata());
+            // Initialize the database connection
+            $database = $this->databaseFactory->create($configuration->getConnectionParams());
+            $database->connect();
 
-        // Create the Mysqldump object (mysqldump-php library)
-        $dumpContext = new DumpContext();
-        $dumper = $this->createMysqldump($database, $config, $dumpContext);
+            // Process tables declared in the configuration (remove undefined tables, resolve patterns such as "log_*")
+            $processor = new ConfigProcessor($database->getMetadata());
+            $processor->process($configuration);
 
-        $this->eventDispatcher->dispatch(new DumpEvent($dumper, $database, $config, $dumpContext));
+            // Create the Mysqldump object (mysqldump-php library)
+            $dumpContext = new DumpContext();
+            $dumper = $this->createMysqldump($database, $configuration, $dumpContext);
 
-        // Close the Doctrine connection before proceeding to the dump creation (mysqldump-php uses its own connection)
-        $database->getConnection()->close();
+            $this->eventDispatcher->dispatch(new DumpEvent($dumper, $database, $configuration, $dumpContext));
 
-        if (!$dryRun) {
-            // Create the dump
-            $dumper->start($config->getDumpOutput());
+            // Close the Doctrine connection (mysqldump-php uses its own connection)
+            $database->close();
+
+            if (!$dryRun) {
+                // Create the dump
+                $dumper->start($configuration->getDumpSettings()->getOutput());
+            }
+
+            $this->eventDispatcher->dispatch(new DumpFinishedEvent($configuration));
+        } catch (Throwable $e) {
+            isset($database) && $database->close();
+            throw $e instanceof DumpException ? $e : new DumpException($e->getMessage(), $e);
         }
-
-        $this->eventDispatcher->dispatch(new DumpFinishedEvent($config));
-    }
-
-    /**
-     * Create the dumper config object.
-     */
-    private function createDumperConfig(ConfigInterface $config, MetadataInterface $metadata): DumperConfig
-    {
-        // Process tables declared in the configuration (remove undefined tables, resolve patterns such as "log_*")
-        $processor = new ConfigProcessor($metadata);
-        $processor->process($config);
-
-        return new DumperConfig($config);
     }
 
     /**
      * Create the Mysqldump object.
      */
     private function createMysqldump(
-        DatabaseInterface $database,
-        DumperConfig $config,
+        Database $database,
+        Configuration $configuration,
         DumpContext $dumpContext,
     ): Mysqldump {
-        $dumpSettings = $this->mysqldumpSettingsBuilder->build($config);
+
+        $dumpSettings = $this->mysqldumpSettingsBuilder->build($configuration);
 
         // Set SQL variables
         $connection = $database->getConnection();
-        foreach ($config->getVarQueries() as $varName => $query) {
+        foreach ($configuration->getVarQueries() as $varName => $query) {
             $value = $connection->fetchOne($query);
             $dumpContext->variables[$varName] = $value;
             $dumpSettings['init_commands'][] = 'SET @' . $varName . ' = ' . $connection->quote($value);

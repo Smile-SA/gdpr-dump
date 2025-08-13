@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Anonymizer;
 
-use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Converter;
 
-final class AnonymizeDateTime implements ConverterInterface
+final class AnonymizeDateTime implements Converter
 {
     private AnonymizeDate $dateConverter;
 

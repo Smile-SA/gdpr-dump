@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Randomizer;
 
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Converter\Randomizer\RandomizeText;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
@@ -54,7 +54,7 @@ final class RandomizeTextTest extends TestCase
      */
     public function testEmptyReplacements(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(RandomizeText::class, ['replacements' => '']);
     }
 }

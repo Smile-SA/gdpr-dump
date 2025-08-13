@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Database;
 
+use Smile\GdprDump\Database\Driver\DatabaseDriver;
 use UnexpectedValueException;
 
 final class ParameterBag
 {
     private array $params;
     private array $defaults = [
-        DatabaseInterface::DRIVER_MYSQL => ['host' => 'localhost', 'user' => 'root'],
+        DatabaseDriver::MYSQL => ['host' => 'localhost', 'user' => 'root'],
     ];
 
     /**
@@ -47,12 +48,18 @@ final class ParameterBag
         // The database name is mandatory, no matter what driver is used
         // (this will require some refactoring if SQLite compatibility is added)
         if (!isset($params['dbname'])) {
-            throw new UnexpectedValueException('Missing database name.');
+            $message = <<<'EOT'
+                The database name is required.
+
+                To specify a database name, you can set the parameter `database.name` in a configuration file.
+                Alternatively, you can use the command-line option `--database`.
+                EOT;
+            throw new UnexpectedValueException($message);
         }
 
         // Set the driver
         if (!isset($params['driver'])) {
-            $params['driver'] = DatabaseInterface::DRIVER_MYSQL;
+            $params['driver'] = DatabaseDriver::DEFAULT;
         }
 
         if (isset($this->defaults[$params['driver']])) {
@@ -62,7 +69,7 @@ final class ParameterBag
         // Remove empty elements
         return array_filter(
             $params,
-            fn (mixed $value): bool => $value !== null && $value !== '' && $value !== false
+            fn (mixed $value): bool => $value !== null && $value !== ''
         );
     }
 }

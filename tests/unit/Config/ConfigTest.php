@@ -2,96 +2,91 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Config;
+namespace Smile\GdprDump\Tests\Unit\Dumper\Config;
 
-use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Configuration\Configuration;
+use Smile\GdprDump\Configuration\Definition\DumpConfig;
+use Smile\GdprDump\Configuration\Definition\FakerConfig;
+use Smile\GdprDump\Configuration\Definition\FilterPropagationConfig;
+use Smile\GdprDump\Configuration\Definition\Table\SortOrder;
+use Smile\GdprDump\Configuration\Definition\TableConfig;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use UnexpectedValueException;
 
 final class ConfigTest extends TestCase
 {
-    private array $data = [
-        'string' => 'value',
-        'array' => [1, 2],
-        'object' => [
-            'sub_object' => [
-                'key1' => 'value1',
-                'key2' => 'value2',
-            ],
-        ],
-    ];
-
     /**
-     * Test the constructor.
+     * Test the creation of a dumper config object.
      */
-    public function testConstructor(): void
+    public function testObjectCreation(): void
     {
-        $config = new Config($this->data);
-        $this->assertSame($this->data, $config->toArray());
+        $dumpConfig = new DumpConfig();
+        $fakerConfig = new FakerConfig();
+        $filterPropagationConfig = new FilterPropagationConfig();
+        $tablesConfig = [
+            'table1' => (new TableConfig())->setTruncate(true), // to truncate
+            'table2' => (new TableConfig())->setLimit(10), // to filter
+            'table3' => (new TableConfig())->setWhere('1=1'), // to filter
+            'table4' => (new TableConfig())->setSortOrders([new SortOrder('id')]), // to sort
+            'table5' => (new TableConfig())->setLimit(0), // value 0 must be ignored
+        ];
+        $connectionParams = ['name' => 'tests'];
+        $includedTables = ['table1'];
+        $excludedTables = ['table2'];
+        $varQueries = ['foo' => 'bar'];
+
+        $configuration = (new Configuration())
+            ->setDumpSettings($dumpConfig)
+            ->setFakerConfig($fakerConfig)
+            ->setFilterPropagationConfig($filterPropagationConfig)
+            ->setTablesConfig($tablesConfig)
+            ->setConnectionParams($connectionParams)
+            ->setIncludedTables($includedTables)
+            ->setExcludedTables($excludedTables)
+            ->setVarQueries($varQueries);
+
+        $this->assertSame($dumpConfig, $configuration->getDumpSettings());
+        $this->assertSame($fakerConfig, $configuration->getFakerConfig());
+        $this->assertSame($filterPropagationConfig, $configuration->getFilterPropagationConfig());
+        $this->assertSame($tablesConfig, $configuration->getTablesConfig());
+        $this->assertSame($connectionParams, $configuration->getConnectionParams());
+        $this->assertSame($includedTables, $configuration->getIncludedTables());
+        $this->assertSame($excludedTables, $configuration->getExcludedTables());
+        $this->assertSame($varQueries, $configuration->getVarQueries());
+        $this->assertSame(['table2', 'table3'], $configuration->getTablesToFilter());
+        $this->assertSame(['table4'], $configuration->getTablesToSort());
+        $this->assertSame(['table1'], $configuration->getTablesToTruncate());
     }
 
     /**
-     * Test the "set", "get" and "has" methods.
+     * Test the default values.
      */
-    public function testSetValue(): void
+    public function testDefaultValues(): void
     {
-        $config = new Config();
-        $config->set('key', 'value');
+        $configuration = new Configuration();
 
-        $this->assertTrue($config->has('key'));
-        $this->assertSame('value', $config->get('key'));
-        $this->assertSame(['key' => 'value'], $config->toArray());
+        // Assert that the objects are properly loaded
+        $this->assertInstanceOf(DumpConfig::class, $configuration->getDumpSettings());
+        $this->assertInstanceOf(FakerConfig::class, $configuration->getFakerConfig());
+        $this->assertInstanceOf(FilterPropagationConfig::class, $configuration->getFilterPropagationConfig());
+
+        // Assert that other values are properly set
+        $this->assertSame([], $configuration->getTablesConfig());
+        $this->assertSame([], $configuration->getConnectionParams());
+        $this->assertSame([], $configuration->getIncludedTables());
+        $this->assertSame([], $configuration->getExcludedTables());
+        $this->assertSame([], $configuration->getVarQueries());
+        $this->assertSame([], $configuration->getTablesToFilter());
+        $this->assertSame([], $configuration->getTablesToSort());
+        $this->assertSame([], $configuration->getTablesToTruncate());
     }
 
     /**
-     * Test the "reset" method.
+     * Assert that an exception is thrown when a var query contains a forbidden statement.
      */
-    public function testReset(): void
+    public function testInvalidStatementInVariableQuery(): void
     {
-        $config = new Config($this->data);
-        $config->reset();
-        $this->assertEmpty($config->toArray());
-
-        $data = ['key' => 'value'];
-        $config->reset($data);
-        $this->assertSame($data, $config->toArray());
-    }
-
-    /**
-     * Test the "merge" method.
-     */
-    public function testMerge(): void
-    {
-        $config = new Config();
-        $config->merge($this->data);
-
-        // Assert that numeric arrays are replaced
-        $newArray = [2, 3];
-        $config->merge(['array' => $newArray]);
-        $this->assertSame($newArray, $config->get('array'));
-
-        // Assert that associative arrays are properly merged
-        $newObject = ['sub_object' => ['key2' => 'new_value', 'key3' => 'value3']];
-        $expectedObject = ['sub_object' => array_merge($this->data['object']['sub_object'], $newObject['sub_object'])];
-        $config->merge(['object' => $newObject]);
-        $this->assertSame($expectedObject, $config->get('object'));
-
-        // Assert that objects set to null are removed from the config array if they are already defined
-        $config->merge(['object' => ['sub_object' => null]]);
-        $this->assertFalse($config->has('object'));
-
-        // Assert that objects set to null are removed from the config
-        $config->merge(['object2' => ['sub_object' => null]]);
-        $this->assertSame(['sub_object' => null], $config->get('object2'));
-    }
-
-    /**
-     * Test the behavior of the "get" method when the specified key is not defined.
-     */
-    public function testValueNotFound(): void
-    {
-        $config = new Config($this->data);
-
-        $this->assertFalse($config->has('not_exists'));
-        $this->assertSame('defaultValue', $config->get('not_exists', 'defaultValue'));
+        $this->expectException(UnexpectedValueException::class);
+        (new Configuration())->setVarQueries(['my_var' => 'select my_col from my_table; delete from my_table']);
     }
 }

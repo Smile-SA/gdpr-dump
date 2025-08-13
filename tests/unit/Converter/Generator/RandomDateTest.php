@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 
 use DateTime;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Converter\Generator\RandomDate;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 final class RandomDateTest extends TestCase
@@ -77,7 +77,7 @@ final class RandomDateTest extends TestCase
      */
     public function testEmptyFormat(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(RandomDate::class, ['format' => '']);
     }
 
@@ -86,7 +86,7 @@ final class RandomDateTest extends TestCase
      */
     public function testYearConflict(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(RandomDate::class, [
             'min_year' => 2020,
             'max_year' => 2019,

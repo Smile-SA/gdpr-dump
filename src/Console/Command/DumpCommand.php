@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Console\Command;
 
-use Smile\GdprDump\Config\Config;
-use Smile\GdprDump\Config\ConfigException;
-use Smile\GdprDump\Config\ConfigInterface;
-use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
-use Smile\GdprDump\Config\Validator\ValidationException;
-use Smile\GdprDump\Config\Validator\ValidationResultInterface;
-use Smile\GdprDump\Config\Validator\ValidatorInterface;
+use Smile\GdprDump\Configuration\ConfigurationFactory;
 use Smile\GdprDump\Console\Helper\DumpInfo;
-use Smile\GdprDump\Dumper\DumperInterface;
+use Smile\GdprDump\Dumper\DumperFactory;
+use Smile\GdprDump\Exception\JsonSchemaException;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\InvalidOptionException;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,15 +17,15 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Throwable;
 
 final class DumpCommand extends Command
 {
     public function __construct(
-        private DumperInterface $dumper,
-        private ConfigLoaderInterface $configLoader,
-        private ValidatorInterface $validator,
-        private DumpInfo $dumpInfo,
+        private ConfigurationFactory $configurationFactory,
+        private DumperFactory $dumperFactory,
+        private EventDispatcherInterface $eventDispatcher,
     ) {
         parent::__construct();
     }
@@ -43,7 +39,7 @@ final class DumpCommand extends Command
             ->setDescription('Create an anonymized dump')
             ->addArgument(
                 'config_file',
-                InputArgument::IS_ARRAY | InputArgument::REQUIRED,
+                InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
                 'Dump configuration file(s)'
             )
             ->addOption('host', null, InputOption::VALUE_REQUIRED, 'Database host' . $configHint)
@@ -59,34 +55,21 @@ final class DumpCommand extends Command
     {
         try {
             // Load the config file(s)
-            $config = $this->loadConfig($input);
-
-            // Validate the config data
-            $result = $this->validator->validate($config->toArray());
-            if (!$result->isValid()) {
-                $this->outputValidationResult($result, $output);
-                return Command::FAILURE;
-            }
-
-            // Prompt for the password if not defined
-            $database = (array) $config->get('database', []);
-            if (!array_key_exists('password', $database)) {
-                $database['password'] = $this->promptPassword($input, $output);
-                $config->set('database', $database);
-            }
+            $configuration = $this->loadConfig($input, $output);
 
             if ($output->isVerbose()) {
-                $this->dumpInfo->setOutput($output);
+                $dumpInfo = new DumpInfo($output, $this->eventDispatcher);
+                $dumpInfo->addListeners();
             }
 
-            $this->dumper->dump($config, $input->getOption('dry-run'));
+            $this->dumperFactory
+                ->create($configuration)
+                ->dump($configuration, $input->getOption('dry-run'));
         } catch (Throwable $e) {
-            if ($output->isVerbose()) {
-                throw $e;
-            }
-
-            $this->getErrorOutput($output)->writeln('<error>' . $e->getMessage() . '</error>');
+            $this->handleException($e, $output);
             return Command::FAILURE;
+        } finally {
+           isset($dumpInfo) && $dumpInfo->removeListeners();
         }
 
         return Command::SUCCESS;
@@ -94,55 +77,58 @@ final class DumpCommand extends Command
 
     /**
      * Load the dump config.
-     *
-     * @throws ConfigException
      */
-    private function loadConfig(InputInterface $input): ConfigInterface
+    private function loadConfig(InputInterface $input, OutputInterface $output): object
     {
-        $config = new Config();
-        $files = (array) $input->getArgument('config_file');
-        $this->configLoader->load($config, ...$files);
+        $builder = $this->configurationFactory->createBuilder();
 
-        // Add database config from input options
-        $this->addInputOptionsToConfig($config, $input);
+        // Load the provided files
+        $fileNames = (array) $input->getArgument('config_file');
+        foreach ($fileNames as $fileName) {
+            $builder->addResource($this->configurationFactory->createFileResource($fileName));
+        }
 
-        return $config;
+        // Add input from stdin
+        $stdin = $this->getStdin();
+        if ($stdin !== '') {
+            $builder->addResource($this->configurationFactory->createJsonResource($stdin));
+        }
+
+        $configuration = $builder->build();
+        $connectionParams = $configuration->getConnectionParams();
+
+        // Add command-line options to the connection params (e.g. `--database`)
+        $this->addInputOptionsToConnectionParams($connectionParams, $input);
+
+        // Prompt for the password if not defined
+        if ($connectionParams && !array_key_exists('password', $connectionParams)) {
+            $connectionParams['password'] = $this->promptPassword($input, $output);
+        }
+
+        $configuration->setConnectionParams($connectionParams);
+
+        return $configuration;
     }
 
     /**
-     * Add input option values to the config.
-     *
-     * @throws ValidationException
+     * Update database config from command-line options.
      */
-    private function addInputOptionsToConfig(ConfigInterface $config, InputInterface $input): void
+    private function addInputOptionsToConnectionParams(array &$connectionParams, InputInterface $input): void
     {
-        $databaseConfig = (array) $config->get('database', []);
-
         foreach (['host', 'port', 'user', 'password', 'database'] as $option) {
             $value = $input->getOption($option);
             if ($value === null) {
-                // Option was not provided
-                continue;
+                continue; // Option was not provided
             }
 
-            if ($value === '') {
-                if ($option === 'password') {
-                    // Remove the password from the config if an empty value was provided
-                    unset($databaseConfig['password']);
-                    continue;
-                }
-
-                // Option must have a value
-                throw new ValidationException(sprintf('Please provide a value for the option "%s".', $option));
+            if ($value === '' && $option !== 'password') {
+                // Disallow empty string (except for password)
+                throw new InvalidOptionException(sprintf('The "--%s" option requires a non-empty value.', $option));
             }
 
-            // Override the config value with the provided option value
-            $configKey = $option === 'database' ? 'name' : $option;
-            $databaseConfig[$configKey] = $value;
-        }
-
-        if ($databaseConfig) {
-            $config->set('database', $databaseConfig);
+            // Override the value
+            $param = $option === 'database' ? 'dbname' : $option;
+            $connectionParams[$param] = $value;
         }
     }
 
@@ -161,15 +147,41 @@ final class DumpCommand extends Command
     }
 
     /**
-     * Display the validation result.
+     * Display the provided exception.
      */
-    private function outputValidationResult(ValidationResultInterface $result, OutputInterface $output): void
+    private function handleException(Throwable $exception, OutputInterface $output): void
     {
-        $stdErr = $this->getErrorOutput($output);
-        $stdErr->writeln('<error>The following errors were detected:</error>');
-        foreach ($result->getMessages() as $message) {
-            $stdErr->writeln('  - ' . $message);
+        if ($exception instanceof JsonSchemaException) {
+            // Display errors detected by the JSON schema validator
+            $stdErr = $this->getErrorOutput($output);
+            $stdErr->writeln('<error>The configuration is invalid:</error>');
+            foreach ($exception->getMessages() as $message) {
+                $stdErr->writeln('  - ' . $message);
+            }
+            return;
         }
+
+        if ($output->isDebug() || $exception instanceof InvalidOptionException) {
+            throw $exception;
+        }
+
+        $this->getErrorOutput($output)->writeln($exception->getMessage());
+    }
+
+    /**
+     * Get the value passed in stdin (if any).
+     */
+    private function getStdin(): string
+    {
+        $stdin = '';
+        $fh = fopen('php://stdin', 'r');
+        stream_set_blocking($fh, false);
+
+        while ($line = fgets($fh)) {
+            $stdin .= $line;
+        }
+
+        return $stdin;
     }
 
     /**

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Converter\Proxy\SerializedData;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
@@ -54,7 +54,7 @@ final class SerializedDataTest extends TestCase
      */
     public function testConvertersNotSet(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(SerializedData::class);
     }
 
@@ -63,7 +63,7 @@ final class SerializedDataTest extends TestCase
      */
     public function testEmptyConverters(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(SerializedData::class, ['converters' => []]);
     }
 
@@ -72,7 +72,7 @@ final class SerializedDataTest extends TestCase
      */
     public function testInvalidConverters(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(SerializedData::class, ['converters' => 'notAnArray']);
     }
 
