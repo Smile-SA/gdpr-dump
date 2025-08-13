@@ -6,17 +6,23 @@ namespace Smile\GdprDump;
 
 use ErrorException;
 use Exception;
+use GdprDumpCachedContainer;
 use RuntimeException;
 use Smile\GdprDump\Console\Application;
+use Smile\GdprDump\Console\Command\DumpCommand;
 use Smile\GdprDump\DependencyInjection\Compiler\ConverterAliasPass;
+use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class Kernel
 {
@@ -31,7 +37,7 @@ final class Kernel
      *
      * @throws Exception
      */
-    public function run(string $command = 'command.dump'): void
+    public function run(string $command = DumpCommand::class): void
     {
         $this->boot();
         $application = new Application();
@@ -57,9 +63,14 @@ final class Kernel
         // Convert notices/warnings into exceptions
         $this->initErrorHandler();
 
+        // Load the .env file
+        $env = dirname(__DIR__) . '/.env';
+        if (is_file($env)) {
+            (new Dotenv())->load($env);
+        }
+
         // Build the service container
         $this->container = $this->buildContainer();
-
         $this->booted = true;
     }
 
@@ -95,27 +106,63 @@ final class Kernel
     }
 
     /**
-     * Build the service container.
-     *
-     * The container is not cached (cf. https://symfony.com/doc/6.2/components/dependency_injection/compilation.html#dumping-the-configuration-for-performance)
-     * because the cache file would contain hardcoded paths (e.g. app_root).
-     * It would prevent the phar file from working.
+     * Fetch the service container from a cache file, or create it if the file doesn't exist.
      */
     private function buildContainer(): ContainerInterface
     {
-        $basePath = dirname(__DIR__);
+        $file = dirname(__DIR__) . '/var/container_cache.php';
+        $containerConfigCache = new ConfigCache($file, $this->isDebug());
+        if (!$containerConfigCache->isFresh()) {
+            $container = $this->createContainer();
+
+            if (!is_writable(dirname($file))) {
+                // Skip cache file creation if the parent directory is not writable
+                return $this->createContainer();
+            }
+
+            // Dump the container to the cache file
+            $dumper = new PhpDumper($container);
+            /** @var string $content */
+            $content = $dumper->dump(['class' => 'GdprDumpCachedContainer']);
+            $containerConfigCache->write($content, $container->getResources());
+        }
+
+        // Fetch the container from the cache
+        require_once $file;
+
+        // @phpstan-ignore-next-line
+        return new GdprDumpCachedContainer();
+    }
+
+    /**
+     * Create the service container.
+     */
+    private function createContainer(): ContainerBuilder
+    {
         $container = new ContainerBuilder();
 
-        $loader = new YamlFileLoader($container, new FileLocator($basePath . '/app/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__) . '/app/config'));
         $loader->load('services.yaml');
 
         $container->addCompilerPass(new RegisterListenersPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->addCompilerPass(new ConverterAliasPass());
 
-        $container->setParameter('app_root', $basePath);
         $container->register('event_dispatcher', EventDispatcher::class);
+        $container->setAlias(EventDispatcherInterface::class, 'event_dispatcher');
+        $container->setAlias(ContainerInterface::class, 'service_container'); // used by ConverterFactory
         $container->compile();
 
         return $container;
+    }
+
+    /**
+     * Check if the application runs in debug mode.
+     */
+    private function isDebug(): bool
+    {
+        return !str_starts_with(__DIR__, 'phar://')
+            // phpcs:ignore SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable
+            ? (bool) ($_ENV['APP_DEBUG'] ?? false)
+            : false; // the phar file is compiled without the .env file, but better be safe than sorry
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Functional\Config\Loader;
 
 use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Config\Loader\ConfigLoader;
 use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
@@ -54,7 +55,7 @@ final class ConfigLoaderTest extends TestCase
     private function getConfigLoader(): ConfigLoaderInterface
     {
         /** @var ConfigLoaderInterface */
-        return $this->getContainer()->get('config.loader');
+        return $this->getContainer()->get(ConfigLoader::class);
     }
 
     /**

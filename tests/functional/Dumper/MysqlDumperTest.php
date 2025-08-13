@@ -27,7 +27,7 @@ final class MysqlDumperTest extends TestCase
         // Make sure the dump file does not already exist
         $this->deleteDumpFile();
 
-        $faker = $this->getContainer()->get('faker.service');
+        $faker = $this->getContainer()->get(FakerService::class);
         $this->assertInstanceOf(FakerService::class, $faker);
         $this->assertSame('en_US', $faker->getLocale());
 
@@ -179,6 +179,6 @@ final class MysqlDumperTest extends TestCase
     private function getDumper(): MysqlDumper
     {
         /** @var MysqlDumper */
-        return $this->getContainer()->get('dumper');
+        return $this->getContainer()->get(MysqlDumper::class);
     }
 }
