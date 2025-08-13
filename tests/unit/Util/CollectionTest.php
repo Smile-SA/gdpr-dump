@@ -8,6 +8,7 @@ use Smile\GdprDump\Tests\Unit\TestCase;
 use Smile\GdprDump\Util\Collection;
 use UnexpectedValueException;
 
+// TODO REMOVE OR USE THE COLLECTION OBJECT
 final class CollectionTest extends TestCase
 {
     /**

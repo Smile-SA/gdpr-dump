@@ -14,6 +14,7 @@ use Smile\GdprDump\DependencyInjection\Compiler\ConverterAliasPass;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -24,6 +25,7 @@ use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
+use UnitEnum;
 
 final class Kernel
 {
@@ -161,12 +163,21 @@ final class Kernel
         $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__) . '/app/config'));
         $loader->load('services.yaml');
 
+        // Compiler pass
         $container->addCompilerPass(new RegisterListenersPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->addCompilerPass(new ConverterAliasPass());
 
+        // Core services
         $container->register('event_dispatcher', EventDispatcher::class);
         $container->setAlias(EventDispatcherInterface::class, 'event_dispatcher');
         $container->setAlias(ContainerInterface::class, 'service_container'); // used by ConverterFactory
+
+        // Autoconfiguration
+        $container->registerForAutoconfiguration(CompilerPassInterface::class)
+            ->addTag('container.excluded', ['source' => 'because it\'s a compiler pass']);
+        $container->registerForAutoconfiguration(UnitEnum::class)
+            ->addTag('container.excluded', ['source' => 'because it\'s an enum']);
+
         $container->compile();
 
         return $container;

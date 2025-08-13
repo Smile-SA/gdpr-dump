@@ -1,6 +1,6 @@
 version: '%env(TEST_VERSION)%'
 if_version:
-    '>10.0':
+    '>2.0':
         dump:
             output: '%env(TEST_DUMP_OUTPUT)%'
         database:

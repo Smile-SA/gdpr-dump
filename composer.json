@@ -22,6 +22,7 @@
         "theseer/tokenizer": "^1.2"
     },
     "require-dev": {
+        "dg/bypass-finals": "^1.9",
         "php-parallel-lint/php-parallel-lint": "^1.4",
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-phpunit": "^2.0",

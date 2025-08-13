@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
 use OverflowException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Converter\Generator\SetNull;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Converter\Proxy\Internal\Unique;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
@@ -60,16 +60,16 @@ final class UniqueTest extends TestCase
      */
     public function testConverterNotSet(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(Unique::class);
     }
 
     /**
-     * Assert that an exception is thrown when the parameter "converter" is not an instance of ConverterInterface.
+     * Assert that an exception is thrown when the parameter "converter" is not an instance of Converter.
      */
     public function testConverterNotValid(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(Unique::class, ['converter' => new stdClass()]);
     }
 }

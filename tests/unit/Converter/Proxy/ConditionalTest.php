@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
-use Smile\GdprDump\Converter\ConverterInterface;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Converter;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Converter\Proxy\Internal\Conditional;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
-use Smile\GdprDump\Tests\Unit\Converter\DumpContextAwareInterface;
+use Smile\GdprDump\Tests\Unit\Converter\DumpContextAware;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 use stdClass;
 
-final class ConditionalTest extends TestCase implements DumpContextAwareInterface
+final class ConditionalTest extends TestCase implements DumpContextAware
 {
     /**
      * Test the converter.
@@ -45,16 +45,16 @@ final class ConditionalTest extends TestCase implements DumpContextAwareInterfac
      */
     public function testConverterNotSet(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(Conditional::class, ['condition' => '{{id}} === 1']);
     }
 
     /**
-     * Assert that an exception is thrown when the parameter "converter" is not an instance of ConverterInterface.
+     * Assert that an exception is thrown when the parameter "converter" is not an instance of Converter.
      */
     public function testConverterNotValid(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(Conditional::class, ['converter' => new stdClass()]);
     }
 
@@ -63,7 +63,7 @@ final class ConditionalTest extends TestCase implements DumpContextAwareInterfac
      */
     public function testConditionNotSet(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(Conditional::class, ['converter' => $this->createOnSuccessConverter()]);
     }
 
@@ -72,7 +72,7 @@ final class ConditionalTest extends TestCase implements DumpContextAwareInterfac
      */
     public function testEmptyCondition(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(Conditional::class, [
             'converter' => $this->createOnSuccessConverter(),
             'condition' => '',
@@ -82,7 +82,7 @@ final class ConditionalTest extends TestCase implements DumpContextAwareInterfac
     /**
      * Create a test converter for conditions that evaluate to true.
      */
-    private function createOnSuccessConverter(): ConverterInterface
+    private function createOnSuccessConverter(): Converter
     {
         return $this->createConverter(ConverterMock::class, ['prefix' => 'success_']);
     }

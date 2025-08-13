@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Proxy;
 
-use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Converter;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Faker\FakerService;
 use Throwable;
 
-final class Faker implements ConverterInterface
+final class Faker implements Converter
 {
     private object $provider;
     private string $method;
@@ -43,7 +43,7 @@ final class Faker implements ConverterInterface
                 ->getFormatter($formatter);
         } catch (Throwable $e) {
             // Wrap the original exception to make it more clear that the error is due to a faker formatter
-            throw new ValidationException(sprintf('Faker formatter error: %s', $e->getMessage()), $e);
+            throw new InvalidParameterException(sprintf('Faker formatter error: %s', $e->getMessage()), $e);
         }
 
         $this->arguments = $input->get('arguments') ?? [];

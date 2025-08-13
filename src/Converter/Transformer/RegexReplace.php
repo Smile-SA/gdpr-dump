@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Transformer;
 
-use RuntimeException;
-use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Converter;
+use Smile\GdprDump\Converter\Exception\ConversionFailedException;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-final class RegexReplace implements ConverterInterface
+final class RegexReplace implements Converter
 {
     private string $pattern;
     private string $replacement;
@@ -36,7 +36,7 @@ final class RegexReplace implements ConverterInterface
             $value = preg_replace($this->pattern, $this->replacement, $value, $this->limit);
 
             if ($value === null) {
-                throw new RuntimeException(
+                throw new ConversionFailedException(
                     sprintf('Failed to perform a regex search and replace with the pattern "%s".', $this->pattern)
                 );
             }

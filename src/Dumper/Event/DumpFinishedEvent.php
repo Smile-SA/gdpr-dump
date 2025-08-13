@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Dumper\Event;
 
-use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
+use Smile\GdprDump\Config\DumperConfig;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
@@ -12,14 +12,14 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 final class DumpFinishedEvent extends Event
 {
-    public function __construct(private DumperConfigInterface $config)
+    public function __construct(private DumperConfig $config)
     {
     }
 
     /**
      * Get the dumper config.
      */
-    public function getConfig(): DumperConfigInterface
+    public function getConfig(): DumperConfig
     {
         return $this->config;
     }

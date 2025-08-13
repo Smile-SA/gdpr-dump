@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Functional\Database\Metadata;
 
 use RuntimeException;
-use Smile\GdprDump\Database\Metadata\MetadataInterface;
+use Smile\GdprDump\Database\Metadata\DatabaseMetadata;
 use Smile\GdprDump\Database\Metadata\MysqlMetadata;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
@@ -53,7 +53,7 @@ final class MysqlMetadataTest extends TestCase
     /**
      * Validate the foreign keys of the "stores" table.
      */
-    private function validateStoresForeignKeys(MetadataInterface $metadata): void
+    private function validateStoresForeignKeys(DatabaseMetadata $metadata): void
     {
         $foreignKeys = $metadata->getTableForeignKeys('stores');
         $this->assertCount(1, $foreignKeys);
@@ -69,7 +69,7 @@ final class MysqlMetadataTest extends TestCase
     /**
      * Validate the foreign keys of the "customers" table.
      */
-    private function validateCustomersForeignKeys(MetadataInterface $metadata): void
+    private function validateCustomersForeignKeys(DatabaseMetadata $metadata): void
     {
         $foreignKeys = $metadata->getTableForeignKeys('customers');
 
@@ -104,7 +104,7 @@ final class MysqlMetadataTest extends TestCase
     /**
      * Validate the foreign keys of the "addresses" table.
      */
-    private function validateAddressesForeignKeys(MetadataInterface $metadata): void
+    private function validateAddressesForeignKeys(DatabaseMetadata $metadata): void
     {
         $foreignKeys = $metadata->getTableForeignKeys('addresses');
         $this->assertCount(1, $foreignKeys);

@@ -82,11 +82,6 @@ final class CompileCommand extends Command
             // Throw an exception if one of the locales is not supported
             $this->validateLocales($locales);
 
-            if (!in_array($this->defaultLocale, $locales, true)) {
-                // phpcs:ignore Generic.Files.LineLength.TooLong
-                throw new RuntimeException(sprintf('Cannot proceed without including the default locale "%s" defined in app/config/services.yaml.', $this->defaultLocale));
-            }
-
             // Always include the fallback Faker locale
             if (!in_array(Factory::DEFAULT_LOCALE, $locales, true)) {
                 $locales[] = Factory::DEFAULT_LOCALE;
@@ -109,6 +104,11 @@ final class CompileCommand extends Command
             if (!is_dir($basePath . '/vendor/fakerphp/faker/src/Faker/Provider/' . $locale)) {
                 throw new RuntimeException(sprintf('The locale "%s" is not supported by Faker.', $locale));
             }
+        }
+
+        if (!in_array($this->defaultLocale, $locales, true)) {
+            // phpcs:ignore Generic.Files.LineLength.TooLong
+            throw new RuntimeException(sprintf('Cannot proceed without including the default locale "%s" defined in app/config/services.yaml.', $this->defaultLocale));
         }
     }
 

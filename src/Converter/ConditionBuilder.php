@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter;
 
-use RuntimeException;
+use Smile\GdprDump\Converter\Exception\InvalidConditionException;
 use TheSeer\Tokenizer\Token;
 use TheSeer\Tokenizer\TokenCollection;
 use TheSeer\Tokenizer\Tokenizer;
@@ -34,12 +34,12 @@ final class ConditionBuilder
     /**
      * Build the condition.
      *
-     * @throws RuntimeException
+     * @throws InvalidConditionException
      */
     public function build(string $condition): string
     {
         if ($condition === '') {
-            throw new RuntimeException('The condition must not be empty.');
+            throw new InvalidConditionException('The condition must not be empty.');
         }
 
         // Sanitize the condition
@@ -128,24 +128,24 @@ final class ConditionBuilder
     /**
      * Assert that the token is allowed.
      *
-     * @throws RuntimeException
+     * @throws InvalidConditionException
      */
     private function validateToken(Token $token, TokenCollection $tokens, int $index, int $tokenCount): void
     {
         if ($index > 0 && $token->getName() === 'T_OPEN_TAG') {
-            throw new RuntimeException('PHP opening tags are not allowed in converter conditions.');
+            throw new InvalidConditionException('PHP opening tags are not allowed in converter conditions.');
         }
 
         if ($index < $tokenCount - 1 && $token->getName() === 'T_CLOSE_TAG') {
-            throw new RuntimeException('PHP closing tags are not allowed in converter conditions.');
+            throw new InvalidConditionException('PHP closing tags are not allowed in converter conditions.');
         }
 
         if ($token->getName() === 'T_EQUAL') {
-            throw new RuntimeException('The operator "=" is not allowed in converter conditions.');
+            throw new InvalidConditionException('The operator "=" is not allowed in converter conditions.');
         }
 
         if ($token->getName() === 'T_VARIABLE') {
-            throw new RuntimeException('The character "$" is not allowed in converter conditions.');
+            throw new InvalidConditionException('The character "$" is not allowed in converter conditions.');
         }
 
         if ($token->getName() === 'T_OPEN_BRACKET') {
@@ -163,7 +163,7 @@ final class ConditionBuilder
                     $function = $previousToken->getValue();
                     if (!$this->isFunctionAllowed($function)) {
                         $message = sprintf('The function "%s" is not allowed in converter conditions.', $function);
-                        throw new RuntimeException($message);
+                        throw new InvalidConditionException($message);
                     }
 
                     // If the previous token is `::`, then it's a static call
@@ -171,7 +171,8 @@ final class ConditionBuilder
                     if ($previousTokenPos !== null) {
                         $previousToken = $tokens[$previousTokenPos];
                         if ($previousToken->getName() === 'T_DOUBLE_COLON') {
-                            throw new RuntimeException('Static functions are not allowed in converter conditions.');
+                            $message = 'Static functions are not allowed in converter conditions.';
+                            throw new InvalidConditionException($message);
                         }
                     }
                 }

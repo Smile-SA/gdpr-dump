@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeEmail;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 final class AnonymizeEmailTest extends TestCase
@@ -74,7 +74,7 @@ final class AnonymizeEmailTest extends TestCase
      */
     public function testEmptyMinWordLength(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(AnonymizeEmail::class, ['min_word_length' => null]);
     }
 
@@ -95,7 +95,7 @@ final class AnonymizeEmailTest extends TestCase
      */
     public function testEmptyReplacement(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(AnonymizeEmail::class, ['replacement' => '']);
     }
 
@@ -136,7 +136,7 @@ final class AnonymizeEmailTest extends TestCase
      */
     public function testInvalidDelimiters(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(AnonymizeEmail::class, ['delimiters' => 'invalid']);
     }
 
@@ -158,7 +158,7 @@ final class AnonymizeEmailTest extends TestCase
      */
     public function testEmptyDomains(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(AnonymizeEmail::class, ['domains' => []]);
     }
 
@@ -167,7 +167,7 @@ final class AnonymizeEmailTest extends TestCase
      */
     public function testInvalidDomains(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(AnonymizeEmail::class, ['domains' => 'invalid']);
     }
 

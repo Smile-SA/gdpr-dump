@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeNumber;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 final class AnonymizeNumberTest extends TestCase
@@ -70,7 +70,7 @@ final class AnonymizeNumberTest extends TestCase
      */
     public function testEmptyMinNumberLength(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(AnonymizeNumber::class, ['min_number_length' => null]);
     }
 
@@ -90,7 +90,7 @@ final class AnonymizeNumberTest extends TestCase
      */
     public function testEmptyReplacement(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(AnonymizeNumber::class, ['replacement' => '']);
     }
 }

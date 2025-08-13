@@ -8,12 +8,17 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 use RuntimeException;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigInterface;
-use Smile\GdprDump\Config\Loader\ConfigLoader;
+use Smile\GdprDump\Config\Loader\Loader;
 use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Database\ParameterBag;
 use Smile\GdprDump\Kernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+// TODO
+// https://github.com/symfony/symfony/blob/7.4/src/Symfony/Bundle/FrameworkBundle/Test/KernelTestCase.php
+// https://github.com/symfony/symfony/blob/7.4/src/Symfony/Bundle/FrameworkBundle/Resources/config/test.php#L48
+// https://github.com/symfony/symfony/blob/7.4/src/Symfony/Bundle/FrameworkBundle/Kernel/MicroKernelTrait.php#L161
+// https://github.com/symfony/symfony/blob/7.4/src/Symfony/Bundle/FrameworkBundle/Test/TestContainer.php
 abstract class TestCase extends BaseTestCase
 {
     private static ?Kernel $kernel = null;
@@ -57,8 +62,8 @@ abstract class TestCase extends BaseTestCase
         if (self::$config === null) {
             self::$config = new Config();
 
-            /** @var ConfigLoader $loader */
-            $loader = self::getContainer()->get(ConfigLoader::class);
+            /** @var Loader $loader */
+            $loader = self::getContainer()->get(Loader::class);
             $loader->load(self::$config, self::getResource('config/config.yaml'));
         }
 

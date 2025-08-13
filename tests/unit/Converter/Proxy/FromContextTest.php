@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Converter\Proxy\FromContext;
-use Smile\GdprDump\Tests\Unit\Converter\DumpContextAwareInterface;
+use Smile\GdprDump\Tests\Unit\Converter\DumpContextAware;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-final class FromContextTest extends TestCase implements DumpContextAwareInterface
+final class FromContextTest extends TestCase implements DumpContextAware
 {
     /**
      * Test the converter.
@@ -68,7 +68,7 @@ final class FromContextTest extends TestCase implements DumpContextAwareInterfac
      */
     public function testKeyNotSet(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(FromContext::class);
     }
 
@@ -77,7 +77,7 @@ final class FromContextTest extends TestCase implements DumpContextAwareInterfac
      */
     public function testEmptyKey(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(FromContext::class, ['key' => '']);
     }
 
@@ -86,7 +86,7 @@ final class FromContextTest extends TestCase implements DumpContextAwareInterfac
      */
     public function testInvalidContextType(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(FromContext::class, ['key' => 'foo.email']);
     }
 
@@ -95,7 +95,7 @@ final class FromContextTest extends TestCase implements DumpContextAwareInterfac
      */
     public function testKeyHasTooFewParts(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(FromContext::class, ['key' => 'row_data']);
     }
 
@@ -104,7 +104,7 @@ final class FromContextTest extends TestCase implements DumpContextAwareInterfac
      */
     public function testKeyHasTooManyParts(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(FromContext::class, ['key' => 'row_data.foo.bar']);
     }
 }

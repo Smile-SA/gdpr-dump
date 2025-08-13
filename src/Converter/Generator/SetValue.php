@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Generator;
 
-use Smile\GdprDump\Converter\ConverterInterface;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Converter;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 
-final class SetValue implements ConverterInterface
+final class SetValue implements Converter
 {
     private mixed $value;
 
@@ -15,11 +15,11 @@ final class SetValue implements ConverterInterface
     {
         // The parameter must be specified, but accepts empty values
         if (!array_key_exists('value', $parameters)) {
-            throw new ValidationException('The parameter "value" is required.');
+            throw new InvalidParameterException('The parameter "value" is required.');
         }
 
         if ($parameters['value'] !== null && !is_scalar($parameters['value'])) {
-            throw new ValidationException('The parameter "value" must be a scalar or null.');
+            throw new InvalidParameterException('The parameter "value" must be a scalar or null.');
         }
 
         $this->value = $parameters['value'];

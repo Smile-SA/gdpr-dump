@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter\Proxy\Internal;
 
 use OverflowException;
-use Smile\GdprDump\Converter\ConverterInterface;
-use Smile\GdprDump\Converter\InternalConverterInterface;
+use Smile\GdprDump\Converter\Converter;
+use Smile\GdprDump\Converter\IsInternal;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
-final class Unique implements InternalConverterInterface
+final class Unique implements IsInternal
 {
-    private ConverterInterface $converter;
+    private Converter $converter;
     private int $maxRetries;
     private array $generated = [];
 
     public function setParameters(array $parameters): void
     {
         $input = (new ParameterProcessor())
-            ->addParameter('converter', ConverterInterface::class, true)
+            ->addParameter('converter', Converter::class, true)
             ->addParameter('max_retries', Parameter::TYPE_INT, true, 100)
             ->process($parameters);
 

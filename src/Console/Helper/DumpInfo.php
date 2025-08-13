@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Console\Helper;
 
-use Smile\GdprDump\Database\Metadata\MetadataInterface;
-use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
+use Generator;
+use Smile\GdprDump\Config\DumperConfig;
+use Smile\GdprDump\Database\Metadata\DatabaseMetadata;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
 use Smile\GdprDump\Dumper\Event\DumpFinishedEvent;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -15,85 +16,88 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class DumpInfo
 {
-    private OutputInterface $output;
     private ProgressBar $progressBar;
     private ?array $lastTableInfo = null;
 
-    public function __construct(private EventDispatcherInterface $eventDispatcher)
+    public function __construct(private OutputInterface $output)
     {
+        if ($this->output instanceof ConsoleOutputInterface) {
+            $this->output = $this->output->getErrorOutput();
+        }
+
+        $this->progressBar = new ProgressBar($output);
+        $this->progressBar->minSecondsBetweenRedraws(0.1); // default: 0.04
     }
 
     /**
-     * Set the output that will display the dump progress.
+     * Register the event listeners.
      */
-    public function setOutput(OutputInterface $output): void
+    public function addListeners(EventDispatcherInterface $eventDispatcher): void
     {
-        if ($output instanceof ConsoleOutputInterface) {
-            $output = $output->getErrorOutput();
-        }
+        $eventDispatcher->addListener(DumpEvent::class, [$this, 'onDumpStarted']);
+        $eventDispatcher->addListener(DumpFinishedEvent::class, [$this, 'onDumpFinished']);
+    }
 
-        $this->output = $output;
-        $this->progressBar = new ProgressBar($output);
-        $this->progressBar->minSecondsBetweenRedraws(0.1); // default: 0.04
-        $this->eventDispatcher->addListener(DumpEvent::class, $this->getDumpStartedListener());
-        $this->eventDispatcher->addListener(DumpFinishedEvent::class, $this->getDumpFinishedListener());
+    /**
+     * Unregister the event listeners.
+     */
+    public function removeListeners(EventDispatcherInterface $eventDispatcher): void
+    {
+        $eventDispatcher->removeListener(DumpEvent::class, [$this, 'onDumpStarted']);
+        $eventDispatcher->removeListener(DumpFinishedEvent::class, [$this, 'onDumpFinished']);
     }
 
     /**
      * Get the listener that will be triggered when a dump is started.
      */
-    private function getDumpStartedListener(): callable
+    public function onDumpStarted(DumpEvent $event): void
     {
-        return function (DumpEvent $event): void {
-            $config = $event->getConfig();
-            $database = $event->getDatabase();
+        $config = $event->getConfig();
+        $database = $event->getDatabase();
 
-            // DSN
-            $this->displaySection('Database settings');
-            $this->displaySectionItem('Dsn', $database->getDriver()->getDsn());
-            $this->displaySectionItem(
-                'Using password',
-                $database->getConnectionParams()->get('password') ? 'yes' : 'no'
-            );
+        // DSN
+        $this->displaySection('Database settings');
+        $this->displaySectionItem('Dsn', $database->getDriver()->getDsn());
+        $this->displaySectionItem(
+            'Using password',
+            $database->getConnectionParams()->get('password') ? 'yes' : 'no'
+        );
 
-            // Dump settings
-            $this->output->writeln('');
-            $this->displaySection('Dump settings');
-            $this->displaySectionItem('output', $config->getDumpOutput());
-            foreach ($config->getDumpSettings() as $name => $value) {
-                $this->displaySectionItem($name, $value);
-            }
+        // Dump settings
+        $this->output->writeln('');
+        $this->displaySection('Dump settings');
 
-            $this->output->writeln('');
-            $this->displaySection('Dump progress');
+        foreach ($this->getDumpSettings($config) as $name => $value) {
+            $this->displaySectionItem($name, $value);
+        }
 
-            // Configure and start the progress bar
-            $this->progressBar->setFormat(
-                ' %current%/%max% [%bar%] %percent:3s%% - %title% - %elapsed:6s% - %memory:6s%'
-            );
-            $this->progressBar->setMaxSteps($this->getMaxSteps($config, $database->getMetadata()));
-            $this->progressBar->setMessage('<info>Starting dump</info>', 'title');
-            $this->progressBar->start();
+        $this->output->writeln('');
+        $this->displaySection('Dump progress');
 
-            // Set the hook that will update the bar during the dump creation
-            $event->getDumper()->setInfoHook($this->getDumpInfoHook());
-        };
+        // Configure and start the progress bar
+        $this->progressBar->setFormat(
+            ' %current%/%max% [%bar%] %percent:3s%% - %title% - %elapsed:6s% - %memory:6s%'
+        );
+        $this->progressBar->setMaxSteps($this->getMaxSteps($config, $database->getMetadata()));
+        $this->progressBar->setMessage('<info>Starting dump</info>', 'title');
+        $this->progressBar->start();
+
+        // Set the hook that will update the bar during the dump creation
+        $event->getDumper()->setInfoHook($this->getDumpInfoHook());
     }
 
     /**
      * Get the listener that will be triggered when a dump is finished.
      */
-    private function getDumpFinishedListener(): callable
+    public function onDumpFinished(): void
     {
-        return function (): void {
-            if ($this->lastTableInfo) {
-                // Display information of the last table that was dumped
-                $this->updateProgressBarMessage($this->lastTableInfo);
-            }
+        if ($this->lastTableInfo) {
+            // Display information of the last table that was dumped
+            $this->updateProgressBarMessage($this->lastTableInfo);
+        }
 
-            $this->progressBar->finish();
-            $this->output->writeln('');
-        };
+        $this->progressBar->finish();
+        $this->output->writeln('');
     }
 
     /**
@@ -148,7 +152,7 @@ final class DumpInfo
     /**
      * Get max number of steps of the progress bar.
      */
-    private function getMaxSteps(DumperConfigInterface $config, MetadataInterface $metadata): int
+    private function getMaxSteps(DumperConfig $config, DatabaseMetadata $metadata): int
     {
         $includedTables = $config->getIncludedTables() ?: $metadata->getTableNames();
         $excludedTables = $config->getExcludedTables();
@@ -180,5 +184,38 @@ final class DumpInfo
         $formatted = number_format($rowCount, 0, '.', ' ');
 
         return $rowCount > 1 ? $formatted . ' rows' : $formatted . ' row';
+    }
+
+    /**
+     * Get an array representation of the dump settings.
+     */
+    private function getDumpSettings(DumperConfig $config): Generator
+    {
+        $dumpConfig = $config->getDumpSettings();
+
+        yield 'output' => $dumpConfig->getOutput();
+        yield 'add_drop_database' => $dumpConfig->getAddDropDatabase();
+        yield 'add_drop_table' => $dumpConfig->getAddDropTable();
+        yield 'add_drop_trigger' => $dumpConfig->getAddDropTrigger();
+        yield 'add_locks' => $dumpConfig->getAddLocks();
+        yield 'complete_insert' => $dumpConfig->getCompleteInsert();
+        yield 'compress' => lcfirst($dumpConfig->getCompress());
+        yield 'default_character_set' => $dumpConfig->getDefaultCharacterSet();
+        yield 'disable_keys' => $dumpConfig->getDisableKeys();
+        yield 'events' => $dumpConfig->getEvents();
+        yield 'extended_insert' => $dumpConfig->getExtendedInsert();
+        yield 'hex_blob' => $dumpConfig->getHexBlob();
+        yield 'insert_ignore' => $dumpConfig->getInsertIgnore();
+        yield 'lock_tables' => $dumpConfig->getLockTables();
+        yield 'net_buffer_length' => $dumpConfig->getNetBufferLength();
+        yield 'no_autocommit' => $dumpConfig->getNoAutocommit();
+        yield 'no_create_info' => $dumpConfig->getNoCreateInfo();
+        yield 'routines' => $dumpConfig->getRoutines();
+        yield 'single_transaction' => $dumpConfig->getSingleTransaction();
+        yield 'skip_comments' => $dumpConfig->getSkipComments();
+        yield 'skip_definer' => $dumpConfig->getSkipDefiner();
+        yield 'skip_dump_date' => $dumpConfig->getSkipDumpDate();
+        yield 'skip_triggers' => $dumpConfig->getSkipTriggers();
+        yield 'skip_tz_utc' => $dumpConfig->getSkipTzUtc();
     }
 }

@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Dumper\EventListener;
 
 use RuntimeException;
+use Smile\GdprDump\Config\DumperConfig;
 use Smile\GdprDump\Converter\ConditionBuilder;
+use Smile\GdprDump\Converter\Converter;
 use Smile\GdprDump\Converter\ConverterBuilder;
-use Smile\GdprDump\Converter\ConverterInterface;
-use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
+use Smile\GdprDump\Converter\ConverterFactory;
 use Smile\GdprDump\Dumper\DumpContext;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
 use Throwable;
@@ -18,7 +19,7 @@ final class DataConverterListener
     private DumpContext $dumpContext;
 
     /**
-     * @var ConverterInterface[][]
+     * @var Converter[][]
      */
     private array $converters = [];
 
@@ -27,10 +28,8 @@ final class DataConverterListener
      */
     private array $skipConditions = [];
 
-    public function __construct(
-        private ConverterBuilder $converterBuilder,
-        private ConditionBuilder $conditionBuilder,
-    ) {
+    public function __construct(private ConverterFactory $converterFactory)
+    {
     }
 
     /**
@@ -87,22 +86,33 @@ final class DataConverterListener
     /**
      * Create the converters, grouped by table.
      */
-    private function buildConverters(DumperConfigInterface $config): void
+    private function buildConverters(DumperConfig $config): void
     {
+        $conditionBuilder = new ConditionBuilder();
+        $converterBuilder = (new ConverterBuilder($this->converterFactory))
+            ->setDumpContext($this->dumpContext);
+
         $this->converters = [];
         $this->skipConditions = [];
-        $this->converterBuilder->setDumpContext($this->dumpContext);
 
         foreach ($config->getTablesConfig() as $tableName => $tableConfig) {
             // Build data converters
             foreach ($tableConfig->getConvertersConfig() as $columnName => $converterConfig) {
-                $this->converters[$tableName][$columnName] = $this->converterBuilder->build($converterConfig);
+                try {
+                    $this->converters[$tableName][$columnName] = $converterBuilder->build($converterConfig);
+                } catch (Throwable $e) {
+                    throw new RuntimeException(sprintf('[%s.%s] %s', $tableName, $columnName, $e->getMessage()), 0, $e);
+                }
             }
 
             // Build conversion skip conditions
             $skipCondition = $tableConfig->getSkipCondition();
             if ($skipCondition !== '') {
-                $this->skipConditions[$tableName] = $this->conditionBuilder->build($skipCondition);
+                try {
+                    $this->skipConditions[$tableName] = $conditionBuilder->build($skipCondition);
+                } catch (Throwable $e) {
+                    throw new RuntimeException(sprintf('[%s] %s', $tableName, $e->getMessage()), 0, $e);
+                }
             }
         }
     }

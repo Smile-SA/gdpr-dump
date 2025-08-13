@@ -6,6 +6,8 @@ namespace Smile\GdprDump\Tests\Functional\Dumper;
 
 use RuntimeException;
 use Smile\GdprDump\Config\ConfigInterface;
+use Smile\GdprDump\Database\Driver\DatabaseDriver;
+use Smile\GdprDump\Dumper\DumperFactory;
 use Smile\GdprDump\Dumper\MysqlDumper;
 use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Functional\TestCase;
@@ -179,6 +181,7 @@ final class MysqlDumperTest extends TestCase
     private function getDumper(): MysqlDumper
     {
         /** @var MysqlDumper */
-        return $this->getContainer()->get(MysqlDumper::class);
+        return $this->getContainer()->get(DumperFactory::class)
+            ->create(DatabaseDriver::MYSQL);
     }
 }

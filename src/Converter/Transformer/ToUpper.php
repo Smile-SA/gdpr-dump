@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Transformer;
 
-use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Converter;
 
-final class ToUpper implements ConverterInterface
+final class ToUpper implements Converter
 {
     private bool $multiByteEnabled;
 

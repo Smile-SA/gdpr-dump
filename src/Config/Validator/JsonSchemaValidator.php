@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Config\Validator;
 
 use JsonSchema\Validator;
+use Smile\GdprDump\Config\Exception\InvalidJsonSchemaException;
 use Throwable;
 
-final class JsonSchemaValidator implements ValidatorInterface
+final class JsonSchemaValidator implements SchemaValidator
 {
     private string $schemaFile;
     private ?Validator $schemaValidator = null;
@@ -24,20 +25,15 @@ final class JsonSchemaValidator implements ValidatorInterface
         $this->schemaFile = $schemaFile;
     }
 
-    public function validate(mixed $data): ValidationResultInterface
+    public function validate(array|object $input): ValidationResult
     {
         $validator = $this->getValidator();
 
-        // Automatically convert associative arrays to stdClass (required for object validation)
-        if (is_array($data)) {
-            $data = json_decode((string) json_encode($data));
-        }
-
         // Validate the data against the schema file
         try {
-            $validator->validate($data, (object) ['$ref' => $this->schemaFile]);
+            $validator->validate($input, (object) ['$ref' => $this->schemaFile]);
         } catch (Throwable $e) {
-            throw new ValidationException($e->getMessage(), $e);
+            throw new InvalidJsonSchemaException($e->getMessage(), $e);
         }
 
         // Build the messages array
@@ -48,12 +44,7 @@ final class JsonSchemaValidator implements ValidatorInterface
                 : $error['message'];
         }
 
-        // Create the validation results object
-        $result = new ValidationResult();
-        $result->setValid($validator->isValid());
-        $result->setMessages($messages);
-
-        return $result;
+        return new ValidationResult(!$messages, $messages);
     }
 
     /**

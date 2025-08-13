@@ -13,6 +13,7 @@ use UnexpectedValueException;
  * @template T
  * @implements IteratorAggregate<string, T>
  */
+ // TODO remove or use
 abstract class Collection implements IteratorAggregate
 {
     protected string $descriptor = 'item';

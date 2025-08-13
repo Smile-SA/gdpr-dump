@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\Version;
 
+use Smile\GdprDump\Config\Exception\InvalidVersionException;
+
 final class VersionMatcher
 {
     /**

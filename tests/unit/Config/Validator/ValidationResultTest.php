@@ -10,33 +10,17 @@ use Smile\GdprDump\Tests\Unit\TestCase;
 final class ValidationResultTest extends TestCase
 {
     /**
-     * Test the "valid" property.
+     * Test the object creation and setters.
      */
-    public function testValidProperty(): void
+    public function testObjectCreation(): void
     {
-        $result = new ValidationResult();
-
-        // Default value
-        $this->assertFalse($result->isValid());
-
-        // Setter
-        $result->setValid(true);
+        $result = new ValidationResult(true, []);
         $this->assertTrue($result->isValid());
-    }
+        $this->assertSame([], $result->getMessages());
 
-    /**
-     * Test the "messages" property.
-     */
-    public function testMessagesProperty(): void
-    {
-        $result = new ValidationResult();
-
-        // Default value
-        $this->assertEmpty($result->getMessages());
-
-        // Setter
-        $messages = ['message1', 'message2'];
-        $result->setMessages($messages);
+        $messages = ['message1'];
+        $result = new ValidationResult(false, $messages);
+        $this->assertFalse($result->isValid());
         $this->assertSame($messages, $result->getMessages());
     }
 }

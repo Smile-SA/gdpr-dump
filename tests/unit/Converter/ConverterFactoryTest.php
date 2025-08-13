@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter;
 
 use RuntimeException;
 use Smile\GdprDump\Converter\ConverterFactory;
+use Smile\GdprDump\Converter\Exception\ConverterNotFoundException;
 use Smile\GdprDump\DependencyInjection\ConverterAliasResolver;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Symfony\Component\DependencyInjection\Container;
@@ -28,7 +29,7 @@ final class ConverterFactoryTest extends TestCase
      */
     public function testConverterNotDefined(): void
     {
-        $this->expectException(RuntimeException::class);
+        $this->expectException(ConverterNotFoundException::class);
         $this->createFactory()
             ->create('notExists');
     }

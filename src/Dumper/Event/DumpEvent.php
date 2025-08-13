@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Dumper\Event;
 
 use Druidfi\Mysqldump\Mysqldump;
-use Smile\GdprDump\Database\DatabaseInterface;
-use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
+use Smile\GdprDump\Config\DumperConfig;
+use Smile\GdprDump\Database\ConnectionProvider;
 use Smile\GdprDump\Dumper\DumpContext;
 use Symfony\Contracts\EventDispatcher\Event;
 
@@ -17,8 +17,8 @@ final class DumpEvent extends Event
 {
     public function __construct(
         private Mysqldump $dumper,
-        private DatabaseInterface $database,
-        private DumperConfigInterface $config,
+        private ConnectionProvider $database,
+        private DumperConfig $config,
         private DumpContext $dumpContext,
     ) {
     }
@@ -26,7 +26,7 @@ final class DumpEvent extends Event
     /**
      * Get the dumper config.
      */
-    public function getConfig(): DumperConfigInterface
+    public function getConfig(): DumperConfig
     {
         return $this->config;
     }
@@ -34,7 +34,7 @@ final class DumpEvent extends Event
     /**
      * Get the database wrapper.
      */
-    public function getDatabase(): DatabaseInterface
+    public function getDatabase(): ConnectionProvider
     {
         return $this->database;
     }

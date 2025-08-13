@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Config\Version;
 
-use Smile\GdprDump\Config\Version\InvalidVersionException;
+use Smile\GdprDump\Config\Exception\InvalidVersionException;
 use Smile\GdprDump\Config\Version\VersionCondition;
 use Smile\GdprDump\Tests\Unit\TestCase;
 

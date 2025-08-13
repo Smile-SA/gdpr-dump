@@ -6,56 +6,91 @@ namespace Smile\GdprDump\Database;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\Exception;
-use Smile\GdprDump\Database\Driver\DriverInterface;
+use Smile\GdprDump\Database\Driver\DatabaseDriver;
 use Smile\GdprDump\Database\Driver\MysqlDriver;
-use Smile\GdprDump\Database\Metadata\MetadataInterface;
+use Smile\GdprDump\Database\Exception\DatabaseException;
+use Smile\GdprDump\Database\Metadata\DatabaseMetadata;
 use Smile\GdprDump\Database\Metadata\MysqlMetadata;
-use UnexpectedValueException;
+use Throwable;
 
-final class Database implements DatabaseInterface
+final class Database implements ConnectionProvider
 {
     private Connection $connection;
-    private DriverInterface $driver;
-    private MetadataInterface $metadata;
+    private DatabaseDriver $driver;
+    private DatabaseMetadata $metadata;
 
-    /**
-     * @throws Exception|UnexpectedValueException
-     */
     public function __construct(private ParameterBag $connectionParams)
     {
-        $this->connection = DriverManager::getConnection($this->connectionParams->all());
+    }
 
-        $driver = $this->connectionParams->get('driver');
+    public function connect(): void
+    {
+        if ($this->isConnected()) {
+            return;
+        }
 
-        switch ($driver) {
-            case self::DRIVER_MYSQL:
+        $driverName = $this->connectionParams->get('driver');
+
+        switch ($driverName) {
+            case DatabaseDriver::MYSQL:
+                $this->connection = $this->createConnection();
                 $this->driver = new MysqlDriver($this->connectionParams);
                 $this->metadata = new MysqlMetadata($this->connection);
                 break;
 
             default:
-                throw new UnexpectedValueException(sprintf('The database driver "%s" is not supported.', $driver));
+                throw new DatabaseException(sprintf('The database driver "%s" is not supported.', $driverName));
         }
+    }
+
+    public function close(): void
+    {
+        if (isset($this->connection) && $this->connection->isConnected()) {
+            $this->connection->close();
+        }
+
+        unset($this->connection);
+        unset($this->driver);
+        unset($this->metadata);
     }
 
     public function getConnection(): Connection
     {
-        return $this->connection;
+        return $this->connection ?? throw new DatabaseException('The database connection is not opened');
     }
 
-    public function getDriver(): DriverInterface
+    public function getDriver(): DatabaseDriver
     {
-        return $this->driver;
+        return $this->driver ?? throw new DatabaseException('The database connection is not opened');
     }
 
-    public function getMetadata(): MetadataInterface
+    public function getMetadata(): DatabaseMetadata
     {
-        return $this->metadata;
+        return $this->metadata ?? throw new DatabaseException('The database connection is not opened');
     }
 
     public function getConnectionParams(): ParameterBag
     {
-        return $this->connectionParams;
+        return $this->connectionParams ?? throw new DatabaseException('The database connection is not opened');
+    }
+
+    /**
+     * Create a new connection.
+     */
+    private function createConnection(): Connection
+    {
+        try {
+            return DriverManager::getConnection($this->connectionParams->all());
+        } catch (Throwable $e) {
+            throw new DatabaseException($e->getMessage(), $e);
+        }
+    }
+
+    /**
+     * Check whether the connection is opened.
+     */
+    private function isConnected(): bool
+    {
+        return isset($this->connection) && $this->connection->isConnected();
     }
 }

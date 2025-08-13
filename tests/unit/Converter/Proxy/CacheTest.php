@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Converter\Proxy\Internal\Cache;
 use Smile\GdprDump\Converter\Randomizer\RandomizeText;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
@@ -58,16 +58,16 @@ final class CacheTest extends TestCase
      */
     public function testConverterNotSet(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(Cache::class, ['cache_key' => 'username']);
     }
 
     /**
-     * Assert that an exception is thrown when the parameter "converter" is not an instance of ConverterInterface.
+     * Assert that an exception is thrown when the parameter "converter" is not an instance of Converter.
      */
     public function testConverterNotValid(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(Cache::class, [
             'converter' => new stdClass(),
             'cache_key' => 'username',
@@ -79,7 +79,7 @@ final class CacheTest extends TestCase
      */
     public function testCacheKeyNotSet(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(Cache::class, [
             'converter' => $this->createConverter(ConverterMock::class),
         ]);
@@ -90,7 +90,7 @@ final class CacheTest extends TestCase
      */
     public function testEmptyCacheKey(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(Cache::class, [
             'converter' => $this->createConverter(ConverterMock::class),
             'cache_key' => '',

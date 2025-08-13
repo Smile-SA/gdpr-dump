@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Converter\Generator\SetValue;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 final class SetValueTest extends TestCase
@@ -34,7 +34,7 @@ final class SetValueTest extends TestCase
      */
     public function testValueNotSet(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(SetValue::class);
     }
 
@@ -43,7 +43,7 @@ final class SetValueTest extends TestCase
      */
     public function testValueNotScalar(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(SetValue::class, ['value' => ['1']]);
     }
 

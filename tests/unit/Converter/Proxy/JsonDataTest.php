@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Converter\Proxy\JsonData;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
@@ -55,7 +55,7 @@ final class JsonDataTest extends TestCase
      */
     public function testConvertersNotSet(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(JsonData::class);
     }
 
@@ -64,7 +64,7 @@ final class JsonDataTest extends TestCase
      */
     public function testEmptyConverters(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(JsonData::class, ['converters' => []]);
     }
 
@@ -73,7 +73,7 @@ final class JsonDataTest extends TestCase
      */
     public function testInvalidConverters(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(JsonData::class, ['converters' => 'notAnArray']);
     }
 

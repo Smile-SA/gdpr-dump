@@ -4,35 +4,36 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\EventListener;
 
-use Smile\GdprDump\Config\ConfigInterface;
-use Smile\GdprDump\Config\Event\LoadEvent;
-use Smile\GdprDump\Config\Event\MergeEvent;
-use Smile\GdprDump\Config\Event\ParseEvent;
-use Smile\GdprDump\Config\Validator\ValidationException;
-use Smile\GdprDump\Config\Version\MissingVersionException;
+use Smile\GdprDump\Config\Event\ConfigLoadEvent;
+use Smile\GdprDump\Config\Event\MergeConfigEvent;
+use Smile\GdprDump\Config\Event\ParseConfigEvent;
+use Smile\GdprDump\Config\Exception\InvalidVersionException;
+use Smile\GdprDump\Config\Loader\EnvVarProcessor;
 use Smile\GdprDump\Config\Version\VersionMatcher;
+use Smile\GdprDump\Util\Objects;
 
 final class VersionListener
 {
     private string $version = '';
 
-    /**
-     * Reset the application version when the config loader starts the loading process.
-     */
-    public function onLoad(LoadEvent $event): void
+    public function __construct(private EnvVarProcessor $envVarProcessor)
     {
-        $config = $event->getConfig();
-
-        // Check if the version is already provided in the initial configuration
-        $this->version = $this->getVersion($config);
     }
 
     /**
-     * Detect the application version from the parsed file.
+     * Reset the listener state.
      */
-    public function onParse(ParseEvent $event): void
+    public function onConfigLoad(ConfigLoadEvent $event): void
     {
-        $config = $event->getConfig();
+        $this->version = '';
+    }
+
+    /**
+     * Detect the application version from the first value found of the "version" parameter.
+     */
+    public function onConfigParse(ParseConfigEvent $event): void
+    {
+        $config = $event->getConfigData();
 
         if ($this->version === '') {
             $this->version = $this->getVersion($config);
@@ -40,18 +41,18 @@ final class VersionListener
     }
 
     /**
-     * Merge the contents of `if_version` blocks to the configuration.
+     * Merge the contents of the `if_version` parameter.
      */
-    public function onMerge(MergeEvent $event): void
+    public function onConfigMerge(MergeConfigEvent $event): void
     {
-        $config = $event->getConfig();
+        $config = $event->getConfigData();
         $versionsData = $this->getVersionsData($config);
         if (!$versionsData) {
             return;
         }
 
         if ($this->version === '') {
-            throw new MissingVersionException('The application version must be specified in the configuration.');
+            throw new InvalidVersionException('The application version must be specified in the configuration.');
         }
 
         $versionMatcher = new VersionMatcher();
@@ -59,30 +60,35 @@ final class VersionListener
         // Merge version-specific data into the configuration
         foreach ($versionsData as $requirement => $versionData) {
             if (!is_string($requirement)) {
-                throw new ValidationException('Could not parse the version requirement.');
+                throw new InvalidVersionException('Could not parse the version requirement.');
             }
 
-            if (!is_array($versionData)) {
-                throw new ValidationException(
+            if (!is_object($versionData)) {
+                throw new InvalidVersionException(
                     sprintf('Could not parse data for version requirement "%s".', $requirement)
                 );
             }
 
             if ($versionMatcher->match($requirement, $this->version)) {
-                $config->merge($versionData)
-                    ->remove('if_version');
+                Objects::merge($config, $versionData);
             }
         }
+
+        unset($config->if_version);
     }
 
     /**
      * Get the application version.
      */
-    private function getVersion(ConfigInterface $config): string
+    private function getVersion(object $config): string
     {
-        $version = $config->get('version', '');
+        $version = $config->version ?? '';
         if (!is_string($version)) {
-            throw new ValidationException('The parameter "version" must be a string.');
+            throw new InvalidVersionException('The parameter "version" must be a string.');
+        }
+
+        if ($version !== '') {
+            $version = $this->envVarProcessor->process($version);
         }
 
         return $version;
@@ -91,13 +97,16 @@ final class VersionListener
     /**
      * Get the version-specific data.
      */
-    private function getVersionsData(ConfigInterface $config): array
+    private function getVersionsData(object $config): array
     {
-        $versionsData = $config->get('if_version', []);
-        if (!is_array($versionsData)) {
-            throw new ValidationException('The parameter "if_version" must be an object.');
+        if (!property_exists($config, 'if_version')) {
+            return [];
         }
 
-        return $versionsData;
+        if (!is_object($config->if_version)) {
+            throw new InvalidVersionException('The parameter "if_version" must be an object.');
+        }
+
+        return (array) $config->if_version;
     }
 }

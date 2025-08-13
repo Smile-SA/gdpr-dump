@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Converter\Generator\NumberBetween;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 final class NumberBetweenTest extends TestCase
@@ -31,7 +31,7 @@ final class NumberBetweenTest extends TestCase
      */
     public function testMinNotSet(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(NumberBetween::class, ['max' => 0]);
     }
 
@@ -40,7 +40,7 @@ final class NumberBetweenTest extends TestCase
      */
     public function testMaxNotSet(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(NumberBetween::class, ['min' => 0]);
     }
 
@@ -49,7 +49,7 @@ final class NumberBetweenTest extends TestCase
      */
     public function testMinGreaterThanMax(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(NumberBetween::class, ['min' => 100, 'max' => 0]);
     }
 }

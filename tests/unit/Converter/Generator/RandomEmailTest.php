@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Generator;
 
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Converter\Generator\RandomEmail;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 final class RandomEmailTest extends TestCase
@@ -65,7 +65,7 @@ final class RandomEmailTest extends TestCase
      */
     public function testEmptyCharacters(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(RandomEmail::class, ['characters' => '']);
     }
 
@@ -87,7 +87,7 @@ final class RandomEmailTest extends TestCase
      */
     public function testEmptyDomains(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(RandomEmail::class, ['domains' => []]);
     }
 
@@ -96,7 +96,7 @@ final class RandomEmailTest extends TestCase
      */
     public function testInvalidDomains(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(RandomEmail::class, ['domains' => 'invalid']);
     }
 }

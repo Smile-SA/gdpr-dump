@@ -6,7 +6,6 @@ namespace Smile\GdprDump\Tests\Functional\Config\Loader;
 
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\Loader\ConfigLoader;
-use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
 final class ConfigLoaderTest extends TestCase
@@ -24,7 +23,7 @@ final class ConfigLoaderTest extends TestCase
         $this->initEnvVars([
             'TEST_DUMP_OUTPUT' => 'dump.sql',
             'TEST_DATABASE_URL' => 'mysql://localhost/db_name',
-            'TEST_VERSION' => '10.5',
+            'TEST_VERSION' => '2.5',
         ]);
 
         $config = new Config();
@@ -50,11 +49,11 @@ final class ConfigLoaderTest extends TestCase
     }
 
     /**
-     * Get the config compiler.
+     * Get the config loader.
      */
-    private function getConfigLoader(): ConfigLoaderInterface
+    private function getConfigLoader(): ConfigLoader
     {
-        /** @var ConfigLoaderInterface */
+        /** @var ConfigLoader */
         return $this->getContainer()->get(ConfigLoader::class);
     }
 

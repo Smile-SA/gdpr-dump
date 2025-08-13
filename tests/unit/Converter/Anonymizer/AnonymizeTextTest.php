@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeText;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 final class AnonymizeTextTest extends TestCase
@@ -68,7 +68,7 @@ final class AnonymizeTextTest extends TestCase
      */
     public function testEmptyMinWordLength(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(AnonymizeText::class, ['min_word_length' => null]);
     }
 
@@ -88,7 +88,7 @@ final class AnonymizeTextTest extends TestCase
      */
     public function testEmptyReplacement(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(AnonymizeText::class, ['replacement' => '']);
     }
 
@@ -126,7 +126,7 @@ final class AnonymizeTextTest extends TestCase
      */
     public function testInvalidDelimiters(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidParameterException::class);
         $this->createConverter(AnonymizeText::class, ['delimiters' => 'invalid']);
     }
 }

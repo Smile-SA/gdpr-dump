@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Config\Validator;
 
+use Smile\GdprDump\Config\Exception\InvalidJsonSchemaException;
 use Smile\GdprDump\Config\Validator\JsonSchemaValidator;
-use Smile\GdprDump\Config\Validator\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
+use stdClass;
 
 final class JsonSchemaValidatorTest extends TestCase
 {
@@ -22,7 +23,8 @@ final class JsonSchemaValidatorTest extends TestCase
      */
     public function testValidationSuccess(): void
     {
-        $data = ['key' => 'value'];
+        $data = new stdClass();
+        $data->key = 'value';
 
         $validator = new JsonSchemaValidator($this->schemaFile);
         $result = $validator->validate($data);
@@ -36,8 +38,8 @@ final class JsonSchemaValidatorTest extends TestCase
      */
     public function testValidationError(): void
     {
-        // The property "key" must be a string
-        $data = ['key' => 1];
+        $data = new stdClass();
+        $data->key = 1;
 
         $validator = new JsonSchemaValidator($this->schemaFile);
         $result = $validator->validate($data);
@@ -54,7 +56,7 @@ final class JsonSchemaValidatorTest extends TestCase
         $schemaFile = 'not_exists.json';
         $validator = new JsonSchemaValidator($schemaFile);
 
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidJsonSchemaException::class);
         $validator->validate(['key' => 'value']);
     }
 }

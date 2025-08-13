@@ -1,0 +1,1 @@
+This is a string, only objects are allowed. The parser must throw a ParseException when trying to load this file.
