@@ -1,0 +1,76 @@
+tables:
+    sylius_address_log_entries:
+        truncate: true
+
+    sylius_address:
+        converters:
+            first_name:
+                converter: 'randomizeText'
+            last_name:
+                converter: 'randomizeText'
+            phone_number:
+                converter: 'randomizeNumber'
+            street:
+                converter: 'randomizeText'
+            company:
+                converter: 'randomizeText'
+            city:
+                converter: 'randomizeText'
+            postcode:
+                converter: 'randomizeNumber'
+
+    sylius_admin_user:
+        converters:
+            username:
+                converter: 'randomizeText'
+                unique: true
+            username_canonical:
+                converter: 'fromContext'
+                parameters:
+                    key: 'processed_data.username'
+            email:
+                converter: 'randomizeEmail'
+                unique: true
+            email_canonical:
+                converter: 'fromContext'
+                parameters:
+                    key: 'processed_data.email'
+            first_name:
+                converter: 'randomizeText'
+            last_name:
+                converter: 'randomizeText'
+
+    sylius_customer:
+        converters:
+            email:
+                converter: 'randomizeEmail'
+                unique: true
+            email_canonical:
+                converter: 'fromContext'
+                parameters:
+                    key: 'processed_data.email'
+            first_name:
+                converter: 'randomizeText'
+            last_name:
+                converter: 'randomizeText'
+            birthday:
+                converter: 'anonymizeDateTime'
+            phone_number:
+                converter: 'randomizeNumber'
+
+    sylius_shop_user:
+        converters:
+            username:
+                converter: 'randomizeText'
+                unique: true
+            username_canonical:
+                converter: 'fromContext'
+                parameters:
+                    key: 'processed_data.username'
+            email:
+                converter: 'randomizeEmail'
+                unique: true
+            email_canonical:
+                converter: 'fromContext'
+                parameters:
+                    key: 'processed_data.email'

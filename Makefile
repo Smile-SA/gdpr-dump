@@ -33,7 +33,7 @@ dump: vendor ## Run bin/gdpr-dump command. Example: `make dump c=test.yaml`
 	$(PHP_CLI) bin/gdpr-dump $(c)
 
 .PHONY: compile
-compile: ## Run bin/compile command.
+compile: cc ## Run bin/compile command.
 	$(PHP_CLI) composer install --no-dev
 	$(PHP_CLI) bin/compile $(c)
 	$(PHP_CLI) composer install
@@ -56,6 +56,7 @@ composer: ## Run composer. Example: `make composer c=update`
 .PHONY: analyse
 analyse: vendor ## Run code analysis tools (parallel-lint, phpcs, phpstan).
 	$(PHP_CLI) composer audit
+	$(PHP_CLI) vendor/bin/yaml-lint app/config --parse-tags
 	$(PHP_CLI) vendor/bin/parallel-lint app bin src tests
 	$(PHP_CLI) vendor/bin/phpcs
 	$(PHP_CLI) vendor/bin/phpstan analyse

@@ -7,7 +7,6 @@ namespace Smile\GdprDump\Tests\Unit\Database;
 use PDO;
 use Smile\GdprDump\Database\ParameterBag;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use UnexpectedValueException;
 
 final class ParameterBagTest extends TestCase
 {
@@ -44,14 +43,5 @@ final class ParameterBagTest extends TestCase
         $this->assertNull($bag->get('port'));
         $this->assertSame('root', $bag->get('user'));
         $this->assertNull($bag->get('driverOptions'));
-    }
-
-    /**
-     * Assert that an exception is thrown when the database name is missing.
-     */
-    public function testMissingDatabaseName(): void
-    {
-        $this->expectException(UnexpectedValueException::class);
-        new ParameterBag([]);
     }
 }

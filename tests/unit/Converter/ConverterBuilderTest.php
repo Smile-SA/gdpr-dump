@@ -4,36 +4,31 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter;
 
-use RuntimeException;
-use Smile\GdprDump\Converter\ConditionBuilder;
+use Faker\Factory;
+use Smile\GdprDump\Configuration\Definition\ConverterConfig;
 use Smile\GdprDump\Converter\ConverterBuilder;
 use Smile\GdprDump\Converter\ConverterFactory;
-use Smile\GdprDump\Converter\Proxy\Chain;
-use Smile\GdprDump\Converter\Proxy\Faker;
-use Smile\GdprDump\Converter\Proxy\Internal\Cache;
-use Smile\GdprDump\Converter\Proxy\Internal\Conditional;
-use Smile\GdprDump\Converter\Proxy\Internal\Unique;
+use Smile\GdprDump\Converter\Converters\Chain;
+use Smile\GdprDump\Converter\Converters\Faker;
+use Smile\GdprDump\Converter\Converters\Internal\Cache;
+use Smile\GdprDump\Converter\Converters\Internal\Conditional;
+use Smile\GdprDump\Converter\Converters\Internal\Unique;
+use Smile\GdprDump\Converter\Exception\ConverterNotFoundException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\DependencyInjection\ConverterAliasResolver;
-use Smile\GdprDump\Faker\FakerService;
+use Smile\GdprDump\Faker\LazyGenerator;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Symfony\Component\DependencyInjection\Container;
-use UnexpectedValueException;
 
-final class ConverterBuilderTest extends TestCase implements DumpContextAwareInterface
+final class ConverterBuilderTest extends TestCase implements DumpContextAware
 {
     /**
      * Test the converter creation from an array definition.
      */
     public function testConverterCreation(): void
     {
-        $builder = $this->createBuilder();
-
-        $converter = $builder->build([
-            'converter' => 'mock',
-            'parameters' => [
-                'prefix' => '',
-            ],
-        ]);
+        $configuration = (new ConverterConfig('mock'))->setParameters(['prefix' => '']);
+        $converter = $this->createBuilder()->build($configuration);
         $this->assertInstanceOf(ConverterMock::class, $converter);
     }
 
@@ -42,14 +37,10 @@ final class ConverterBuilderTest extends TestCase implements DumpContextAwareInt
      */
     public function testFakerConverter(): void
     {
-        $builder = $this->createBuilder();
+        $configuration = (new ConverterConfig('faker'))
+            ->setParameters(['formatter' => 'safeEmail']);
 
-        $converter = $builder->build([
-            'converter' => 'faker',
-            'parameters' => [
-                'formatter' => 'safeEmail',
-            ],
-        ]);
+        $converter = $this->createBuilder()->build($configuration);
         $this->assertInstanceOf(Faker::class, $converter);
     }
 
@@ -58,18 +49,14 @@ final class ConverterBuilderTest extends TestCase implements DumpContextAwareInt
      */
     public function testUniqueConverter(): void
     {
-        $builder = $this->createBuilder();
+        $configuration = (new ConverterConfig('mock'))
+            ->setUnique(true);
 
-        $converter = $builder->build([
-            'converter' => 'mock',
-            'unique' => true,
-        ]);
+        $converter = $this->createBuilder()->build($configuration);
         $this->assertInstanceOf(Unique::class, $converter);
 
-        $converter = $builder->build([
-            'converter' => 'mock',
-            'unique' => false,
-        ]);
+        $configuration->setUnique(false);
+        $converter = $this->createBuilder()->build($configuration);
         $this->assertInstanceOf(ConverterMock::class, $converter);
     }
 
@@ -78,12 +65,11 @@ final class ConverterBuilderTest extends TestCase implements DumpContextAwareInt
      */
     public function testConditionConverter(): void
     {
-        $builder = $this->createBuilder();
+        $configuration = (new ConverterConfig('mock'))
+            ->setCondition('true');
 
-        $converter = $builder->build([
-            'converter' => 'mock',
-            'condition' => '{{id}} === 1',
-        ]);
+        $converter = $this->createBuilder()
+            ->build($configuration);
         $this->assertInstanceOf(Conditional::class, $converter);
     }
 
@@ -92,12 +78,10 @@ final class ConverterBuilderTest extends TestCase implements DumpContextAwareInt
      */
     public function testCacheConverter(): void
     {
-        $builder = $this->createBuilder();
+        $configuration = (new ConverterConfig('mock'))
+            ->setCacheKey('test');
 
-        $converter = $builder->build([
-            'converter' => 'mock',
-            'cache_key' => 'test',
-        ]);
+        $converter = $this->createBuilder()->build($configuration);
         $this->assertInstanceOf(Cache::class, $converter);
     }
 
@@ -106,38 +90,15 @@ final class ConverterBuilderTest extends TestCase implements DumpContextAwareInt
      */
     public function testNestedConverters(): void
     {
-        $builder = $this->createBuilder();
+        $configuration = (new ConverterConfig('chain'))
+            ->setParameters(['converters' => [new ConverterConfig('mock'), new ConverterConfig('mock')]]);
 
-        $converter = $builder->build([
-            'converter' => 'chain',
-            'parameters' => [
-                'converters' => [
-                    ['converter' => 'mock'],
-                    ['converter' => 'mock'],
-                ],
-            ],
-        ]);
+        $converter = $this->createBuilder()->build($configuration);
         $this->assertInstanceOf(Chain::class, $converter);
-    }
 
-    /**
-     * Assert that an exception is thrown when the converter is set but empty.
-     */
-    public function testEmptyConverter(): void
-    {
-        $builder = $this->createBuilder();
-        $this->expectException(UnexpectedValueException::class);
-        $builder->build(['converter' => null]);
-    }
-
-    /**
-     * Assert that an exception is thrown when the converter is not set.
-     */
-    public function testConverterNotSet(): void
-    {
-        $builder = $this->createBuilder();
-        $this->expectException(UnexpectedValueException::class);
-        $builder->build([]);
+        // Conversion must have been done twice
+        $value = $converter->convert('value');
+        $this->assertSame('test_test_value', $value);
     }
 
     /**
@@ -145,22 +106,10 @@ final class ConverterBuilderTest extends TestCase implements DumpContextAwareInt
      */
     public function testConverterNotDefined(): void
     {
-        $builder = $this->createBuilder();
-        $this->expectException(RuntimeException::class);
-        $builder->build(['converter' => 'notExists']);
-    }
+        $configuration = new ConverterConfig('notExists');
 
-    /**
-     * Assert that an exception is thrown when the parameter "parameters" is not an array.
-     */
-    public function testParametersNotAnArray(): void
-    {
-        $builder = $this->createBuilder();
-        $this->expectException(UnexpectedValueException::class);
-        $builder->build([
-            'converter' => 'mock',
-            'parameters' => '',
-        ]);
+        $this->expectException(ConverterNotFoundException::class);
+        $this->createBuilder()->build($configuration);
     }
 
     /**
@@ -169,30 +118,11 @@ final class ConverterBuilderTest extends TestCase implements DumpContextAwareInt
      */
     public function testConverterParameterMalformed(): void
     {
-        $builder = $this->createBuilder();
-        $this->expectException(UnexpectedValueException::class);
-        $builder->build([
-            'converter' => 'mock',
-            'parameters' => [
-                'converter' => null,
-            ],
-        ]);
-    }
+        $configuration = (new ConverterConfig('mock'))
+            ->setParameters(['converter' => ['converter' => 'mock']]);
 
-    /**
-     * Assert that an exception is thrown when the parameter "converters" is used,
-     * but the value is not an array.
-     */
-    public function testConvertersParameterNotAnArray(): void
-    {
-        $builder = $this->createBuilder();
-        $this->expectException(UnexpectedValueException::class);
-        $builder->build([
-            'converter' => 'mock',
-            'parameters' => [
-                'converters' => null,
-            ],
-        ]);
+        $this->expectException(InvalidParameterException::class);
+        $this->createBuilder()->build($configuration);
     }
 
     /**
@@ -201,48 +131,31 @@ final class ConverterBuilderTest extends TestCase implements DumpContextAwareInt
      */
     public function testConvertersParameterMalformed(): void
     {
-        $builder = $this->createBuilder();
-        $this->expectException(UnexpectedValueException::class);
-        $builder->build([
-            'converter' => 'mock',
-            'parameters' => [
-                'converters' => [null],
-            ],
-        ]);
-    }
+        $configuration = (new ConverterConfig('mock'))
+            ->setParameters(['converters' => ['converter' => 'mock']]);
 
-    /**
-     * Assert that an exception is thrown if the dump context was not set and a DumpContextAware converter is built.
-     */
-    public function testMissingDumpContext(): void
-    {
-        $builder = $this->createBuilder(false);
-        $this->expectException(RuntimeException::class);
-        $builder->build([
-            'converter' => 'mock',
-            'condition' => '{{id}} === 1',
-        ]);
+        $this->expectException(InvalidParameterException::class);
+        $this->createBuilder()->build($configuration);
     }
 
     /**
      * Create a converter factory object.
      */
-    private function createBuilder(bool $withDumpContext = true): ConverterBuilder
+    private function createBuilder(): ConverterBuilder
     {
         $resolver = new ConverterAliasResolver();
         $container = new Container();
         $container->set($resolver->getAliasByName('cache'), new Cache());
         $container->set($resolver->getAliasByName('chain'), new Chain());
-        $container->set($resolver->getAliasByName('conditional'), new Conditional(new ConditionBuilder()));
-        $container->set($resolver->getAliasByName('faker'), new Faker(new FakerService()));
+        $container->set($resolver->getAliasByName('conditional'), new Conditional());
+        $container->set($resolver->getAliasByName('faker'), new Faker());
         $container->set($resolver->getAliasByName('mock'), new ConverterMock());
         $container->set($resolver->getAliasByName('unique'), new Unique());
 
-        $converterBuilder = new ConverterBuilder(new ConverterFactory($container, $resolver));
-        if ($withDumpContext) {
-            $converterBuilder->setDumpContext($this->getDumpContext());
-        }
-
-        return $converterBuilder;
+        return new ConverterBuilder(
+            new ConverterFactory($container, $resolver),
+            $this->getDumpContext(),
+            new LazyGenerator(Factory::DEFAULT_LOCALE)
+        );
     }
 }

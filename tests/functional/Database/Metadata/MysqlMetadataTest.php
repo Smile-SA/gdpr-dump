@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Functional\Database\Metadata;
 
-use RuntimeException;
-use Smile\GdprDump\Database\Metadata\MetadataInterface;
+use Doctrine\DBAL\Exception as DBALException;
 use Smile\GdprDump\Database\Metadata\MysqlMetadata;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
@@ -34,7 +33,7 @@ final class MysqlMetadataTest extends TestCase
      */
     public function testErrorOnInvalidTableName(): void
     {
-        $this->expectException(RuntimeException::class);
+        $this->expectException(DBALException::class);
         $this->getMetadata()->getColumnNames('undefined');
     }
 
@@ -53,7 +52,7 @@ final class MysqlMetadataTest extends TestCase
     /**
      * Validate the foreign keys of the "stores" table.
      */
-    private function validateStoresForeignKeys(MetadataInterface $metadata): void
+    private function validateStoresForeignKeys(MysqlMetadata $metadata): void
     {
         $foreignKeys = $metadata->getTableForeignKeys('stores');
         $this->assertCount(1, $foreignKeys);
@@ -69,7 +68,7 @@ final class MysqlMetadataTest extends TestCase
     /**
      * Validate the foreign keys of the "customers" table.
      */
-    private function validateCustomersForeignKeys(MetadataInterface $metadata): void
+    private function validateCustomersForeignKeys(MysqlMetadata $metadata): void
     {
         $foreignKeys = $metadata->getTableForeignKeys('customers');
 
@@ -104,7 +103,7 @@ final class MysqlMetadataTest extends TestCase
     /**
      * Validate the foreign keys of the "addresses" table.
      */
-    private function validateAddressesForeignKeys(MetadataInterface $metadata): void
+    private function validateAddressesForeignKeys(MysqlMetadata $metadata): void
     {
         $foreignKeys = $metadata->getTableForeignKeys('addresses');
         $this->assertCount(1, $foreignKeys);

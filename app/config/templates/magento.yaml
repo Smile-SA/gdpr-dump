@@ -1,0 +1,980 @@
+if_version:
+    '>=2.0.0':
+        tables:
+            admin_user_session:
+                truncate: true
+            admin_passwords:
+                truncate: true
+            cache:
+                truncate: true
+            cache_tag:
+                truncate: true
+            customer_visitor:
+                truncate: true
+            newsletter_queue:
+                truncate: true
+            password_reset_request_event:
+                truncate: true
+            persistent_session:
+                truncate: true
+            report_event:
+                truncate: true
+            session:
+                truncate: true
+            '*_log':
+                truncate: true
+            '*_tmp':
+                truncate: true
+            '*_idx':
+                truncate: true
+            '*_replica':
+                truncate: true
+
+            admin_user:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+                        unique: true
+                    username:
+                        converter: 'randomizeText'
+                        unique: true
+                    firstname:
+                        converter: 'randomizeText'
+                    lastname:
+                        converter: 'randomizeText'
+                    password:
+                        converter: 'randomizeText'
+                    failures_num:
+                        converter: 'setValue'
+                        parameters:
+                            value: 0
+                    first_failure:
+                        converter: 'setNull'
+                    lock_expires:
+                        converter: 'setNull'
+
+            customer_entity:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+                        unique: true
+                    firstname:
+                        converter: 'randomizeText'
+                    middlename:
+                        converter: 'randomizeText'
+                    lastname:
+                        converter: 'randomizeText'
+                    dob:
+                        converter: 'anonymizeDate'
+                    password_hash:
+                        converter: 'randomizeText'
+                    failures_num:
+                        converter: 'setValue'
+                        parameters:
+                            value: 0
+                    first_failure:
+                        converter: 'setNull'
+                    lock_expires:
+                        converter: 'setNull'
+
+            customer_address_entity:
+                converters:
+                    firstname:
+                        converter: 'randomizeText'
+                    middlename:
+                        converter: 'randomizeText'
+                    lastname:
+                        converter: 'randomizeText'
+                    street:
+                        converter: 'randomizeText'
+                    postcode:
+                        converter: 'randomizeNumber'
+                    city:
+                        converter: 'randomizeText'
+                    telephone:
+                        converter: 'randomizeNumber'
+                    fax:
+                        converter: 'randomizeNumber'
+                    company:
+                        converter: 'randomizeText'
+
+            customer_grid_flat:
+                converters:
+                    name:
+                        converter: 'randomizeText'
+                    email:
+                        converter: 'randomizeEmail'
+                    dob:
+                        converter: 'anonymizeDate'
+                    shipping_full:
+                        converter: 'randomizeText'
+                    billing_full:
+                        converter: 'randomizeText'
+                    billing_firstname:
+                        converter: 'randomizeText'
+                    billing_lastname:
+                        converter: 'randomizeText'
+                    billing_company:
+                        converter: 'randomizeText'
+                    billing_street:
+                        converter: 'randomizeText'
+                    billing_postcode:
+                        converter: 'randomizeNumber'
+                    billing_city:
+                        converter: 'randomizeText'
+                    billing_telephone:
+                        converter: 'randomizeNumber'
+                    billing_fax:
+                        converter: 'randomizeNumber'
+
+            integration:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+
+            newsletter_subscriber:
+                converters:
+                    subscriber_email:
+                        converter: 'randomizeEmail'
+                    subscriber_confirm_code:
+                        converter: 'randomizeText'
+
+            quote:
+                converters:
+                    customer_email:
+                        converter: 'randomizeEmail'
+                    customer_firstname:
+                        converter: 'randomizeText'
+                    customer_middlename:
+                        converter: 'randomizeText'
+                    customer_lastname:
+                        converter: 'randomizeText'
+                    customer_dob:
+                        converter: 'anonymizeDateTime'
+                    customer_note:
+                        converter: 'randomizeText'
+                    remote_ip:
+                        converter: 'faker'
+                        parameters:
+                            formatter: 'ipv4'
+                    password_hash:
+                        converter: 'setNull'
+
+            quote_address:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+                    firstname:
+                        converter: 'randomizeText'
+                    middlename:
+                        converter: 'randomizeText'
+                    lastname:
+                        converter: 'randomizeText'
+                    company:
+                        converter: 'randomizeText'
+                    street:
+                        converter: 'randomizeText'
+                    postcode:
+                        converter: 'randomizeNumber'
+                    city:
+                        converter: 'randomizeText'
+                    telephone:
+                        converter: 'randomizeNumber'
+                    fax:
+                        converter: 'randomizeNumber'
+                    customer_notes:
+                        converter: 'randomizeText'
+
+            quote_payment:
+                converters:
+                    cc_owner:
+                        converter: 'randomizeText'
+                    cc_number_enc:
+                        converter: 'randomizeText'
+                    cc_last_4:
+                        converter: 'anonymizeNumber'
+                    additional_information:
+                        converter: 'jsonData'
+                        parameters:
+                            converters:
+                                CC_CN:
+                                    converter: 'randomizeText'
+
+            rating_option_vote:
+                converters:
+                    remote_ip:
+                        converter: 'setValue'
+                        parameters:
+                            value: ''
+                    remote_ip_long:
+                        converter: 'setValue'
+                        parameters:
+                            value: 0
+
+            review_detail:
+                converters:
+                    nickname:
+                        converter: 'randomizeText'
+
+            sales_creditmemo:
+                converters:
+                    customer_note:
+                        converter: 'randomizeText'
+
+            sales_creditmemo_comment:
+                converters:
+                    comment:
+                        converter: 'randomizeText'
+
+            sales_creditmemo_grid:
+                converters:
+                    customer_email:
+                        converter: 'randomizeEmail'
+                    customer_name:
+                        converter: 'randomizeText'
+                    billing_name:
+                        converter: 'randomizeText'
+                    billing_address:
+                        converter: 'randomizeText'
+                    shipping_address:
+                        converter: 'randomizeText'
+
+            sales_invoice:
+                converters:
+                    customer_note:
+                        converter: 'randomizeText'
+
+            sales_invoice_comment:
+                converters:
+                    comment:
+                        converter: 'randomizeText'
+
+            sales_invoice_grid:
+                converters:
+                    customer_email:
+                        converter: 'randomizeEmail'
+                    customer_name:
+                        converter: 'randomizeText'
+                    billing_name:
+                        converter: 'randomizeText'
+                    billing_address:
+                        converter: 'randomizeText'
+                    shipping_address:
+                        converter: 'randomizeText'
+
+            sales_order:
+                converters:
+                    customer_email:
+                        converter: 'randomizeEmail'
+                    customer_firstname:
+                        converter: 'randomizeText'
+                    customer_middlename:
+                        converter: 'randomizeText'
+                    customer_lastname:
+                        converter: 'randomizeText'
+                    customer_dob:
+                        converter: 'anonymizeDateTime'
+                    customer_note:
+                        converter: 'randomizeText'
+                    remote_ip:
+                        converter: 'faker'
+                        parameters:
+                            formatter: 'ipv4'
+
+            sales_order_address:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+                    firstname:
+                        converter: 'randomizeText'
+                    middlename:
+                        converter: 'randomizeText'
+                    lastname:
+                        converter: 'randomizeText'
+                    company:
+                        converter: 'randomizeText'
+                    street:
+                        converter: 'randomizeText'
+                    postcode:
+                        converter: 'randomizeNumber'
+                    city:
+                        converter: 'randomizeText'
+                    telephone:
+                        converter: 'randomizeNumber'
+                    fax:
+                        converter: 'randomizeNumber'
+
+            sales_order_grid:
+                converters:
+                    customer_email:
+                        converter: 'randomizeEmail'
+                    customer_name:
+                        converter: 'randomizeText'
+                    billing_name:
+                        converter: 'randomizeText'
+                    shipping_name:
+                        converter: 'randomizeText'
+                    billing_address:
+                        converter: 'randomizeText'
+                    shipping_address:
+                        converter: 'randomizeText'
+
+            sales_order_payment:
+                converters:
+                    last_trans_id:
+                        converter: 'anonymizeNumber'
+                    cc_trans_id:
+                        converter: 'anonymizeNumber'
+                    cc_owner:
+                        converter: 'randomizeText'
+                    cc_approval:
+                        converter: 'randomizeText'
+                    cc_number_enc:
+                        converter: 'randomizeText'
+                    cc_last_4:
+                        converter: 'anonymizeNumber'
+                    cc_debug_request_body:
+                        converter: 'randomizeText'
+                    cc_debug_response_body:
+                        converter: 'randomizeText'
+                    cc_debug_response_serialized:
+                        converter: 'randomizeText'
+                    echeck_account_name:
+                        converter: 'randomizeText'
+                    echeck_bank_name:
+                        converter: 'randomizeText'
+                    additional_information:
+                        converter: 'jsonData'
+                        parameters:
+                            converters:
+                                CC_CN:
+                                    converter: 'randomizeText'
+                                method_title:
+                                    converter: 'randomizeText'
+
+            sales_shipment:
+                converters:
+                    customer_note:
+                        converter: 'randomizeText'
+
+            sales_shipment_comment:
+                converters:
+                    comment:
+                        converter: 'randomizeText'
+
+            sales_shipment_grid:
+                converters:
+                    customer_email:
+                        converter: 'randomizeText'
+                    customer_name:
+                        converter: 'randomizeText'
+                    billing_name:
+                        converter: 'randomizeText'
+                    shipping_name:
+                        converter: 'randomizeText'
+                    billing_address:
+                        converter: 'randomizeText'
+                    shipping_address:
+                        converter: 'randomizeText'
+
+            sales_shipment_track:
+                converters:
+                    track_number:
+                        converter: 'randomizeText'
+
+            # --- Commerce tables ---
+            magento_login_as_customer_log:
+                truncate: true
+
+            magento_logging_event:
+                truncate: true
+
+            magento_logging_event_changes:
+                truncate: true
+
+            '*_cl':
+                truncate: true
+
+            magento_giftregistry_entity:
+                converters:
+                    title:
+                        converter: 'randomizeText'
+                    message:
+                        converter: 'randomizeText'
+                    shipping_address:
+                        converter: 'jsonData'
+                        parameters:
+                            converters:
+                                firstname:
+                                    converter: 'randomizeText'
+                                middlename:
+                                    converter: 'randomizeText'
+                                lastname:
+                                    converter: 'randomizeText'
+                                company:
+                                    converter: 'randomizeText'
+                                street:
+                                    converter: 'randomizeText'
+                                postcode:
+                                    converter: 'randomizeNumber'
+                                city:
+                                    converter: 'randomizeText'
+                                telephone:
+                                    converter: 'randomizeNumber'
+                                fax:
+                                    converter: 'randomizeNumber'
+
+            magento_giftregistry_person:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+                    firstname:
+                        converter: 'randomizeText'
+                    lastname:
+                        converter: 'randomizeText'
+
+            magento_invitation:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+                    message:
+                        converter: 'randomizeText'
+
+            magento_rma:
+                converters:
+                    customer_custom_email:
+                        converter: 'randomizeEmail'
+
+            magento_rma_shipping_label:
+                converters:
+                    track_number:
+                        converter: 'randomizeText'
+
+            magento_rma_status_history:
+                converters:
+                    comment:
+                        converter: 'randomizeText'
+
+            magento_sales_creditmemo_grid_archive:
+                converters:
+                    customer_email:
+                        converter: 'randomizeEmail'
+                    customer_name:
+                        converter: 'randomizeText'
+                    billing_name:
+                        converter: 'randomizeText'
+                    billing_address:
+                        converter: 'randomizeText'
+                    shipping_address:
+                        converter: 'randomizeText'
+                    shipping_information:
+                        converter: 'randomizeText'
+
+            magento_sales_invoice_grid_archive:
+                converters:
+                    customer_email:
+                        converter: 'randomizeEmail'
+                    customer_name:
+                        converter: 'randomizeText'
+                    billing_name:
+                        converter: 'randomizeText'
+                    billing_address:
+                        converter: 'randomizeText'
+                    shipping_address:
+                        converter: 'randomizeText'
+                    shipping_information:
+                        converter: 'randomizeText'
+
+            magento_sales_order_grid_archive:
+                converters:
+                    customer_email:
+                        converter: 'randomizeEmail'
+                    customer_name:
+                        converter: 'randomizeText'
+                    billing_name:
+                        converter: 'randomizeText'
+                    shipping_name:
+                        converter: 'randomizeText'
+                    billing_address:
+                        converter: 'randomizeText'
+                    shipping_address:
+                        converter: 'randomizeText'
+                    shipping_information:
+                        converter: 'randomizeText'
+
+            magento_sales_shipment_grid_archive:
+                converters:
+                    customer_email:
+                        converter: 'randomizeEmail'
+                    customer_name:
+                        converter: 'randomizeText'
+                    billing_name:
+                        converter: 'randomizeText'
+                    shipping_name:
+                        converter: 'randomizeText'
+                    billing_address:
+                        converter: 'randomizeText'
+                    shipping_address:
+                        converter: 'randomizeText'
+                    shipping_information:
+                        converter: 'randomizeText'
+
+            # --- B2B tables ---
+
+            company:
+                converters:
+                    company_email:
+                        converter: 'randomizeEmail'
+                    company_name:
+                        converter: 'randomizeText'
+                    legal_name:
+                        converter: 'randomizeText'
+                    comment:
+                        converter: 'randomizeText'
+                    street:
+                        converter: 'randomizeText'
+                    city:
+                        converter: 'randomizeText'
+                    postcode:
+                        converter: 'randomizeNumber'
+                    telephone:
+                        converter: 'randomizeNumber'
+                    reject_reason:
+                        converter: 'randomizeText'
+
+            company_advanced_customer_entity:
+                converters:
+                    telephone:
+                        converter: 'randomizeNumber'
+
+            company_credit_history:
+                converters:
+                    comment:
+                        converter: 'randomizeText'
+
+            company_order_entity:
+                converters:
+                    company_name:
+                        converter: 'randomizeText'
+
+            negotiable_quote_comment:
+                converters:
+                    comment:
+                        converter: 'randomizeText'
+
+            negotiable_quote_grid:
+                converters:
+                    company_name:
+                        converter: 'randomizeText'
+                    sales_rep:
+                        converter: 'randomizeText'
+
+    '>=2.2.0':
+        tables:
+            # Dotdigital tables (these tables were removed in Magento 2.4.4)
+            email_abandoned_cart:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+
+            email_automation:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+
+            email_campaign:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+
+            email_contact:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+
+            email_sms_order_queue:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+                    phone_number:
+                        converter: 'randomizeNumber'
+                    content:
+                        converter: 'randomizeText'
+                    message:
+                        converter: 'randomizeText'
+
+    '>=2.0.0 <2.2.0':
+        tables:
+            # Before Magento 2.2, additional data was serialized instead of JSON-encoded
+            quote_payment:
+                converters:
+                    additional_information:
+                        converter: 'serializedData'
+
+            sales_order_payment:
+                converters:
+                    additional_information:
+                        converter: 'serializedData'
+
+    '<2.0.0':
+        variables:
+            firstname_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "firstname" and entity_type_id = 1'
+            middlename_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "middlename" and entity_type_id = 1'
+            lastname_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "lastname" and entity_type_id = 1'
+            dob_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "dob" and entity_type_id = 1'
+            password_hash_attribute_id: 'select attribute_id from eav_attribute where attribute_code = "password_hash" and entity_type_id = 1'
+
+        tables:
+            api_session:
+                truncate: true
+            core_cache:
+                truncate: true
+            core_cache_tag:
+                truncate: true
+            core_session:
+                truncate: true
+            dataflow_batch:
+                truncate: true
+            dataflow_batch_export:
+                truncate: true
+            dataflow_batch_import:
+                truncate: true
+            dataflow_import_data:
+                truncate: true
+            dataflow_profile_history:
+                truncate: true
+            dataflow_session:
+                truncate: true
+            index_event:
+                truncate: true
+            persistent_session:
+                truncate: true
+            report_event:
+                truncate: true
+            ui_bookmark:
+                truncate: true
+            log_*:
+                truncate: true
+            '*_log':
+                truncate: true
+            '*_tmp':
+                truncate: true
+            '*_idx':
+                truncate: true
+
+            admin_user:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+                        unique: true
+                    username:
+                        converter: 'randomizeText'
+                        unique: true
+                    firstname:
+                        converter: 'randomizeText'
+                    lastname:
+                        converter: 'randomizeText'
+                    password:
+                        converter: 'randomizeText'
+
+            customer_entity:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+                        unique: true
+
+            customer_entity_datetime:
+                converters:
+                    value:
+                        converter: 'anonymizeDateTime'
+                        condition: '{{attribute_id}} == @dob_attribute_id'
+
+            customer_entity_varchar:
+                converters:
+                    value:
+                        converter: 'randomizeText'
+                        condition: '{{attribute_id}} == @firstname_attribute_id || {{attribute_id}} == @middlename_attribute_id || {{attribute_id}} == @lastname_attribute_id || {{attribute_id}} == @password_hash_attribute_id'
+
+            newsletter_subscriber:
+                converters:
+                    subscriber_email:
+                        converter: 'randomizeEmail'
+                    subscriber_confirm_code:
+                        converter: 'randomizeText'
+
+            review_detail:
+                converters:
+                    nickname:
+                        converter: 'randomizeText'
+
+            sales_flat_creditmemo_comment:
+                converters:
+                    comment:
+                        converter: 'randomizeText'
+
+            sales_flat_creditmemo_grid:
+                converters:
+                    billing_name:
+                        converter: 'randomizeText'
+
+            sales_flat_invoice_comment:
+                converters:
+                    comment:
+                        converter: 'randomizeText'
+
+            sales_flat_invoice_grid:
+                converters:
+                    billing_name:
+                        converter: 'randomizeText'
+
+            sales_flat_order:
+                converters:
+                    customer_email:
+                        converter: 'randomizeEmail'
+                    customer_firstname:
+                        converter: 'randomizeText'
+                    customer_middlename:
+                        converter: 'randomizeText'
+                    customer_lastname:
+                        converter: 'randomizeText'
+                    customer_dob:
+                        converter: 'anonymizeDateTime'
+                    customer_note:
+                        converter: 'randomizeText'
+                    remote_ip:
+                        converter: 'faker'
+                        parameters:
+                            formatter: 'ipv4'
+
+            sales_flat_order_address:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+                    firstname:
+                        converter: 'randomizeText'
+                    middlename:
+                        converter: 'randomizeText'
+                    lastname:
+                        converter: 'randomizeText'
+                    company:
+                        converter: 'randomizeText'
+                    street:
+                        converter: 'randomizeText'
+                    postcode:
+                        converter: 'randomizeNumber'
+                    city:
+                        converter: 'randomizeText'
+                    telephone:
+                        converter: 'randomizeNumber'
+                    fax:
+                        converter: 'randomizeNumber'
+
+            sales_flat_order_grid:
+                converters:
+                    billing_name:
+                        converter: 'randomizeText'
+                    shipping_name:
+                        converter: 'randomizeText'
+
+            sales_flat_order_payment:
+                converters:
+                    last_trans_id:
+                        converter: 'anonymizeNumber'
+                    cc_trans_id:
+                        converter: 'anonymizeNumber'
+                    cc_owner:
+                        converter: 'randomizeText'
+                    cc_approval:
+                        converter: 'randomizeText'
+                    cc_number_enc:
+                        converter: 'randomizeText'
+                    cc_last4:
+                        converter: 'anonymizeNumber'
+                    cc_debug_request_body:
+                        converter: 'randomizeText'
+                    cc_debug_response_body:
+                        converter: 'randomizeText'
+                    cc_debug_response_serialized:
+                        converter: 'randomizeText'
+                    echeck_account_name:
+                        converter: 'randomizeText'
+                    echeck_bank_name:
+                        converter: 'randomizeText'
+                    additional_information:
+                        converter: 'serializedData'
+                        parameters:
+                            converters:
+                                CC_CN:
+                                    converter: 'randomizeText'
+
+            sales_flat_quote:
+                converters:
+                    customer_email:
+                        converter: 'randomizeEmail'
+                    customer_firstname:
+                        converter: 'randomizeText'
+                    customer_middlename:
+                        converter: 'randomizeText'
+                    customer_lastname:
+                        converter: 'randomizeText'
+                    customer_dob:
+                        converter: 'anonymizeDateTime'
+                    customer_note:
+                        converter: 'randomizeText'
+                    remote_ip:
+                        converter: 'faker'
+                        parameters:
+                            formatter: 'ipv4'
+                    password_hash:
+                        converter: 'setNull'
+
+            sales_flat_quote_address:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+                    firstname:
+                        converter: 'randomizeText'
+                    middlename:
+                        converter: 'randomizeText'
+                    lastname:
+                        converter: 'randomizeText'
+                    company:
+                        converter: 'randomizeText'
+                    street:
+                        converter: 'randomizeText'
+                    postcode:
+                        converter: 'randomizeNumber'
+                    city:
+                        converter: 'randomizeText'
+                    telephone:
+                        converter: 'randomizeNumber'
+                    fax:
+                        converter: 'randomizeNumber'
+                    customer_notes:
+                        converter: 'randomizeText'
+
+            sales_flat_quote_payment:
+                converters:
+                    cc_owner:
+                        converter: 'randomizeText'
+                    cc_number_enc:
+                        converter: 'randomizeText'
+                    cc_last4:
+                        converter: 'anonymizeNumber'
+                    additional_information:
+                        converter: 'serializedData'
+                        parameters:
+                            converters:
+                                CC_CN:
+                                    converter: 'randomizeText'
+
+            sales_flat_shipment_comment:
+                converters:
+                    comment:
+                        converter: 'randomizeText'
+
+            sales_flat_shipment_grid:
+                converters:
+                    shipping_name:
+                        converter: 'randomizeText'
+
+            sales_flat_shipment_track:
+                converters:
+                    track_number:
+                        converter: 'randomizeText'
+
+            # --- Enterprise Edition tables ---
+
+            enterprise_admin_passwords:
+                truncate: true
+
+            enterprise_logging_event:
+                truncate: true
+
+            enterprise_logging_event_changes:
+                truncate: true
+
+            '*_cl':
+                truncate: true
+
+            enterprise_giftregistry_entity:
+                converters:
+                    title:
+                        converter: 'randomizeText'
+                    message:
+                        converter: 'randomizeText'
+                    shipping_address:
+                        converter: 'serializedData'
+                        parameters:
+                            converters:
+                                firstname:
+                                    converter: 'randomizeText'
+                                middlename:
+                                    converter: 'randomizeText'
+                                lastname:
+                                    converter: 'randomizeText'
+                                company:
+                                    converter: 'randomizeText'
+                                street:
+                                    converter: 'randomizeText'
+                                postcode:
+                                    converter: 'randomizeNumber'
+                                city:
+                                    converter: 'randomizeText'
+                                telephone:
+                                    converter: 'randomizeNumber'
+                                fax:
+                                    converter: 'randomizeNumber'
+
+            enterprise_giftregistry_person:
+                converters:
+                    email:
+                        converter: 'randomizeEmail'
+                    firstname:
+                        converter: 'randomizeText'
+                    middlename:
+                        converter: 'randomizeText'
+                    lastname:
+                        converter: 'randomizeText'
+
+            enterprise_rma:
+                converters:
+                    customer_custom_email:
+                        converter: 'randomizeEmail'
+
+            enterprise_rma_grid:
+                converters:
+                    customer_name:
+                        converter: 'randomizeText'
+
+            enterprise_rma_shipping_label:
+                converters:
+                    track_number:
+                        converter: 'randomizeText'
+
+            enterprise_rma_status_history:
+                converters:
+                    comment:
+                        converter: 'randomizeText'
+
+            enterprise_sales_creditmemo_grid_archive:
+                converters:
+                    billing_name:
+                        converter: 'randomizeText'
+
+            enterprise_sales_invoice_grid_archive:
+                converters:
+                    billing_name:
+                        converter: 'randomizeText'
+
+            enterprise_sales_order_grid_archive:
+                converters:
+                    billing_name:
+                        converter: 'randomizeText'
+                    shipping_name:
+                        converter: 'randomizeText'
+
+            enterprise_sales_shipment_grid_archive:
+                converters:
+                    shipping_name:
+                        converter: 'randomizeText'

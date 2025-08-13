@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Database;
 
-use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
-use Smile\GdprDump\Database\Metadata\MetadataInterface;
+use Smile\GdprDump\Database\Metadata\DatabaseMetadata;
+use Smile\GdprDump\Database\Metadata\Definition\ForeignKey;
 use Smile\GdprDump\Database\TableDependencyResolver;
-use Smile\GdprDump\Dumper\Config\Definition\FilterPropagationSettings;
-use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 final class TableDependencyResolverTest extends TestCase
@@ -170,25 +168,6 @@ final class TableDependencyResolverTest extends TestCase
     }
 
     /**
-     * Create a table dependency resolver object.
-     */
-    private function createResolver(array $foreignKeyMap, array $ignoredForeignKeys = []): TableDependencyResolver
-    {
-        $metadataMock = $this->createMock(MetadataInterface::class);
-        $metadataMock->expects($this->once())
-            ->method('getTableNames')
-            ->willReturn(array_column($foreignKeyMap, 0));
-        $metadataMock->method('getTableForeignKeys')
-            ->willReturnMap($foreignKeyMap);
-
-        $configMock = $this->createMock(DumperConfigInterface::class);
-        $configMock->method('getFilterPropagationSettings')
-            ->willReturn(new FilterPropagationSettings(true, $ignoredForeignKeys));
-
-        return new TableDependencyResolver($metadataMock, $configMock);
-    }
-
-    /**
      * Assert that the dependency array contains the foreign key used by the table "addresses".
      */
     private function assertHasAddressesDependency(array $dependencies): void
@@ -214,5 +193,20 @@ final class TableDependencyResolverTest extends TestCase
         $foreignKey = $dependencies['customers']['fk_stores'];
         $this->assertInstanceOf(ForeignKey::class, $foreignKey);
         $this->assertSame('fk_stores', $foreignKey->getConstraintName());
+    }
+
+    /**
+     * Create a table dependency resolver object.
+     */
+    private function createResolver(array $foreignKeyMap, array $ignoredForeignKeys = []): TableDependencyResolver
+    {
+        $metadataMock = $this->createMock(DatabaseMetadata::class);
+        $metadataMock->expects($this->once())
+            ->method('getTableNames')
+            ->willReturn(array_column($foreignKeyMap, 0));
+        $metadataMock->method('getTableForeignKeys')
+            ->willReturnMap($foreignKeyMap);
+
+        return new TableDependencyResolver($metadataMock, $ignoredForeignKeys);
     }
 }

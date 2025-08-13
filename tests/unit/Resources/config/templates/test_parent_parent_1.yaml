@@ -1,7 +1,0 @@
-tables:
-    table1:
-        converters:
-            field1:
-                converter: 'randomizeEmail'
-            field2:
-                converter: 'randomizeText'

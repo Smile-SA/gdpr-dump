@@ -6,9 +6,9 @@ namespace Smile\GdprDump\Tests\Functional;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use RuntimeException;
-use Smile\GdprDump\Config\Config;
-use Smile\GdprDump\Config\ConfigInterface;
-use Smile\GdprDump\Config\Loader\ConfigLoader;
+use Smile\GdprDump\Configuration\Configuration;
+use Smile\GdprDump\Configuration\ConfigurationFactory;
+use Smile\GdprDump\Configuration\Loader\Resource\Resource;
 use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Database\ParameterBag;
 use Smile\GdprDump\Kernel;
@@ -16,9 +16,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class TestCase extends BaseTestCase
 {
-    private static ?Kernel $kernel = null;
-    private static ?Database $database = null;
-    private static ?Config $config = null;
+    private static Kernel $kernel;
+    private static Database $database;
+    private static Configuration $configuration;
+
+    public static function setUpBeforeClass(): void
+    {
+        self::getDatabase()->connect();
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        self::getDatabase()->close();
+    }
 
     /**
      * Get the absolute path of the application.
@@ -41,7 +51,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected static function getContainer(): ContainerInterface
     {
-        if (self::$kernel === null) {
+        if (!isset(self::$kernel)) {
             self::$kernel = new Kernel();
             self::$kernel->boot();
         }
@@ -52,17 +62,17 @@ abstract class TestCase extends BaseTestCase
     /**
      * Get the dumper config.
      */
-    protected static function getConfig(): ConfigInterface
+    protected static function getConfiguration(): Configuration
     {
-        if (self::$config === null) {
-            self::$config = new Config();
-
-            /** @var ConfigLoader $loader */
-            $loader = self::getContainer()->get(ConfigLoader::class);
-            $loader->load(self::$config, self::getResource('config/config.yaml'));
+        if (!isset(self::$configuration)) {
+            /** @var ConfigurationFactory $factory */
+            $factory = self::getContainer()->get(ConfigurationFactory::class);
+            $builder = $factory->createBuilder();
+            $builder->addResource(new Resource(self::getResource('config/config.yaml')));
+            self::$configuration = $builder->build();
         }
 
-        return self::$config;
+        return self::$configuration;
     }
 
     /**
@@ -70,19 +80,19 @@ abstract class TestCase extends BaseTestCase
      */
     protected static function getDatabase(): Database
     {
-        if (self::$database === null) {
-            $config = self::getConfig();
+        if (!isset(self::$database)) {
+            $configuration = self::getConfiguration();
 
             // Initialize the shared connection
-            $connectionParams = $config->get('database');
-            $connectionParams['dbname'] = $connectionParams['name'];
-            unset($connectionParams['name']);
+            $connectionParams = $configuration->getConnectionParams();
             self::$database = new Database(new ParameterBag($connectionParams));
+            self::$database->connect();
 
             // Create the tables
             $connection = self::$database->getConnection();
             $statement = $connection->prepare(self::getDatabaseDump());
             $statement->executeQuery();
+            self::$database->close();
         }
 
         return self::$database;

@@ -1,0 +1,22 @@
+extends: 'parent.yaml'
+
+dump:
+    output: '%env(DUMP_OUTPUT)%'
+
+tables:
+    table1:
+        converters:
+            field3: ~ # removes the object declared in a parent file
+
+    table3:
+        order_by: 'field1'
+
+if_version:
+    '>=2.0.0':
+        tables:
+            table3:
+                limit: 10
+
+    '<2.0.0':
+        table3:
+            limit: 50 # won't be applied

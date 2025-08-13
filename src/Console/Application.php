@@ -14,6 +14,12 @@ final class Application extends BaseApplication
     public function __construct()
     {
         parent::__construct('GdprDump', $this->getPackageVersion());
+
+        // Remove the --quiet and --silent options
+        $options = $this->getDefinition()->getOptions();
+        unset($options['quiet']);
+        unset($options['silent']); // introduced in symfony 7.2
+        $this->getDefinition()->setOptions($options);
     }
 
     /**

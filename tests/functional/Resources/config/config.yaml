@@ -1,4 +1,4 @@
-extends: 'template.yaml'
+extends: 'parent.yaml'
 version: '2.2.0'
 
 database:
