@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Transformer;
 
-use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Converter;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 
-final class Hash implements ConverterInterface
+final class Hash implements Converter
 {
     private string $algorithm;
 
@@ -23,7 +23,7 @@ final class Hash implements ConverterInterface
         $allowed = hash_algos();
 
         if (!in_array($this->algorithm, $allowed, true)) {
-            throw new ValidationException(
+            throw new InvalidParameterException(
                 sprintf('Invalid algorithm "%s". Allowed values: %s.', $this->algorithm, implode(', ', $allowed))
             );
         }

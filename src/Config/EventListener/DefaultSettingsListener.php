@@ -4,42 +4,43 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\EventListener;
 
-use Smile\GdprDump\Config\Event\LoadEvent;
+use Smile\GdprDump\Config\Event\ParseConfigEvent;
+use Smile\GdprDump\Database\Driver\DriverType;
+use Smile\GdprDump\Util\Objects;
 
 final class DefaultSettingsListener
 {
     /**
      * Add default settings to the configuration.
      */
-    public function __invoke(LoadEvent $event): void
+    public function __invoke(ParseConfigEvent $event): void
     {
-        $config = $event->getConfig();
-        $data = $config->toArray();
-        $data += [
-            'database' => [],
-            'dump' => [],
-            'faker' => [],
-            'filter_propagation' => [],
-            'tables_whitelist' => [],
-            'tables_blacklist' => [],
-            'tables' => [],
-            'variables' => [],
-        ];
+        return; // TODO which event??? will be useles anyway with a DumpConfig object
+        $config = $event->getConfigData();
 
-        foreach ($this->getDefaultSettings() as $key => $value) {
-            $data[$key] += $value;
+        foreach ($this->getDefaultSettings() as $property => $value) {
+            if (!property_exists($config, $property)) {
+                $config->$property = $value;
+                continue;
+            }
+
+            if (is_object($value)) {
+                Objects::merge($value, $config->$property);
+                $config->$property = $value;
+            }
         }
-
-        $config->reset($data);
     }
 
     /**
      * Get default settings.
      */
-    private function getDefaultSettings(): array
+    private function getDefaultSettings(): object
     {
-        return [
-            'dump' => [
+        return (object) [
+            'database' => (object) [
+                'driver' => Drivers::MYSQL,
+            ],
+            'dump' => (object) [
                 'output' => 'php://stdout',
                 'add_drop_database' => false,
                 'add_drop_table' => true, // false in MySQLDump-PHP
@@ -66,13 +67,17 @@ final class DefaultSettingsListener
                 'skip_triggers' => false,
                 'skip_tz_utc' => false,
             ],
-            'filter_propagation' => [
+            'faker' => (object) [
+                'locale' => '',
+            ],
+            'filter_propagation' => (object) [
                 'enabled' => true,
                 'ignored_foreign_keys' => [],
             ],
-            'faker' => [
-                'locale' => '',
-            ],
+            'tables' => (object) [],
+            'tables_whitelist' => [],
+            'tables_blacklist' => [],
+            'variables' => (object) [],
         ];
     }
 }

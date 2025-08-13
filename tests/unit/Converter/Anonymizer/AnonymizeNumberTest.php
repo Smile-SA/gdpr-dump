@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter\Anonymizer;
 
 use Smile\GdprDump\Converter\Anonymizer\AnonymizeNumber;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\ValidationException;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
 final class AnonymizeNumberTest extends TestCase

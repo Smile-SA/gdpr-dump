@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Dumper\Config;
 
 use RuntimeException;
-use Smile\GdprDump\Config\ConfigInterface;
-use Smile\GdprDump\Database\Metadata\MetadataInterface;
+use Smile\GdprDump\Database\Metadata\DatabaseMetadata;
+use Smile\GdprDump\Util\Objects;
+use stdClass;
 
 final class ConfigProcessor
 {
@@ -15,7 +16,7 @@ final class ConfigProcessor
      */
     private ?array $tableNames = null;
 
-    public function __construct(private MetadataInterface $metadata)
+    public function __construct(private DatabaseMetadata $metadata)
     {
     }
 
@@ -29,45 +30,47 @@ final class ConfigProcessor
      *
      * @throws RuntimeException if there are invalid column names
      */
-    public function process(ConfigInterface $config): void
+    public function process(stdClass $config): void
     {
         $this->processTableLists($config);
-        $this->processTablesData($config);
+        $this->processTablesConfig($config);
     }
 
     /**
      * Process the `tables_whitelist` and `tables_blacklist` parameters.
      */
-    private function processTableLists(ConfigInterface $config): void
+    private function processTableLists(stdClass $config): void
     {
-        $configKeys = ['tables_whitelist', 'tables_blacklist'];
+        $strict = $this->isStrictSchema($config);
 
-        foreach ($configKeys as $configKey) {
-            $tableNames = (array) $config->get($configKey, []);
+        $includedTables = Objects::getProperty($config, 'tables_whitelist', 'array');
+        if ($includedTables) {
+            $config->tables_whitelist = $this->resolveTableNames($includedTables, $strict);
+        }
 
-            if ($tableNames) {
-                $strict = (bool) $config->get('strict_schema');
-                $resolved = $this->resolveTableNames($tableNames, $strict);
-                $config->set($configKey, $resolved);
-            }
+        $excludedTables = Objects::getProperty($config, 'tables_blacklist', 'array');
+        if ($excludedTables) {
+            $config->tables_blacklist = $this->resolveTableNames($excludedTables, $strict);
         }
     }
 
     /**
      * Process the `tables` parameter.
      */
-    private function processTablesData(ConfigInterface $config): void
+    private function processTablesConfig(stdClass $config): void
     {
-        $tablesData = (array) $config->get('tables', []);
-        if ($tablesData) {
-            $strict = (bool) $config->get('strict_schema');
-            $resolved = $this->resolveTablesData($tablesData, $strict);
-            $config->set('tables', $resolved);
+        $tablesConfig = (array) Objects::getProperty($config, 'tables', '?object');
+
+        if ($tablesConfig) {
+            $strict = $this->isStrictSchema($config);
+            $config->tables = $this->resolveTablesConfig($tablesConfig, $strict);
         }
     }
 
     /**
      * Resolve a list of table name patterns.
+     *
+     * @param string[] $tableNames
      */
     private function resolveTableNames(array $tableNames, bool $strict): array
     {
@@ -88,23 +91,27 @@ final class ConfigProcessor
      *
      * @throws RuntimeException
      */
-    private function resolveTablesData(array $tablesData, bool $strict): array
+    private function resolveTablesConfig(array $tablesConfig, bool $strict): stdClass
     {
-        $resolved = [];
+        $resolved = new stdClass();
 
-        foreach ($tablesData as $tableName => $tableData) {
-            $matches = $this->findTablesByName((string) $tableName, $strict);
+        foreach ($tablesConfig as $tableName => $tableConfig) {
+            if ($tableConfig === null) {
+                continue; // object properties can be set to null in the config file
+            }
+
+            $matches = $this->findTablesByName($tableName, $strict);
 
             foreach ($matches as $match) {
                 // Throw an exception if a converter refers to a column that does not exist
-                $this->validateTableColumns($tableName, $tableData);
+                $this->validateTableColumns($tableName, $tableConfig);
 
                 // Merge table configuration
-                if (!array_key_exists($match, $resolved)) {
-                    $resolved[$match] = [];
+                if (!property_exists($resolved, $match)) {
+                    $resolved->$match = clone $tableConfig;
+                } else {
+                    Objects::merge($resolved->$match, $tableConfig);
                 }
-
-                $resolved[$match] += $tableData;
             }
         }
 
@@ -139,21 +146,28 @@ final class ConfigProcessor
      *
      * @throws RuntimeException
      */
-    private function validateTableColumns(string $tableName, array $tableData): void
+    private function validateTableColumns(string $tableName, stdClass $tableConfig): void
     {
-        if (!array_key_exists('converters', $tableData) || !$tableData['converters']) {
+        $convertersConfig = (array) Objects::getProperty($tableConfig, 'converters', '?object');
+        if (!$convertersConfig) {
             return;
         }
 
         $columns = $this->metadata->getColumnNames($tableName);
 
-        foreach ($tableData['converters'] as $columnName => $converterData) {
-            $disabled = $converterData['disabled'] ?? false;
-
-            if (!$disabled && !in_array($columnName, $columns, true)) {
+        foreach (array_keys($convertersConfig) as $columnName) {
+            if (!in_array($columnName, $columns, true)) {
                 $message = 'The table "%s" uses a converter on an undefined column "%s".';
                 throw new RuntimeException(sprintf($message, $tableName, $columnName));
             }
         }
+    }
+
+    /**
+     * Check whether strict schema mode is enabled.
+     */
+    private function isStrictSchema(stdClass $config): bool
+    {
+        return (bool) Objects::getProperty($config, 'strict_schema', 'bool');
     }
 }

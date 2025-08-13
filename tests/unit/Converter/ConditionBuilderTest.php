@@ -106,7 +106,7 @@ final class ConditionBuilderTest extends TestCase
     {
         $builder = new ConditionBuilder();
         $this->expectException(RuntimeException::class);
-        $builder->build('ArrayHelper::getPath(\'id\') === 1');
+        $builder->build('Arrays::getPath(\'id\') === 1');
     }
 
     /**
@@ -116,6 +116,6 @@ final class ConditionBuilderTest extends TestCase
     {
         $builder = new ConditionBuilder();
         $this->expectException(RuntimeException::class);
-        $builder->build('\'ArrayHelper\'::getPath(\'id\') === 1');
+        $builder->build('\'Arrays\'::getPath(\'id\') === 1');
     }
 }

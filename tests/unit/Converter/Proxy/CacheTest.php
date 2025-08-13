@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\ValidationException;
 use Smile\GdprDump\Converter\Proxy\Internal\Cache;
 use Smile\GdprDump\Converter\Randomizer\RandomizeText;
 use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
@@ -63,7 +63,7 @@ final class CacheTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown when the parameter "converter" is not an instance of ConverterInterface.
+     * Assert that an exception is thrown when the parameter "converter" is not an instance of Converter.
      */
     public function testConverterNotValid(): void
     {

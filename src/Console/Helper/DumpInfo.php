@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Console\Helper;
 
-use Smile\GdprDump\Database\Metadata\MetadataInterface;
+use Smile\GdprDump\Database\Metadata\DatabaseMetadata;
 use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
 use Smile\GdprDump\Dumper\Event\DumpFinishedEvent;
@@ -15,85 +15,88 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class DumpInfo
 {
-    private OutputInterface $output;
     private ProgressBar $progressBar;
     private ?array $lastTableInfo = null;
 
-    public function __construct(private EventDispatcherInterface $eventDispatcher)
+    public function __construct(private OutputInterface $output)
     {
+        if ($this->output instanceof ConsoleOutputInterface) {
+            $this->output = $this->output->getErrorOutput();
+        }
+
+        $this->progressBar = new ProgressBar($output);
+        $this->progressBar->minSecondsBetweenRedraws(0.1); // default: 0.04
     }
 
     /**
-     * Set the output that will display the dump progress.
+     * Register the event listeners.
      */
-    public function setOutput(OutputInterface $output): void
+    public function addListeners(EventDispatcherInterface $eventDispatcher): void
     {
-        if ($output instanceof ConsoleOutputInterface) {
-            $output = $output->getErrorOutput();
-        }
+        $eventDispatcher->addListener(DumpEvent::class, [$this, 'onDumpStarted']);
+        $eventDispatcher->addListener(DumpFinishedEvent::class, [$this, 'onDumpEnded']);
+    }
 
-        $this->output = $output;
-        $this->progressBar = new ProgressBar($output);
-        $this->progressBar->minSecondsBetweenRedraws(0.1); // default: 0.04
-        $this->eventDispatcher->addListener(DumpEvent::class, $this->getDumpStartedListener());
-        $this->eventDispatcher->addListener(DumpFinishedEvent::class, $this->getDumpFinishedListener());
+    /**
+     * Unregister the event listeners.
+     */
+    public function removeListeners(EventDispatcherInterface $eventDispatcher): void
+    {
+        $eventDispatcher->removeListener(DumpEvent::class, [$this, 'onDumpStarted']);
+        $eventDispatcher->removeListener(DumpFinishedEvent::class, [$this, 'onDumpEnded']);
     }
 
     /**
      * Get the listener that will be triggered when a dump is started.
      */
-    private function getDumpStartedListener(): callable
+    public function onDumpStarted(DumpEvent $event): void
     {
-        return function (DumpEvent $event): void {
-            $config = $event->getConfig();
-            $database = $event->getDatabase();
+        $config = $event->getConfig();
+        $database = $event->getDatabase();
 
-            // DSN
-            $this->displaySection('Database settings');
-            $this->displaySectionItem('Dsn', $database->getDriver()->getDsn());
-            $this->displaySectionItem(
-                'Using password',
-                $database->getConnectionParams()->get('password') ? 'yes' : 'no'
-            );
+        // DSN
+        $this->displaySection('Database settings');
+        $this->displaySectionItem('Dsn', $database->getDriver()->getDsn());
+        $this->displaySectionItem(
+            'Using password',
+            $database->getConnectionParams()->get('password') ? 'yes' : 'no'
+        );
 
-            // Dump settings
-            $this->output->writeln('');
-            $this->displaySection('Dump settings');
-            $this->displaySectionItem('output', $config->getDumpOutput());
-            foreach ($config->getDumpSettings() as $name => $value) {
-                $this->displaySectionItem($name, $value);
-            }
+        // Dump settings
+        $this->output->writeln('');
+        $this->displaySection('Dump settings');
+        $this->displaySectionItem('output', $config->getDumpOutput());
+        foreach ($config->getDumpSettings() as $name => $value) {
+            $this->displaySectionItem($name, $value);
+        }
 
-            $this->output->writeln('');
-            $this->displaySection('Dump progress');
+        $this->output->writeln('');
+        $this->displaySection('Dump progress');
 
-            // Configure and start the progress bar
-            $this->progressBar->setFormat(
-                ' %current%/%max% [%bar%] %percent:3s%% - %title% - %elapsed:6s% - %memory:6s%'
-            );
-            $this->progressBar->setMaxSteps($this->getMaxSteps($config, $database->getMetadata()));
-            $this->progressBar->setMessage('<info>Starting dump</info>', 'title');
-            $this->progressBar->start();
+        // Configure and start the progress bar
+        $this->progressBar->setFormat(
+            ' %current%/%max% [%bar%] %percent:3s%% - %title% - %elapsed:6s% - %memory:6s%'
+        );
+        $this->progressBar->setMaxSteps($this->getMaxSteps($config, $database->getMetadata()));
+        $this->progressBar->setMessage('<info>Starting dump</info>', 'title');
+        $this->progressBar->start();
 
-            // Set the hook that will update the bar during the dump creation
-            $event->getDumper()->setInfoHook($this->getDumpInfoHook());
-        };
+        // Set the hook that will update the bar during the dump creation
+        $event->getDumper()->setInfoHook($this->getDumpInfoHook());
     }
 
     /**
      * Get the listener that will be triggered when a dump is finished.
      */
-    private function getDumpFinishedListener(): callable
+    public function onDumpFinished(): void
     {
-        return function (): void {
-            if ($this->lastTableInfo) {
-                // Display information of the last table that was dumped
-                $this->updateProgressBarMessage($this->lastTableInfo);
-            }
+        if ($this->lastTableInfo) {
+            // Display information of the last table that was dumped
+            $this->updateProgressBarMessage($this->lastTableInfo);
+        }
 
-            $this->progressBar->finish();
-            $this->output->writeln('');
-        };
+        $this->progressBar->finish();
+        $this->output->writeln('');
     }
 
     /**
@@ -148,7 +151,7 @@ final class DumpInfo
     /**
      * Get max number of steps of the progress bar.
      */
-    private function getMaxSteps(DumperConfigInterface $config, MetadataInterface $metadata): int
+    private function getMaxSteps(DumperConfigInterface $config, DatabaseMetadata $metadata): int
     {
         $includedTables = $config->getIncludedTables() ?: $metadata->getTableNames();
         $excludedTables = $config->getExcludedTables();

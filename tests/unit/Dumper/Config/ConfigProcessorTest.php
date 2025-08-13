@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Dumper\Config;
 
 use RuntimeException;
 use Smile\GdprDump\Config\Config;
-use Smile\GdprDump\Database\Metadata\MetadataInterface;
+use Smile\GdprDump\Database\Metadata\DatabaseMetadata;
 use Smile\GdprDump\Dumper\Config\ConfigProcessor;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
@@ -134,7 +134,7 @@ final class ConfigProcessorTest extends TestCase
      */
     private function createConfigProcessor(): ConfigProcessor
     {
-        $metadataMock = $this->createMock(MetadataInterface::class);
+        $metadataMock = $this->createMock(DatabaseMetadata::class);
         $metadataMock->expects($this->atMost(1))
             ->method('getTableNames')
             ->willReturn(['table1', 'table2', 'table3']);

@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Config\Loader;
 
 use Smile\GdprDump\Config\Config;
+use Smile\GdprDump\Config\Exception\ConfigLoadException;
+use Smile\GdprDump\Config\Exception\FileLocatorException;
 use Smile\GdprDump\Config\Loader\ConfigLoader;
-use Smile\GdprDump\Config\Loader\FileLocator;
-use Smile\GdprDump\Config\Loader\FileNotFoundException;
-use Smile\GdprDump\Config\Loader\ParseException;
+use Smile\GdprDump\Config\Loader\DumpConfigLoader;
+use Smile\GdprDump\Config\Loader\TemplateLocator;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -54,7 +55,7 @@ final class ConfigLoaderTest extends TestCase
         $config = new Config();
         $configLoader = $this->createConfigLoader();
 
-        $this->expectException(FileNotFoundException::class);
+        $this->expectException(FileLocatorException::class);
         $configLoader->load($config, 'not_exists.yaml');
     }
 
@@ -66,7 +67,7 @@ final class ConfigLoaderTest extends TestCase
         $config = new Config();
         $configLoader = $this->createConfigLoader();
 
-        $this->expectException(ParseException::class);
+        $this->expectException(ConfigLoadException::class);
         $configLoader->load($config, $this->getResource('config/templates/invalid_data.yaml'));
     }
 
@@ -108,6 +109,6 @@ final class ConfigLoaderTest extends TestCase
         $templatesDirectory = $this->getResource('config/templates');
         $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
 
-        return new ConfigLoader(new FileLocator($templatesDirectory), $eventDispatcherMock);
+        return new DumpConfigLoader(new TemplateLocator($templatesDirectory), $eventDispatcherMock);
     }
 }

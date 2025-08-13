@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Tests\Unit\Converter\Parameters;
 
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\ValidationException;
 use Smile\GdprDump\Tests\Unit\TestCase;
 use stdClass;
 

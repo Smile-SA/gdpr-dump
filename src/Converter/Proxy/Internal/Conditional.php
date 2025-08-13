@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter\Proxy\Internal;
 
 use Smile\GdprDump\Converter\ConditionBuilder;
-use Smile\GdprDump\Converter\ContextAwareInterface;
-use Smile\GdprDump\Converter\ConverterInterface;
-use Smile\GdprDump\Converter\InternalConverterInterface;
+use Smile\GdprDump\Converter\IsContextAware;
+use Smile\GdprDump\Converter\Converter;
+use Smile\GdprDump\Converter\IsInternal;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 use Smile\GdprDump\Dumper\DumpContext;
 
-final class Conditional implements InternalConverterInterface, ContextAwareInterface
+final class Conditional implements IsInternal, IsContextAware
 {
     private DumpContext $dumpContext; // @phpstan-ignore property.onlyWritten (required for condition evaluation)
     private string $condition;
-    private ConverterInterface $converter;
+    private Converter $converter;
 
     public function __construct(private ConditionBuilder $conditionBuilder)
     {
@@ -26,7 +26,7 @@ final class Conditional implements InternalConverterInterface, ContextAwareInter
     {
         $input = (new ParameterProcessor())
             ->addParameter('condition', Parameter::TYPE_STRING, true)
-            ->addParameter('converter', ConverterInterface::class, true)
+            ->addParameter('converter', Converter::class, true)
             ->process($parameters);
 
         $this->condition = $this->conditionBuilder->build($input->get('condition'));

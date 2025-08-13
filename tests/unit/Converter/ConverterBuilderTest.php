@@ -8,7 +8,7 @@ use RuntimeException;
 use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Converter\ConverterBuilder;
 use Smile\GdprDump\Converter\ConverterFactory;
-use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Converter;
 use Smile\GdprDump\Converter\Proxy\Chain;
 use Smile\GdprDump\Converter\Proxy\Faker;
 use Smile\GdprDump\Converter\Proxy\Internal\Cache;
@@ -21,7 +21,7 @@ use Smile\GdprDump\Tests\Framework\Mock\Converter\ConverterMock;
 use Symfony\Component\DependencyInjection\Container;
 use UnexpectedValueException;
 
-final class ConverterBuilderTest extends TestCase implements DumpContextAwareInterface
+final class ConverterBuilderTest extends TestCase implements DumpContextAware
 {
     /**
      * Test the converter creation from an array definition.
@@ -189,7 +189,7 @@ final class ConverterBuilderTest extends TestCase implements DumpContextAwareInt
     /**
      * Build a converter with the specified data.
      */
-    private function buildConverter(array $data, bool $withDumpContext = true): ConverterInterface
+    private function buildConverter(array $data, bool $withDumpContext = true): Converter
     {
         $builder = $this->createBuilder();
         if ($withDumpContext) {

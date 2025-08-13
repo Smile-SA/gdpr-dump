@@ -6,21 +6,17 @@ namespace Smile\GdprDump\Dumper\Builder;
 
 use RuntimeException;
 use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
-use Smile\GdprDump\Util\ArrayHelper;
+use Smile\GdprDump\Util\Arrays;
 
 final class MysqldumpSettingsBuilder
 {
-    public function __construct(private ArrayHelper $arrayHelper)
-    {
-    }
-
     /**
      * Build mysqldump-php settings.
      */
     public function build(DumperConfigInterface $config): array
     {
         $mapping = $this->getMapping();
-        $settings = $this->arrayHelper->mapKeys(
+        $settings = Arrays::mapKeys(
             $config->getDumpSettings(),
             fn (string $key): string => $mapping[$key]
                 ?? throw new RuntimeException(sprintf('The dump setting "%s" is not supported.', $key))

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Converter\Generator;
 
 use DateTime;
-use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Converter;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 
-final class RandomDate implements ConverterInterface
+final class RandomDate implements Converter
 {
     private DateTime $date;
     private string $format;
@@ -18,7 +18,7 @@ final class RandomDate implements ConverterInterface
     private int $maxYear;
 
     /**
-     * @throws ValidationException
+     * @throws InvalidParameterException
      */
     public function setParameters(array $parameters): void
     {
@@ -34,7 +34,7 @@ final class RandomDate implements ConverterInterface
         $this->maxYear = $input->get('max_year') ?? (int) $this->date->format('Y');
 
         if ($this->minYear > $this->maxYear) {
-            throw new ValidationException('The parameter "min_year" must be lower than the parameter "max_year".');
+            throw new InvalidParameterException('The parameter "min_year" must be lower than the parameter "max_year".');
         }
     }
 

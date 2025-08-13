@@ -4,28 +4,23 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Database\Builder;
 
-use RuntimeException;
-use Smile\GdprDump\Config\ConfigInterface;
-use Smile\GdprDump\Util\ArrayHelper;
+use Smile\GdprDump\Config\DumperConfig;
+use Smile\GdprDump\Database\Exception\InvalidParameterException;
+use Smile\GdprDump\Util\Arrays;
 
 final class ConnectionParamsBuilder
 {
-    public function __construct(private ArrayHelper $arrayHelper)
-    {
-    }
-
     /**
      * Build Doctrine connection parameters.
      */
-    public function build(ConfigInterface $config): array
+    public function build(DumperConfig $config): array
     {
         $mapping = $this->getMapping();
-        $settings = (array) $config->get('database', []);
 
-        return $this->arrayHelper->mapKeys(
-            $settings,
+        return Arrays::mapKeys(
+            $config->getConnectionParams(),
             fn (string $key): string => $mapping[$key]
-                ?? throw new RuntimeException(sprintf('The database setting "%s" is not supported.', $key))
+                ?? throw new InvalidParameterException(sprintf('The database setting "%s" is not supported.', $key))
         );
     }
 

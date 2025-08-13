@@ -6,8 +6,8 @@ namespace Smile\GdprDump\Dumper\EventListener;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Smile\GdprDump\Database\Metadata\DatabaseMetadata;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
-use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Database\TableDependencyResolver;
 use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
@@ -16,7 +16,7 @@ use UnexpectedValueException;
 final class TableFilterListener
 {
     private Connection $connection;
-    private MetadataInterface $metadata;
+    private DatabaseMetadata $metadata;
     private DumperConfigInterface $config;
 
     /**

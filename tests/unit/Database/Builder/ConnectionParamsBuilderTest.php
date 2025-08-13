@@ -7,9 +7,8 @@ namespace Smile\GdprDump\Tests\Unit\Database\Builder;
 use PDO;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Database\Builder\ConnectionParamsBuilder;
-use Smile\GdprDump\Database\DatabaseInterface;
+use Smile\GdprDump\Database\Driver\DatabaseDriver;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use Smile\GdprDump\Util\ArrayHelper;
 
 final class ConnectionParamsBuilderTest extends TestCase
 {
@@ -26,7 +25,7 @@ final class ConnectionParamsBuilderTest extends TestCase
             'port' => 3306,
             'charset' => 'utf8mb4',
             'unix_socket' => '/tmp/mysql.sock',
-            'driver' => DatabaseInterface::DRIVER_MYSQL,
+            'driver' => DatabaseDriver::MYSQL,
             'driver_options' => [
                 PDO::MYSQL_ATTR_SSL_KEY => 'key.pem',
                 PDO::MYSQL_ATTR_SSL_CERT => 'cert.pem',
@@ -34,7 +33,7 @@ final class ConnectionParamsBuilderTest extends TestCase
             ],
         ];
 
-        $result = $this->createBuilder()->build($this->createConfig($settings));
+        $result = (new ConnectionParamsBuilder())->build($this->createConfig($settings));
         $this->assertSameKeyValuePairs($this->getExpectedResult($settings), $result);
     }
 
@@ -50,7 +49,7 @@ final class ConnectionParamsBuilderTest extends TestCase
             'host' => 'db',
         ];
 
-        $result = $this->createBuilder()->build($this->createConfig($settings));
+        $result = (new ConnectionParamsBuilder())->build($this->createConfig($settings));
         $this->assertSameKeyValuePairs($this->getExpectedResult($settings), $result);
     }
 
@@ -59,7 +58,7 @@ final class ConnectionParamsBuilderTest extends TestCase
      */
     public function testEmptySettings(): void
     {
-        $result = $this->createBuilder()->build($this->createConfig());
+        $result = (new ConnectionParamsBuilder())->build($this->createConfig());
         $this->assertSameKeyValuePairs($this->getExpectedResult(), $result);
     }
 
@@ -87,13 +86,5 @@ final class ConnectionParamsBuilderTest extends TestCase
     private function createConfig(array $databaseSettings = []): Config
     {
         return new Config(['database' => $databaseSettings]);
-    }
-
-    /**
-     * Create the object to test.
-     */
-    private function createBuilder(): ConnectionParamsBuilder
-    {
-        return new ConnectionParamsBuilder(new ArrayHelper());
     }
 }

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Converter\Proxy;
 
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\ValidationException;
 use Smile\GdprDump\Converter\Proxy\FromContext;
-use Smile\GdprDump\Tests\Unit\Converter\DumpContextAwareInterface;
+use Smile\GdprDump\Tests\Unit\Converter\DumpContextAware;
 use Smile\GdprDump\Tests\Unit\Converter\TestCase;
 
-final class FromContextTest extends TestCase implements DumpContextAwareInterface
+final class FromContextTest extends TestCase implements DumpContextAware
 {
     /**
      * Test the converter.

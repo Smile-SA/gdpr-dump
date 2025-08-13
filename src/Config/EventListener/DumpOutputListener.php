@@ -4,27 +4,29 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Config\EventListener;
 
-use Smile\GdprDump\Config\Event\LoadedEvent;
-use Smile\GdprDump\Config\Validator\ValidationException;
+use Smile\GdprDump\Config\Event\ParseConfigEvent;
+use Smile\GdprDump\Config\Exception\ConfigLoadException;
 
 final class DumpOutputListener
 {
     /**
      * Process date placeholder in the dump output parameter.
      */
-    public function __invoke(LoadedEvent $event): void
+    public function __invoke(ParseConfigEvent $event): void
     {
-        $config = $event->getConfig();
-
-        $dump = $config->get('dump', []);
-        if (!is_array($dump) || (array_key_exists('output', $dump) && !is_string($dump['output']))) {
-            throw new ValidationException('Failed to parse the dump output.');
+        $config = $event->getConfigData();
+        if (!property_exists($config, 'dump')) {
+            return;
         }
 
-        $output = $dump['output'] ?? '';
+        $dump = $config->dump;
+        if (!is_object($dump) || (property_exists($dump, 'output') && !is_string($dump->output))) {
+            throw new ConfigLoadException('Failed to parse the dump output.');
+        }
+
+        $output = $dump->output ?? '';
         if ($output !== '') {
-            $dump['output'] = $this->processDatePlaceholder($dump['output']);
-            $config->set('dump', $dump);
+            $dump->output = $this->processDatePlaceholder($dump->output);
         }
     }
 
@@ -40,7 +42,7 @@ final class DumpOutputListener
         );
 
         if ($input === null) {
-            throw new ValidationException('Failed to replace placeholders in value "%s".', $input);
+            throw new ConfigLoadException(sprintf('Failed to replace placeholders in value "%s".', $input));
         }
 
         return $input;

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Framework\Mock\Converter;
 
-use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Converter;
 
-final class ConverterMock implements ConverterInterface
+final class ConverterMock implements Converter
 {
     private string $prefix = 'test_';
 

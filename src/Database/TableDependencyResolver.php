@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Database;
 
+use Smile\GdprDump\Database\Metadata\DatabaseMetadata;
 use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
-use Smile\GdprDump\Database\Metadata\MetadataInterface;
 use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 
 final class TableDependencyResolver
@@ -20,7 +20,7 @@ final class TableDependencyResolver
      */
     private array $foreignKeys = [];
 
-    public function __construct(private MetadataInterface $metadata, private DumperConfigInterface $config)
+    public function __construct(private DatabaseMetadata $metadata, private DumperConfigInterface $config)
     {
     }
 

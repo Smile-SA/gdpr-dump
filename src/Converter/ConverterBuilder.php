@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter;
 
-use RuntimeException;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\InvalidDefinitionException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 use Smile\GdprDump\Dumper\Config\Definition\ConverterConfig;
 use Smile\GdprDump\Dumper\DumpContext;
-use UnexpectedValueException;
 
 final class ConverterBuilder
 {
@@ -20,8 +19,10 @@ final class ConverterBuilder
 
     /**
      * Build a converter from a definition array.
+     *
+     * @throws InvalidDefinitionException
      */
-    public function build(ConverterConfig $definition): ConverterInterface
+    public function build(ConverterConfig $definition): Converter
     {
         $name = $definition->getName();
         $parameters = $this->parseParameters($definition);
@@ -30,8 +31,8 @@ final class ConverterBuilder
         $converter = $this->createConverter($name, $parameters);
 
         // Disallow using internal converters
-        if ($converter instanceof InternalConverterInterface) {
-            throw new UnexpectedValueException(
+        if ($converter instanceof IsInternal) {
+            throw new InvalidDefinitionException(
                 sprintf('The converter "%s" is an internal implementation.', $name)
             );
         }
@@ -54,7 +55,7 @@ final class ConverterBuilder
     /**
      * If the "unique" parameter is set to true, bind a unique converter to the specified converter.
      */
-    private function bindUnique(ConverterInterface $converter, ConverterConfig $definition): ConverterInterface
+    private function bindUnique(Converter $converter, ConverterConfig $definition): Converter
     {
         if ($definition->isUnique()) {
             $converter = $this->createConverter('unique', ['converter' => $converter]);
@@ -66,7 +67,7 @@ final class ConverterBuilder
     /**
      * If a cache key is defined, bind a cache converter to the specified converter.
      */
-    private function bindCache(ConverterInterface $converter, ConverterConfig $definition): ConverterInterface
+    private function bindCache(Converter $converter, ConverterConfig $definition): Converter
     {
         if ($definition->getCacheKey() !== '') {
             $converter = $this->createConverter(
@@ -81,7 +82,7 @@ final class ConverterBuilder
     /**
      * If a condition is defined, bind a condition converter to the specified converter.
      */
-    private function bindCondition(ConverterInterface $converter, ConverterConfig $definition): ConverterInterface
+    private function bindCondition(Converter $converter, ConverterConfig $definition): Converter
     {
         // Convert data only if it matches the specified condition
         if ($definition->getCondition() !== '') {
@@ -97,7 +98,7 @@ final class ConverterBuilder
     /**
      * Parse the converter parameters.
      *
-     * @throws UnexpectedValueException
+     * @throws InvalidDefinitionException
      */
     private function parseParameters(ConverterConfig $definition): array
     {
@@ -122,13 +123,13 @@ final class ConverterBuilder
     /**
      * Parse a parameter that defines an array of converter definitions.
      *
-     * @return ConverterInterface[]
-     * @throws UnexpectedValueException
+     * @return Converter[]
+     * @throws InvalidDefinitionException
      */
     private function parseConvertersParameter(string $name, mixed $definitionsCandidate): array
     {
         if (!is_array($definitionsCandidate)) {
-            throw new UnexpectedValueException(sprintf('The parameter "%s" must be an array.', $name));
+            throw new InvalidDefinitionException(sprintf('The parameter "%s" must be an array.', $name));
         }
 
         foreach ($definitionsCandidate as $index => $definitionCandidate) {
@@ -142,12 +143,12 @@ final class ConverterBuilder
     /**
      * Parse a parameter that defines a converter definition.
      *
-     * @throws UnexpectedValueException
+     * @throws InvalidDefinitionException
      */
-    private function parseConverterParameter(string $name, mixed $definitionCandidate): ConverterInterface
+    private function parseConverterParameter(string $name, mixed $definitionCandidate): Converter
     {
         if (!is_array($definitionCandidate)) {
-            throw new UnexpectedValueException(sprintf('The parameter "%s" must be an array.', $name));
+            throw new InvalidDefinitionException(sprintf('The parameter "%s" must be an array.', $name));
         }
 
         return $this->build(new ConverterConfig($definitionCandidate));
@@ -156,21 +157,21 @@ final class ConverterBuilder
     /**
      * Create a converter that matches the specified name and parameters.
      */
-    private function createConverter(string $name, array $parameters): ConverterInterface
+    private function createConverter(string $name, array $parameters): Converter
     {
         $converter = $this->converterFactory->create($name);
 
         try {
             $converter->setParameters($parameters);
-        } catch (ValidationException $e) {
-            throw new RuntimeException(
+        } catch (InvalidParameterException $e) {
+            throw new InvalidDefinitionException(
                 sprintf('An error occurred while parsing the converter "%s": %s', $name, lcfirst($e->getMessage()))
             );
         }
 
-        if ($converter instanceof ContextAwareInterface) {
+        if ($converter instanceof IsContextAware) {
             if (!isset($this->dumpContext)) {
-                throw new RuntimeException('The dump context is not set.');
+                throw new InvalidDefinitionException('The dump context is not set.');
             }
 
             $converter->setDumpContext($this->dumpContext);

@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Config\Validator;
 
 use JsonSchema\Validator;
+use Smile\GdprDump\Config\Exception\InvalidJsonSchemaException;
+use Smile\GdprDump\Config\Loader\ContainerInterface;
 use Throwable;
 
-final class JsonSchemaValidator implements ValidatorInterface
+final class JsonSchemaValidator implements SchemaValidator
 {
     private string $schemaFile;
     private ?Validator $schemaValidator = null;
@@ -24,36 +26,82 @@ final class JsonSchemaValidator implements ValidatorInterface
         $this->schemaFile = $schemaFile;
     }
 
-    public function validate(mixed $data): ValidationResultInterface
+    public function validate(array|object $input): ValidationResult
     {
         $validator = $this->getValidator();
-
-        // Automatically convert associative arrays to stdClass (required for object validation)
-        if (is_array($data)) {
-            $data = json_decode((string) json_encode($data));
-        }
+        //$object = $this->containerToStdClass($dataObject); // TODO remove
 
         // Validate the data against the schema file
         try {
-            $validator->validate($data, (object) ['$ref' => $this->schemaFile]);
+            $validator->validate($input, (object) ['$ref' => $this->schemaFile]);
         } catch (Throwable $e) {
-            throw new ValidationException($e->getMessage(), $e);
+            throw new InvalidJsonSchemaException($e->getMessage(), $e);
         }
 
         // Build the messages array
         $messages = [];
         foreach ($validator->getErrors() as $error) {
+            if ($this->isErrorAllowed($error)) {
+                // Allow setting an object to null (removes an entry defined by a parent file)
+                continue;
+            }
+
             $messages[] = $error['property'] !== ''
                 ? sprintf('[%s] %s', $error['property'], $error['message'])
                 : $error['message'];
         }
 
-        // Create the validation results object
-        $result = new ValidationResult();
-        $result->setValid($validator->isValid());
-        $result->setMessages($messages);
+        return new ValidationResult(!$messages, $messages);
+    }
 
-        return $result;
+    /**
+     * Check whether a validation error should be ignored.
+     *
+     * @param array{
+     *     property: string,
+     *     pointer: string,
+     *     message: string,
+     *     constraint: array{name: string, params: mixed[]}
+     * }
+     */
+    private function isErrorAllowed(array $error)
+    {
+        $params = $error['constraint']['params'];
+
+        return $error['constraint']['name'] === 'type'
+            && array_key_exists('found', $params) && $params['found'] === 'NULL'
+            && array_key_exists('expected', $params) && $params['expected'] === 'an object';
+    }
+
+    // TODO REMOVE
+    private function containerToStdClass(ContainerInterface $container): object
+    {
+        $object = new \stdClass();
+
+        foreach ($container->toArray() as $key => $value) {
+            if ($value instanceof ContainerInterface) {
+                $value = $this->containerToStdClass($value);
+            } elseif (is_array($value)) {
+                $value = $this->arrayToStdClass($value);
+            }
+
+            $object->{$key} = $value;
+        }
+
+        return $object;
+    }
+
+    private function arrayToStdClass(array $array): array
+    {
+        foreach ($array as $key => $value) {
+            if ($value instanceof ContainerInterface) {
+                $array[$key] = $this->containerToStdClass($value);
+            } elseif (is_array($value)) {
+                $array[$key] = $this->arrayToStdClass($value);
+            }
+        }
+
+        return $array;
     }
 
     /**

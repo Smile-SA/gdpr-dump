@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Generator;
 
-use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Converter;
 use Smile\GdprDump\Converter\Parameters\Parameter;
 use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
 
-final class NumberBetween implements ConverterInterface
+final class NumberBetween implements Converter
 {
     private int $min;
     private int $max;
@@ -25,7 +25,7 @@ final class NumberBetween implements ConverterInterface
         $this->max = $input->get('max');
 
         if ($this->min > $this->max) {
-            throw new ValidationException('The parameter "min" must be lower than the parameter "max".');
+            throw new InvalidParameterException('The parameter "min" must be lower than the parameter "max".');
         }
     }
 

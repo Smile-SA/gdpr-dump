@@ -26,20 +26,10 @@
             "$ref": "#/definitions/faker"
         },
         "tables": {
-            "oneOf": [
-                {
-                    "type": "object",
-                    "additionalProperties": {
-                        "$ref": "#/definitions/table"
-                    }
-                },
-                {
-                    "type": "array",
-                    "items": {
-                        "maxLength": 0
-                    }
-                }
-            ]
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/table"
+            }
         },
         "tables_whitelist": {
             "type": "array",
@@ -56,20 +46,10 @@
             }
         },
         "variables": {
-            "oneOf": [
-                {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                {
-                    "type": "array",
-                    "items": {
-                        "maxLength": 0
-                    }
-                }
-            ]
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
         }
     },
     "additionalProperties": false,

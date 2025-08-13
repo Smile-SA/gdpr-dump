@@ -6,10 +6,12 @@ services:
         autowire: true
 
     _instanceof:
-        Smile\GdprDump\Converter\ConverterInterface:
+        Smile\GdprDump\Config\Parser\Parser:
+            tags: ['config.parser']
+        Smile\GdprDump\Converter\Converter:
             shared: false
             tags: ['converter'] # used by ConverterAliasPass to create aliases for data converters
-        Smile\GdprDump\Phar\Minify\MinifierInterface:
+        Smile\GdprDump\Phar\Minify\Minifier:
             tags: ['compiler.minifier']
         Symfony\Component\Console\Command\Command:
             public: true # used by Kernel
@@ -23,9 +25,11 @@ services:
     Smile\GdprDump\Console\Command\CompileCommand:
         $defaultLocale: '%faker.locale%'
 
-    Smile\GdprDump\Config\Loader\ConfigLoader:
+    Smile\GdprDump\Config\Loader\DumpConfigLoader:
         public: true # used by functional tests
         shared: false
+        arguments:
+            $parsers: !tagged_iterator config.parser
 
     Smile\GdprDump\Config\EventListener\DefaultSettingsListener:
         tags:
@@ -37,9 +41,15 @@ services:
 
     Smile\GdprDump\Config\EventListener\VersionListener:
         tags:
-            - { name: 'kernel.event_listener', method: 'onLoad' }
-            - { name: 'kernel.event_listener', method: 'onParse' }
-            - { name: 'kernel.event_listener', method: 'onMerge' }
+            - { name: 'kernel.event_listener', method: 'onConfigParse' }
+            - { name: 'kernel.event_listener', method: 'onConfigMerge' }
+            - { name: 'kernel.event_listener', method: 'onDumpTermination' }
+
+    Smile\GdprDump\Config\EventListener\TableNamesListener:
+        tags:
+            - { name: 'kernel.event_listener', method: 'onDatabaseConnected' }
+            - { name: 'kernel.event_listener', method: 'onConfigLoaded' }
+            - { name: 'kernel.event_listener', method: 'onDumpTermination' }
 
     Smile\GdprDump\Config\EventListener\DatabaseUrlListener:
         tags: ['kernel.event_listener']

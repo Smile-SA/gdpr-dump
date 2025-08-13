@@ -7,7 +7,7 @@ namespace Smile\GdprDump\Dumper\EventListener;
 use RuntimeException;
 use Smile\GdprDump\Converter\ConditionBuilder;
 use Smile\GdprDump\Converter\ConverterBuilder;
-use Smile\GdprDump\Converter\ConverterInterface;
+use Smile\GdprDump\Converter\Converter;
 use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
 use Smile\GdprDump\Dumper\DumpContext;
 use Smile\GdprDump\Dumper\Event\DumpEvent;
@@ -18,7 +18,7 @@ final class DataConverterListener
     private DumpContext $dumpContext;
 
     /**
-     * @var ConverterInterface[][]
+     * @var Converter[][]
      */
     private array $converters = [];
 

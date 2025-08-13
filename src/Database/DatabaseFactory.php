@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Database;
 
 use Doctrine\DBAL\Exception;
-use Smile\GdprDump\Config\ConfigInterface;
+use Smile\GdprDump\Config\DumperConfig;
 use Smile\GdprDump\Database\Builder\ConnectionParamsBuilder;
 
 final class DatabaseFactory
@@ -19,7 +19,7 @@ final class DatabaseFactory
      *
      * @throws Exception
      */
-    public function create(ConfigInterface $config): Database
+    public function create(DumperConfig $config): Database
     {
         $connectionParams = $this->connectionParamsBuilder->build($config);
 
