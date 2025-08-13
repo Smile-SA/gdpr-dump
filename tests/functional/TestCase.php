@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 use RuntimeException;
 use Smile\GdprDump\Config\Config;
 use Smile\GdprDump\Config\ConfigInterface;
-use Smile\GdprDump\Config\Loader\ConfigLoaderInterface;
+use Smile\GdprDump\Config\Loader\ConfigLoader;
 use Smile\GdprDump\Database\Database;
 use Smile\GdprDump\Database\ParameterBag;
 use Smile\GdprDump\Kernel;
@@ -57,8 +57,8 @@ abstract class TestCase extends BaseTestCase
         if (self::$config === null) {
             self::$config = new Config();
 
-            /** @var ConfigLoaderInterface $loader */
-            $loader = self::getContainer()->get('config.loader');
+            /** @var ConfigLoader $loader */
+            $loader = self::getContainer()->get(ConfigLoader::class);
             $loader->load(self::$config, self::getResource('config/config.yaml'));
         }
 

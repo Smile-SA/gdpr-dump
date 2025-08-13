@@ -9,11 +9,14 @@ use Throwable;
 
 final class JsonSchemaValidator implements ValidatorInterface
 {
+    private string $schemaFile;
     private ?Validator $schemaValidator = null;
 
-    public function __construct(private string $schemaFile)
+    public function __construct(?string $schemaFile = null)
     {
-        // Prefix the file name by the schema
+        $schemaFile ??= dirname(__DIR__, 3) . '/app/config/schema.json';
+
+        // Prefix the file name with the schema
         if (!str_contains($schemaFile, 'phar://')) {
             $schemaFile = 'file://' . $schemaFile;
         }

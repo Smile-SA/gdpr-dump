@@ -10,7 +10,7 @@ use Smile\GdprDump\Config\Loader\FileLocator;
 use Smile\GdprDump\Config\Loader\FileNotFoundException;
 use Smile\GdprDump\Config\Loader\ParseException;
 use Smile\GdprDump\Tests\Unit\TestCase;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class ConfigLoaderTest extends TestCase
 {

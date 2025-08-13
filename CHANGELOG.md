@@ -16,6 +16,7 @@ Breaking changes:
 Improvements:
 
 - Upgraded `justinrainbow/json-schema` package to from v5 to v6 ([#185](https://github.com/Smile-SA/gdpr-dump/pull/185))
+- The DI container is now dumped to a cache file ([#189](https://github.com/Smile-SA/gdpr-dump/pull/189))
 
 ## [5.0.5] - 2025-04-05
 [5.0.5]: https://github.com/Smile-SA/gdpr-dump/compare/5.0.4...5.0.5

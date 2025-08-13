@@ -6,13 +6,16 @@ namespace Smile\GdprDump\Config\Loader;
 
 final class FileLocator implements FileLocatorInterface
 {
+    private string $templatesDirectory;
+
     /**
      * @var string[]
      */
     private ?array $templates = null;
 
-    public function __construct(private string $templatesDirectory)
+    public function __construct(?string $templatesDirectory = null)
     {
+        $this->templatesDirectory = $templatesDirectory ?? dirname(__DIR__, 3) . '/app/config/templates';
     }
 
     public function locate(string $path, ?string $currentDirectory = null): string
