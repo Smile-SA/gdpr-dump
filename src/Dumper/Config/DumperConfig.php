@@ -178,7 +178,7 @@ final class DumperConfig implements DumperConfigInterface
 
         foreach ($tablesData as $tableName => $tableData) {
             $tableConfig = new TableConfig((string) $tableName, $tableData);
-            $this->tablesConfig->add($tableConfig);
+            $this->tablesConfig->add($tableName, $tableConfig);
 
             if ($tableConfig->getLimit() === 0) {
                 $this->tablesToTruncate[] = $tableConfig->getName();

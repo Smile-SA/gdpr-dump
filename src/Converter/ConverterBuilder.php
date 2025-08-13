@@ -6,6 +6,7 @@ namespace Smile\GdprDump\Converter;
 
 use RuntimeException;
 use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Dumper\Config\Definition\ConverterConfig;
 use Smile\GdprDump\Dumper\DumpContext;
 use UnexpectedValueException;
 
@@ -20,13 +21,10 @@ final class ConverterBuilder
     /**
      * Build a converter from a definition array.
      */
-    public function build(array $definition): ConverterInterface
+    public function build(ConverterConfig $definition): ConverterInterface
     {
-        $definition = $this->getConverterData($definition);
-
-        // Get the converter name and parameters
-        $name = $definition['converter'];
-        $parameters = $definition['parameters'];
+        $name = $definition->getName();
+        $parameters = $this->parseParameters($definition);
 
         // Create the converter
         $converter = $this->createConverter($name, $parameters);
@@ -54,49 +52,11 @@ final class ConverterBuilder
     }
 
     /**
-     * Get the converter data.
-     *
-     * @throws UnexpectedValueException
-     */
-    private function getConverterData(array $definition): array
-    {
-        if (!array_key_exists('converter', $definition)) {
-            throw new UnexpectedValueException('The converter name is required.');
-        }
-
-        if (array_key_exists('parameters', $definition) && !is_array($definition['parameters'])) {
-            throw new UnexpectedValueException('The converter parameters must be an array.');
-        }
-
-        $definition['converter'] = (string) $definition['converter'];
-        if ($definition['converter'] === '') {
-            throw new UnexpectedValueException('The converter name is required.');
-        }
-
-        $definition += [
-            'parameters' => [],
-            'condition' => '',
-            'cache_key' => '',
-            'unique' => false,
-        ];
-
-        // Parse the parameters
-        $definition['parameters'] = $this->parseParameters($definition['parameters']);
-
-        // Cast values
-        $definition['condition'] = (string) $definition['condition'];
-        $definition['unique'] = (bool) $definition['unique'];
-        $definition['cache_key'] = (string) $definition['cache_key'];
-
-        return $definition;
-    }
-
-    /**
      * If the "unique" parameter is set to true, bind a unique converter to the specified converter.
      */
-    private function bindUnique(ConverterInterface $converter, array $definition): ConverterInterface
+    private function bindUnique(ConverterInterface $converter, ConverterConfig $definition): ConverterInterface
     {
-        if ($definition['unique']) {
+        if ($definition->isUnique()) {
             $converter = $this->createConverter('unique', ['converter' => $converter]);
         }
 
@@ -106,12 +66,12 @@ final class ConverterBuilder
     /**
      * If a cache key is defined, bind a cache converter to the specified converter.
      */
-    private function bindCache(ConverterInterface $converter, array $definition): ConverterInterface
+    private function bindCache(ConverterInterface $converter, ConverterConfig $definition): ConverterInterface
     {
-        if ($definition['cache_key'] !== '') {
+        if ($definition->getCacheKey() !== '') {
             $converter = $this->createConverter(
                 'cache',
-                ['converter' => $converter, 'cache_key' => $definition['cache_key']]
+                ['converter' => $converter, 'cache_key' => $definition->getCacheKey()]
             );
         }
 
@@ -121,13 +81,13 @@ final class ConverterBuilder
     /**
      * If a condition is defined, bind a condition converter to the specified converter.
      */
-    private function bindCondition(ConverterInterface $converter, array $definition): ConverterInterface
+    private function bindCondition(ConverterInterface $converter, ConverterConfig $definition): ConverterInterface
     {
         // Convert data only if it matches the specified condition
-        if ($definition['condition'] !== '') {
+        if ($definition->getCondition() !== '') {
             $converter = $this->createConverter(
                 'conditional',
-                ['condition' => $definition['condition'], 'converter' => $converter]
+                ['converter' => $converter, 'condition' => $definition->getCondition()]
             );
         }
 
@@ -139,8 +99,10 @@ final class ConverterBuilder
      *
      * @throws UnexpectedValueException
      */
-    private function parseParameters(array $parameters): array
+    private function parseParameters(ConverterConfig $definition): array
     {
+        $parameters = $definition->getParameters();
+
         foreach ($parameters as $name => $value) {
             if ($name === 'converters' || str_contains($name, '_converters')) {
                 // Param is an array of converter definitions (e.g. "converters" param of the "chain" converter)
@@ -149,7 +111,7 @@ final class ConverterBuilder
             }
 
             if ($name === 'converter' || str_contains($name, '_converter')) {
-                // Param is a converter definition (e.g. "converter" param of the "unique" converter
+                // Param is a converter definition (e.g. "converter" param of the "unique" converter)
                 $parameters[$name] = $this->parseConverterParameter($name, $value);
             }
         }
@@ -163,17 +125,18 @@ final class ConverterBuilder
      * @return ConverterInterface[]
      * @throws UnexpectedValueException
      */
-    private function parseConvertersParameter(string $name, mixed $parameter): array
+    private function parseConvertersParameter(string $name, mixed $definitionsCandidate): array
     {
-        if (!is_array($parameter)) {
+        if (!is_array($definitionsCandidate)) {
             throw new UnexpectedValueException(sprintf('The parameter "%s" must be an array.', $name));
         }
 
-        foreach ($parameter as $index => $definition) {
-            $parameter[$index] = $this->parseConverterParameter($name . '[' . $index . ']', $definition);
+        foreach ($definitionsCandidate as $index => $definitionCandidate) {
+            $candidateName = $name . '[' . $index . ']';
+            $definitionsCandidate[$index] = $this->parseConverterParameter($candidateName, $definitionCandidate);
         }
 
-        return $parameter;
+        return $definitionsCandidate;
     }
 
     /**
@@ -181,13 +144,13 @@ final class ConverterBuilder
      *
      * @throws UnexpectedValueException
      */
-    private function parseConverterParameter(string $name, mixed $parameter): ConverterInterface
+    private function parseConverterParameter(string $name, mixed $definitionCandidate): ConverterInterface
     {
-        if (!is_array($parameter)) {
+        if (!is_array($definitionCandidate)) {
             throw new UnexpectedValueException(sprintf('The parameter "%s" must be an array.', $name));
         }
 
-        return $this->build($parameter);
+        return $this->build(new ConverterConfig($definitionCandidate));
     }
 
     /**

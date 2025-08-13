@@ -11,14 +11,14 @@ use UnexpectedValueException;
 final class TableConfigTest extends TestCase
 {
     /**
-     * Test the creation of a table filter with empty data.
+     * Test the creation of a table config with empty data.
      */
     public function testEmptyData(): void
     {
         $config = new TableConfig('table1', []);
 
         $this->assertSame('table1', $config->getName());
-        $this->assertEmpty($config->getConverters());
+        $this->assertEmpty($config->getConvertersConfig()->all());
 
         $this->assertFalse($config->hasLimit());
         $this->assertFalse($config->hasSortOrder());
@@ -45,17 +45,21 @@ final class TableConfigTest extends TestCase
     {
         $config = new TableConfig('table1', [
             'converters' => [
-                'column1' => ['converter' => 'converterName'],
-                'column2' => ['converter' => ''],
-                'column3' => ['converter' => '', 'disabled' => true],
-                'column4' => [],
+                'column1' => ['converter' => 'converter1'],
+                'column3' => ['converter' => 'converter2', 'disabled' => true],
             ],
         ]);
 
-        $converters = $config->getConverters();
+        // The config must have ignored disabled converters
+        $this->assertCount(1, $config->getConvertersConfig());
 
-        // The config must have ignored empty/disabled converters
-        $this->assertCount(2, $converters);
+        // Empty converter names are disallowed
+        $this->expectException(UnexpectedValueException::class);
+        new TableConfig('table1', [
+            'converters' => [
+                'column1' => ['converter' => ''],
+            ],
+        ]);
     }
 
     /**

@@ -95,8 +95,8 @@ final class DataConverterListener
 
         foreach ($config->getTablesConfig() as $tableName => $tableConfig) {
             // Build data converters
-            foreach ($tableConfig->getConverters() as $columnName => $converterDefinition) {
-                $this->converters[$tableName][$columnName] = $this->converterBuilder->build($converterDefinition);
+            foreach ($tableConfig->getConvertersConfig() as $columnName => $converterConfig) {
+                $this->converters[$tableName][$columnName] = $this->converterBuilder->build($converterConfig);
             }
 
             // Build conversion skip conditions

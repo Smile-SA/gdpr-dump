@@ -10,21 +10,19 @@ use UnexpectedValueException;
 
 final class TableConfig
 {
-    private string $name;
     private ?string $where = null;
     private ?int $limit = null;
-    private array $converters = [];
     private string $skipCondition = '';
+    private ConverterConfigCollection $convertersConfig;
 
     /**
      * @var SortOrder[]
      */
     private array $sortOrders = [];
 
-    public function __construct(string $tableName, array $tableConfig)
+    public function __construct(private string $name, array $tableData)
     {
-        $this->name = $tableName;
-        $this->prepareConfig($tableConfig);
+        $this->prepareConfig($tableData);
     }
 
     /**
@@ -64,9 +62,9 @@ final class TableConfig
     /**
      * Get the converter definitions of a table.
      */
-    public function getConverters(): array
+    public function getConvertersConfig(): ConverterConfigCollection
     {
-        return $this->converters;
+        return $this->convertersConfig;
     }
 
     /**
@@ -182,16 +180,17 @@ final class TableConfig
      */
     private function prepareConverters(array $tableData): void
     {
-        if (isset($tableData['converters'])) {
-            foreach ($tableData['converters'] as $column => $converterData) {
-                // Ignore disabled converters
-                if (array_key_exists('disabled', $converterData) && $converterData['disabled']) {
-                    break;
-                }
+        $this->convertersConfig = new ConverterConfigCollection();
+        $convertersData = (array) ($tableData['converters'] ?? []);
 
-                // Converter data will be validated by the factory during the object creation
-                $this->converters[$column] = $converterData;
+        foreach ($convertersData as $column => $converterData) {
+            // Ignore disabled converters
+            if (array_key_exists('disabled', $converterData) && $converterData['disabled']) {
+                break;
             }
+
+            // Converter data will be validated by the factory during the object creation
+            $this->convertersConfig->add($column, new ConverterConfig($converterData));
         }
 
         $skipCondition = (string) ($tableData['skip_conversion_if'] ?? '');

@@ -7,9 +7,9 @@ namespace Smile\GdprDump\Dumper\Config\Definition;
 use Smile\GdprDump\Util\Collection;
 
 /**
- * @extends Collection<TableConfig>
+ * @extends Collection<ConverterConfig>
  */
-final class TableConfigCollection extends Collection
+final class ConverterConfigCollection extends Collection
 {
     protected string $descriptor = 'converter';
 }

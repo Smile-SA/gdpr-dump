@@ -12,34 +12,26 @@ use UnexpectedValueException;
 final class TableConfigCollectionTest extends TestCase
 {
     /**
-     * Test that an empty collection behaves as expected.
+     * Test that the collection supports TableConfig objects.
      */
-    public function testEmptyCollection(): void
+    public function testSupportsTableConfig(): void
     {
         $collection = new TableConfigCollection();
-        $this->assertCount(0, $collection->all());
-        $this->assertFalse($collection->has('table1'));
-    }
-
-    /**
-     * Test adding items to the collection.
-     */
-    public function testAddItems(): void
-    {
-        $collection = new TableConfigCollection();
-        $collection->add(new TableConfig('table1', []));
-        $collection->add(new TableConfig('table2', []));
+        $collection->add('table1', new TableConfig('table1', []));
+        $collection->add('table2', new TableConfig('table2', []));
 
         $this->assertCount(2, $collection->all());
         $this->assertTrue($collection->has('table1'));
         $this->assertTrue($collection->has('table2'));
+        $this->assertFalse($collection->has('table3'));
         $this->assertSame('table1', $collection->get('table1')->getName());
+        $this->assertSame('table2', $collection->get('table2')->getName());
     }
 
     /**
-     * Assert that an exception is thrown when fetching a table that is not defined.
+     * Assert that an exception is thrown when fetching a table config that is not defined.
      */
-    public function testUndefinedTableName(): void
+    public function testUndefinedTableConfig(): void
     {
         $this->expectException(UnexpectedValueException::class);
         $collection = new TableConfigCollection();
