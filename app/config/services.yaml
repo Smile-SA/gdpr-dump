@@ -1,9 +1,10 @@
 parameters:
-    config.schema_file: '%app_root%/app/config/schema.json'
-    config.templates_dir: '%app_root%/app/config/templates'
     faker.locale: 'en_US'
 
 services:
+    _defaults:
+        autowire: true
+
     _instanceof:
         Smile\GdprDump\Converter\ConverterInterface:
             shared: false
@@ -11,165 +12,66 @@ services:
         Smile\GdprDump\Phar\Minify\MinifierInterface:
             tags: ['compiler.minifier']
         Symfony\Component\Console\Command\Command:
-            public: true
+            public: true # used by Kernel
 
-    Smile\GdprDump\Converter\:
-        resource: '../../src/Converter'
+    Smile\GdprDump\:
+        resource: '../../src/'
+        exclude:
+            - '../../src/Kernel.php'
+            - '../../src/Console/Application.php'
 
-    Smile\GdprDump\Converter\Proxy\Internal\Conditional:
-        arguments:
-            - '@converter.condition_builder'
+    Smile\GdprDump\Console\Command\CompileCommand:
+        $defaultLocale: '%faker.locale%'
 
-    Smile\GdprDump\Converter\Proxy\Faker:
-        arguments:
-            - '@faker.service'
-
-    Smile\GdprDump\Converter\Proxy\JsonData:
-        arguments:
-            - '@util.array_helper'
-
-    Smile\GdprDump\Converter\Proxy\SerializedData:
-        arguments:
-            - '@util.array_helper'
-
-    console.dump_info:
-        class: 'Smile\GdprDump\Console\Helper\DumpInfo'
-        arguments:
-            - '@event_dispatcher'
-
-    command.compile:
-        class: 'Smile\GdprDump\Console\Command\CompileCommand'
-        arguments:
-            - '@phar.compiler'
-            - '%faker.locale%'
-
-    command.dump:
-        class: 'Smile\GdprDump\Console\Command\DumpCommand'
-        shared: false
-        arguments:
-            - '@dumper'
-            - '@config.loader'
-            - '@config.schema_validator'
-            - '@console.dump_info'
-
-    config.loader:
-        class: 'Smile\GdprDump\Config\Loader\ConfigLoader'
+    Smile\GdprDump\Config\Loader\ConfigLoader:
         public: true # used by functional tests
-        arguments:
-            - '@config.file_locator'
-            - '@event_dispatcher'
+        shared: false
 
-    config.event_listener.default_settings:
-        class: 'Smile\GdprDump\Config\EventListener\DefaultSettingsListener'
+    Smile\GdprDump\Config\EventListener\DefaultSettingsListener:
         tags:
             - { name: 'kernel.event_listener', priority: 100 }
 
-    config.event_listener.env_var:
-        class: 'Smile\GdprDump\Config\EventListener\EnvVarListener'
+    Smile\GdprDump\Config\EventListener\EnvVarListener:
         tags:
            - { name: 'kernel.event_listener', priority: 100 }
 
-    config.event_listener.version:
-        class: 'Smile\GdprDump\Config\EventListener\VersionListener'
+    Smile\GdprDump\Config\EventListener\VersionListener:
         tags:
             - { name: 'kernel.event_listener', method: 'onLoad' }
             - { name: 'kernel.event_listener', method: 'onParse' }
             - { name: 'kernel.event_listener', method: 'onMerge' }
 
-    config.event_listener.database_url:
-        class: 'Smile\GdprDump\Config\EventListener\DatabaseUrlListener'
+    Smile\GdprDump\Config\EventListener\DatabaseUrlListener:
         tags: ['kernel.event_listener']
 
-    config.event_listener.dump_output:
-        class: 'Smile\GdprDump\Config\EventListener\DumpOutputListener'
+    Smile\GdprDump\Config\EventListener\DumpOutputListener:
         tags: ['kernel.event_listener']
 
-    config.file_locator:
-        class: 'Smile\GdprDump\Config\Loader\FileLocator'
-        arguments:
-            - '%config.templates_dir%'
-
-    config.schema_validator:
-        class: 'Smile\GdprDump\Config\Validator\JsonSchemaValidator'
-        arguments:
-            - '%config.schema_file%'
-
-    converter.builder:
-        class: 'Smile\GdprDump\Converter\ConverterBuilder'
-        shared: false
-        arguments:
-            - '@converter.factory'
-
-    converter.factory:
-        class: 'Smile\GdprDump\Converter\ConverterFactory'
-        arguments:
-            - '@service_container'
-            - '@di.converter_alias_resolver'
-
-    converter.condition_builder:
-        class: 'Smile\GdprDump\Converter\ConditionBuilder'
+    Smile\GdprDump\Converter\ConverterBuilder:
         shared: false
 
-    database.connection_params_builder:
-        class: 'Smile\GdprDump\Database\Builder\ConnectionParamsBuilder'
-        arguments:
-            - '@util.array_helper'
+    Smile\GdprDump\Converter\ConditionBuilder:
+        shared: false
 
-    database.factory:
-        class: 'Smile\GdprDump\Database\DatabaseFactory'
-        arguments:
-            - '@database.connection_params_builder'
-
-    di.converter_alias_resolver:
-        class: 'Smile\GdprDump\DependencyInjection\ConverterAliasResolver'
-
-    dumper:
-        class: 'Smile\GdprDump\Dumper\MysqlDumper'
+    Smile\GdprDump\Dumper\MysqlDumper:
         public: true # used by functional tests
-        arguments:
-            - '@database.factory'
-            - '@dumper.mysqldump_settings_builder'
-            - '@event_dispatcher'
+        shared: false
 
-    dumper.mysqldump_settings_builder:
-        class: 'Smile\GdprDump\Dumper\Builder\MysqldumpSettingsBuilder'
-        arguments:
-            - '@util.array_helper'
-
-    dumper.listener.faker_locale:
-        class: 'Smile\GdprDump\Dumper\EventListener\FakerLocaleListener'
+    Smile\GdprDump\Dumper\EventListener\FakerLocaleListener:
         tags:
             - { name: 'kernel.event_listener', priority: 100 } # must be triggered before data converter listener
-        arguments:
-            - '@faker.service'
 
-    dumper.event_listener.data_converter:
-        class: 'Smile\GdprDump\Dumper\EventListener\DataConverterListener'
-        tags: ['kernel.event_listener']
-        arguments:
-            - '@converter.builder'
-            - '@converter.condition_builder'
-
-    dumper.event_listener.table_filter:
-        class: 'Smile\GdprDump\Dumper\EventListener\TableFilterListener'
+    Smile\GdprDump\Dumper\EventListener\DataConverterListener:
         tags: ['kernel.event_listener']
 
-    faker.service:
-        class: 'Smile\GdprDump\Faker\FakerService'
+    Smile\GdprDump\Dumper\EventListener\TableFilterListener:
+        tags: ['kernel.event_listener']
+
+    Smile\GdprDump\Faker\FakerService:
         public: true # used by functional tests
         arguments:
-            - '%faker.locale%'
+            $locale: '%faker.locale%'
 
-    phar.compiler:
-        class: 'Smile\GdprDump\Phar\Compiler'
+    Smile\GdprDump\Phar\Compiler:
         arguments:
             - !tagged_iterator compiler.minifier
-
-    phar.compiler.minify.json:
-        class: 'Smile\GdprDump\Phar\Minify\Json'
-
-    phar.compiler.minify.php:
-        class: 'Smile\GdprDump\Phar\Minify\Php'
-
-    util.array_helper:
-        class: 'Smile\GdprDump\Util\ArrayHelper'

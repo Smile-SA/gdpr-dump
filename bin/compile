@@ -3,9 +3,10 @@
 
 declare(strict_types=1);
 
+use Smile\GdprDump\Console\Command\CompileCommand;
 use Smile\GdprDump\Kernel;
 
 require dirname(__DIR__) . '/app/bootstrap.php';
 
 $application = new Kernel();
-$application->run('command.compile');
+$application->run(CompileCommand::class);

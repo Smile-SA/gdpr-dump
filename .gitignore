@@ -3,6 +3,7 @@
 /build
 /docker/db-data
 /tests/functional/Resources/var
+/var
 /vendor
 /.env
 /.phpunit.result.cache

@@ -11,8 +11,8 @@ use Smile\GdprDump\Config\Event\LoadedEvent;
 use Smile\GdprDump\Config\Event\LoadEvent;
 use Smile\GdprDump\Config\Event\MergeEvent;
 use Smile\GdprDump\Config\Event\ParseEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Throwable;
 
 final class ConfigLoader implements ConfigLoaderInterface
@@ -45,7 +45,7 @@ final class ConfigLoader implements ConfigLoaderInterface
      *
      * @throws ConfigException
      */
-    private function loadFile(string $fileName, ConfigInterface $config): void // TODO remove $config arg
+    private function loadFile(string $fileName, ConfigInterface $config): void
     {
         $input = file_get_contents($fileName);
         if ($input === false) {

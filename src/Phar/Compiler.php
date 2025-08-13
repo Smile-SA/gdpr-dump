@@ -82,18 +82,18 @@ final class Compiler
      */
     private function addFiles(Phar $phar): void
     {
-        // Add app, src and vendor directories
+        // Add binary file
+        $contents = $this->parseFile($this->basePath . '/bin/gdpr-dump', 'php');
+        $contents = (string) preg_replace('{^#!/usr/bin/env php\s*}', '', $contents);
+        $phar->addFromString('bin/gdpr-dump', $contents);
+
+        // Add app, src, var and vendor directories
         foreach ($this->getFinders() as $finder) {
             foreach ($finder as $file) {
                 $path = $this->getRelativeFilePath($file);
                 $phar->addFromString($path, $this->parseFile($file->getRealPath()));
             }
         }
-
-        // Add binary file
-        $contents = $this->parseFile($this->basePath . '/bin/gdpr-dump', 'php');
-        $contents = (string) preg_replace('{^#!/usr/bin/env php\s*}', '', $contents);
-        $phar->addFromString('bin/gdpr-dump', $contents);
     }
 
     /**
@@ -103,9 +103,9 @@ final class Compiler
      */
     private function getFinders(): array
     {
-        $finder = fn (string $directory): Finder => (new Finder())->files()->in($directory);
-
-        $vendorFinder = $finder($this->basePath . '/vendor')
+        $vendorFinder = (new Finder())
+            ->files()
+            ->in($this->basePath . '/vendor')
             // The directory "vendor/symfony/console/Resources" (which stores shell completion files) must exist
             ->name(['*.php', 'completion.*']);
 
@@ -117,9 +117,10 @@ final class Compiler
         }
 
         return [
-            $finder($this->basePath . '/src')->name(['*.php']),
+            (new Finder())->files()->in($this->basePath . '/app')->notName(['example.yaml']),
+            (new Finder())->files()->in($this->basePath . '/src')->name(['*.php']),
+            (new Finder())->files()->in($this->basePath . '/var')->name(['container_cache*'])->depth(0),
             $vendorFinder,
-            $finder($this->basePath . '/app')->notName(['example.yaml']),
         ];
     }
 
