@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Config\EventListener;
 
 use Smile\GdprDump\Config\Event\LoadEvent;
-use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
-#[AsEventListener(event: LoadEvent::class, priority: 42)]
 final class DefaultSettingsListener
 {
     /**
