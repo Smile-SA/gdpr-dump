@@ -23,6 +23,7 @@ use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 final class Kernel
 {
@@ -115,16 +116,17 @@ final class Kernel
         if (!$containerConfigCache->isFresh()) {
             $container = $this->createContainer();
 
-            if (!is_writable(dirname($file))) {
-                // Skip cache file creation if the parent directory is not writable
-                return $this->createContainer();
-            }
-
             // Dump the container to the cache file
             $dumper = new PhpDumper($container);
             /** @var string $content */
             $content = $dumper->dump(['class' => 'GdprDumpCachedContainer']);
-            $containerConfigCache->write($content, $container->getResources());
+
+            try {
+                $containerConfigCache->write($content, $container->getResources());
+            } catch (IOException) {
+                // Don't prevent the application from running if the file creation failed
+                return $container;
+            }
         }
 
         // Fetch the container from the cache
