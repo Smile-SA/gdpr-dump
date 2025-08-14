@@ -43,6 +43,10 @@ debug: ## Run a CLI command with xdebug enabled. Example: `make debug c="bin/gdp
 	$(eval c ?= bin/gdpr-dump)
 	$(DOCKER_COMPOSE) run --rm --env PHP_IDE_CONFIG=serverName=_ --env XDEBUG_SESSION=cli app -d xdebug.mode=debug $(c)
 
+.PHONY: cc
+cc: ## Clears the DI container cache
+	rm -f var/container_cache*
+
 ## Composer
 .PHONY: composer
 composer: ## Run composer. Example: `make composer c=update`
