@@ -29,6 +29,7 @@ final class Kernel
 {
     private ContainerInterface $container;
     private bool $booted = false;
+    private bool $debug = false;
 
     /**
      * Run the application.
@@ -64,11 +65,8 @@ final class Kernel
         // Convert notices/warnings into exceptions
         $this->initErrorHandler();
 
-        // Load the .env file
-        $env = dirname(__DIR__) . '/.env';
-        if (is_file($env)) {
-            (new Dotenv())->load($env);
-        }
+        // Load the .env file if it exists
+        $this->bootEnv();
 
         // Build the service container
         $this->container = $this->buildContainer();
@@ -107,12 +105,29 @@ final class Kernel
     }
 
     /**
+     * Load the .env file if it exists.
+     */
+    private function bootEnv(): void
+    {
+        $env = dirname(__DIR__) . '/.env';
+
+        if (is_file($env)) {
+            (new Dotenv())->load($env);
+
+            // Detect debug mode (always false when run from the phar file, because the .env file is not included)
+            // phpcs:ignore SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable
+            $this->debug = (bool) ($_ENV['APP_DEBUG'] ?? false);
+        }
+    }
+
+    /**
      * Fetch the service container from a cache file, or create it if the file doesn't exist.
      */
     private function buildContainer(): ContainerInterface
     {
         $file = dirname(__DIR__) . '/var/container_cache.php';
-        $containerConfigCache = new ConfigCache($file, $this->isDebug());
+        $containerConfigCache = new ConfigCache($file, $this->debug);
+
         if (!$containerConfigCache->isFresh()) {
             $container = $this->createContainer();
 
@@ -155,16 +170,5 @@ final class Kernel
         $container->compile();
 
         return $container;
-    }
-
-    /**
-     * Check if the application runs in debug mode.
-     */
-    private function isDebug(): bool
-    {
-        return !str_starts_with(__DIR__, 'phar://')
-            // phpcs:ignore SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable
-            ? (bool) ($_ENV['APP_DEBUG'] ?? false)
-            : false; // the phar file is compiled without the .env file, but better be safe than sorry
     }
 }
