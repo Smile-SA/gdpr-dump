@@ -89,7 +89,7 @@ final class ConfigProcessor
 
             foreach ($matches as $match) {
                 // Throw an exception if a converter refers to a column that does not exist
-                $this->validateTableColumns($tableName, $tableData);
+                $this->validateTableColumns($match, $tableData);
 
                 // Merge table configuration
                 if (!array_key_exists($match, $resolved)) {
