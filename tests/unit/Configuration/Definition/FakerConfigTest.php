@@ -25,6 +25,6 @@ final class FakerConfigTest extends TestCase
     public function testDefaultValues(): void
     {
         $fakerConfig = new FakerConfig();
-        $this->assertSame('en_US', $fakerConfig->getLocale());
+        $this->assertSame('', $fakerConfig->getLocale());
     }
 }
