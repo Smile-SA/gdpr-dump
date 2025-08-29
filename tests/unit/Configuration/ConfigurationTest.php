@@ -58,6 +58,7 @@ final class ConfigurationTest extends TestCase
     public function testDefaultValues(): void
     {
         $configuration = new Configuration();
+        $this->assertFalse($configuration->isStrictSchema());
 
         // Assert that all arrays are empty
         $this->assertTrue($configuration->getTableConfigs()->isEmpty());
