@@ -143,7 +143,7 @@ final class ConfigurationMapperTest extends TestCase
                 'products' => [
                     'order_by' => 'name desc',
                     'where' => '1=1',
-                    'limit' => 10000,
+                    'limit' => null,
                 ],
             ],
         ];
