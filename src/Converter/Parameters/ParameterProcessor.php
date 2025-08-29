@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter\Parameters;
 
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
+
 final class ParameterProcessor
 {
     /**
@@ -25,7 +27,7 @@ final class ParameterProcessor
      * Process an array of parameter values.
      * This method handles data validation and type casting.
      *
-     * @throws ValidationException
+     * @throws InvalidParameterException
      */
     public function process(array $values): InputParameters
     {
@@ -46,17 +48,19 @@ final class ParameterProcessor
     /**
      * Process a parameter value.
      *
-     * @throws ValidationException
+     * @throws InvalidParameterException
      */
     private function processValue(Parameter $parameter, mixed $value): mixed
     {
         if ($parameter->isRequired()) {
             if ($value === null) {
-                throw new ValidationException(sprintf('The parameter "%s" is required.', $parameter->getName()));
+                throw new InvalidParameterException(sprintf('The parameter "%s" is required.', $parameter->getName()));
             }
 
             if ($value === '' || $value === []) {
-                throw new ValidationException(sprintf('The parameter "%s" must not be empty.', $parameter->getName()));
+                throw new InvalidParameterException(
+                    sprintf('The parameter "%s" must not be empty.', $parameter->getName())
+                );
             }
         }
 
@@ -74,7 +78,7 @@ final class ParameterProcessor
     /**
      * Assert that the parameter type is allowed.
      *
-     * @throws ValidationException
+     * @throws InvalidParameterException
      */
     private function validateType(Parameter $parameter, mixed $value): void
     {
@@ -83,14 +87,14 @@ final class ParameterProcessor
 
         if ($parameter->isArray()) {
             if (!is_array($value)) {
-                throw new ValidationException(sprintf('The parameter "%s" must be an array.', $name));
+                throw new InvalidParameterException(sprintf('The parameter "%s" must be an array.', $name));
             }
         } elseif ($parameter->isScalar()) {
             if (!is_scalar($value)) {
-                throw new ValidationException(sprintf('The parameter "%s" must be a %s.', $name, $type));
+                throw new InvalidParameterException(sprintf('The parameter "%s" must be a %s.', $name, $type));
             }
-        } elseif (!is_object($value) || !$value instanceof $type) {
-            throw new ValidationException(sprintf('The parameter "%s" must be an instance of %s.', $name, $type));
+        } elseif (!$value instanceof $type) {
+            throw new InvalidParameterException(sprintf('The parameter "%s" must be an instance of %s.', $name, $type));
         }
     }
 }

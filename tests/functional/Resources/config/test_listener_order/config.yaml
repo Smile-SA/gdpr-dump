@@ -1,7 +1,0 @@
-version: '%env(TEST_VERSION)%'
-if_version:
-    '>10.0':
-        dump:
-            output: '%env(TEST_DUMP_OUTPUT)%'
-        database:
-            url: '%env(TEST_DATABASE_URL)%'

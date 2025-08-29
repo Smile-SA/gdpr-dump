@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Smile\GdprDump\Converter\Converters;
+
+use Smile\GdprDump\Converter\Converter;
+
+final class ToLower implements Converter
+{
+    private bool $multiByteEnabled;
+
+    public function __construct()
+    {
+        // Call the extension_loaded function only once (few seconds gain when converting millions of values)
+        $this->multiByteEnabled = extension_loaded('mbstring');
+    }
+
+    public function convert(mixed $value): string
+    {
+        $value = (string) $value;
+
+        return $value !== ''
+            ? ($this->multiByteEnabled ? mb_strtolower($value, 'UTF-8') : strtolower($value))
+            : $value;
+    }
+}

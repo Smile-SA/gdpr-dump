@@ -6,7 +6,7 @@ namespace Smile\GdprDump\Database\Driver;
 
 use Smile\GdprDump\Database\ParameterBag;
 
-final class MysqlDriver implements DriverInterface
+final class MysqlDriver implements DatabaseDriver
 {
     public function __construct(private ParameterBag $connectionParams)
     {

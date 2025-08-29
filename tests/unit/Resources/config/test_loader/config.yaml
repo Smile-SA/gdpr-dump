@@ -1,0 +1,23 @@
+extends:
+    - 'template'
+    - 'parent.yaml'
+
+dump:
+    output: '%env(DUMP_OUTPUT)%'
+
+tables:
+    table1:
+        limit: null
+        truncate: true
+
+if_version:
+    '>=3.0.0':
+        tables:
+            table2:
+                converters:
+                    field3: ~ # removes the object declared in a parent file
+
+    '>=2.0.0 <3.0.0':
+        tables:
+            table1:
+                where: '1=1'
