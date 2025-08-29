@@ -119,7 +119,7 @@ final class ConfigurationMapper
 
         foreach ($source as $key => $value) {
             match ($key) {
-                'locale' => $configuration->setLocale($value),
+                'locale' => $configuration->setLocale((string) $value),
                 default => throw new UnexpectedValueException(sprintf('Unsupported faker property "%s".', $key)),
             };
         }
