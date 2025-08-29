@@ -1,0 +1,7 @@
+if_version:
+    '>=3.0.0':
+        tables:
+            table2:
+                converters:
+                    field1:
+                        converter: 'anonymizeEmail'

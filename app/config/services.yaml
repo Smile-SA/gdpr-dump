@@ -4,12 +4,17 @@ parameters:
 services:
     _defaults:
         autowire: true
+        autoconfigure: true
 
     _instanceof:
-        Smile\GdprDump\Converter\ConverterInterface:
-            shared: false
+        Smile\GdprDump\Configuration\Loader\Processor\Processor:
+            tags: ['config.loader_processor']
+        Smile\GdprDump\Converter\Converter:
+            shared: false # the converter factory uses the container to create new instances
             tags: ['converter'] # used by ConverterAliasPass to create aliases for data converters
-        Smile\GdprDump\Phar\Minify\MinifierInterface:
+        Smile\GdprDump\Dumper\Dumper:
+            tags: ['dumper']
+        Smile\GdprDump\Phar\Minify\Minifier:
             tags: ['compiler.minifier']
         Symfony\Component\Console\Command\Command:
             public: true # used by Kernel
@@ -18,60 +23,28 @@ services:
         resource: '../../src/'
         exclude:
             - '../../src/Kernel.php'
-            - '../../src/Console/Application.php'
+            - '../../src/Util/*.php'
+            - '../../src/**/*Exception.php'
 
     Smile\GdprDump\Console\Command\CompileCommand:
         $defaultLocale: '%faker.locale%'
 
-    Smile\GdprDump\Config\Loader\ConfigLoader:
+    Smile\GdprDump\Configuration\ConfigurationFactory:
         public: true # used by functional tests
-        shared: false
 
-    Smile\GdprDump\Config\EventListener\DefaultSettingsListener:
-        tags:
-            - { name: 'kernel.event_listener', priority: 100 }
+    Smile\GdprDump\Configuration\Loader\ConfigurationLoader:
+        arguments:
+            $processors: !tagged_iterator 'config.loader_processor'
 
-    Smile\GdprDump\Config\EventListener\EnvVarListener:
-        tags:
-           - { name: 'kernel.event_listener', priority: 100 }
-
-    Smile\GdprDump\Config\EventListener\VersionListener:
-        tags:
-            - { name: 'kernel.event_listener', method: 'onLoad' }
-            - { name: 'kernel.event_listener', method: 'onParse' }
-            - { name: 'kernel.event_listener', method: 'onMerge' }
-
-    Smile\GdprDump\Config\EventListener\DatabaseUrlListener:
-        tags: ['kernel.event_listener']
-
-    Smile\GdprDump\Config\EventListener\DumpOutputListener:
-        tags: ['kernel.event_listener']
-
-    Smile\GdprDump\Converter\ConverterBuilder:
-        shared: false
-
-    Smile\GdprDump\Converter\ConditionBuilder:
-        shared: false
-
-    Smile\GdprDump\Dumper\MysqlDumper:
-        public: true # used by functional tests
-        shared: false
-
-    Smile\GdprDump\Dumper\EventListener\FakerLocaleListener:
-        tags:
-            - { name: 'kernel.event_listener', priority: 100 } # must be triggered before data converter listener
-
-    Smile\GdprDump\Dumper\EventListener\DataConverterListener:
-        tags: ['kernel.event_listener']
-
-    Smile\GdprDump\Dumper\EventListener\TableFilterListener:
-        tags: ['kernel.event_listener']
-
-    Smile\GdprDump\Faker\FakerService:
+    Smile\GdprDump\Dumper\DumperResolver:
         public: true # used by functional tests
         arguments:
-            $locale: '%faker.locale%'
+            $dumperLocator: !tagged_locator 'dumper'
 
-    Smile\GdprDump\Phar\Compiler:
+    Smile\GdprDump\Faker\LazyGeneratorFactory:
         arguments:
-            - !tagged_iterator compiler.minifier
+            $defaultLocale: '%faker.locale%'
+
+    Smile\GdprDump\Phar\Minify\MinifierResolver:
+        arguments:
+            $minifierLocator: !tagged_locator compiler.minifier

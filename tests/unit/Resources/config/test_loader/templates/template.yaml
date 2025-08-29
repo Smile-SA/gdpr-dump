@@ -1,0 +1,12 @@
+tables:
+    table1:
+        limit: 100
+
+    table2:
+        converters:
+            field1:
+                converter: 'randomizeEmail'
+            field2:
+                converter: 'randomizeText'
+            field3:
+                converter: 'randomizeText'

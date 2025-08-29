@@ -17,14 +17,14 @@ services:
             - 'composer:/home/www/.composer'
 
     db:
-        image: 'mariadb:10.6'
+        image: 'mariadb:11.8'
         ports:
             - 3306
         environment:
-            MYSQL_ROOT_PASSWORD: '!root'
-            MYSQL_DATABASE: 'tests'
-            MYSQL_USER: 'tests'
-            MYSQL_PASSWORD: 'tests'
+            MARIADB_ROOT_PASSWORD: '!root'
+            MARIADB_DATABASE: 'tests'
+            MARIADB_USER: 'tests'
+            MARIADB_PASSWORD: 'tests'
         volumes:
             - 'db-data:/var/lib/mysql'
             - './docker/db-data:/docker-entrypoint-initdb.d'

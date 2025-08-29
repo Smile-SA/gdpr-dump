@@ -1,4 +1,5 @@
 {
+    "id": "schema.json",
     "type": "object",
     "properties": {
         "extends": {
@@ -7,12 +8,6 @@
         "strict_schema": {
             "type": "boolean"
         },
-        "requires_version": {
-            "type": "boolean"
-        },
-        "version": {
-            "type": "string"
-        },
         "database": {
             "$ref": "#/definitions/database"
         },
@@ -20,63 +15,49 @@
             "$ref": "#/definitions/dump"
         },
         "filter_propagation": {
-            "$ref" : "#/definitions/filter_propagation"
+            "$ref" : "#/definitions/filterPropagation"
         },
         "faker": {
             "$ref": "#/definitions/faker"
         },
         "tables": {
-            "oneOf": [
-                {
-                    "type": "object",
-                    "additionalProperties": {
-                        "$ref": "#/definitions/table"
-                    }
-                },
-                {
-                    "type": "array",
-                    "items": {
-                        "maxLength": 0
-                    }
-                }
-            ]
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/table"
+            }
         },
         "tables_whitelist": {
             "type": "array",
             "items": {
-                "type": "string",
-                "minLength": 1
+                "$ref": "#/definitions/nonEmptyString"
             }
         },
         "tables_blacklist": {
             "type": "array",
             "items": {
-                "type": "string",
-                "minLength": 1
+                "$ref": "#/definitions/nonEmptyString"
             }
         },
         "variables": {
-            "oneOf": [
-                {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                {
-                    "type": "array",
-                    "items": {
-                        "maxLength": 0
-                    }
-                }
-            ]
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
+        },
+        "version": {
+            "$ref": "#/definitions/nonEmptyString"
+        },
+        "if_version": {
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/ifVersion"
+            }
         }
     },
     "additionalProperties": false,
     "definitions": {
         "database": {
             "type": "object",
-            "required": true,
             "properties": {
                 "driver": {
                     "type": "string",
@@ -89,35 +70,29 @@
                     }
                 },
                 "host": {
-                    "type": "string",
-                    "minLength": 1
+                    "$ref": "#/definitions/nonEmptyString"
                 },
                 "port": {
                     "type": ["string", "integer"],
                     "minLength": 1
                 },
                 "user": {
-                    "type": "string",
-                    "minLength": 1
+                    "$ref": "#/definitions/nonEmptyString"
                 },
                 "password": {
                     "type": "string"
                 },
                 "name": {
-                    "type": "string",
-                    "minLength": 1
+                    "$ref": "#/definitions/nonEmptyString"
                 },
                 "charset": {
-                    "type": "string",
-                    "minLength": 1
+                    "$ref": "#/definitions/nonEmptyString"
                 },
                 "unix_socket": {
-                    "type": "string",
-                    "minLength": 1
+                    "$ref": "#/definitions/nonEmptyString"
                 },
                 "url": {
-                    "type": "string",
-                    "minLength": 1
+                    "$ref": "#/definitions/nonEmptyString"
                 }
             },
             "additionalProperties": false
@@ -126,8 +101,7 @@
             "type": "object",
             "properties": {
                 "output": {
-                    "type": "string",
-                    "minLength": 1
+                    "$ref": "#/definitions/nonEmptyString"
                 },
                 "add_drop_database": {
                     "type": "boolean"
@@ -149,8 +123,7 @@
                     "enum": ["none", "gzip", "bzip2"]
                 },
                 "default_character_set": {
-                    "type": "string",
-                    "minLength": 1
+                    "$ref": "#/definitions/nonEmptyString"
                 },
                 "disable_keys": {
                     "type": "boolean"
@@ -167,8 +140,7 @@
                 "init_commands": {
                     "type": "array",
                     "items": {
-                        "type": "string",
-                        "minLength": 1
+                        "$ref": "#/definitions/nonEmptyString"
                     }
                 },
                 "insert_ignore": {
@@ -210,7 +182,16 @@
             },
             "additionalProperties": false
         },
-        "filter_propagation": {
+        "faker": {
+            "type": "object",
+            "properties": {
+                "locale": {
+                    "type": ["string", "null"]
+                }
+            },
+            "additionalProperties": false
+        },
+        "filterPropagation": {
             "type": "object",
             "properties": {
                 "enabled": {
@@ -221,14 +202,6 @@
                     "items": {
                         "type": "string"
                     }
-                }
-            }
-        },
-        "faker": {
-            "type": "object",
-            "properties": {
-                "locale": {
-                    "type": ["string", "null"]
                 }
             },
             "additionalProperties": false
@@ -267,9 +240,7 @@
             "type": "object",
             "properties": {
                 "converter": {
-                    "type": "string",
-                    "required": true,
-                    "minLength": 1
+                    "$ref": "#/definitions/nonEmptyString"
                 },
                 "parameters": {
                     "type": "object",
@@ -298,7 +269,30 @@
                     "type": "boolean"
                 }
             },
+            "required": ["converter"],
             "additionalProperties": false
+        },
+        "ifVersion": {
+            "type": "object",
+            "properties": {
+                "tables": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/table"
+                    }
+                },
+                "variables": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "nonEmptyString": {
+            "type": "string",
+            "minLength": 1
         }
     }
 }

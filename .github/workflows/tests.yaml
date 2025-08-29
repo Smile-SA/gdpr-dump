@@ -19,17 +19,16 @@ jobs:
                     - '8.4'
 
         services:
-            mysql:
-                image: 'mariadb:10.6'
+            db:
+                image: 'mariadb:11.8'
                 env:
-                    MYSQL_ALLOW_EMPTY_PASSWORD: false
-                    MYSQL_ROOT_PASSWORD: '!root'
-                    MYSQL_USER: 'tests'
-                    MYSQL_PASSWORD: 'tests'
-                    MYSQL_DATABASE: 'tests'
+                    MARIADB_ROOT_PASSWORD: '!root'
+                    MARIADB_USER: 'tests'
+                    MARIADB_PASSWORD: 'tests'
+                    MARIADB_DATABASE: 'tests'
                 ports:
                     - 3306
-                options: '--health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3'
+                options: '--health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=10s --health-timeout=5s --health-retries=3'
 
         steps:
             - name: 'Checkout'
@@ -59,5 +58,5 @@ jobs:
 
             - name: 'Run PHPUnit'
               env:
-                  DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+                  DB_PORT: ${{ job.services.db.ports['3306'] }}
               run: 'vendor/bin/phpunit'

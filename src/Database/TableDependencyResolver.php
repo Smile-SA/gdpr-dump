@@ -4,23 +4,24 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Database;
 
-use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
-use Smile\GdprDump\Database\Metadata\MetadataInterface;
-use Smile\GdprDump\Dumper\Config\DumperConfigInterface;
+use Smile\GdprDump\Database\Metadata\DatabaseMetadata;
+use Smile\GdprDump\Database\Metadata\Definition\ForeignKey;
 
 final class TableDependencyResolver
 {
+    /**
+     * Resolved foreign keys indexed by referenced table name.
+     * E.g. index "table1" with all foreign keys referencing that table.
+     *
+     * @var array<string, array<int, ForeignKey>>
+     */
+    private array $foreignKeys = [];
     private bool $resolved = false;
 
     /**
-     * Foreign keys by referenced table name.
-     * E.g. key "table1" will contain an array with all foreign key that reference that table.
-     *
-     * @var ForeignKey[][]
+     * @param string[] $ignoredForeignKeys
      */
-    private array $foreignKeys = [];
-
-    public function __construct(private MetadataInterface $metadata, private DumperConfigInterface $config)
+    public function __construct(private DatabaseMetadata $metadata, private array $ignoredForeignKeys = [])
     {
     }
 
@@ -38,10 +39,10 @@ final class TableDependencyResolver
      * ```
      * [
      *    'table2' => [
-     *        'fk_t2' => FK object,
+     *        FK object (fk_t2),
      *    ],
      *    'table3' => [
-     *        'fk_t3' => FK object,
+     *        FK object (fk_t3),
      *    ],
      * ]
      * ```
@@ -67,8 +68,8 @@ final class TableDependencyResolver
      */
     private function resolveDependencies(string $tableName, array $resolved = []): array
     {
-        // No foreign key to this table
-        if (!isset($this->foreignKeys[$tableName])) {
+        if (!array_key_exists($tableName, $this->foreignKeys)) {
+            // No foreign key found for this table
             return $resolved;
         }
 
@@ -120,10 +121,6 @@ final class TableDependencyResolver
      */
     private function isForeignKeyIgnored(ForeignKey $foreignKey): bool
     {
-        return in_array(
-            $foreignKey->getConstraintName(),
-            $this->config->getFilterPropagationSettings()->getIgnoredForeignKeys(),
-            true
-        );
+        return in_array($foreignKey->getConstraintName(), $this->ignoredForeignKeys, true);
     }
 }

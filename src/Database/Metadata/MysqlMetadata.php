@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Database\Metadata;
 
 use Doctrine\DBAL\Connection;
-use RuntimeException;
-use Smile\GdprDump\Database\Metadata\Definition\Constraint\ForeignKey;
+use Doctrine\DBAL\Exception as DBALException;
+use Smile\GdprDump\Database\Exception\MetadataException;
+use Smile\GdprDump\Database\Metadata\Definition\ForeignKey;
 
-final class MysqlMetadata implements MetadataInterface
+final class MysqlMetadata implements DatabaseMetadata
 {
     private string $schema;
     private ?array $tableNames = null;
     private ?array $columnNames = null;
     private ?array $foreignKeys = null;
 
+    /**
+     * @throws DBALException
+     */
     public function __construct(private Connection $connection)
     {
         $this->schema = (string) $connection->getDatabase();
@@ -56,7 +60,7 @@ final class MysqlMetadata implements MetadataInterface
         }
 
         return $this->columnNames[$tableName]
-            ?? throw new RuntimeException(sprintf('The table "%s" is not defined.', $tableName));
+            ?? throw new MetadataException(sprintf('The table "%s" is not defined.', $tableName));
     }
 
     public function getForeignKeys(): array

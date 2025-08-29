@@ -1,0 +1,10 @@
+version: '%env(TEST_VERSION)%'
+dump:
+    output: '%env(TEST_DUMP_OUTPUT)%'
+database:
+    url: '%env(TEST_DATABASE_URL)%'
+if_version:
+    '>2.0':
+        tables:
+            logs:
+                truncate: '%env(bool:TEST_TRUNCATE_LOGS)%'

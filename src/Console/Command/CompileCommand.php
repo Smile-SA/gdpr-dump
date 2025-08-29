@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Console\Command;
 
 use Faker\Factory;
-use RuntimeException;
 use Smile\GdprDump\Phar\Compiler;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Throwable;
 
 final class CompileCommand extends Command
 {
@@ -36,34 +34,24 @@ final class CompileCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        try {
-            if ($this->hasDevPackages()) {
-                $output->writeln('<error>Dev packages detected. Please run "composer install --no-dev".</error>');
-                return Command::FAILURE;
-            }
-
-            $locales = $this->getLocales($input);
-            $output->writeln('<comment>Creating the phar file, please wait...</comment>');
-
-            $fileName = $this->getPharFileName();
-            $this->compiler->setLocales($locales)
-                ->compile($fileName);
-
-            $output->writeln('');
-            $output->writeln(sprintf('<info>The phar file was created in "%s".</info>', $fileName));
-
-            $localeMsg = $locales
-                ? sprintf('It is bundled with the following Faker locales: %s', implode(', ', $locales))
-                : 'It is bundled with all Faker locales';
-            $output->writeln(sprintf('<info>%s. The default locale is "%s".</info>', $localeMsg, $this->defaultLocale));
-        } catch (Throwable $e) {
-            if ($output->isVerbose()) {
-                throw $e;
-            }
-
-            $this->getErrorOutput($output)->writeln('<error>' . $e->getMessage() . '</error>');
-            return Command::FAILURE;
+        if ($this->hasDevPackages()) {
+            throw new RuntimeException('Dev packages detected. Please run "composer install --no-dev".');
         }
+
+        $locales = $this->getLocales($input);
+        $output->writeln('<comment>Creating the phar file, please wait...</comment>');
+
+        $fileName = $this->getPharFileName();
+        $this->compiler->setLocales($locales)
+            ->compile($fileName);
+
+        $output->writeln('');
+        $output->writeln(sprintf('<info>The phar file was created in "%s".</info>', $fileName));
+
+        $localeMsg = $locales
+            ? sprintf('It is bundled with the following Faker locales: %s', implode(', ', $locales))
+            : 'It is bundled with all Faker locales';
+        $output->writeln(sprintf('<info>%s. The default locale is "%s".</info>', $localeMsg, $this->defaultLocale));
 
         return Command::SUCCESS;
     }
@@ -81,11 +69,6 @@ final class CompileCommand extends Command
         if ($locales) {
             // Throw an exception if one of the locales is not supported
             $this->validateLocales($locales);
-
-            if (!in_array($this->defaultLocale, $locales, true)) {
-                // phpcs:ignore Generic.Files.LineLength.TooLong
-                throw new RuntimeException(sprintf('Cannot proceed without including the default locale "%s" defined in app/config/services.yaml.', $this->defaultLocale));
-            }
 
             // Always include the fallback Faker locale
             if (!in_array(Factory::DEFAULT_LOCALE, $locales, true)) {
@@ -110,6 +93,11 @@ final class CompileCommand extends Command
                 throw new RuntimeException(sprintf('The locale "%s" is not supported by Faker.', $locale));
             }
         }
+
+        if (!in_array($this->defaultLocale, $locales, true)) {
+            // phpcs:ignore Generic.Files.LineLength.TooLong
+            throw new RuntimeException(sprintf('Cannot proceed without including the default locale "%s" defined in app/config/services.yaml.', $this->defaultLocale));
+        }
     }
 
     /**
@@ -126,13 +114,5 @@ final class CompileCommand extends Command
     private function getPharFileName(): string
     {
         return dirname(__DIR__, 3) . '/build/gdpr-dump.phar';
-    }
-
-    /**
-     * Get the error output.
-     */
-    private function getErrorOutput(OutputInterface $output): OutputInterface
-    {
-        return $output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output;
     }
 }

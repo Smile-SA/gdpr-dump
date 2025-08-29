@@ -133,7 +133,7 @@
             <property name="linesCountBetweenAnnotationsGroups" value="1"/>
             <property name="annotationsGroups" type="array">
                 <element value="@inheritdoc"/>
-                <element value="@internal,@deprecated,@template,@var,@param,@return,@throws,@phpstan-assert,@phpstan-assert-if-true,@phpstan-assert-if-false,@phpstan-ignore"/>
+                <element value="@internal,@deprecated,@template,@template-covariant,@extends,@implements,@var,@param,@return,@throws,@phpstan-assert,@phpstan-assert-if-true,@phpstan-assert-if-false,@phpstan-ignore"/>
             </property>
         </properties>
     </rule>

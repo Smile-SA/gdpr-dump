@@ -1,0 +1,7 @@
+extends: 'parent_parent.yaml'
+
+if_version:
+    '>=3.0.0':
+        tables:
+            table3:
+                order_by: 'field1'

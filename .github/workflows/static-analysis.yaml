@@ -39,6 +39,9 @@ jobs:
             - name: 'Run composer audit'
               run: 'composer audit --format=plain'
 
+            - name: 'Run yaml-lint'
+              run: 'vendor/bin/yaml-lint app/config --parse-tags'
+
             - name: 'Run PHP Parallel Lint'
               run: 'vendor/bin/parallel-lint app bin src tests'
 

@@ -14,6 +14,7 @@ use Smile\GdprDump\DependencyInjection\Compiler\ConverterAliasPass;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -24,6 +25,8 @@ use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
+use Throwable;
+use UnitEnum;
 
 final class Kernel
 {
@@ -42,10 +45,9 @@ final class Kernel
     public function run(string $command = DumpCommand::class): void
     {
         $this->boot();
-        $application = new Application();
 
-        /** @var Command $defaultCommand */
-        $defaultCommand = $this->container->get($command);
+        $application = new Application();
+        $defaultCommand = $this->getCommand($command);
         $application->add($defaultCommand);
         $application->setDefaultCommand((string) $defaultCommand->getName(), true);
         $application->run();
@@ -121,6 +123,19 @@ final class Kernel
     }
 
     /**
+     * Get a console command.
+     */
+    private function getCommand(string $commandName): Command
+    {
+        $command = $this->container->get($commandName);
+        if (!$command instanceof Command) {
+            throw new RuntimeException(sprintf('"%s" is not a console command.', $commandName));
+        }
+
+        return $command;
+    }
+
+    /**
      * Fetch the service container from a cache file, or create it if the file doesn't exist.
      */
     private function buildContainer(): ContainerInterface
@@ -128,7 +143,7 @@ final class Kernel
         $file = dirname(__DIR__) . '/var/container_cache.php';
         $containerConfigCache = new ConfigCache($file, $this->debug);
 
-        if (!$containerConfigCache->isFresh()) {
+        if (!$this->isContainerCacheFresh($containerConfigCache)) {
             $container = $this->createContainer();
 
             // Dump the container to the cache file
@@ -161,14 +176,35 @@ final class Kernel
         $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__) . '/app/config'));
         $loader->load('services.yaml');
 
+        // Compiler pass
         $container->addCompilerPass(new RegisterListenersPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->addCompilerPass(new ConverterAliasPass());
 
+        // Core services
         $container->register('event_dispatcher', EventDispatcher::class);
         $container->setAlias(EventDispatcherInterface::class, 'event_dispatcher');
         $container->setAlias(ContainerInterface::class, 'service_container'); // used by ConverterFactory
+
+        // Autoconfiguration
+        $container->registerForAutoconfiguration(CompilerPassInterface::class)
+            ->addTag('container.excluded', ['source' => 'because it\'s a compiler pass']);
+        $container->registerForAutoconfiguration(UnitEnum::class)
+            ->addTag('container.excluded', ['source' => 'because it\'s an enum']);
+
         $container->compile();
 
         return $container;
+    }
+
+    /**
+     * Check whether the container must be refreshed.
+     */
+    private function isContainerCacheFresh(ConfigCache $configCache): bool
+    {
+        try {
+            return $configCache->isFresh();
+        } catch (Throwable $e) {
+            return false; // Symfony uses filemtime, which can throw an ErrorException
+        }
     }
 }

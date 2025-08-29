@@ -33,7 +33,7 @@ dump: vendor ## Run bin/gdpr-dump command. Example: `make dump c=test.yaml`
 	$(PHP_CLI) bin/gdpr-dump $(c)
 
 .PHONY: compile
-compile: ## Run bin/compile command.
+compile: cc ## Run bin/compile command.
 	$(PHP_CLI) composer install --no-dev
 	$(PHP_CLI) bin/compile $(c)
 	$(PHP_CLI) composer install
@@ -56,6 +56,7 @@ composer: ## Run composer. Example: `make composer c=update`
 .PHONY: analyse
 analyse: vendor ## Run code analysis tools (parallel-lint, phpcs, phpstan).
 	$(PHP_CLI) composer audit
+	$(PHP_CLI) vendor/bin/yaml-lint app/config --parse-tags
 	$(PHP_CLI) vendor/bin/parallel-lint app bin src tests
 	$(PHP_CLI) vendor/bin/phpcs
 	$(PHP_CLI) vendor/bin/phpstan analyse
@@ -68,13 +69,13 @@ test: vendor ## Run phpunit.
 .PHONY: db
 db: service := --wait db
 db: up ## Connect to the database.
-	$(DOCKER_COMPOSE) exec db sh -c 'mysql --password=$$MYSQL_ROOT_PASSWORD'
+	$(DOCKER_COMPOSE) exec db sh -c 'mariadb --password=$$MARIADB_ROOT_PASSWORD'
 
 .PHONY: db-import
 db-import: service := --wait db
 db-import: up ## Execute a SQL file. Pass the parameter "filename=" to set the filename (default: dump.sql).
 	$(eval filename ?= dump.sql)
-	$(DOCKER_COMPOSE) exec -T db sh -c 'mysql --password=$$MYSQL_ROOT_PASSWORD' < $(filename)
+	$(DOCKER_COMPOSE) exec -T db sh -c 'mariadb --password=$$MARIADB_ROOT_PASSWORD' < $(filename)
 
 vendor: | composer.json
 	$(PHP_CLI) composer install

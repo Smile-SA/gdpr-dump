@@ -4,99 +4,61 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Converter;
 
-use RuntimeException;
-use Smile\GdprDump\Converter\Parameters\ValidationException;
+use Smile\GdprDump\Configuration\Definition\ConverterConfig;
+use Smile\GdprDump\Converter\Converter;
+use Smile\GdprDump\Converter\ConverterFactory;
+use Smile\GdprDump\Converter\Exception\BuildException;
+use Smile\GdprDump\Converter\Exception\InternalConverterException;
+use Smile\GdprDump\Converter\Exception\InvalidParameterException;
+use Smile\GdprDump\Converter\IsConfigurable;
+use Smile\GdprDump\Converter\IsContextAware;
+use Smile\GdprDump\Converter\IsFakerAware;
+use Smile\GdprDump\Converter\IsInternal;
 use Smile\GdprDump\Dumper\DumpContext;
-use UnexpectedValueException;
+use Smile\GdprDump\Faker\LazyGenerator;
 
 final class ConverterBuilder
 {
-    private DumpContext $dumpContext;
-
-    public function __construct(private ConverterFactory $converterFactory)
-    {
+    public function __construct(
+        private ConverterFactory $converterFactory,
+        private DumpContext $dumpContext,
+        private LazyGenerator $lazyFaker,
+    ) {
     }
 
     /**
      * Build a converter from a definition array.
+     *
+     * @throws BuildException
      */
-    public function build(array $definition): ConverterInterface
+    public function build(ConverterConfig $definition): Converter
     {
-        $definition = $this->getConverterData($definition);
-
-        // Get the converter name and parameters
-        $name = $definition['converter'];
-        $parameters = $definition['parameters'];
+        $name = $definition->getName();
+        $parameters = $this->parseParameters($definition);
 
         // Create the converter
         $converter = $this->createConverter($name, $parameters);
 
         // Disallow using internal converters
-        if ($converter instanceof InternalConverterInterface) {
-            throw new UnexpectedValueException(
-                sprintf('The converter "%s" is an internal implementation.', $name)
-            );
+        if ($converter instanceof IsInternal) {
+            $message = 'The converter "%s" is an internal implementation. %s';
+            throw new InternalConverterException(sprintf($message, $name, $converter->getAlternative()));
         }
 
         // Add unique/cache/conditional converters if specified in the definition
         $converter = $this->bindUnique($converter, $definition);
         $converter = $this->bindCache($converter, $definition);
+        $converter = $this->bindCondition($converter, $definition);
 
-        return $this->bindCondition($converter, $definition);
-    }
-
-    /**
-     * Set the dump context.
-     */
-    public function setDumpContext(DumpContext $dumpContext): void
-    {
-        $this->dumpContext = $dumpContext;
-    }
-
-    /**
-     * Get the converter data.
-     *
-     * @throws UnexpectedValueException
-     */
-    private function getConverterData(array $definition): array
-    {
-        if (!array_key_exists('converter', $definition)) {
-            throw new UnexpectedValueException('The converter name is required.');
-        }
-
-        if (array_key_exists('parameters', $definition) && !is_array($definition['parameters'])) {
-            throw new UnexpectedValueException('The converter parameters must be an array.');
-        }
-
-        $definition['converter'] = (string) $definition['converter'];
-        if ($definition['converter'] === '') {
-            throw new UnexpectedValueException('The converter name is required.');
-        }
-
-        $definition += [
-            'parameters' => [],
-            'condition' => '',
-            'cache_key' => '',
-            'unique' => false,
-        ];
-
-        // Parse the parameters
-        $definition['parameters'] = $this->parseParameters($definition['parameters']);
-
-        // Cast values
-        $definition['condition'] = (string) $definition['condition'];
-        $definition['unique'] = (bool) $definition['unique'];
-        $definition['cache_key'] = (string) $definition['cache_key'];
-
-        return $definition;
+        return $converter;
     }
 
     /**
      * If the "unique" parameter is set to true, bind a unique converter to the specified converter.
      */
-    private function bindUnique(ConverterInterface $converter, array $definition): ConverterInterface
+    private function bindUnique(Converter $converter, ConverterConfig $definition): Converter
     {
-        if ($definition['unique']) {
+        if ($definition->isUnique()) {
             $converter = $this->createConverter('unique', ['converter' => $converter]);
         }
 
@@ -106,12 +68,12 @@ final class ConverterBuilder
     /**
      * If a cache key is defined, bind a cache converter to the specified converter.
      */
-    private function bindCache(ConverterInterface $converter, array $definition): ConverterInterface
+    private function bindCache(Converter $converter, ConverterConfig $definition): Converter
     {
-        if ($definition['cache_key'] !== '') {
+        if ($definition->getCacheKey() !== '') {
             $converter = $this->createConverter(
                 'cache',
-                ['converter' => $converter, 'cache_key' => $definition['cache_key']]
+                ['converter' => $converter, 'cache_key' => $definition->getCacheKey()]
             );
         }
 
@@ -121,13 +83,13 @@ final class ConverterBuilder
     /**
      * If a condition is defined, bind a condition converter to the specified converter.
      */
-    private function bindCondition(ConverterInterface $converter, array $definition): ConverterInterface
+    private function bindCondition(Converter $converter, ConverterConfig $definition): Converter
     {
         // Convert data only if it matches the specified condition
-        if ($definition['condition'] !== '') {
+        if ($definition->getCondition() !== '') {
             $converter = $this->createConverter(
                 'conditional',
-                ['condition' => $definition['condition'], 'converter' => $converter]
+                ['converter' => $converter, 'condition' => $definition->getCondition()]
             );
         }
 
@@ -136,20 +98,20 @@ final class ConverterBuilder
 
     /**
      * Parse the converter parameters.
-     *
-     * @throws UnexpectedValueException
      */
-    private function parseParameters(array $parameters): array
+    private function parseParameters(ConverterConfig $definition): array
     {
+        $parameters = $definition->getParameters();
+
         foreach ($parameters as $name => $value) {
-            if ($name === 'converters' || str_contains($name, '_converters')) {
+            if ($name === 'converters') {
                 // Param is an array of converter definitions (e.g. "converters" param of the "chain" converter)
                 $parameters[$name] = $this->parseConvertersParameter($name, $value);
                 continue;
             }
 
-            if ($name === 'converter' || str_contains($name, '_converter')) {
-                // Param is a converter definition (e.g. "converter" param of the "unique" converter
+            if ($name === 'converter') {
+                // Param is a converter definition (e.g. "converter" param of the "unique" converter)
                 $parameters[$name] = $this->parseConverterParameter($name, $value);
             }
         }
@@ -160,57 +122,51 @@ final class ConverterBuilder
     /**
      * Parse a parameter that defines an array of converter definitions.
      *
-     * @return ConverterInterface[]
-     * @throws UnexpectedValueException
+     * @return Converter[]
      */
-    private function parseConvertersParameter(string $name, mixed $parameter): array
+    private function parseConvertersParameter(string $name, mixed $definitionsCandidate): array
     {
-        if (!is_array($parameter)) {
-            throw new UnexpectedValueException(sprintf('The parameter "%s" must be an array.', $name));
+        if (!is_array($definitionsCandidate)) {
+            throw new InvalidParameterException(sprintf('The parameter "%s" must be an array.', $name));
         }
 
-        foreach ($parameter as $index => $definition) {
-            $parameter[$index] = $this->parseConverterParameter($name . '[' . $index . ']', $definition);
+        foreach ($definitionsCandidate as $index => $definitionCandidate) {
+            $candidateName = $name . '[' . $index . ']';
+            $definitionsCandidate[$index] = $this->parseConverterParameter($candidateName, $definitionCandidate);
         }
 
-        return $parameter;
+        return $definitionsCandidate;
     }
 
     /**
      * Parse a parameter that defines a converter definition.
-     *
-     * @throws UnexpectedValueException
      */
-    private function parseConverterParameter(string $name, mixed $parameter): ConverterInterface
+    private function parseConverterParameter(string $name, mixed $definitionCandidate): Converter
     {
-        if (!is_array($parameter)) {
-            throw new UnexpectedValueException(sprintf('The parameter "%s" must be an array.', $name));
+        if (!$definitionCandidate instanceof ConverterConfig) {
+            throw new InvalidParameterException(sprintf('The parameter "%s" must be a converter.', $name));
         }
 
-        return $this->build($parameter);
+        return $this->build($definitionCandidate);
     }
 
     /**
      * Create a converter that matches the specified name and parameters.
      */
-    private function createConverter(string $name, array $parameters): ConverterInterface
+    private function createConverter(string $name, array $parameters): Converter
     {
         $converter = $this->converterFactory->create($name);
 
-        try {
-            $converter->setParameters($parameters);
-        } catch (ValidationException $e) {
-            throw new RuntimeException(
-                sprintf('An error occurred while parsing the converter "%s": %s', $name, lcfirst($e->getMessage()))
-            );
+        if ($converter instanceof IsContextAware) {
+            $converter->setDumpContext($this->dumpContext);
         }
 
-        if ($converter instanceof ContextAwareInterface) {
-            if (!isset($this->dumpContext)) {
-                throw new RuntimeException('The dump context is not set.');
-            }
+        if ($converter instanceof IsFakerAware) {
+            $converter->setFaker($this->lazyFaker->getGenerator());
+        }
 
-            $converter->setDumpContext($this->dumpContext);
+        if ($converter instanceof IsConfigurable) {
+            $converter->setParameters($parameters);
         }
 
         return $converter;

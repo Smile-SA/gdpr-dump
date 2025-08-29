@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Functional\Dumper;
 
-use RuntimeException;
-use Smile\GdprDump\Config\ConfigInterface;
+use Smile\GdprDump\Configuration\Configuration;
+use Smile\GdprDump\Dumper\DumperResolver;
+use Smile\GdprDump\Dumper\Exception\DumpException;
 use Smile\GdprDump\Dumper\MysqlDumper;
-use Smile\GdprDump\Faker\FakerService;
 use Smile\GdprDump\Tests\Functional\TestCase;
 
 final class MysqlDumperTest extends TestCase
@@ -27,23 +27,17 @@ final class MysqlDumperTest extends TestCase
         // Make sure the dump file does not already exist
         $this->deleteDumpFile();
 
-        $faker = $this->getContainer()->get(FakerService::class);
-        $this->assertInstanceOf(FakerService::class, $faker);
-        $this->assertSame('en_US', $faker->getLocale());
-
         // Create the dump
-        $config = $this->createConfig();
-        $this->getDumper()->dump($config);
+        $configuration = $this->createConfiguration();
+        $this->assertSame('fr_FR', $configuration->getFakerConfig()->getLocale());
+        $this->getDumper()->dump($configuration);
         $this->assertDumpIsValid();
 
-        // Assert that the faker locale was changed
-        $this->assertSame('fr_FR', $faker->getLocale());
-
         // Same tests but with filter propagation disabled
-        $config = $this->createConfig();
-        $config->set('filter_propagation', ['enabled' => false]);
+        $configuration = $this->createConfiguration();
+        $configuration->getFilterPropagationConfig()->setEnabled(false);
 
-        $this->getDumper()->dump($config);
+        $this->getDumper()->dump($configuration);
         $this->assertDumpIsValid(false);
     }
 
@@ -56,8 +50,8 @@ final class MysqlDumperTest extends TestCase
         $this->deleteDumpFile();
 
         // Run the dumper with dry run option
-        $config = $this->createConfig();
-        $this->getDumper()->dump($config, true);
+        $configuration = $this->createConfiguration();
+        $this->getDumper()->dump($configuration, true);
         $this->assertFileDoesNotExist($this->dumpFile);
     }
 
@@ -70,11 +64,11 @@ final class MysqlDumperTest extends TestCase
         $this->deleteDumpFile();
 
         // Run the dumper with strict mode
-        $config = $this->createConfig();
-        $config->set('strict_schema', true);
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('No table found with pattern "not_exists".');
-        $this->getDumper()->dump($config, true);
+        $configuration = $this->createConfiguration();
+        $configuration->setStrictSchema(true);
+        $this->expectException(DumpException::class);
+        $this->expectExceptionMessageMatches('/No table found with pattern "not_exists"/');
+        $this->getDumper()->dump($configuration, true);
     }
 
     /**
@@ -163,14 +157,13 @@ final class MysqlDumperTest extends TestCase
     /**
      * Create the config object.
      */
-    private function createConfig(): ConfigInterface
+    private function createConfiguration(): Configuration
     {
-        $config = clone $this->getConfig();
-        $dumpParams = $config->get('dump');
-        $dumpParams['output'] = $this->dumpFile;
-        $config->set('dump', $dumpParams);
+        $configuration = clone $this->getConfiguration();
+        $dumpSettings = $configuration->getDumpSettings();
+        $dumpSettings->setOutput($this->dumpFile);
 
-        return $config;
+        return $configuration;
     }
 
     /**
@@ -178,7 +171,10 @@ final class MysqlDumperTest extends TestCase
      */
     private function getDumper(): MysqlDumper
     {
+        /** @var DumperResolver $resolver */
+        $resolver = $this->getContainer()->get(DumperResolver::class);
+
         /** @var MysqlDumper */
-        return $this->getContainer()->get(MysqlDumper::class);
+        return $resolver->getDumper($this->getConfiguration());
     }
 }

@@ -5,18 +5,15 @@ declare(strict_types=1);
 namespace Smile\GdprDump\Tests\Unit\Converter;
 
 use DateTime;
+use Faker\Factory;
 use RuntimeException;
-use Smile\GdprDump\Converter\ConditionBuilder;
-use Smile\GdprDump\Converter\ContextAwareInterface;
-use Smile\GdprDump\Converter\ConverterInterface;
-use Smile\GdprDump\Converter\Proxy\Faker;
-use Smile\GdprDump\Converter\Proxy\Internal\Conditional;
-use Smile\GdprDump\Converter\Proxy\JsonData;
-use Smile\GdprDump\Converter\Proxy\SerializedData;
+use Smile\GdprDump\Converter\Converter;
+use Smile\GdprDump\Converter\IsConfigurable;
+use Smile\GdprDump\Converter\IsContextAware;
+use Smile\GdprDump\Converter\IsFakerAware;
 use Smile\GdprDump\Dumper\DumpContext;
-use Smile\GdprDump\Faker\FakerService;
+use Smile\GdprDump\Faker\LazyGenerator;
 use Smile\GdprDump\Tests\Unit\TestCase as UnitTestCase;
-use Smile\GdprDump\Util\ArrayHelper;
 
 abstract class TestCase extends UnitTestCase
 {
@@ -24,14 +21,14 @@ abstract class TestCase extends UnitTestCase
 
     protected function setUp(): void
     {
-        if ($this instanceof DumpContextAwareInterface) {
+        if ($this instanceof DumpContextAware) {
             $this->dumpContext = new DumpContext();
         }
     }
 
     protected function tearDown(): void
     {
-        if ($this instanceof DumpContextAwareInterface) {
+        if ($this instanceof DumpContextAware) {
             unset($this->dumpContext);
         }
     }
@@ -39,31 +36,31 @@ abstract class TestCase extends UnitTestCase
     /**
      * Create a converter.
      *
-     * @template T
+     * @template T of Converter
      * @param class-string<T> $className
      * @return T
-     * @phpstan-ignore return.phpDocType (T is resolved at the beginning of the function)
      */
-    public function createConverter(string $className, array $parameters = []): ConverterInterface
+    public function createConverter(string $className, array $parameters = []): Converter
     {
-        if (!is_a($className, ConverterInterface::class, true)) {
+        // @phpstan-ignore function.alreadyNarrowedType
+        if (!is_a($className, Converter::class, true)) {
             throw new RuntimeException(
-                sprintf('The class "%s" does not implement %s.', $className, ConverterInterface::class)
+                sprintf('The class "%s" does not implement %s.', $className, Converter::class)
             );
         }
 
-        $converter = match ($className) {
-            Conditional::class => new Conditional(new ConditionBuilder()),
-            Faker::class => new Faker(new FakerService()),
-            JsonData::class => new JsonData(new ArrayHelper()),
-            SerializedData::class => new SerializedData(new ArrayHelper()),
-            default => new $className(),
-        };
+        $converter = new $className();
 
-        $converter->setParameters($parameters);
-
-        if ($converter instanceof ContextAwareInterface) {
+        if ($converter instanceof IsContextAware) {
             $converter->setDumpContext($this->getDumpContext());
+        }
+
+        if ($converter instanceof IsFakerAware) {
+            $converter->setFaker((new LazyGenerator(Factory::DEFAULT_LOCALE))->getGenerator());
+        }
+
+        if ($converter instanceof IsConfigurable) {
+            $converter->setParameters($parameters);
         }
 
         return $converter;
@@ -163,8 +160,8 @@ abstract class TestCase extends UnitTestCase
      */
     protected function getDumpContext(): DumpContext
     {
-        if (!$this instanceof DumpContextAwareInterface) {
-            throw new RuntimeException('Please implement DumpContextAwareInterface to access the dump context object');
+        if (!$this instanceof DumpContextAware) {
+            throw new RuntimeException('Please implement DumpContextAware to access the dump context object');
         }
 
         return $this->dumpContext;
