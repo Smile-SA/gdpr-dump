@@ -75,14 +75,14 @@ final class ConfigurationMapperTest extends TestCase
      */
     public function testMapFakerSettings(): void
     {
-        $data = [
-            'faker' => [
-                'locale' => 'fr_FR',
-            ],
-        ];
-
+        $data = ['faker' => ['locale' => 'fr_FR']];
         $fakerConfig = $this->createConfig($data)->getFakerConfig();
         $this->assertSame($data['faker']['locale'], $fakerConfig->getLocale());
+
+        // Assert that setting the locale to null does not result in an error
+        $data = ['faker' => ['locale' => null]];
+        $fakerConfig = $this->createConfig($data)->getFakerConfig();
+        $this->assertSame('', $fakerConfig->getLocale());
     }
 
     /**
