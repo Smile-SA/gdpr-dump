@@ -1,3 +1,5 @@
+strict_schema: false
+
 tables:
     oro_logger_log_entry:
         truncate: true
