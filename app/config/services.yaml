@@ -8,7 +8,7 @@ services:
 
     _instanceof:
         Smile\GdprDump\Configuration\Compiler\Processor\Processor:
-            tags: ['config.loader_processor']
+            tags: ['config.compiler_processor']
         Smile\GdprDump\Converter\Converter:
             shared: false # the converter factory uses the container to create new instances
             tags: ['converter'] # used by ConverterAliasPass to create aliases for data converters
@@ -34,7 +34,7 @@ services:
 
     Smile\GdprDump\Configuration\Compiler\ConfigurationCompiler:
         arguments:
-            $processors: !tagged_iterator 'config.loader_processor'
+            $processors: !tagged_iterator 'config.compiler_processor'
 
     Smile\GdprDump\Dumper\DumperResolver:
         public: true # used by functional tests

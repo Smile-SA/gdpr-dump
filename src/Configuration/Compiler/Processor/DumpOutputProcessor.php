@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Configuration\Compiler\Processor;
 
-use Smile\GdprDump\Configuration\Compiler\ProcessorType;
+use Smile\GdprDump\Configuration\Compiler\CompilerStep;
 use Smile\GdprDump\Configuration\Exception\ParseException;
 use Smile\GdprDump\Configuration\Loader\Container;
 
 class DumpOutputProcessor implements Processor
 {
-    public function getType(): ProcessorType
+    public function getStep(): CompilerStep
     {
-        return ProcessorType::AFTER_VALIDATION;
+        return CompilerStep::AFTER_VALIDATION;
     }
 
     /**

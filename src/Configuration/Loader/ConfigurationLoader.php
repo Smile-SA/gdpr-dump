@@ -35,11 +35,11 @@ final class ConfigurationLoader
             if ($resources) {
                 $this->loadResources($container, $resources);
             }
+
+            $this->compiler->compile($container);
         } catch (Throwable $e) {
             throw $e instanceof ConfigurationException ? $e : new ParseException($e->getMessage(), $e);
         }
-
-        $this->compiler->compile($container);
     }
 
     /**
