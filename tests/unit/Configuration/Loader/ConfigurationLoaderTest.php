@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Configuration;
 
+use Smile\GdprDump\Configuration\Compiler\CompilerStep;
 use Smile\GdprDump\Configuration\Compiler\ConfigurationCompiler;
 use Smile\GdprDump\Configuration\Compiler\Processor\Processor;
-use Smile\GdprDump\Configuration\Compiler\ProcessorType;
 use Smile\GdprDump\Configuration\Loader\ConfigurationLoader;
 use Smile\GdprDump\Configuration\Loader\Container;
 use Smile\GdprDump\Configuration\Loader\Env\EnvVarParser;
@@ -101,9 +101,9 @@ final class ConfigurationLoaderTest extends TestCase
     {
         // Create a mock processor to make sure that processors are triggered
         $processorMock = new class implements Processor {
-            public function getType(): ProcessorType
+            public function getStep(): CompilerStep
             {
-                return ProcessorType::BEFORE_VALIDATION;
+                return CompilerStep::BEFORE_VALIDATION;
             }
 
             public function process(Container $container): void

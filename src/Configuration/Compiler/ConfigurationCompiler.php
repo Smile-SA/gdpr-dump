@@ -6,10 +6,8 @@ namespace Smile\GdprDump\Configuration\Compiler;
 
 use Smile\GdprDump\Configuration\Compiler\Processor\Processor;
 use Smile\GdprDump\Configuration\Exception\ConfigurationException;
-use Smile\GdprDump\Configuration\Exception\ParseException;
 use Smile\GdprDump\Configuration\Loader\Container;
 use Smile\GdprDump\Configuration\Validator\JsonSchemaValidator;
-use Throwable;
 
 final class ConfigurationCompiler
 {
@@ -32,18 +30,14 @@ final class ConfigurationCompiler
      */
     public function compile(Container $container): void
     {
-        try {
-            // Actions that must be performed before the validation (e.g. resolving env vars)
-            $this->runProcessors($container, ProcessorType::BEFORE_VALIDATION);
+        // Actions that must be performed before the validation (e.g. resolving env vars)
+        $this->runProcessors($container, CompilerStep::BEFORE_VALIDATION);
 
-            // Validate the configuration against a JSON schema
-            $this->schemaValidator->validate($container->getRoot());
+        // Validate the configuration against a JSON schema
+        $this->schemaValidator->validate($container->getRoot());
 
-            // Actions that must be performed after the validation (e.g. resolving virtual converters)
-            $this->runProcessors($container, ProcessorType::AFTER_VALIDATION);
-        } catch (Throwable $e) {
-            throw $e instanceof ConfigurationException ? $e : new ParseException($e->getMessage(), $e);
-        }
+        // Actions that must be performed after the validation (e.g. resolving virtual converters)
+        $this->runProcessors($container, CompilerStep::AFTER_VALIDATION);
     }
 
     /**
@@ -51,12 +45,12 @@ final class ConfigurationCompiler
      */
     private function addProcessor(Processor $processor): self
     {
-        $type = $processor->getType()->name;
-        if (!array_key_exists($type, $this->processors)) {
-            $this->processors[$type] = [];
+        $step = $processor->getStep()->name;
+        if (!array_key_exists($step, $this->processors)) {
+            $this->processors[$step] = [];
         }
 
-        $this->processors[$type][] = $processor;
+        $this->processors[$step][] = $processor;
 
         return $this;
     }
@@ -64,9 +58,9 @@ final class ConfigurationCompiler
     /**
      * Run processors that match the specified type.
      */
-    private function runProcessors(Container $container, ProcessorType $type): void
+    private function runProcessors(Container $container, CompilerStep $step): void
     {
-        foreach ($this->processors[$type->name] ?? [] as $processor) {
+        foreach ($this->processors[$step->name] ?? [] as $processor) {
             $processor->process($container);
         }
     }

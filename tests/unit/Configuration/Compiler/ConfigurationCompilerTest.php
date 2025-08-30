@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Tests\Unit\Configuration\Compiler;
 
+use Smile\GdprDump\Configuration\Compiler\CompilerStep;
 use Smile\GdprDump\Configuration\Compiler\ConfigurationCompiler;
 use Smile\GdprDump\Configuration\Compiler\Processor\Processor;
-use Smile\GdprDump\Configuration\Compiler\ProcessorType;
 use Smile\GdprDump\Configuration\Exception\JsonSchemaException;
 use Smile\GdprDump\Configuration\Loader\Container;
 use Smile\GdprDump\Configuration\Validator\JsonSchemaValidator;
@@ -15,7 +15,7 @@ use Smile\GdprDump\Tests\Unit\TestCase;
 final class ConfigurationCompilerTest extends TestCase
 {
     /**
-     * Assert that converter templates are merged into the configuration.
+     * Test the configuration compiler.
      */
     public function testCompiler(): void
     {
@@ -43,9 +43,9 @@ final class ConfigurationCompilerTest extends TestCase
     {
         $processors = [
             new class implements Processor {
-                public function getType(): ProcessorType
+                public function getStep(): CompilerStep
                 {
-                    return ProcessorType::BEFORE_VALIDATION;
+                    return CompilerStep::BEFORE_VALIDATION;
                 }
 
                 public function process(Container $container): void
@@ -54,9 +54,9 @@ final class ConfigurationCompilerTest extends TestCase
                 }
             },
             new class implements Processor {
-                public function getType(): ProcessorType
+                public function getStep(): CompilerStep
                 {
-                    return ProcessorType::AFTER_VALIDATION;
+                    return CompilerStep::AFTER_VALIDATION;
                 }
 
                 public function process(Container $container): void
