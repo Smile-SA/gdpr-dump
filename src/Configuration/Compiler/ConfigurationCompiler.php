@@ -30,13 +30,13 @@ final class ConfigurationCompiler
      */
     public function compile(Container $container): void
     {
-        // Actions that must be performed before the validation (e.g. resolving env vars)
+        // Actions that must be performed before the validation
         $this->runProcessors($container, CompilerStep::BEFORE_VALIDATION);
 
         // Validate the configuration against a JSON schema
         $this->schemaValidator->validate($container->getRoot());
 
-        // Actions that must be performed after the validation (e.g. resolving virtual converters)
+        // Actions that must be performed after the validation
         $this->runProcessors($container, CompilerStep::AFTER_VALIDATION);
     }
 
