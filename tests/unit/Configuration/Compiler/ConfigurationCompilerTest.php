@@ -7,6 +7,7 @@ namespace Smile\GdprDump\Tests\Unit\Configuration\Compiler;
 use Smile\GdprDump\Configuration\Compiler\ConfigurationCompiler;
 use Smile\GdprDump\Configuration\Compiler\Processor\Processor;
 use Smile\GdprDump\Configuration\Compiler\ProcessorType;
+use Smile\GdprDump\Configuration\Exception\JsonSchemaException;
 use Smile\GdprDump\Configuration\Loader\Container;
 use Smile\GdprDump\Configuration\Validator\JsonSchemaValidator;
 use Smile\GdprDump\Tests\Unit\TestCase;
@@ -16,13 +17,23 @@ final class ConfigurationCompilerTest extends TestCase
     /**
      * Assert that converter templates are merged into the configuration.
      */
-    public function testCompilerr(): void
+    public function testCompiler(): void
     {
         $container = new Container((object) ['to_remove' => true]);
         $this->createCompiler()->compile($container);
         $this->assertTrue($container->has('key'));
         $this->assertSame('value', $container->get('key'));
         $this->assertFalse($container->has('to_remove'));
+    }
+
+    /**
+     * Assert that the compiler uses the schema validator.
+     */
+    public function testCompilerUsesSchemaValidator(): void
+    {
+        $container = new Container((object) ['invalid' => true]);
+        $this->expectException(JsonSchemaException::class);
+        $this->createCompiler()->compile($container);
     }
 
     /**
@@ -56,7 +67,7 @@ final class ConfigurationCompilerTest extends TestCase
         ];
 
         return new ConfigurationCompiler(
-            new JsonSchemaValidator($this->getResource('test_schema.json')),
+            new JsonSchemaValidator($this->getBasePath() . '/app/config/schema.json'),
             $processors
         );
     }
