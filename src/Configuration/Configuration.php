@@ -15,7 +15,7 @@ use Smile\GdprDump\Configuration\Validator\QueryValidator;
  */
 final class Configuration
 {
-    private bool $strictSchema = false;
+    private bool $strictSchema = true;
     private DumpConfig $dumpConfig;
     private FilterPropagationConfig $filterPropagationConfig;
     private FakerConfig $fakerConfig;

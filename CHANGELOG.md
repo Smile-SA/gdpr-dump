@@ -11,6 +11,7 @@ New features:
 
 Breaking changes:
 
+- `strict_schema` is enabled by default (except in config templates such as `magento2`)
 - Fixed `if_version` parameter being processed too late ([#188](https://github.com/Smile-SA/gdpr-dump/pull/188))
 
 Improvements:
