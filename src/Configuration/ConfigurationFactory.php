@@ -8,14 +8,12 @@ use Smile\GdprDump\Configuration\Loader\ConfigurationLoader;
 use Smile\GdprDump\Configuration\Loader\Resource\Resource;
 use Smile\GdprDump\Configuration\Loader\Resource\ResourceFactory;
 use Smile\GdprDump\Configuration\Mapper\ConfigurationMapper;
-use Smile\GdprDump\Configuration\Validator\JsonSchemaValidator;
 
 final class ConfigurationFactory
 {
     public function __construct(
         private ConfigurationLoader $configurationLoader,
         private ConfigurationMapper $configurationMapper,
-        private JsonSchemaValidator $schemaValidator,
         private ResourceFactory $resourceFactory,
     ) {
     }
@@ -25,7 +23,7 @@ final class ConfigurationFactory
      */
     public function createBuilder(): ConfigurationBuilder
     {
-        return new ConfigurationBuilder($this->configurationLoader, $this->configurationMapper, $this->schemaValidator);
+        return new ConfigurationBuilder($this->configurationLoader, $this->configurationMapper);
     }
 
     /**

@@ -23,7 +23,9 @@ final class ConverterAliasPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container): void
     {
-        foreach (array_keys($container->findTaggedServiceIds('converter')) as $serviceId) {
+        $taggedServices = $container->findTaggedServiceIds('converter');
+
+        foreach (array_keys($taggedServices) as $serviceId) {
             $definition = $container->getDefinition($serviceId);
             $className = $definition->getClass();
             if ($className === null) {

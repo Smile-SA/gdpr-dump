@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Tests\Unit\Configuration\Loader\Processor;
+namespace Smile\GdprDump\Tests\Unit\Configuration\Compiler\Processor;
 
+use Smile\GdprDump\Configuration\Compiler\Processor\EnvVarProcessor;
+use Smile\GdprDump\Configuration\Loader\Container;
 use Smile\GdprDump\Configuration\Loader\Env\EnvVarParser;
-use Smile\GdprDump\Configuration\Loader\Processor\EnvVarProcessor;
 use Smile\GdprDump\Tests\Unit\TestCase;
 
 final class EnvVarProcessorTest extends TestCase
@@ -17,12 +18,11 @@ final class EnvVarProcessorTest extends TestCase
     {
         putenv('TEST_VAR=1');
 
-        $data = (object) ['strict_schema' => '%env(bool:TEST_VAR)%'];
+        $container = new Container((object) ['strict_schema' => '%env(bool:TEST_VAR)%']);
         $processor = new EnvVarProcessor(new EnvVarParser());
-        $processor->process($data);
+        $processor->process($container);
+        $this->assertTrue($container->get('strict_schema'));
 
-        // @phpstan-ignore method.impossibleType
-        $this->assertTrue($data->strict_schema);
         putenv('TEST_VAR');
     }
 }

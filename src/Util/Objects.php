@@ -38,7 +38,7 @@ final class Objects
 
             if (!property_exists($object, $property)) {
                 // New property, add it to the existing object
-                $object->{$property} = $value instanceof stdClass ? self::deepCloneObject($value) : $value;
+                $object->{$property} = $value instanceof stdClass ? self::deepClone($value) : $value;
                 continue;
             }
 
@@ -57,14 +57,14 @@ final class Objects
             }
 
             // Overwrite existing value
-            $object->{$property} = $value instanceof stdClass ? self::deepCloneObject($value) : $value;
+            $object->{$property} = $value instanceof stdClass ? self::deepClone($value) : $value;
         }
     }
 
     /**
      * Deep clone an object (only works with instances of stdClass because their properties are public).
      */
-    private static function deepCloneObject(stdClass $object): stdClass
+    public static function deepClone(stdClass $object): stdClass
     {
         $clone = clone $object;
 
@@ -72,7 +72,7 @@ final class Objects
             $property = (string) $property; // (get_object_vars returns int keys if properties are numeric)
 
             if ($value instanceof stdClass) {
-                $clone->$property = self::deepCloneObject($value);
+                $clone->$property = self::deepClone($value);
             } elseif (is_array($value)) {
                 $clone->$property = self::deepCloneArray($value);
             }
@@ -88,7 +88,7 @@ final class Objects
     {
         foreach ($array as $key => $value) {
             if ($value instanceof stdClass) {
-                $array[$key] = self::deepCloneObject($value);
+                $array[$key] = self::deepClone($value);
             } elseif (is_array($value)) {
                 $array[$key] = self::deepCloneArray($value);
             }

@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Configuration\Loader\Processor;
+namespace Smile\GdprDump\Configuration\Compiler\Processor;
 
+use Smile\GdprDump\Configuration\Compiler\ProcessorType;
+use Smile\GdprDump\Configuration\Loader\Container;
 use Smile\GdprDump\Configuration\Loader\Env\EnvVarParser;
-use stdClass;
 use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
 #[AsTaggedItem(priority: 10)]
@@ -15,11 +16,16 @@ class EnvVarProcessor implements Processor
     {
     }
 
+    public function getType(): ProcessorType
+    {
+        return ProcessorType::BEFORE_VALIDATION;
+    }
+
     /**
      * Replaces env var placeholders such as `%env(VAR)%`.
      */
-    public function process(stdClass $configuration): void
+    public function process(Container $container): void
     {
-        $this->envVarParser->parse($configuration);
+        $this->envVarParser->parse($container->getRoot());
     }
 }
