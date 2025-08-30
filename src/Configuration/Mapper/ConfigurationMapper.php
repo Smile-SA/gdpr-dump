@@ -45,7 +45,7 @@ final class ConfigurationMapper
                 ),
                 'strict_schema' => $configuration->setStrictSchema($value),
                 'variables' => $configuration->setSqlVariables($value),
-                'version', 'if_version', 'virtual_converters' => null, // only useful for parsing and validation
+                'version', 'if_version' => null, // only useful for parsing and validation
                 'requires_version' => null, // deprecated parameter
                 default => throw new UnexpectedValueException(sprintf('Unsupported config property "%s".', $key)),
             };
