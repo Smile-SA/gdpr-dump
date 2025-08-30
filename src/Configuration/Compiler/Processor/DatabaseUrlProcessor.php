@@ -2,37 +2,38 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Configuration\Loader\Processor;
+namespace Smile\GdprDump\Configuration\Compiler\Processor;
 
+use Smile\GdprDump\Configuration\Compiler\ProcessorType;
 use Smile\GdprDump\Configuration\Exception\ParseException;
+use Smile\GdprDump\Configuration\Loader\Container;
 use Smile\GdprDump\Database\Driver\DatabaseDriver;
 use Smile\GdprDump\Util\Url;
 use stdClass;
 
 class DatabaseUrlProcessor implements Processor
 {
+    public function getType(): ProcessorType
+    {
+        return ProcessorType::AFTER_VALIDATION;
+    }
+
     /**
      * Parse database url (if specified).
      */
-    public function process(stdClass $configuration): void
+    public function process(Container $container): void
     {
-        if (
-            !property_exists($configuration, 'database')
-            || !$configuration->database instanceof stdClass
-            || !property_exists($configuration->database, 'url')
-        ) {
+        $database = $container->get('database');
+        if (!$database) {
             return;
         }
 
-        if (!is_string($configuration->database->url)) {
-            throw new ParseException('The database url must be a string.');
+        $url = $database->url ?? '';
+        if ($url !== '') {
+            $this->processDatabaseNode($url, $database);
         }
 
-        if ($configuration->database->url !== '') {
-            $this->processDatabaseNode($configuration->database->url, $configuration->database);
-        }
-
-        unset($configuration->database->url);
+        unset($database->url);
     }
 
     /**

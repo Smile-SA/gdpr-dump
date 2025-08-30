@@ -6,10 +6,9 @@ namespace Smile\GdprDump\Configuration;
 
 use Smile\GdprDump\Configuration\Exception\ConfigurationException;
 use Smile\GdprDump\Configuration\Loader\ConfigurationLoader;
+use Smile\GdprDump\Configuration\Loader\Container;
 use Smile\GdprDump\Configuration\Loader\Resource\Resource;
 use Smile\GdprDump\Configuration\Mapper\ConfigurationMapper;
-use Smile\GdprDump\Configuration\Validator\JsonSchemaValidator;
-use Smile\GdprDump\Util\Objects;
 
 final class ConfigurationBuilder
 {
@@ -21,7 +20,6 @@ final class ConfigurationBuilder
     public function __construct(
         private ConfigurationLoader $configurationLoader,
         private ConfigurationMapper $configurationMapper,
-        private JsonSchemaValidator $schemaValidator,
     ) {
     }
 
@@ -42,13 +40,12 @@ final class ConfigurationBuilder
      */
     public function build(): Configuration
     {
-        // Build a stdClass object that contains the merged data of the provided resources
-        $configData = $this->configurationLoader->load(...$this->resources);
+        $container = new Container();
 
-        // Validate the configuration data against a JSON schema
-        $this->schemaValidator->validate($configData);
+        // Add the registered resources to the container
+        $this->configurationLoader->load($container, ...$this->resources);
 
-        // Build and return an object representation of the configuration data
-        return $this->configurationMapper->fromArray(Objects::toArray($configData));
+        // Convert the container to a configuration object with getters/setters
+        return $this->configurationMapper->fromArray($container->toArray());
     }
 }

@@ -4,49 +4,42 @@ declare(strict_types=1);
 
 namespace Smile\GdprDump\Configuration\Loader;
 
+use Smile\GdprDump\Configuration\Compiler\ConfigurationCompiler;
+use Smile\GdprDump\Configuration\Exception\ConfigurationException;
 use Smile\GdprDump\Configuration\Exception\ParseException;
-use Smile\GdprDump\Configuration\Loader\Processor\Processor;
 use Smile\GdprDump\Configuration\Loader\Resource\Resource;
 use Smile\GdprDump\Configuration\Loader\Resource\ResourceFactory;
 use Smile\GdprDump\Configuration\Loader\Resource\ResourceParser;
 use Smile\GdprDump\Configuration\Loader\Version\VersionApplier;
 use Smile\GdprDump\Util\Objects;
-use stdClass;
 use Throwable;
 
 final class ConfigurationLoader
 {
-    /**
-     * @param Processor[] $processors
-     */
     public function __construct(
         private ResourceParser $resourceParser,
         private ResourceFactory $resourceFactory,
         private VersionApplier $versionApplier,
-        private iterable $processors,
+        private ConfigurationCompiler $compiler,
     ) {
     }
 
     /**
      * Load the configuration from the specified resources (files or string input).
      *
-     * @throws ParseException
+     * @throws ConfigurationException
      */
-    public function load(Resource ...$resources): stdClass
+    public function load(Container $container, Resource ...$resources): void
     {
-        $parsed = new stdClass();
-
         try {
             if ($resources) {
-                $this->loadResources($resources, $parsed);
+                $this->loadResources($container, $resources);
             }
-
-            $this->runProcessors($parsed);
         } catch (Throwable $e) {
-            throw $e instanceof ParseException ? $e : new ParseException($e->getMessage(), $e);
+            throw $e instanceof ConfigurationException ? $e : new ParseException($e->getMessage(), $e);
         }
 
-        return $parsed;
+        $this->compiler->compile($container);
     }
 
     /**
@@ -65,13 +58,13 @@ final class ConfigurationLoader
      * and then to merge files in the correct order afterwards.
      *
      * @param Resource[] $resources resources to load
-     * @param stdClass $configuration the object that will contain the parsed configuration
+     * @param Container $container the object that will contain the parsed configuration
      * @param string[] $loadedTemplates cache for files defined in the `extends` parameter, must be loaded only once
      * @param string $version the application version, it it used to merge `if_version` blocks
      */
     private function loadResources(
+        Container $container,
         array &$resources,
-        stdClass $configuration,
         array &$loadedTemplates = [],
         ?string &$version = null,
     ): void {
@@ -93,14 +86,14 @@ final class ConfigurationLoader
 
         // Load remaining resources
         if ($resources) {
-            $this->loadResources($resources, $configuration, $loadedTemplates, $version);
+            $this->loadResources($container, $resources, $loadedTemplates, $version);
         }
 
         // Merge if_version blocks
         $this->versionApplier->applyVersion($parsed, (string) $version);
 
         // Merge the parsed data into the main configuration (FIFO, because it is done after the recursive call)
-        Objects::merge($configuration, $parsed);
+        Objects::merge($container->getRoot(), $parsed);
     }
 
     /**
@@ -124,16 +117,6 @@ final class ConfigurationLoader
                 $loadedTemplates[] = $resource->getInput();
                 $resources[] = $resource;
             }
-        }
-    }
-
-    /**
-     * Run registered processors on the parsed configuration.
-     */
-    private function runProcessors(stdClass $configuration): void
-    {
-        foreach ($this->processors as $processor) {
-            $processor->process($configuration);
         }
     }
 

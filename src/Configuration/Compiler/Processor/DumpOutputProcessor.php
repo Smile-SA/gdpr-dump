@@ -2,29 +2,32 @@
 
 declare(strict_types=1);
 
-namespace Smile\GdprDump\Configuration\Loader\Processor;
+namespace Smile\GdprDump\Configuration\Compiler\Processor;
 
+use Smile\GdprDump\Configuration\Compiler\ProcessorType;
 use Smile\GdprDump\Configuration\Exception\ParseException;
-use stdClass;
+use Smile\GdprDump\Configuration\Loader\Container;
 
 class DumpOutputProcessor implements Processor
 {
+    public function getType(): ProcessorType
+    {
+        return ProcessorType::AFTER_VALIDATION;
+    }
+
     /**
      * Process placeholders in the dump output setting.
      */
-    public function process(stdClass $configuration): void
+    public function process(Container $container): void
     {
-        if (
-            !property_exists($configuration, 'dump')
-            || !$configuration->dump instanceof stdClass
-            || !property_exists($configuration->dump, 'output')
-            || !is_string($configuration->dump->output)
-        ) {
+        $dump = $container->get('dump');
+        if (!$dump) {
             return;
         }
 
-        if ($configuration->dump->output !== '') {
-            $configuration->dump->output = $this->processDatePlaceholder($configuration->dump->output);
+        $output = $dump->output ?? '';
+        if ($output !== '') {
+            $dump->output = $this->processDatePlaceholder($output);
         }
     }
 

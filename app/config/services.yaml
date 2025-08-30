@@ -7,7 +7,7 @@ services:
         autoconfigure: true
 
     _instanceof:
-        Smile\GdprDump\Configuration\Loader\Processor\Processor:
+        Smile\GdprDump\Configuration\Compiler\Processor\Processor:
             tags: ['config.loader_processor']
         Smile\GdprDump\Converter\Converter:
             shared: false # the converter factory uses the container to create new instances
@@ -32,7 +32,7 @@ services:
     Smile\GdprDump\Configuration\ConfigurationFactory:
         public: true # used by functional tests
 
-    Smile\GdprDump\Configuration\Loader\ConfigurationLoader:
+    Smile\GdprDump\Configuration\Compiler\ConfigurationCompiler:
         arguments:
             $processors: !tagged_iterator 'config.loader_processor'
 

@@ -6,16 +6,16 @@ dump:
     output: '%env(DUMP_OUTPUT)%'
 
 tables:
-    table1:
-        limit: null
-        truncate: true
+    table2:
+        converters:
+            field3: ~ # removes the object declared in a parent file
 
 if_version:
     '>=3.0.0':
         tables:
-            table2:
-                converters:
-                    field3: ~ # removes the object declared in a parent file
+            table1:
+                limit: null
+                truncate: true
 
     '>=2.0.0 <3.0.0':
         tables:

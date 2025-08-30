@@ -30,8 +30,6 @@ final class ObjectsTest extends TestCase
     public function testMerge(): void
     {
         $object = new stdClass();
-        $override = new stdClass();
-
         $object->strict_schema = true;
         $object->version = '1.0.0';
         $object->tables_blacklist = ['table1'];
@@ -43,6 +41,7 @@ final class ObjectsTest extends TestCase
         $object->tables->table3->truncate = true;
         $object->tables->table4 = new stdClass();
 
+        $override = new stdClass();
         $override->version = null;
         $override->tables_whitelist = ['table1', 'table2'];
         $override->tables_blacklist = ['table3'];
@@ -84,5 +83,33 @@ final class ObjectsTest extends TestCase
         $this->assertNull($object->version);
         $this->assertSame(['table3'], $object->tables_blacklist);
         $this->assertTrue($object->tables->table2->truncate);
+    }
+
+    /**
+     * Test the "deepClone" method.
+     */
+    public function testDeepClone(): void
+    {
+        $object = (object) [
+            'boolean' => false,
+            1 => (object) ['prop' => 'value'],
+            'nested_object' => (object) ['prop' => 'value',],
+            'nested_objects' => [
+                'obj1' => (object) ['prop' => 'value'],
+                'obj2' => (object) ['prop' => 'value'],
+            ],
+        ];
+
+        $clone = Objects::deepClone($object);
+
+        // Assert that the two objects are identical
+        $this->assertEquals($object, $clone);
+
+        // Assert that the two objects and their dependencies don't share the same instance
+        $this->assertNotSame($object, $clone);
+        $this->assertNotSame($object->{1}, $clone->{1});
+        $this->assertNotSame($object->nested_object, $clone->nested_object);
+        $this->assertNotSame($object->nested_objects['obj1'], $clone->nested_objects['obj1']);
+        $this->assertNotSame($object->nested_objects['obj2'], $clone->nested_objects['obj2']);
     }
 }
