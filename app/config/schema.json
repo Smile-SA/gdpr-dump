@@ -52,6 +52,12 @@
             "additionalProperties": {
                 "$ref": "#/definitions/ifVersion"
             }
+        },
+        "converter_templates": {
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/converter"
+            }
         }
     },
     "additionalProperties": false,
