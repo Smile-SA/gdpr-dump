@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 New features:
 
+- Added `converter_templates` config parameter ([#192](https://github.com/Smile-SA/gdpr-dump/pull/192))
 - Added `strict_schema` config parameter ([#158](https://github.com/Smile-SA/gdpr-dump/pull/158))
 - The configuration can be passed as a yaml or json string from stdin
 
@@ -15,13 +16,13 @@ Breaking changes:
 
 Improvements:
 
-- Upgraded `justinrainbow/json-schema` package to from v5 to v6 ([#185](https://github.com/Smile-SA/gdpr-dump/pull/185))
+- The command-line option `--password` now behaves in the same way as the mysqldump command
 - Performance improvement: the DI container is now dumped to a cache file ([#189](https://github.com/Smile-SA/gdpr-dump/pull/189))
+- Upgraded `justinrainbow/json-schema` package to from v5 to v6 ([#185](https://github.com/Smile-SA/gdpr-dump/pull/185))
 
-Other changes:
+Deprecations:
 
 - Deprecated config parameter `requires_version` ([#186](https://github.com/Smile-SA/gdpr-dump/pull/186))
-- The command-line option `--password` now behaves in the same way as the mysqldump command
 
 ## [5.0.5] - 2025-04-05
 [5.0.5]: https://github.com/Smile-SA/gdpr-dump/compare/5.0.4...5.0.5
