@@ -18,7 +18,6 @@ final class TableConfigTest extends TestCase
      */
     public function testObjectCreation(): void
     {
-        $truncate = true;
         $where = '1=1';
         $limit = 10;
         $skipCondition = 'true';
@@ -26,14 +25,12 @@ final class TableConfigTest extends TestCase
         $converters = ['username' => new ConverterConfig('randomizeText')];
 
         $tableConfig = (new TableConfig())
-            ->setTruncate($truncate)
             ->setWhere($where)
             ->setLimit($limit)
             ->setSkipCondition($skipCondition)
             ->setSortOrders($sortOrders)
             ->setConverterConfigs(new ConverterConfigMap($converters));
 
-        $this->assertSame($truncate, $tableConfig->isTruncate());
         $this->assertSame($where, $tableConfig->getWhere());
         $this->assertSame($limit, $tableConfig->getLimit());
         $this->assertSame($skipCondition, $tableConfig->getSkipCondition());
@@ -47,7 +44,6 @@ final class TableConfigTest extends TestCase
     public function testDefaultValues(): void
     {
         $tableConfig = new TableConfig();
-        $this->assertFalse($tableConfig->isTruncate());
         $this->assertSame('', $tableConfig->getWhere());
         $this->assertNull($tableConfig->getLimit());
         $this->assertSame('', $tableConfig->getSkipCondition());

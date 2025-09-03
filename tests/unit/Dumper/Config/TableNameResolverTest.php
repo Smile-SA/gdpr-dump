@@ -24,7 +24,7 @@ final class TableNameResolverTest extends TestCase
             ->setExcludedTables(['table2', 'not_exists'])
             ->setTableConfigs(
                 new TableConfigMap([
-                    'table3' => (new TableConfig())->setTruncate(true),
+                    'table3' => (new TableConfig())->setLimit(0),
                     'not_exists' => new TableConfig(),
                 ])
             );
@@ -40,7 +40,7 @@ final class TableNameResolverTest extends TestCase
 
         $tableConfig = $tableConfigs->get('table3');
         $this->assertNotNull($tableConfig);
-        $this->assertTrue($tableConfig->isTruncate());
+        $this->assertSame(0, $tableConfig->getLimit());
     }
 
     /**
@@ -51,7 +51,7 @@ final class TableNameResolverTest extends TestCase
         $configuration = (new Configuration())
             ->setIncludedTables(['table*'])
             ->setExcludedTables(['table*'])
-            ->setTableConfigs(new TableConfigMap(['table*' => (new TableConfig())->setTruncate(true)]));
+            ->setTableConfigs(new TableConfigMap(['table*' => (new TableConfig())->setLimit(0)]));
 
         $this->createResolver()->process($configuration);
 
@@ -64,15 +64,15 @@ final class TableNameResolverTest extends TestCase
 
         $tableConfig = $tableConfigs->get('table1');
         $this->assertNotNull($tableConfig);
-        $this->assertTrue($tableConfig->isTruncate());
+        $this->assertSame(0, $tableConfig->getLimit());
 
         $tableConfig = $tableConfigs->get('table2');
         $this->assertNotNull($tableConfig);
-        $this->assertTrue($tableConfig->isTruncate());
+        $this->assertSame(0, $tableConfig->getLimit());
 
         $tableConfig = $tableConfigs->get('table3');
         $this->assertNotNull($tableConfig);
-        $this->assertTrue($tableConfig->isTruncate());
+        $this->assertSame(0, $tableConfig->getLimit());
     }
 
     /**
@@ -83,8 +83,8 @@ final class TableNameResolverTest extends TestCase
         $configuration = (new Configuration())
             ->setTableConfigs(
                 new TableConfigMap([
-                    'table*' => (new TableConfig())->setTruncate(true),
-                    'table1' => (new TableConfig())->setTruncate(false),
+                    'table*' => (new TableConfig())->setLimit(0),
+                    'table1' => (new TableConfig())->setLimit(null),
                     'table2' => (new TableConfig())->setWhere('1=1'),
                 ])
             );
@@ -97,17 +97,17 @@ final class TableNameResolverTest extends TestCase
 
         $tableConfig = $tableConfigs->get('table1');
         $this->assertNotNull($tableConfig);
-        $this->assertFalse($tableConfig->isTruncate());
+        $this->assertNull($tableConfig->getLimit());
         $this->assertSame('', $tableConfig->getWhere());
 
         $tableConfig = $tableConfigs->get('table2');
         $this->assertNotNull($tableConfig);
-        $this->assertTrue($tableConfig->isTruncate());
+        $this->assertSame(0, $tableConfig->getLimit());
         $this->assertSame('1=1', $tableConfig->getWhere());
 
         $tableConfig = $tableConfigs->get('table3');
         $this->assertNotNull($tableConfig);
-        $this->assertTrue($tableConfig->isTruncate());
+        $this->assertSame(0, $tableConfig->getLimit());
         $this->assertSame('', $tableConfig->getWhere());
     }
 
@@ -119,8 +119,8 @@ final class TableNameResolverTest extends TestCase
         $configuration = (new Configuration())
             ->setTableConfigs(
                 new TableConfigMap([
-                    'table1' => (new TableConfig())->setTruncate(false),
-                    'table*' => (new TableConfig())->setTruncate(true),
+                    'table1' => (new TableConfig())->setLimit(null),
+                    'table*' => (new TableConfig())->setLimit(0),
                     'table2' => (new TableConfig())->setWhere('1=1'),
                 ])
             );
@@ -133,17 +133,17 @@ final class TableNameResolverTest extends TestCase
 
         $tableConfig = $tableConfigs->get('table1');
         $this->assertNotNull($tableConfig);
-        $this->assertTrue($tableConfig->isTruncate());
+        $this->assertSame(0, $tableConfig->getLimit());
         $this->assertSame('', $tableConfig->getWhere());
 
         $tableConfig = $tableConfigs->get('table2');
         $this->assertNotNull($tableConfig);
-        $this->assertTrue($tableConfig->isTruncate());
+        $this->assertSame(0, $tableConfig->getLimit());
         $this->assertSame('1=1', $tableConfig->getWhere());
 
         $tableConfig = $tableConfigs->get('table3');
         $this->assertNotNull($tableConfig);
-        $this->assertTrue($tableConfig->isTruncate());
+        $this->assertSame(0, $tableConfig->getLimit());
         $this->assertSame('', $tableConfig->getWhere());
     }
 
@@ -170,7 +170,7 @@ final class TableNameResolverTest extends TestCase
             ->setStrictSchema(true)
             ->setIncludedTables(['table1'])
             ->setExcludedTables(['table2'])
-            ->setTableConfigs(new TableConfigMap(['table3' => (new TableConfig())->setTruncate(true)]));
+            ->setTableConfigs(new TableConfigMap(['table3' => (new TableConfig())->setLimit(0)]));
 
         $this->createResolver()->process($configuration);
 
@@ -182,7 +182,7 @@ final class TableNameResolverTest extends TestCase
 
         $tableConfig = $tableConfigs->get('table3');
         $this->assertNotNull($tableConfig);
-        $this->assertTrue($tableConfig->isTruncate());
+        $this->assertSame(0, $tableConfig->getLimit());
     }
 
     /**

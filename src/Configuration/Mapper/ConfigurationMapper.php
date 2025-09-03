@@ -154,7 +154,6 @@ final class ConfigurationMapper
 
         foreach ($source as $key => $value) {
             match ($key) {
-                'truncate' => $configuration->setTruncate($value),
                 'where' => $configuration->setWhere($value),
                 'limit' => $configuration->setLimit($value),
                 'order_by' => $configuration->setSortOrders($this->sortOrderMapper->fromString($value)),
@@ -167,8 +166,14 @@ final class ConfigurationMapper
                 'filters' => throw new UnexpectedValueException(
                     'The table property "filters" is no longer supported, use "where" instead.'
                 ),
+                'truncate' => null, // deprecated param, handled below
                 default => throw new UnexpectedValueException(sprintf('Unsupported table property "%s".', $key)),
             };
+        }
+
+        // Truncate always has priority over limit
+        if (array_key_exists('truncate', $source) && $source['truncate']) {
+            $configuration->setLimit(0);
         }
 
         return $configuration;

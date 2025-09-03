@@ -153,7 +153,7 @@ final class ConfigurationMapperTest extends TestCase
 
         $tableConfig = $tableConfigs->get('log_*');
         $this->assertNotNull($tableConfig);
-        $this->assertSame($data['tables']['log_*']['truncate'], $tableConfig->isTruncate());
+        $this->assertSame(0, $tableConfig->getLimit());
 
         $tableConfig = $tableConfigs->get('products');
         $this->assertNotNull($tableConfig);

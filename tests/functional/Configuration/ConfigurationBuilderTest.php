@@ -41,7 +41,7 @@ final class ConfigurationBuilderTest extends TestCase
         // Assert that the `if_version` block was merged and that env vars inside this block were resolved
         $tableConfig = $configuration->getTableConfigs()->get('logs');
         $this->assertNotNull($tableConfig);
-        $this->assertTrue($tableConfig->isTruncate());
+        $this->assertSame(0, $tableConfig->getLimit());
 
         $this->restoreEnvVars();
     }

@@ -201,7 +201,7 @@ final class MysqldumpWheresBuilder
         }
 
         // Apply limit
-        if ($tableConfig->getLimit() > 0) {
+        if ($tableConfig->getLimit() !== null) {
             $queryBuilder->setMaxResults($tableConfig->getLimit());
         }
 
