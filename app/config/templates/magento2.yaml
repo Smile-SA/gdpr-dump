@@ -1,3 +1,5 @@
+strict_schema: false
+
 tables:
     admin_user_session:
         truncate: true
