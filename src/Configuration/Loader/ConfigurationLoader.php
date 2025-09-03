@@ -12,6 +12,7 @@ use Smile\GdprDump\Configuration\Loader\Resource\ResourceFactory;
 use Smile\GdprDump\Configuration\Loader\Resource\ResourceParser;
 use Smile\GdprDump\Configuration\Loader\Version\VersionApplier;
 use Smile\GdprDump\Util\Objects;
+use stdClass;
 use Throwable;
 
 final class ConfigurationLoader
@@ -24,100 +25,97 @@ final class ConfigurationLoader
     ) {
     }
 
+
     /**
-     * Load the configuration from the specified resources (files or string input).
-     *
-     * @throws ConfigurationException
+     * Load the configuration from the specified file or YAML input.
      */
-    public function load(Container $container, Resource ...$resources): void
+    public function load(string $input, bool $isFile = true): Container
     {
+        $container = new Container();
+
         try {
-            if ($resources) {
-                $this->loadResources($container, $resources);
+            $resource = $isFile
+                ? $this->resourceFactory->createFileResource($input)
+                : $this->resourceFactory->createStringResource($input);
+
+            // Load the resource into the container
+            $this->loadResource($container, $resource);
+
+            //
+            if ($container->has('fail')) {
+                throw new ParseException((string) $container->get('fail'));
             }
 
+            // Remove config properties that are only useful during parsing
+            $this->removeInternalProperties($container);
+
+            // Compile the configuration (e.g. resolves environment variables)
             $this->compiler->compile($container);
         } catch (Throwable $e) {
             throw $e instanceof ConfigurationException ? $e : new ParseException($e->getMessage(), $e);
         }
+
+        return $container;
     }
 
-    /**
-     * Load the specified resources and return an object representation of the configuration (stdClass).
-     *
-     * Parse order of resources is LIFO, merge order is FIFO.
-     *
-     * For example, if the following resources were registered:
-     * - config1.yaml (extends parent1_1.yaml and parent1_2.yaml)
-     * - config2.yaml
-     *
-     * The parse order is config2.yaml, config1.yaml, parent1_2.yaml, parent1_1.yaml.
-     * The merge order is the other way around (from parent_1_1.yaml to config2.yaml).
-     *
-     * This order allows to properly detect some settings during parsing (e.g. application version),
-     * and then to merge files in the correct order afterwards.
-     *
-     * @param Resource[] $resources resources to load
-     * @param Container $container the object that will contain the parsed configuration
-     * @param string[] $loadedTemplates cache for files defined in the `extends` parameter, must be loaded only once
-     * @param string $version the application version, it it used to merge `if_version` blocks
-     */
-    private function loadResources(
+    private function loadResource(
         Container $container,
-        array &$resources,
-        array &$loadedTemplates = [],
-        ?string &$version = null,
+        Resource $resource,
+        array &$loadedFiles = [],
+        ?string &$version = null
     ): void {
-        // Parse the resource (LIFO)
-        /** @var Resource $resource (array_pop never returns null in this context) */
-        $resource = array_pop($resources);
+        // Parse the resource
         $parsed = $this->resourceParser->parse($resource);
 
         // Detect the application version
         $version ??= $this->versionApplier->detectVersion($parsed);
 
-        // Add files declared in the `extends` parameter to the $resources array
-        if (isset($parsed->extends)) {
-            $fileNames = (array) $parsed->extends;
-            $currentDirectory = $this->getCurrentDirectory($resource);
-            $this->addParentFiles($fileNames, $resources, $loadedTemplates, $currentDirectory);
-            unset($parsed->extends);
+        // Check if there are files to import (from the `extends` parameter)
+        foreach ($this->getImports($parsed, $version) as $fileName) {
+            $import = $this->resourceFactory->createFileResource($fileName, $this->getCurrentDirectory($resource));
+
+            // Load the file only if it wasn't already included
+            if (!in_array($import->getInput(), $loadedFiles, true)) {
+                $loadedFiles[] = $import->getInput();
+                $this->loadResource($container, $import, $loadedFiles, $version);
+            }
         }
 
-        // Load remaining resources
-        if ($resources) {
-            $this->loadResources($container, $resources, $loadedTemplates, $version);
-        }
+        var_dump($resource->getInput());
 
-        // Merge if_version blocks
-        $this->versionApplier->applyVersion($parsed, (string) $version);
+        // Merge `if_version` blocks that match the detected version
+        $this->versionApplier->applyVersion($parsed, $version);
 
-        // Merge the parsed data into the main configuration (FIFO, because it is done after the recursive call)
+        // Merge the parsed data into the main configuration
         Objects::merge($container->getRoot(), $parsed);
     }
 
     /**
-     * Add the specified configuration files to the list of resources to parse.
-     *
-     * @param string[] $fileNames
-     * @param Resource[] $resources
-     * @param string[] $loadedTemplates
+     * Remove config properties that are only useful during parsing.
      */
-    private function addParentFiles(
-        array $fileNames,
-        array &$resources,
-        array &$loadedTemplates,
-        ?string $currentDirectory,
-    ): void {
-        foreach ($fileNames as $fileName) {
-            $resource = $this->resourceFactory->createFileResource($fileName, $currentDirectory);
+    private function removeInternalProperties(Container $container): void
+    {
+        $container->remove('extends')
+            ->remove('fail')
+            ->remove('if_version')
+            ->remove('requires_vesion') // deprecated param
+            ->remove('version');
+    }
 
-            // Load a parent file only if it wasn't already included by another config file
-            if (!in_array($resource->getInput(), $loadedTemplates, true)) {
-                $loadedTemplates[] = $resource->getInput();
-                $resources[] = $resource;
-            }
+    /**
+     * Get all files declared in the `extends` parameter.
+     */
+    private function getImports(stdClass $parsed, ?string $version)
+    {
+        $imports = isset($parsed->extends) ? (array) $parsed->extends : [];
+
+        // Also get the imports declared in `if_version` sections
+        $versionedImports = $this->versionApplier->getImports($parsed, $version);
+        if ($versionedImports) {
+            $imports = array_merge($imports, $versionedImports);
         }
+
+        return $imports;
     }
 
     /**

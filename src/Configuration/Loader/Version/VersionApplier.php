@@ -34,11 +34,47 @@ final class VersionApplier
     }
 
     /**
+     * Get file imports that are contained in versioned data.
+     */
+    public function getImports(stdClass $configuration, ?string $version): array
+    {
+        $imports = [];
+
+        $this->applyCallableToVersionedData(
+            $configuration,
+            $version,
+            function (stdClass $versionData) use (&$imports): void {
+                if (isset($versionData->extends)) {
+                    $imports = array_merge($imports, (array) $versionData->extends);
+                }
+            }
+        );
+
+        return $imports;
+    }
+
+    /**
      * Merge `if_version` blocks that match the specified version.
+     *
+     * Throws an exception if there are `if_version` blocks to merge and an empty version was provided.
      *
      * @throws ParseException
      */
-    public function applyVersion(stdClass $configuration, string $version): void
+    public function applyVersion(stdClass $configuration, ?string $version): void
+    {
+        $this->applyCallableToVersionedData(
+            $configuration,
+            $version,
+            function (stdClass $versionData) use ($configuration): void {
+                Objects::merge($configuration, $versionData);
+            }
+        );
+    }
+
+    /**
+     * Apply the specified callback to the `if_version` fragments that match the specified version.
+     */
+    private function applyCallableToVersionedData(stdClass $configuration, ?string $version, callable $callback): void
     {
         $versionsData = $this->getVersionsData($configuration);
         if (!$versionsData) {
@@ -46,7 +82,7 @@ final class VersionApplier
             return;
         }
 
-        if ($version === '') {
+        if ($version === null || $version === '') {
             throw new ParseException('The application version must be specified in the configuration.');
         }
 
@@ -59,7 +95,7 @@ final class VersionApplier
             }
 
             if ($versionMatcher->match((string) $requirement, $version)) {
-                Objects::merge($configuration, $versionData);
+                $callback($versionData);
             }
         }
     }

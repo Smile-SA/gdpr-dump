@@ -6,6 +6,9 @@ namespace Smile\GdprDump\Configuration\Loader\Resource;
 
 use Smile\GdprDump\Configuration\Exception\FileNotFoundException;
 use Smile\GdprDump\Util\Platform;
+use SplFileInfo;
+use Symfony\Component\Finder\Finder;
+use Throwable;
 
 final class ResourceLocator
 {
@@ -77,7 +80,7 @@ final class ResourceLocator
         $templates = [];
 
         foreach ($files as $fileName) {
-            if ($fileName === '.' || $fileName === '..') {
+            if (is_dir($fileName)) {
                 continue;
             }
 

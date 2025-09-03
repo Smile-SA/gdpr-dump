@@ -37,7 +37,7 @@ final class DumpCommand extends Command
         // phpcs:disable Generic.Files.LineLength.TooLong
         $this->setName('gdpr-dump')
             ->setDescription('Create an anonymized dump')
-            ->addArgument('config_files', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Dump configuration file(s) in YAML format')
+            ->addArgument('config_file', InputArgument::OPTIONAL, 'Dump configuration file in YAML format')
             ->addOption('host', null, InputOption::VALUE_REQUIRED, 'Database host')
             ->addOption('port', null, InputOption::VALUE_REQUIRED, 'Database port')
             ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Database user')
@@ -78,19 +78,20 @@ final class DumpCommand extends Command
     {
         $builder = $this->configurationFactory->createBuilder();
 
-        // Load the provided files
-        $fileNames = (array) $input->getArgument('config_files');
-        foreach ($fileNames as $fileName) {
-            $builder->addResource($this->configurationFactory->createFileResource($fileName));
-        }
+        $fileName = (string) $input->getArgument('config_file');
 
-        // Read stdin if a value was provided
-        $stdin = $this->io->readStdin();
-        if ($stdin !== '') {
-            $builder->addResource($this->configurationFactory->createStringResource($stdin));
+        if ($fileName !== '' && $fileName !== '-') {
+            // Read the provided configuration file
+            $configuration = $builder->build($fileName, true);
+        } else {
+            // Read from stdin if it is not empty
+            $stdin = $this->io->readStdin();
+            if ($stdin !== '') {
+                $configuration = $builder->build($stdin, false);
+            } else {
+                $configuration = $builder->build();
+            }
         }
-
-        $configuration = $builder->build();
 
         // Add command-line options to the connection params (e.g. `--database`)
         $this->addInputOptionsToConnectionParams($configuration, $input, $output);
