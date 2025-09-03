@@ -17,16 +17,15 @@ final class TableConfigMapTest extends TestCase
     public function testFilters(): void
     {
         $map = new TableConfigMap([
-            'table1' => (new TableConfig())->setTruncate(true), // to truncate
-            'table2' => (new TableConfig())->setLimit(10), // to filter
-            'table3' => (new TableConfig())->setWhere('1=1'), // to filter
-            'table4' => (new TableConfig())->setSortOrders([new SortOrder('id')]), // to sort
-            'table5' => (new TableConfig())->setLimit(0), // value 0 must be ignored
+            'table1' => (new TableConfig())->setLimit(0),
+            'table2' => (new TableConfig())->setLimit(10),
+            'table3' => (new TableConfig())->setWhere('1=1'),
+            'table4' => (new TableConfig())->setSortOrders([new SortOrder('id')]),
+            'table5' => new TableConfig(),
         ]);
 
-        $this->assertSame(['table2', 'table3'], $map->getTablesToFilter());
+        $this->assertSame(['table1', 'table2', 'table3'], $map->getTablesToFilter());
         $this->assertSame(['table4'], $map->getTablesToSort());
-        $this->assertSame(['table1'], $map->getTablesToTruncate());
     }
 
     /**

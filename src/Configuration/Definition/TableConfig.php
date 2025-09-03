@@ -15,7 +15,6 @@ final class TableConfig
      *
      * @see \Smile\GdprDump\Dumper\Config\TableNameResolver::resolveTableConfigs()
      */
-    private bool $truncate;
     private string $where;
     private ?int $limit;
     private string $skipCondition;
@@ -25,18 +24,6 @@ final class TableConfig
      * @var SortOrder[]
      */
     private array $sortOrders;
-
-    public function isTruncate(): bool
-    {
-        return $this->truncate ?? false;
-    }
-
-    public function setTruncate(bool $truncate): self
-    {
-        $this->truncate = $truncate;
-
-        return $this;
-    }
 
     public function getWhere(): string
     {

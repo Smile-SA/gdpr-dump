@@ -37,7 +37,6 @@ final class MysqldumpSettingsBuilder
             'lock-tables' => $dumpConfig->getLockTables(),
             'net_buffer_length' => $dumpConfig->getNetBufferLength(),
             'no-autocommit' => $dumpConfig->getNoAutocommit(),
-            'no-data' => $configuration->getTableConfigs()->getTablesToTruncate(),
             'no-create-info' => $dumpConfig->getNoCreateInfo(),
             'routines' => $dumpConfig->getRoutines(),
             'single-transaction' => $dumpConfig->getSingleTransaction(),
