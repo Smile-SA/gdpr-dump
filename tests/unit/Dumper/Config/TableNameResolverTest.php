@@ -20,18 +20,12 @@ final class TableNameResolverTest extends TestCase
     public function testTableNameResolution(): void
     {
         $configuration = (new Configuration())
-            ->setIncludedTables(['table1', 'not_exists'])
-            ->setExcludedTables(['table2', 'not_exists'])
-            ->setTableConfigs(
-                new TableConfigMap([
-                    'table3' => (new TableConfig())->setLimit(0),
-                    'not_exists' => new TableConfig(),
-                ])
-            );
+            ->setIncludedTables(['table1'])
+            ->setExcludedTables(['table2'])
+            ->setTableConfigs(new TableConfigMap(['table3' => (new TableConfig())->setLimit(0)]));
 
         $this->createResolver()->process($configuration);
 
-        // Assert that table names were resolved
         $this->assertSame(['table1'], $configuration->getIncludedTables());
         $this->assertSame(['table2'], $configuration->getExcludedTables());
 
@@ -162,18 +156,24 @@ final class TableNameResolverTest extends TestCase
     }
 
     /**
-     * Test the config processor with strict mode enabled.
+     * Test the config processor with strict mode disabled.
      */
-    public function testStrictMode(): void
+    public function testStrictModeDisabled(): void
     {
         $configuration = (new Configuration())
-            ->setStrictSchema(true)
-            ->setIncludedTables(['table1'])
-            ->setExcludedTables(['table2'])
-            ->setTableConfigs(new TableConfigMap(['table3' => (new TableConfig())->setLimit(0)]));
+            ->setStrictSchema(false)
+            ->setIncludedTables(['table1', 'not_exists'])
+            ->setExcludedTables(['table2', 'not_exists'])
+            ->setTableConfigs(
+                new TableConfigMap([
+                    'table3' => (new TableConfig())->setLimit(0),
+                    'not_exists' => new TableConfig(),
+                ])
+            );
 
         $this->createResolver()->process($configuration);
 
+        // Assert that table names were resolved
         $this->assertSame(['table1'], $configuration->getIncludedTables());
         $this->assertSame(['table2'], $configuration->getExcludedTables());
 
@@ -186,12 +186,11 @@ final class TableNameResolverTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown in strict mode when the table whitelist contains an invalid table name.
+     * Assert that an exception is thrown when the table whitelist contains an invalid table name.
      */
-    public function testStrictModeWithInvalidTableInclusion(): void
+    public function testStrictInvalidTableInclusion(): void
     {
         $configuration = (new Configuration())
-            ->setStrictSchema(true)
             ->setIncludedTables(['table1', 'not_exists']);
 
         $this->expectException(MetadataException::class);
@@ -200,12 +199,11 @@ final class TableNameResolverTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown in strict mode when the table blacklist contains an invalid table name.
+     * Assert that an exception is thrown when the table blacklist contains an invalid table name.
      */
     public function testStrictModeWithInvalidTableExclusion(): void
     {
         $configuration = (new Configuration())
-            ->setStrictSchema(true)
             ->setExcludedTables(['table2', 'not_exists']);
 
         $this->expectException(MetadataException::class);
@@ -214,12 +212,11 @@ final class TableNameResolverTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown in strict mode when the tables config contains an invalid table.
+     * Assert that an exception is thrown when the tables config contains an invalid table.
      */
     public function testStrictModeWithInvalidTableConfig(): void
     {
         $configuration = (new Configuration())
-            ->setStrictSchema(true)
             ->setTableConfigs(
                 new TableConfigMap([
                     'table3' => new TableConfig(),

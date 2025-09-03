@@ -1,4 +1,5 @@
 extends: 'parent.yaml'
+strict_schema: false
 version: '2.2.0'
 
 database:
