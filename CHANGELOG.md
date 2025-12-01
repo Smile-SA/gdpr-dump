@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## WIP
 
 - Fixed an error that occurred when parsing table name patterns ([#190](https://github.com/Smile-SA/gdpr-dump/pull/190))
+- Fixed an error that occurred when the database url contains special characters ([#196](https://github.com/Smile-SA/gdpr-dump/pull/196))
 
 ## [5.0.5] - 2025-04-05
 [5.0.5]: https://github.com/Smile-SA/gdpr-dump/compare/5.0.4...5.0.5
