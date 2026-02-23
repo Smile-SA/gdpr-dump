@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## WIP
 
+Bugfixes:
+
 - Fixed an error that occurred when the database url contains special characters ([#196](https://github.com/Smile-SA/gdpr-dump/pull/196))
+
+Internal:
+
+- Moved converters to a dedicated namespace ([#198](https://github.com/Smile-SA/gdpr-dump/pull/198))
 
 ## [5.0.6] - 2026-01-15
 [5.0.6]: https://github.com/Smile-SA/gdpr-dump/compare/5.0.5...5.0.6

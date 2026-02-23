@@ -19,11 +19,11 @@ services:
     Smile\GdprDump\Converter\:
         resource: '../../src/Converter'
 
-    Smile\GdprDump\Converter\Proxy\Conditional:
+    Smile\GdprDump\Converter\Converters\Internal\Conditional:
         arguments:
             - '@converter.condition_builder'
 
-    Smile\GdprDump\Converter\Proxy\Faker:
+    Smile\GdprDump\Converter\Converters\Faker:
         arguments:
             - '@faker.service'
 
