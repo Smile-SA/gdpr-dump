@@ -62,6 +62,9 @@ final class ConfigProcessor
 
     /**
      * Resolve a list of table name patterns.
+     *
+     * @param string[] $tableNames
+     * @return string[]
      */
     private function resolveTableNames(array $tableNames): array
     {
@@ -79,6 +82,9 @@ final class ConfigProcessor
 
     /**
      * Resolve table name patterns stored as array keys.
+     *
+     * @param array<string, array<string, mixed>> $tablesData
+     * @return array<string, array<string, mixed>>
      */
     private function resolveTablesData(array $tablesData): array
     {
@@ -128,6 +134,7 @@ final class ConfigProcessor
     /**
      * Raise an exception if the table data contains a converter that references an undefined column.
      *
+     * @param array<string, mixed> $tableData
      * @throws RuntimeException
      */
     private function validateTableColumns(string $tableName, array $tableData): void

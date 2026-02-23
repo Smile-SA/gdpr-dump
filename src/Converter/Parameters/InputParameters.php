@@ -6,6 +6,9 @@ namespace Smile\GdprDump\Converter\Parameters;
 
 final class InputParameters
 {
+    /**
+     * @param array<string, mixed> $values
+     */
     public function __construct(private array $values)
     {
     }

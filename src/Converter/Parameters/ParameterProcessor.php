@@ -25,6 +25,7 @@ final class ParameterProcessor
      * Process an array of parameter values.
      * This method handles data validation and type casting.
      *
+     * @param mixed[] $values
      * @throws ValidationException
      */
     public function process(array $values): InputParameters

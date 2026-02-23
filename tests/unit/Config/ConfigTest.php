@@ -9,6 +9,9 @@ use Smile\GdprDump\Tests\Unit\TestCase;
 
 final class ConfigTest extends TestCase
 {
+    /**
+     * @var array<string, mixed>
+     */
     private array $data = [
         'string' => 'value',
         'array' => [1, 2],

@@ -14,6 +14,8 @@ final class ConverterBuilder
 
     /**
      * Build a converter from a definition array.
+     *
+     * @param array<string, mixed> $definition
      */
     public function build(array $definition): ConverterInterface
     {
@@ -52,6 +54,8 @@ final class ConverterBuilder
     /**
      * Get the converter data.
      *
+     * @param array<string, mixed> $definition
+     * @return array<string, mixed>
      * @throws UnexpectedValueException
      */
     private function getConverterData(array $definition): array
@@ -90,6 +94,8 @@ final class ConverterBuilder
     /**
      * Parse the converter parameters.
      *
+     * @param array<string, mixed> $parameters
+     * @return array<string, mixed>
      * @throws UnexpectedValueException
      */
     private function parseParameters(array $parameters): array

@@ -16,6 +16,10 @@ final class DumperConfig implements DumperConfigInterface
     private FakerSettings $fakerSettings;
     private FilterPropagationSettings $filterPropagationSettings;
     private TableConfigCollection $tablesConfig;
+
+    /**
+     * @var array<string, mixed>
+     */
     private array $dumpSettings;
 
     /**

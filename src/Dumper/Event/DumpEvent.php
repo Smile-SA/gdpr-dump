@@ -14,6 +14,9 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 final class DumpEvent extends Event
 {
+    /**
+     * @param array<string, mixed> $context
+     */
     public function __construct(
         private Mysqldump $dumper,
         private DatabaseInterface $database,
@@ -48,6 +51,8 @@ final class DumpEvent extends Event
 
     /**
      * Get the dump context.
+     *
+     * @return array<string, mixed> $context
      */
     public function getContext(): array
     {

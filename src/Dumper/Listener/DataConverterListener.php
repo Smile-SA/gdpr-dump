@@ -14,6 +14,9 @@ use Smile\GdprDump\Dumper\Event\DumpEvent;
 
 final class DataConverterListener
 {
+    /**
+     * @var array<string, mixed>
+     */
     private array $context = [];
 
     /**

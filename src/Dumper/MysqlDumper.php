@@ -67,6 +67,8 @@ final class MysqlDumper implements DumperInterface
 
     /**
      * Get the dump settings.
+     *
+     * @return array<string, mixed>
      */
     private function getDumpSettings(DumperConfigInterface $config): array
     {

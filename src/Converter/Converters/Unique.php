@@ -13,6 +13,10 @@ final class Unique implements ConverterInterface
 {
     private ConverterInterface $converter;
     private int $maxRetries;
+
+    /**
+     * @var array<string, null>
+     */
     private array $generated = [];
 
     /**

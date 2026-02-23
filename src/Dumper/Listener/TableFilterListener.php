@@ -33,6 +33,8 @@ final class TableFilterListener
 
     /**
      * Get the filters to apply on each table.
+     *
+     * @return array<string, string>
      */
     private function buildTablesWhere(): array
     {
@@ -105,6 +107,9 @@ final class TableFilterListener
      * Internal parameters:
      * - $processedTables: used to detect cyclic dependencies and stop the recursion
      * - $subQueryCount: used to generate unique query names
+     *
+     * @param array<string, array<string, ForeignKey>> $dependencies
+     * @param array<string, bool> $processedTables
      */
     private function addDependentFilter(
         string $tableName,
@@ -203,6 +208,8 @@ final class TableFilterListener
 
     /**
      * Get the SQL query that represents a list of columns.
+     *
+     * @param string[] $columns
      */
     private function getColumnsSql(array $columns, bool $enclose = false): string
     {

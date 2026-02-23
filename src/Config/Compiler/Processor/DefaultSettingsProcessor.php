@@ -34,6 +34,8 @@ final class DefaultSettingsProcessor implements ProcessorInterface
 
     /**
      * Get default settings.
+     *
+     * @return array<string, mixed>
      */
     private function getDefaultSettings(): array
     {

@@ -8,6 +8,8 @@ final class ArrayHelper
 {
     /**
      * Get an array value by path.
+     *
+     * @param array<mixed> $array
      */
     public static function getPath(array $array, string $path, mixed $default = null): mixed
     {
@@ -27,6 +29,8 @@ final class ArrayHelper
 
     /**
      * Set an array value by path.
+     *
+     * @param array<mixed> $array
      */
     public static function setPath(array &$array, string $path, mixed $value): void
     {

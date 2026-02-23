@@ -171,6 +171,9 @@ final class TableDependencyResolverTest extends TestCase
 
     /**
      * Create a table dependency resolver object.
+     *
+     * @param array<mixed[]> $foreignKeyMap
+     * @param string[] $ignoredForeignKeys
      */
     private function createResolver(array $foreignKeyMap, array $ignoredForeignKeys = []): TableDependencyResolver
     {
@@ -190,6 +193,8 @@ final class TableDependencyResolverTest extends TestCase
 
     /**
      * Assert that the dependency array contains the foreign key used by the table "addresses".
+     *
+     * @param array<string, array<string, ForeignKey>> $dependencies
      */
     private function assertHasAddressesDependency(array $dependencies): void
     {
@@ -204,6 +209,8 @@ final class TableDependencyResolverTest extends TestCase
 
     /**
      * Assert that the dependency array contains the foreign key used by the table "customers".
+     *
+     * @param array<string, array<string, ForeignKey>> $dependencies
      */
     private function assertHasCustomersDependency(array $dependencies): void
     {

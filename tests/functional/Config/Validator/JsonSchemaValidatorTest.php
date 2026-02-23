@@ -230,6 +230,9 @@ final class JsonSchemaValidatorTest extends TestCase
 
     /**
      * Add required data to the config params.
+     *
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
      */
     private function prepareData(array $data): array
     {

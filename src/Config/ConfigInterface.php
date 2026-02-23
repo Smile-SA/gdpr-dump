@@ -23,16 +23,22 @@ interface ConfigInterface
 
     /**
      * Get the configuration data.
+     *
+     * @return array<string, mixed>
      */
     public function toArray(): array;
 
     /**
      * Reset the config items.
+     *
+     * @param array<string, mixed> $items
      */
     public function reset(array $items): self;
 
     /**
      * Merge the config data with another set of items.
+     *
+     * @param array<string, mixed> $data
      */
     public function merge(array $data): self;
 }

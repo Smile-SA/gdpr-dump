@@ -27,6 +27,8 @@ class DatabaseUrlProcessor implements ProcessorInterface
     /**
      * Parse the database url (if specified).
      *
+     * @param mixed[] $database
+     * @return mixed[]
      * @throws CompileException
      */
     private function processDatabaseNode(array $database): array

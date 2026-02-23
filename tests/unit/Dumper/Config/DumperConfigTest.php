@@ -160,6 +160,8 @@ final class DumperConfigTest extends TestCase
 
     /**
      * Create a dumper config object that stores the specified data.
+     *
+     * @param array<string, mixed> $data
      */
     private function createConfig(array $data): DumperConfig
     {

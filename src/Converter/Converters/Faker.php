@@ -15,6 +15,10 @@ final class Faker implements ConverterInterface
 {
     private object $provider;
     private string $method;
+
+    /**
+     * @var list<mixed>
+     */
     private array $arguments;
 
     /**
@@ -50,9 +54,9 @@ final class Faker implements ConverterInterface
         }
 
         $this->arguments = $input->get('arguments') ?? [];
-        foreach ($this->arguments as $name => $value) {
+        foreach ($this->arguments as $index => $value) {
             if ($value === '{{value}}') {
-                $this->placeholders[] = $name;
+                $this->placeholders[] = $index;
             }
         }
     }

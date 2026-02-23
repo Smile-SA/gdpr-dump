@@ -21,6 +21,7 @@ final class Database implements DatabaseInterface
     private ParameterBag $connectionParams;
 
     /**
+     * @param array<string, mixed> $connectionParams
      * @throws Exception|UnexpectedValueException
      */
     public function __construct(array $connectionParams)

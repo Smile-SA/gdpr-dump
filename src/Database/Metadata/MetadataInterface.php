@@ -19,6 +19,7 @@ interface MetadataInterface
     /**
      * Get the columns of the specified table.
      *
+     * @return string[]
      * @throws RuntimeException
      */
     public function getColumnNames(string $tableName): array;
@@ -26,6 +27,8 @@ interface MetadataInterface
     /**
      * Get all foreign keys.
      * Each array element is an array that contains the foreign keys of a table.
+     *
+     * @return array<string, ForeignKey[]>
      */
     public function getForeignKeys(): array;
 

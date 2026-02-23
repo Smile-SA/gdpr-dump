@@ -17,6 +17,8 @@ interface DumperConfigInterface
 
     /**
      * Get dump settings.
+     *
+     * @return array<string, mixed>
      */
     public function getDumpSettings(): array;
 

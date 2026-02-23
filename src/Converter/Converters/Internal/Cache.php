@@ -10,6 +10,9 @@ use Smile\GdprDump\Converter\Parameters\ParameterProcessor;
 
 final class Cache implements ConverterInterface
 {
+    /**
+     * @var array<string, mixed>
+     */
     private static array $values = [];
     private ConverterInterface $converter;
     private string $cacheKey;

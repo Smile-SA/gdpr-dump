@@ -6,6 +6,9 @@ namespace Smile\GdprDump\Dumper\Config\Definition;
 
 final class FilterPropagationSettings
 {
+    /**
+     * @param string[] $ignoredForeignKeys
+     */
     public function __construct(private bool $enabled, private array $ignoredForeignKeys)
     {
     }
@@ -20,6 +23,8 @@ final class FilterPropagationSettings
 
     /**
      * Get foreign keys to ignore when propagating filters to table dependencies.
+     *
+     * @return string[]
      */
     public function getIgnoredForeignKeys(): array
     {

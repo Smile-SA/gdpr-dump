@@ -144,7 +144,7 @@ final class EnvVarProcessorTest extends TestCase
     private function processValue(string $value): void
     {
         $processor = new EnvVarProcessor();
-        $config = new Config([$value]);
+        $config = new Config(['env_var' => $value]);
         $processor->process($config);
     }
 }

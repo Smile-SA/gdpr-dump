@@ -74,21 +74,21 @@ final class MysqlMetadataTest extends TestCase
         $foreignKeys = $metadata->getTableForeignKeys('customers');
         $this->assertCount(3, $foreignKeys);
 
-        $foreignKey = reset($foreignKeys);
+        $foreignKey = $foreignKeys[0];
         $this->assertNotEmpty($foreignKey->getConstraintName());
         $this->assertSame('customers', $foreignKey->getLocalTableName());
         $this->assertSame(['billing_address_id'], $foreignKey->getLocalColumns());
         $this->assertSame('addresses', $foreignKey->getForeignTableName());
         $this->assertSame(['address_id'], $foreignKey->getForeignColumns());
 
-        $foreignKey = next($foreignKeys);
+        $foreignKey = $foreignKeys[1];
         $this->assertNotEmpty($foreignKey->getConstraintName());
         $this->assertSame('customers', $foreignKey->getLocalTableName());
         $this->assertSame(['shipping_address_id'], $foreignKey->getLocalColumns());
         $this->assertSame('addresses', $foreignKey->getForeignTableName());
         $this->assertSame(['address_id'], $foreignKey->getForeignColumns());
 
-        $foreignKey = next($foreignKeys);
+        $foreignKey = $foreignKeys[2];
         $this->assertNotEmpty($foreignKey->getConstraintName());
         $this->assertSame('customers', $foreignKey->getLocalTableName());
         $this->assertSame(['store_id'], $foreignKey->getLocalColumns());

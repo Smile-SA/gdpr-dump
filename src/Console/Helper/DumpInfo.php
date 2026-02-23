@@ -17,6 +17,10 @@ final class DumpInfo
 {
     private OutputInterface $output;
     private ProgressBar $progressBar;
+
+    /**
+     * @var array{name: string, completed: bool, rowCount: int}|null
+     */
     private ?array $lastTableInfo = null;
 
     public function __construct(private EventDispatcherInterface $eventDispatcher)
@@ -101,6 +105,7 @@ final class DumpInfo
     private function getDumpInfoHook(): callable
     {
         return function (string $object, array $info): void {
+            /** @var array{name: string, completed: bool, rowCount: int} $info */
             if ($object !== 'table') {
                 // The max steps of the progress bar only include tables
                 return;
@@ -137,6 +142,8 @@ final class DumpInfo
 
     /**
      * Update the progress bar message.
+     *
+     * @param array{name: string, completed: bool, rowCount: int} $tableInfo
      */
     private function updateProgressBarMessage(array $tableInfo): void
     {

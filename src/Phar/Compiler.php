@@ -31,6 +31,7 @@ final class Compiler
     /**
      * Set the Faker locales to include.
      *
+     * @param string[] $locales
      * @throws UnexpectedValueException
      */
     public function setLocales(array $locales): self

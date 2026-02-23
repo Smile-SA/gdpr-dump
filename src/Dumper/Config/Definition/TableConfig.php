@@ -13,14 +13,21 @@ final class TableConfig
     private string $name;
     private ?string $where = null;
     private ?int $limit = null;
-    private array $converters = [];
     private string $skipCondition = '';
+
+    /**
+     * @var array<string, mixed>
+     */
+    private array $converters = [];
 
     /**
      * @var SortOrder[]
      */
     private array $sortOrders = [];
 
+    /**
+     * @param array<string, mixed> $tableConfig
+     */
     public function __construct(string $tableName, array $tableConfig)
     {
         $this->name = $tableName;
@@ -63,6 +70,8 @@ final class TableConfig
 
     /**
      * Get the converter definitions of a table.
+     *
+     * @return array<string, mixed>
      */
     public function getConverters(): array
     {
@@ -104,6 +113,8 @@ final class TableConfig
 
     /**
      * Prepare the table config.
+     *
+     * @param array<string, mixed> $tableData
      */
     private function prepareConfig(array $tableData): void
     {
@@ -116,6 +127,7 @@ final class TableConfig
     /**
      * Prepare the table filters.
      *
+     * @param array<string, mixed> $tableData
      * @throws UnexpectedValueException
      */
     private function prepareFilters(array $tableData): void
@@ -137,6 +149,7 @@ final class TableConfig
     /**
      * Prepare the table sort order.
      *
+     * @param array<string, mixed> $tableData
      * @throws UnexpectedValueException
      */
     private function prepareSortOrder(array $tableData): void
@@ -165,6 +178,8 @@ final class TableConfig
 
     /**
      * Prepare the table limit.
+     *
+     * @param array<string, mixed> $tableData
      */
     private function prepareLimit(array $tableData): void
     {
@@ -179,6 +194,8 @@ final class TableConfig
 
     /**
      * Prepare the table converters.
+     *
+     * @param array<string, mixed> $tableData
      */
     private function prepareConverters(array $tableData): void
     {

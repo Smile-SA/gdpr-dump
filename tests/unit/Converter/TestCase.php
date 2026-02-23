@@ -16,6 +16,8 @@ abstract class TestCase extends UnitTestCase
 {
     /**
      * Create a converter.
+     *
+     * @param array<string, mixed> $parameters
      */
     public function createConverter(string $className, array $parameters = []): ConverterInterface
     {

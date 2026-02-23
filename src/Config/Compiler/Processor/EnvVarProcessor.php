@@ -39,6 +39,8 @@ final class EnvVarProcessor implements ProcessorInterface
     /**
      * Process a config item.
      *
+     * @param mixed[] $data
+     * @return mixed[]
      * @throws CompileException
      */
     private function processItem(array $data): array

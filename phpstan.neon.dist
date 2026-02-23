@@ -5,13 +5,6 @@ parameters:
         - bin
         - src
         - tests
-    ignoreErrors:
-        -
-            identifier: missingType.iterableValue
-        -
-            # False positive
-            message: '#Cannot call method [a-zA-Z]+\(\) on Smile\\GdprDump\\Database\\Metadata\\Definition\\Constraint\\ForeignKey#'
-            path: tests/functional/Database/Metadata/MysqlMetadataTest.php
 
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon

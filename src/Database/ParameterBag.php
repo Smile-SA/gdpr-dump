@@ -8,12 +8,20 @@ use UnexpectedValueException;
 
 final class ParameterBag
 {
+    /**
+     * @var array<string, mixed>
+     */
     private array $params;
+
+    /**
+     * @var array<string, array<string, mixed>>
+     */
     private array $defaults = [
         DatabaseInterface::DRIVER_MYSQL => ['host' => 'localhost', 'user' => 'root'],
     ];
 
     /**
+     * @param array<string, mixed> $params
      * @throws UnexpectedValueException
      */
     public function __construct(array $params)
@@ -23,6 +31,8 @@ final class ParameterBag
 
     /**
      * Get all parameters.
+     *
+     * @return array<string, mixed>
      */
     public function all(): array
     {
@@ -40,6 +50,8 @@ final class ParameterBag
     /**
      * Prepare the connection params.
      *
+     * @param array<string, mixed> $params
+     * @return array<string, mixed>
      * @throws UnexpectedValueException
      */
     private function prepareParams(array $params): array
