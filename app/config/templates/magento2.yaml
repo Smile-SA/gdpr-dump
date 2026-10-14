@@ -12,6 +12,8 @@ tables:
         truncate: true
     customer_visitor:
         truncate: true
+    login_as_customer:
+        truncate: true
     newsletter_queue:
         truncate: true
     password_reset_request_event:
@@ -77,9 +79,19 @@ tables:
                 converter: 'setNull'
             lock_expires:
                 converter: 'setNull'
+            taxvat:
+                converter: 'setNull'
+            confirmation:
+                converter: 'randomizeText'
+            rp_token:
+                converter: 'setNull'
+            rp_token_created_at:
+                converter: 'setNull'
 
     customer_address_entity:
         converters:
+            vat_id:
+                converter: 'setNull'
             firstname:
                 converter: 'randomizeText'
             middlename:
@@ -127,6 +139,21 @@ tables:
                 converter: 'randomizeNumber'
             billing_fax:
                 converter: 'randomizeNumber'
+            billing_vat_id:
+                converter: 'setNull'
+            taxvat:
+                converter: 'setNull'
+            confirmation:
+                converter: 'randomizeText'
+
+    gift_message:
+        converters:
+            sender:
+                converter: 'randomizeText'
+            recipient:
+                converter: 'randomizeText'
+            message:
+                converter: 'randomizeText'
 
     integration:
         converters:
@@ -160,9 +187,15 @@ tables:
                     formatter: 'ipv4'
             password_hash:
                 converter: 'setNull'
+            customer_taxvat:
+                converter: 'setNull'
 
     quote_address:
         converters:
+            vat_id:
+                converter: 'setNull'
+            validated_vat_number:
+                converter: 'setNull'
             email:
                 converter: 'randomizeEmail'
             firstname:
@@ -186,20 +219,27 @@ tables:
             customer_notes:
                 converter: 'randomizeText'
 
+    quote_id_mask:
+        converters:
+            masked_id:
+                converter: 'randomizeText'
+                unique: true
+
     quote_payment:
         converters:
             cc_owner:
+                converter: 'randomizeText'
+            cc_ss_owner:
                 converter: 'randomizeText'
             cc_number_enc:
                 converter: 'randomizeText'
             cc_last_4:
                 converter: 'anonymizeNumber'
+            paypal_payer_id:
+                converter: 'setNull'
+            # The keys depend on the payment method (IBAN, card holder, payer name and e-mail...)
             additional_information:
-                converter: 'jsonData'
-                parameters:
-                    converters:
-                        CC_CN:
-                            converter: 'randomizeText'
+                converter: 'setNull'
 
     rating_option_vote:
         converters:
@@ -281,9 +321,19 @@ tables:
                 converter: 'faker'
                 parameters:
                     formatter: 'ipv4'
+            # May contain a comma-separated list of IP addresses
+            x_forwarded_for:
+                converter: 'setNull'
+            customer_taxvat:
+                converter: 'setNull'
+            # Opens the guest order on the shop (guest-view cookie: base64 of "protect_code:increment_id")
+            protect_code:
+                converter: 'randomizeText'
 
     sales_order_address:
         converters:
+            vat_id:
+                converter: 'setNull'
             email:
                 converter: 'randomizeEmail'
             firstname:
@@ -344,19 +394,26 @@ tables:
                 converter: 'randomizeText'
             echeck_bank_name:
                 converter: 'randomizeText'
+            # The keys depend on the payment method (IBAN, card holder, payer name and e-mail...)
             additional_information:
-                converter: 'jsonData'
-                parameters:
-                    converters:
-                        CC_CN:
-                            converter: 'randomizeText'
-                        method_title:
-                            converter: 'randomizeText'
+                converter: 'setNull'
+
+    sales_order_status_history:
+        converters:
+            comment:
+                converter: 'randomizeText'
+
+    sales_payment_transaction:
+        converters:
+            additional_information:
+                converter: 'setNull'
 
     sales_shipment:
         converters:
             customer_note:
                 converter: 'randomizeText'
+            shipping_label:
+                converter: 'setNull'
 
     sales_shipment_comment:
         converters:
@@ -381,6 +438,17 @@ tables:
     sales_shipment_track:
         converters:
             track_number:
+                converter: 'randomizeText'
+
+    wishlist:
+        converters:
+            sharing_code:
+                converter: 'randomizeText'
+                unique: true
+
+    wishlist_item:
+        converters:
+            description:
                 converter: 'randomizeText'
 
     # --- Commerce tables ---
@@ -604,16 +672,3 @@ if_version:
                         converter: 'randomizeText'
                     message:
                         converter: 'randomizeText'
-
-    '<2.2':
-        tables:
-            # Before Magento 2.2, additional data was serialized instead of JSON-encoded
-            quote_payment:
-                converters:
-                    additional_information:
-                        converter: 'serializedData'
-
-            sales_order_payment:
-                converters:
-                    additional_information:
-                        converter: 'serializedData'
