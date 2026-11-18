@@ -46,16 +46,36 @@ final class TableConfigTest extends TestCase
         $config = new TableConfig('table1', [
             'converters' => [
                 'column1' => ['converter' => 'converterName'],
-                'column2' => ['converter' => ''],
-                'column3' => ['converter' => '', 'disabled' => true],
-                'column4' => [],
+                'column2' => ['converter' => 'converterName', 'disabled' => true],
+                'column3' => ['converter' => 'converterName', 'disabled' => false],
+                'column4' => ['converter' => 'converterName'],
             ],
         ]);
 
         $converters = $config->getConverters();
 
-        // The config must have ignored empty/disabled converters
-        $this->assertCount(2, $converters);
+        // The config must have ignored the disabled converter only
+        $this->assertSame(['column1', 'column3', 'column4'], array_keys($converters));
+    }
+
+    /**
+     * Assert that a disabled converter does not prevent the next converters from being applied.
+     */
+    public function testDisabledConverterDoesNotSkipNextConverters(): void
+    {
+        $config = new TableConfig('customer_entity', [
+            'converters' => [
+                'email' => ['converter' => 'randomizeEmail'],
+                'middlename' => ['converter' => 'randomizeText', 'disabled' => true],
+                'lastname' => ['converter' => 'randomizeText'],
+                'password_hash' => ['converter' => 'randomizeText'],
+            ],
+        ]);
+
+        $converters = $config->getConverters();
+
+        $this->assertArrayNotHasKey('middlename', $converters);
+        $this->assertSame(['email', 'lastname', 'password_hash'], array_keys($converters));
     }
 
     /**

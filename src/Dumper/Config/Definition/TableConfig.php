@@ -203,7 +203,7 @@ final class TableConfig
             foreach ($tableData['converters'] as $column => $converterData) {
                 // Ignore disabled converters
                 if (array_key_exists('disabled', $converterData) && $converterData['disabled']) {
-                    break;
+                    continue;
                 }
 
                 // Converter data will be validated by the factory during the object creation
